@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix</groupId>
+		<artifactId>server</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>SynaptixServer</artifactId>
+	<name>Synaptix - Server - Xmpp</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.vysper</groupId>
+			<artifactId>vysper-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<!-- Guice -->
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-multibindings</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixSmackxService</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixServerAbonnement</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixServerService</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

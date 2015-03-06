@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT plugin (name, description?, author?, version?)>
+<!ATTLIST plugin
+xmlns CDATA #FIXED "http://rus.fret.sncf.com/config/1.0"
+class CDATA
+>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT version (#PCDATA)>

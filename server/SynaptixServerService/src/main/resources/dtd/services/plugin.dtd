@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT services service+>
+<!ATTLIST services
+xmlns CDATA #FIXED "http://rus.fret.sncf.com/config/1.0"
+>
+
+<!ELEMENT service (name, scope?, classname, interfacename, description?)>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT scope (#PCDATA)>
+<!ELEMENT classname (#PCDATA)>
+<!ELEMENT interfacename (#PCDATA)>
+<!ELEMENT description (#PCDATA)>

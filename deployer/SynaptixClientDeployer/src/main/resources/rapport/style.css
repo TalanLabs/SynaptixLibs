@@ -1,0 +1,117 @@
+<style type="text/css">
+/*
+ *  Styles generaux
+ */
+
+body { 
+  margin: 10px auto;
+  padding: 0px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.3em;
+  cursor: default;
+  font-weight: normal;
+  background: #FFFFFF;
+  color: #000000;
+  text-align: left;
+}
+
+a { 
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  color: #0084E1;
+}
+
+a:hover {
+  text-decoration: none;
+  font-weight: bold;
+  color: #50B7FF;
+}
+
+img { border: 0px; }
+
+hr {
+  border: 0px;
+  height: 1px;
+  width: 90%;
+  color: #000077;
+  background-color: #000077;
+}
+
+.CADRE_CENTRE {
+  position: relative;
+  top: 0px;
+  margin: auto;
+  width: 95%;
+}
+
+.TITLE {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 25px;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+  background: #F7F7FF;
+  border: 1px dashed #0084E1;
+}
+
+.CONTAINER_TITLE {
+  position: relative;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.CONTAINER_VIEW {
+  position: relative;
+  padding: 15px;
+  padding-left: 15px;
+  background: #F7F7FF;
+  border: 1px dashed #0084E1;
+}
+
+.TEXT {
+  position: relative;
+  margin-bottom: 10px;
+  text-align: justify;
+}
+
+.TAB_DESC {
+  text-decoration: underline;
+}
+
+.TAB_DESCTXT {
+  font-weight: bold;
+}
+
+.SIGN {
+  font-size: 9px;
+  font-style: italic;
+  text-align: center;
+}
+
+.NORMAL { 
+    margin-left: 10px;
+    margin-bottom: 5px;
+    color: #777777;
+    font-size: 13pt;
+  }
+.TITREIN { 
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    color: #7700AA;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 13pt;
+  }
+
+li {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    color: #777777;
+  }
+</style>

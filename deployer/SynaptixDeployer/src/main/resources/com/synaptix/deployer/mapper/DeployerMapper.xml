@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.deployer.mapper.DeployerMapper">
+
+	<select id="getTableAndColumns" resultMap="com.synaptix.deployer.model.ITableColumn">
+			 select table_name, column_name, data_type, 
+					data_precision, data_length, data_scale, 
+					data_default, decode(nullable, 'Y', '1', '0') as nullable,
+					decode(data_scale, null, null, ',') scale_comma,
+					decode(default_length, null, null, '= ') default_equals, column_id
+				from all_tab_columns where owner = #{dbName}
+				order by table_name, column_name
+	</select>
+	
+	<select id="getConstraints" resultMap="com.synaptix.deployer.model.IConstraint">
+		select c.table_name, c.constraint_name,
+			c.constraint_type as constraint_type,
+			c.search_condition,
+			cc.column_1||cc.comma_2||cc.column_2||cc.comma_3||cc.column_3||cc.comma_4||cc.column_4||
+			cc.comma_5||cc.column_5||cc.comma_6||cc.column_6||cc.comma_7||cc.column_7 as r_columns
+		 from all_constraints c,
+				( select owner, table_name, constraint_name, nvl(max(position),0) max_position,
+					 max( decode( position, 1, column_name, null ) ) column_1,
+					 max( decode( position, 2, decode(column_name, null, null, ','), null )) comma_2,
+					 max( decode( position, 2, column_name, null ) ) column_2,
+					 max( decode( position, 3, decode(column_name, null, null, ','), null )) comma_3,
+					 max( decode( position, 3, column_name, null ) ) column_3,
+					 max( decode( position, 4, decode(column_name, null, null, ','), null )) comma_4,
+					 max( decode( position, 4, column_name, null ) ) column_4,
+					 max( decode( position, 5, decode(column_name, null, null, ','), null )) comma_5,
+					 max( decode( position, 5, column_name, null ) ) column_5,
+					 max( decode( position, 6, decode(column_name, null, null, ','), null )) comma_6,
+					 max( decode( position, 6, column_name, null ) ) column_6,
+					 max( decode( position, 7, decode(column_name, null, null, ','), null )) comma_7,
+					 max( decode( position, 7, column_name, null ) ) column_7
+				 from all_cons_columns
+				 group by owner, table_name, constraint_name) cc
+		 where c.owner = #{dbName}
+		 and c.generated != 'GENERATED NAME'
+		 and cc.owner = c.owner
+		 and cc.table_name = c.table_name
+		 and cc.constraint_name = c.constraint_name
+		 order by c.table_name, c.constraint_type desc, c.constraint_name
+	</select>
+	
+	<update id="callDeactivateConstraint" statementType="CALLABLE">
+		begin
+			DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'CONSTRAINTS',false);
+		end;
+	</update>
+	
+	<select id="getDDL" resultType="java.lang.String">
+		SELECT
+			DBMS_METADATA.GET_DDL(A.OBJECT_TYPE , a.OBJECT_NAME , a.OWNER)
+		FROM all_OBJECTS a
+		WHERE a.OWNER = #{dbName} and object_type in
+		<foreach item="object" collection="sqlObjects" separator="," open="(" close=")">
+			#{object.objectType}
+		</foreach>
+	</select>
+	
+	<select id="getConstraintDDL" resultType="java.lang.String">
+		SELECT
+			DBMS_METADATA.GET_DDL('REF_CONSTRAINT' , a.constraint_name , a.owner) FROM all_constraints a where a.owner = #{dbName}
+	</select>
+
+</mapper>

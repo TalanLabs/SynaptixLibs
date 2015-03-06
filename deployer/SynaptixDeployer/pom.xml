@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix</groupId>
+		<artifactId>deployer</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>SynaptixDeployer</artifactId>
+	<name>Synaptix - Deployer - Deployer</name>
+	<description>Deployer for wars</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.49</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixGuice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixMyBatis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixSender</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixComponent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- dependency>
+			<groupId>org.apache.ddlutils</groupId>
+			<artifactId>ddlutils</artifactId>
+			<version>1.0</version>
+		</dependency -->
+	</dependencies>
+</project>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?> 
+<!-- Providers file for default Smack extensions -->
+<smackProviders>
+    <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.service:iq</namespace>
+        <className>com.synaptix.jmeter.plugin.sampler.provider.ResultJMeterServiceIQProvider</className> 
+    </iqProvider>
+</smackProviders>

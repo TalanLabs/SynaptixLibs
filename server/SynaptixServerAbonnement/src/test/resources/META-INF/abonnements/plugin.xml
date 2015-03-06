@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abonnements xmlns="http://synaptix.com/config/1.0">
+	<abonnement>
+		<name>gaby</name>
+		<className>test.abonnement.GabyAbonnement</className>
+	</abonnement>
+</abonnements>

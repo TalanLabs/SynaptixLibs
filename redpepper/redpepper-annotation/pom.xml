@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.redpepper</groupId>
+		<artifactId>redpepper</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>redpepper-annotation</artifactId>
+	<name>Synaptix - Redpepper - Annotation</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.gwtplatform</groupId>
+			<artifactId>gwtp-processors</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-automation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-web-annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<script>
+	<out>RING</out>
+	<nl delay_after="10"/>
+	<out>CLIP +06605504454</out>
+	<nl delay_after="3000"/>
+	<out>RING</out>
+	<nl delay_after="10"/>
+	<out>CLIP +06605504454</out>
+	<nl delay_after="3000"/>
+	<out>RING</out>
+	<nl delay_after="10"/>
+	<out>CLIP +06605504454</out>
+	<nl delay_after="3000"/>
+	<out>RING</out>
+	<nl delay_after="10"/>
+	<close/>
+	<out>CLIP +06605504454</out>
+	<nl delay_after="3000"/>
+	<out>RING</out>
+	<nl delay_after="10"/>
+	<out>CLIP +06605504454</out>
+	<nl delay_after="3000"/>
+</script>

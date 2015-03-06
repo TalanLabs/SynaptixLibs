@@ -1,0 +1,31 @@
+<?xml version="1.0"?> 
+<!-- Providers file for default Smack extensions -->
+<smackProviders>
+
+	<!-- Service 2 -->
+    <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.service:iq</namespace>
+        <className>com.synaptix.smackx.service.provider.Service2Provider</className> 
+    </iqProvider>
+    
+    <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.service.callback:iq</namespace>
+        <className>com.synaptix.smackx.service.provider.ServiceCallback2Provider</className> 
+    </iqProvider>
+
+	<!-- ServiceFactory -->
+    <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.servicefactory:iq</namespace>
+        <className>com.synaptix.smackx.service.provider.ServiceFactoryProvider</className> 
+    </iqProvider>
+    
+     <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.version:iq</namespace>
+        <className>com.synaptix.smackx.version.provider.ServerVersionProvider</className> 
+    </iqProvider>
+
+</smackProviders>

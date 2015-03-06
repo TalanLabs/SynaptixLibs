@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix</groupId>
+		<artifactId>server</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>SynaptixMyBatis</artifactId>
+	<name>Synaptix - Server - MyBatis</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixCommon</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixServerService</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixEntity</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis.scripting</groupId>
+			<artifactId>mybatis-velocity</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-multibindings</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>6</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.redpepper</groupId>
+		<artifactId>redpepper</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>redpepper-backend-automation</artifactId>
+	<name>Synaptix - Redpepper - Backend automation</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-automation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-dao</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>
+

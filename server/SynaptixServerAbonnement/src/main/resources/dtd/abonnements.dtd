@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT abonnements abonnement+>
+<!ATTLIST abonnements
+xmlns CDATA #FIXED "http://synaptix.com/config/1.0"
+>
+
+<!ELEMENT abonnement (name, classname, description?)>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT classname (#PCDATA)>
+<!ELEMENT description (#PCDATA)>

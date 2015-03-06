@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+#
+#	User: Nicolas THOMAS
+#	Date: 27/08/09
+#
+-->
+<plugs>
+	<agents>
+		<!--
+			Liste exhaustive de tous les agents definis identiques sur tous les serveurs.
+		-->
+		<!-- agent id="AGENT_HELLO_NTS" class="test.SimplePrinterAgent" desc="Hello World">
+			<arg>Nicolas THOMAS</arg>
+		</agent -->
+	</agents>
+	
+	<!--
+			Liste des channels des agents uniquement utilises sur le serveur de traitement.
+		-->
+		
+	<!-- channels>
+		<channel id="CHNL_HELLO_NTS2" type="processing">
+			<param name="max_working" value="10"/>
+			<param name="max_waiting" value="30"/>
+			<param name="agent" value="AGENT_HELLO_NTS"/>
+		</channel>
+	</channels -->
+</plugs>

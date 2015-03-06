@@ -1,0 +1,12 @@
+<?xml version="1.0"?> 
+<!-- Providers file for default Smack extensions -->
+<smackProviders>
+
+	<!-- GestionAbonnement -->
+    <iqProvider> 
+        <elementName>query</elementName> 
+        <namespace>synaptix.abonnement:iq</namespace>
+        <className>com.synaptix.smackx.abonnement.provider.GestionAbonnementProvider</className> 
+    </iqProvider>
+
+</smackProviders>

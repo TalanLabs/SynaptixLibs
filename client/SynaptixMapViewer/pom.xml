@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>client</artifactId>
+		<groupId>com.synaptix</groupId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>SynaptixMapViewer</artifactId>
+	<name>Synaptix - Client - MapViewer</name>
+	<dependencies>
+		<dependency>
+			<groupId>net.java.dev.timingframework</groupId>
+			<artifactId>timingframework</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.synaptix</groupId>
+			<artifactId>SynaptixSwing</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-main</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.swinglabs.swingx</groupId>
+			<artifactId>swingx-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.swinglabs.swingx</groupId>
+			<artifactId>swingx-graphics</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.swinglabs.swingx</groupId>
+			<artifactId>swingx-painters</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,3 @@
+<laf-plugin>
+	<component-plugin-class>com.synaptix.widget.view.swing.SynaptixSubstancePlugin</component-plugin-class>
+</laf-plugin>

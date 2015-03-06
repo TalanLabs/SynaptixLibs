@@ -1,0 +1,26 @@
+package com.synaptix.swing;
+
+import javax.swing.ScrollPaneConstants;
+
+public interface SyScrollPaneConstants extends ScrollPaneConstants {
+
+	String NORTH_CENTER = "NORTH_CENTER"; //$NON-NLS-1$
+
+	String NORTH_LEFT_CORNER = "NORTH_LEFT_CORNER"; //$NON-NLS-1$
+
+	String NORTH_RIGHT_CORNER = "NORTH_RIGHT_CORNER"; //$NON-NLS-1$
+
+	String NORTH_LEADING_CORNER = "NORTH_LEADING_CORNER"; //$NON-NLS-1$
+
+	String NORTH_TRAILING_CORNER = "NORTH_TRAILING_CORNER"; //$NON-NLS-1$
+
+	String COLUMN_FOOTER = "COLUMN_FOOTER"; //$NON-NLS-1$
+
+	String FOOTER_LEFT_CORNER = "FOOTER_LEFT_CORNER"; //$NON-NLS-1$
+
+	String FOOTER_RIGHT_CORNER = "FOOTER_RIGHT_CORNER"; //$NON-NLS-1$
+
+	String FOOTER_LEADING_CORNER = "FOOTER_LEADING_CORNER"; //$NON-NLS-1$
+
+	String FOOTER_TRAILING_CORNER = "FOOTER_TRAILING_CORNER"; //$NON-NLS-1$
+}

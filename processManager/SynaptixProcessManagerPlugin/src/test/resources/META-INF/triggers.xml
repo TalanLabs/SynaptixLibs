@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+#
+#	User: Nicolas THOMAS
+#	Date: 27/08/09
+#
+-->
+<plugs>
+	<!-- 
+	<triggers>
+		<trigger id="_TRIG_BRASIL" class="test.SimpleMsgInjector" desc="">
+			<arg>D:/temp/testinteg</arg>
+		</trigger>
+	</triggers>
+	
+	<gates>
+		<gate id="_FileSysGateBRASIL" delay="20000">
+			<param name="injecteur" value="_TRIG_BRASIL"/>
+		</gate>
+	</gates>
+	-->
+</plugs>

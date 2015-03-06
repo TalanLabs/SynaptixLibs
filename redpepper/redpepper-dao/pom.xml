@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.synaptix.redpepper</groupId>
+		<artifactId>redpepper</artifactId>
+		<version>4.2.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>redpepper-dao</artifactId>
+	<name>Synaptix - Redpepper - Dao</name>
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.github.jmkgreen.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>com.google.code</groupId> <artifactId>morphia</artifactId> <version>0.91</version> </dependency> -->
+
+		<dependency>
+			<groupId>com.thoughtworks.proxytoys</groupId>
+			<artifactId>proxytoys</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+		</dependency>
+		<dependency>
+			<artifactId>reflections</artifactId>
+			<groupId>org.reflections</groupId>
+			<version>0.9.9-RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		<!-- red pepper dependencies -->
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-web-annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.synaptix.redpepper</groupId>
+			<artifactId>redpepper-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>DEV</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<gwt.style>PRETTY</gwt.style>
+			</properties>
+			<build>
+				<filters>
+					<filter>src/main/filters/DEV.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>TEST</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<gwt.style>PRETTY</gwt.style>
+			</properties>
+			<build>
+				<filters>
+					<filter>src/main/filters/TEST.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>src/main/filters/NORMAL.properties</filter>
+				</filters>
+			</build>
+		</profile>
+	</profiles>
+</project>

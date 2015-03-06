@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<script>
+	<out delay_before="500">line1</out>
+	<nl da="10000"/>
+	<out>line2</out>
+	<nl delay_after="10000"/>
+	<close/>
+</script>
