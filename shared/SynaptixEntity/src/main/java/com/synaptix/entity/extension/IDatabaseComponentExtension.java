@@ -46,22 +46,17 @@ public interface IDatabaseComponentExtension {
 
 		/**
 		 * The id of the entity in the current table name (the entity which uses the collection annotation)
-		 * 
-		 * @return
 		 */
 		public String idSource();
 
 		/**
 		 * The id of the entity in the sql table name
-		 * 
-		 * @return
 		 */
 		public String idTarget() default "ID";
 
 		/**
-		 * Alias for nested resultMaps (MyBatis)
-		 * 
-		 * @return
+		 * Alias for nested resultMaps (MyBatis)<br/>
+		 * If the alias is undefined, there won't be any nested request.
 		 */
 		public String alias() default "";
 
