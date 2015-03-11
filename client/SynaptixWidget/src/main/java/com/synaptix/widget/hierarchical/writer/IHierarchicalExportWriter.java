@@ -12,4 +12,20 @@ public interface IHierarchicalExportWriter<E extends IComponent, F extends Seria
 
 	public void export(IHierarchicalContext<E, F, L> hierarchicalExportContext, IExportableTable[][] exportTableParts, Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap);
 
+	public enum Type {
+
+		/***/
+		DATE,
+		/***/
+		TEXT,
+		/***/
+		PERCENT,
+		/***/
+		NUMBER,
+		/***/
+		INTEGER,
+		/***/
+		TITLE;
+	}
+
 }

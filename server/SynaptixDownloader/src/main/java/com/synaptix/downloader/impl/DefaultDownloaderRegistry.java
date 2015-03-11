@@ -35,7 +35,7 @@ public class DefaultDownloaderRegistry implements IDownloaderRegistry {
 			throw new IllegalArgumentException("key is null");
 		}
 		String key = newKey();
-		this.cache.put(key, new MyValue(downloaderProcess, true));
+		this.cache.put(key, new MyValue(downloaderProcess, false));
 		return new StringBuilder(downloaderServletPath).append("?key=").append(key).toString();
 	}
 

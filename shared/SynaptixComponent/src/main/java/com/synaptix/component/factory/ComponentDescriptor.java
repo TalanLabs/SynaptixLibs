@@ -120,22 +120,32 @@ public class ComponentDescriptor implements Serializable {
 	}
 
 	private Method findMethod(Class<?> clazz, Method method) {
-		Method res = null;
 		if (clazz != null) {
 			List<Class<?>> ps = new ArrayList<Class<?>>();
 			ps.add(componentClass);
 			ps.addAll(Arrays.asList(method.getParameterTypes()));
 			try {
-				Method m = clazz.getMethod(method.getName(), ps.toArray(new Class<?>[ps.size()]));
-				if (m.getReturnType().equals(method.getReturnType())) {
-					res = m;
+				Method[] methods = clazz.getMethods();
+				if (methods != null) {
+					for (Method m : methods) {
+						if ((m.getName().equals(method.getName())) && (m.getParameterTypes().length == ps.size())) {
+							Class<?>[] parameterTypes = m.getParameterTypes();
+							boolean equal = true;
+							for (int i = 0; i < parameterTypes.length && equal; i++) {
+								if (!parameterTypes[i].isAssignableFrom(ps.get(i))) {
+									equal = false;
+								}
+							}
+							if ((equal) && (m.getReturnType().isAssignableFrom(method.getReturnType()))) {
+								return m;
+							}
+						}
+					}
 				}
 			} catch (SecurityException e) {
-			} catch (NoSuchMethodException e) {
 			}
 		}
-
-		return res;
+		return null;
 	}
 
 	protected void addPropertyName(Method method, ComponentBeanMethod bm, String propertyName) {

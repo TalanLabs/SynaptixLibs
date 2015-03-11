@@ -19,6 +19,7 @@ import com.synaptix.service.hierarchical.model.IHierarchicalLine;
 import com.synaptix.widget.hierarchical.context.ConfigurationContext;
 import com.synaptix.widget.hierarchical.view.swing.component.helper.GraphicsHelper;
 import com.synaptix.widget.hierarchical.writer.IExportableTable;
+import com.synaptix.widget.hierarchical.writer.IHierarchicalExportWriter;
 
 public abstract class HeaderPanel<U, E extends IComponent, F extends Serializable, L extends IHierarchicalLine<E, F>> extends JPanel implements IExportableTable {
 
@@ -135,6 +136,11 @@ public abstract class HeaderPanel<U, E extends IComponent, F extends Serializabl
 	@Override
 	public int getColumnWidth(int columnIndex) {
 		return parent.getColumnSizeAt(columnIndex);
+	}
+
+	@Override
+	public IHierarchicalExportWriter.Type getForcedType(int rowIndex, int columnIndex) {
+		return null;
 	}
 
 	private final class MyMouseListener extends MouseAdapter {

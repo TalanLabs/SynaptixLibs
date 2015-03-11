@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.synaptix.client.view.IView;
 import com.synaptix.component.IComponent;
 import com.synaptix.service.hierarchical.model.IHierarchicalLine;
 import com.synaptix.swing.utils.GenericObjectToString;
@@ -31,6 +32,7 @@ import com.synaptix.swing.utils.SyDesktop;
 import com.synaptix.widget.filefilter.view.ExcelFileFilter;
 import com.synaptix.widget.hierarchical.context.IHierarchicalContext;
 import com.synaptix.widget.util.StaticWidgetHelper;
+import com.synaptix.widget.view.ISynaptixViewFactory;
 import com.synaptix.widget.viewworker.view.AbstractWorkInProgressViewWorker;
 
 public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Serializable, L extends IHierarchicalLine<E, F>> implements IHierarchicalExportWriter<E, F, L> {
@@ -43,23 +45,25 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 	public void export(final IHierarchicalContext<E, F, L> hierarchicalExportContext, final IExportableTable[][] exportTableParts,
 			final Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap) {
 		File chooseFile = null;
+		final ISynaptixViewFactory viewFactory = hierarchicalExportContext.getViewFactory();
+		final IView view = hierarchicalExportContext.getView();
 		if (Manager.isAutoSaveExportExcel()) {
 			try {
 				chooseFile = File.createTempFile("Export", ".xlsx");
 				chooseFile.deleteOnExit();
 			} catch (IOException e) {
-				hierarchicalExportContext.getViewFactory().showErrorMessageDialog(hierarchicalExportContext.getView(), e);
+				viewFactory.showErrorMessageDialog(view, e);
 			}
 		} else {
-			chooseFile = hierarchicalExportContext.getViewFactory().chooseSaveFile(hierarchicalExportContext.getView(), null, new ExcelFileFilter());
+			chooseFile = viewFactory.chooseSaveFile(view, null, new ExcelFileFilter());
 		}
 		final File file = chooseFile;
 		if (file != null) {
-			hierarchicalExportContext.getViewFactory().waitComponentViewWorker(hierarchicalExportContext.getView(), new AbstractWorkInProgressViewWorker<Void>() {
+			viewFactory.waitComponentViewWorker(view, new AbstractWorkInProgressViewWorker<Void>() {
 
 				@Override
 				protected Void doLoading() throws Exception {
-					doExport(file, exportTableParts, objectsToStringByClassMap);
+					doExport(file, hierarchicalExportContext, exportTableParts, objectsToStringByClassMap);
 					return null;
 				}
 
@@ -68,19 +72,20 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 					try {
 						SyDesktop.open(file);
 					} catch (Exception e1) {
-						hierarchicalExportContext.getViewFactory().showErrorMessageDialog(hierarchicalExportContext.getView(), e1);
+						viewFactory.showErrorMessageDialog(view, e1);
 					}
 				}
 
 				@Override
 				public void fail(Throwable t) {
-					hierarchicalExportContext.getViewFactory().showErrorMessageDialog(hierarchicalExportContext.getView(), t);
+					viewFactory.showErrorMessageDialog(view, t);
 				}
 			});
 		}
 	}
 
-	protected void doExport(final File file, final IExportableTable[][] exportTableParts, final Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap) throws Exception {
+	protected void doExport(final File file, IHierarchicalContext<E, F, L> hierarchicalExportContext, final IExportableTable[][] exportTableParts,
+			final Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap) throws Exception {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 
 		XSSFSheet tableSheet = workbook.createSheet(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().hierarchicalTable());
@@ -91,26 +96,38 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 
 		XSSFDataFormat df = workbook.createDataFormat();
 
+		Map<IHierarchicalExportWriter.Type, XSSFCellStyle> styleMap = new HashMap<IHierarchicalExportWriter.Type, XSSFCellStyle>();
+
 		XSSFCellStyle textCs = workbook.createCellStyle();
 		textCs.setFont(f);
 		textCs.setDataFormat(df.getFormat("text"));
 		textCs.setWrapText(true);
 		putBorders(textCs);
+		styleMap.put(IHierarchicalExportWriter.Type.TEXT, textCs);
 
 		XSSFCellStyle numberCs = workbook.createCellStyle();
 		numberCs.setFont(f);
 		numberCs.setDataFormat(df.getFormat("#,##0.0"));
 		putBorders(numberCs);
+		styleMap.put(IHierarchicalExportWriter.Type.NUMBER, numberCs);
 
 		XSSFCellStyle integerCs = workbook.createCellStyle();
 		integerCs.setFont(f);
 		integerCs.setDataFormat(df.getFormat("#"));
 		putBorders(integerCs);
+		styleMap.put(IHierarchicalExportWriter.Type.INTEGER, integerCs);
 
 		XSSFCellStyle dateCs = workbook.createCellStyle();
 		dateCs.setDataFormat(df.getFormat("m/d/yy h:mm"));
 		dateCs.setFont(f);
 		putBorders(dateCs);
+		styleMap.put(IHierarchicalExportWriter.Type.DATE, dateCs);
+
+		XSSFCellStyle percentCs = workbook.createCellStyle();
+		percentCs.setAlignment(XSSFCellStyle.ALIGN_RIGHT);
+		percentCs.setDataFormat(df.getFormat("0.0%"));
+		putBorders(percentCs);
+		styleMap.put(IHierarchicalExportWriter.Type.PERCENT, percentCs);
 
 		XSSFCellStyle titleCs = workbook.createCellStyle();
 		titleCs.setFont(f);
@@ -119,6 +136,7 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 		titleCs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		titleCs.setAlignment(CellStyle.ALIGN_CENTER);
 		putBorders(titleCs);
+		styleMap.put(IHierarchicalExportWriter.Type.TITLE, titleCs);
 
 		XSSFCreationHelper createHelper = workbook.getCreationHelper();
 
@@ -163,11 +181,11 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 							CellInformation cellInformation = exportTable.getCellInformation(rowIndex, columnIndex);
 							if ((title) || ((cellInformation != null) && (cellInformation.getObject() != null))) {
 
-								displayObjectInCell(cell, cellInformation.getObject(), objectsToStringByClassMap, textCs, numberCs, integerCs, dateCs, createHelper);
+								displayObjectInCell(cell, cellInformation.getObject(), objectsToStringByClassMap, styleMap, exportTable.getForcedType(rowIndex, columnIndex), createHelper);
 								if ((cellInformation != null) && (cellInformation.getHorizontalCellSpan() > 1)) {
 									for (int k = columnIndex + 1; k <= cellInformation.getHorizontalCellSpan() - 1; k++) {
 										XSSFCell cell2 = rh.createCell(cellColumn + k);
-										cell2.setCellStyle(textCs);
+										cell2.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 									}
 									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellRow, cellColumn, cellColumn + cellInformation.getHorizontalCellSpan() - 1));
 									columnIndex += cellInformation.getHorizontalCellSpan() - 1;
@@ -177,7 +195,7 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 										XSSFRow rh2 = tableSheet.getRow(k + cellRow);
 										if (rh2.getCell(cellColumn) == null) {
 											XSSFCell cell2 = rh2.createCell(cellColumn);
-											cell2.setCellStyle(title ? titleCs : textCs);
+											cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 										}
 									}
 									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellInformation.getVerticalCellSpan() + cellRow - 1, cellColumn, cellColumn));
@@ -185,15 +203,15 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 									for (int k = 1; k <= maxHeight - exportTable.getExportHeight() + rowIndex; k++) {
 										XSSFRow rh2 = tableSheet.getRow(k + rowIndex);
 										XSSFCell cell2 = rh2.createCell(cellColumn);
-										cell2.setCellStyle(title ? titleCs : textCs);
+										cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 									}
 									tableSheet.addMergedRegion(new CellRangeAddress(0, maxHeight - exportTable.getExportHeight() + rowIndex, cellColumn, cellColumn));
 								}
 								if (title) {
-									cell.setCellStyle(titleCs);
+									cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TITLE));
 								}
 							} else {
-								cell.setCellStyle(textCs);
+								cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 							}
 						}
 					}
@@ -236,42 +254,42 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 		cs.setBorderBottom(BorderStyle.THIN);
 	}
 
-	public void displayObjectInCell(XSSFCell cell, Object d, Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap, XSSFCellStyle textCs, XSSFCellStyle numberCs, XSSFCellStyle integerCs,
-			XSSFCellStyle dateCs, XSSFCreationHelper createHelper) {
-		if (d != null) {
-			if (d instanceof Date) {
-				cell.setCellValue((Date) d);
-				cell.setCellStyle(dateCs);
-			} else if (d instanceof Integer) {
-				cell.setCellValue(((Integer) d).doubleValue());
-				cell.setCellStyle(integerCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-			} else if (d instanceof BigInteger) {
-				cell.setCellValue(((BigInteger) d).doubleValue());
-				cell.setCellStyle(integerCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-			} else if (d instanceof Number) {
-				cell.setCellValue(((Number) d).doubleValue());
-				cell.setCellStyle(numberCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-			} else if (d instanceof Boolean) {
-				cell.setCellValue(createHelper.createRichTextString((Boolean) d ? StaticWidgetHelper.getSynaptixWidgetConstantsBundle().printTrue() : StaticWidgetHelper
-						.getSynaptixWidgetConstantsBundle().printFalse()));
-				cell.setCellStyle(textCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
-			} else if (d instanceof String) {
-				cell.setCellValue(createHelper.createRichTextString((String) d));
-				cell.setCellStyle(textCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
-			} else {
-				String text = getString(d, objectsToStringByClassMap);
-				cell.setCellValue(createHelper.createRichTextString(text));
-				cell.setCellStyle(textCs);
-				cell.setCellType(XSSFCell.CELL_TYPE_STRING);
-			}
+	public void displayObjectInCell(XSSFCell cell, Object d, Map<Class<?>, GenericObjectToString<?>> objectsToStringByClassMap, Map<IHierarchicalExportWriter.Type, XSSFCellStyle> styleMap,
+			IHierarchicalExportWriter.Type type, XSSFCreationHelper createHelper) {
+		if (d instanceof Date) {
+			cell.setCellValue((Date) d);
+			cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.DATE));
+		} else if (d instanceof Integer) {
+			double v = ((Integer) d).doubleValue();
+			cell.setCellValue(type == IHierarchicalExportWriter.Type.PERCENT ? v / 100d : v);
+			cell.setCellStyle(styleMap.get(type == IHierarchicalExportWriter.Type.PERCENT ? type : IHierarchicalExportWriter.Type.INTEGER));
+			cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
+		} else if (d instanceof BigInteger) {
+			BigInteger v = (BigInteger) d;
+			cell.setCellValue((type == IHierarchicalExportWriter.Type.PERCENT ? v.divide(BigInteger.TEN).divide(BigInteger.TEN) : v).doubleValue());
+			cell.setCellStyle(styleMap.get(type == IHierarchicalExportWriter.Type.PERCENT ? type : IHierarchicalExportWriter.Type.INTEGER));
+			cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
+		} else if (d instanceof Number) {
+			double v = ((Number) d).doubleValue();
+			cell.setCellValue(type == IHierarchicalExportWriter.Type.PERCENT ? v / 100d : v);
+			cell.setCellStyle(styleMap.get(type == IHierarchicalExportWriter.Type.PERCENT ? type : IHierarchicalExportWriter.Type.NUMBER));
+			cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
+		} else if (d instanceof Boolean) {
+			cell.setCellValue(createHelper.createRichTextString((Boolean) d ? StaticWidgetHelper.getSynaptixWidgetConstantsBundle().printTrue() : StaticWidgetHelper.getSynaptixWidgetConstantsBundle()
+					.printFalse()));
+			cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+			cell.setCellType(XSSFCell.CELL_TYPE_STRING);
+		} else if (d instanceof String) {
+			cell.setCellValue(createHelper.createRichTextString((String) d));
+			cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+			cell.setCellType(XSSFCell.CELL_TYPE_STRING);
 		} else {
-			cell.setCellValue(createHelper.createRichTextString(""));
-			cell.setCellStyle(textCs);
+			String text = "";
+			if (d != null) {
+				text = getString(d, objectsToStringByClassMap);
+			}
+			cell.setCellValue(createHelper.createRichTextString(text));
+			cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 			cell.setCellType(XSSFCell.CELL_TYPE_STRING);
 		}
 	}

@@ -35,4 +35,13 @@ public interface IExportableTable {
 	 */
 	public int getColumnWidth(int columnIndex);
 
+	/**
+	 * Get a specific supported excel type
+	 * 
+	 * @param rowIndex
+	 * @param columnIndex
+	 * @return
+	 */
+	public IHierarchicalExportWriter.Type getForcedType(int rowIndex, int columnIndex);
+
 }

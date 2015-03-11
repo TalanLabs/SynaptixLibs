@@ -29,6 +29,7 @@ import com.synaptix.widget.hierarchical.view.swing.model.HierarchicalSelectionMo
 import com.synaptix.widget.hierarchical.view.swing.model.HoverCell;
 import com.synaptix.widget.hierarchical.writer.CellInformation;
 import com.synaptix.widget.hierarchical.writer.IExportableTable;
+import com.synaptix.widget.hierarchical.writer.IHierarchicalExportWriter;
 
 public abstract class ContentPanel<U, E extends IComponent, F extends Serializable, L extends IHierarchicalLine<E, F>> extends JPanel implements IExportableTable {
 
@@ -259,6 +260,11 @@ public abstract class ContentPanel<U, E extends IComponent, F extends Serializab
 
 	protected final HoverCell getHoverCell() {
 		return parent.selectionModel.getHoverCell();
+	}
+
+	@Override
+	public IHierarchicalExportWriter.Type getForcedType(int rowIndex, int columnIndex) {
+		return null;
 	}
 
 	private final class MyMouseListener extends MouseAdapter {
