@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,10 @@ public class ValueFooterPanel<E extends IComponent, F extends Serializable, L ex
 				}
 			}
 		}
+	}
+
+	protected final Map<F, Number> getTotalByColumn() {
+		return Collections.unmodifiableMap(totalByColumn);
 	}
 
 	private boolean isSummableValue(final Serializable value) {

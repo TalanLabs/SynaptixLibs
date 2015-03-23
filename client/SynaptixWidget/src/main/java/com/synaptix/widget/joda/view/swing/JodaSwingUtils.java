@@ -179,6 +179,15 @@ public final class JodaSwingUtils {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						timeField.commitEdit();
+					} catch (ParseException e) {
+					}
+				}
+			});
 		}
 
 		@Override
@@ -229,10 +238,29 @@ public final class JodaSwingUtils {
 					LOG.error("Bad Location in " + this.getClass().getName(), e1);
 				}
 			}
+
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						timeField.commitEdit();
+					} catch (ParseException e) {
+					}
+				}
+			});
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						timeField.commitEdit();
+					} catch (ParseException e) {
+					}
+				}
+			});
 		}
 
 		@Override

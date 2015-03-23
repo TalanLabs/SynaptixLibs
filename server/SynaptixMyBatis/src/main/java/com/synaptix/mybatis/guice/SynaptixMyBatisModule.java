@@ -18,11 +18,12 @@ import com.google.inject.name.Names;
 import com.synaptix.mybatis.SynaptixMyBatisServer;
 import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.component.mapper.ComponentMapperManager;
+import com.synaptix.mybatis.dao.DaoUserSessionManager;
 import com.synaptix.mybatis.dao.IDaoSession;
+import com.synaptix.mybatis.dao.IDaoSessionExt;
 import com.synaptix.mybatis.dao.IDaoUserContext;
 import com.synaptix.mybatis.dao.IGUIDGenerator;
 import com.synaptix.mybatis.dao.IReadDaoSession;
-import com.synaptix.mybatis.dao.DaoUserSessionManager;
 import com.synaptix.mybatis.dao.exceptions.VersionConflictDaoException;
 import com.synaptix.mybatis.dao.impl.DefaultDaoSession;
 import com.synaptix.mybatis.dao.impl.DefaultGUIDGenerator;
@@ -179,10 +180,18 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		@Inject
 		private IDaoSession daoSession;
 
+		@Inject
+		private SqlSessionManager sqlSessionManager;
+
 		@Override
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Transactional transactionnel = invocation.getMethod().getAnnotation(Transactional.class);
 			try {
+				if ((transactionnel.checkVersionConflict()) && (daoSession instanceof IDaoSessionExt)) {
+					if (!sqlSessionManager.isManagedSessionStarted()) {
+						((IDaoSessionExt) daoSession).setCheckVersionConflictDaoExceptionInSession(true);
+					}
+				}
 				daoSession.begin();
 				Object res = invocation.proceed();
 				if (transactionnel.commit()) {

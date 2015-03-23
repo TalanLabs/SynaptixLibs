@@ -76,5 +76,4 @@ public class SynaptixMyBatisServer {
 	public void stop() {
 		LOG.info("Stop SynaptixMyBatisServer");
 	}
-
 }

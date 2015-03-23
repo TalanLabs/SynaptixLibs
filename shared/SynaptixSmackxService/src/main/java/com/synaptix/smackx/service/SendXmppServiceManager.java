@@ -9,6 +9,7 @@ import java.util.WeakHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jivesoftware.smack.AbstractConnectionListener;
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.AndFilter;
@@ -28,7 +29,7 @@ public class SendXmppServiceManager {
 
 	private static final Log log = LogFactory.getLog(SendXmppServiceManager.class);
 
-	private static final Map<XMPPConnection, SendXmppServiceManager> instances = new WeakHashMap<XMPPConnection, SendXmppServiceManager>();
+	private static final Map<String, SendXmppServiceManager> instances = new WeakHashMap<String, SendXmppServiceManager>();
 
 	public static SendXmppServiceManager getInstance(final XMPPConnection connection) {
 		if (connection == null) {
@@ -38,10 +39,34 @@ public class SendXmppServiceManager {
 			SendXmppServiceManager manager = instances.get(connection);
 			if (manager == null) {
 				manager = new SendXmppServiceManager(connection);
-				instances.put(connection, manager);
+				instances.put(connection.getConnectionID(), manager);
+
+				connection.addConnectionListener(new MyConnectionListener(connection));
 			}
 
 			return manager;
+		}
+	}
+
+	private static class MyConnectionListener extends AbstractConnectionListener {
+
+		XMPPConnection connection;
+
+		public MyConnectionListener(XMPPConnection connection) {
+			super();
+			this.connection = connection;
+		}
+
+		@Override
+		public void connectionClosedOnError(Exception e) {
+			connection.removeConnectionListener(this);
+			instances.remove(connection.getConnectionID());
+		}
+
+		@Override
+		public void connectionClosed() {
+			connection.removeConnectionListener(this);
+			instances.remove(connection.getConnectionID());
 		}
 	}
 

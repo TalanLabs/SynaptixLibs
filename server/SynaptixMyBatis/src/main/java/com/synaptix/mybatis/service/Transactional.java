@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.synaptix.service.exceptions.VersionConflictServiceException;
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -13,9 +15,13 @@ public @interface Transactional {
 
 	/**
 	 * Commit if ok
-	 * 
-	 * @return
 	 */
 	boolean commit() default false;
+
+	/**
+	 * Checks the version of the entities saved.<br/>
+	 * If different, throws a {@link VersionConflictServiceException}
+	 */
+	boolean checkVersionConflict() default false;
 
 }

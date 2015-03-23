@@ -31,7 +31,7 @@ public abstract class AbstractSimpleDialog extends WaitComponentFeedbackPanel im
 
 	public static final int CANCEL_OPTION = 1;
 
-	public static final int CLOSE_OPTION = 1;
+	public static final int CLOSE_OPTION = 2;
 
 	private JDialogModel dialog;
 
@@ -45,7 +45,7 @@ public abstract class AbstractSimpleDialog extends WaitComponentFeedbackPanel im
 
 	protected Action closeAction;
 
-	private int returnValue;
+	private int returnValue = CANCEL_OPTION;
 
 	protected ToolTipFeedbackComponentValidationResultFocusListener toolTipFeedbackComponentValidationResultFocusListener;
 

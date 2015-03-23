@@ -25,8 +25,10 @@ public class HeartbeatAgent implements Agent {
 	public void work(Object message, Engine processEngine) {
 		synchronized (this) {
 			if ("STOP".equals(message)) {
-				probe.disable();
-				probe = null;
+				if (probe != null) {
+					probe.disable();
+					probe = null;
+				}
 			} else if (probe == null) {
 				probe = new HeartbeatProbe(delay, channel, beat);
 				probe.start();

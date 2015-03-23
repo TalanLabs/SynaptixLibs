@@ -56,7 +56,7 @@ public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel i
 
 	protected Action closeAction;
 
-	private int returnValue;
+	private int returnValue = CANCEL_OPTION;
 
 	protected boolean readOnly;
 

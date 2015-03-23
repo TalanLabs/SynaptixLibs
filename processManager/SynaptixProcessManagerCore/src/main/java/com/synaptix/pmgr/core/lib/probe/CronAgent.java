@@ -25,8 +25,10 @@ public class CronAgent implements Agent {
 	public void work(Object message, Engine processEngine) {
 		synchronized (this) {
 			if ("STOP".equals(message)) {
-				scheduler.stop();
-				scheduler = null;
+				if (scheduler != null) {
+					scheduler.stop();
+					scheduler = null;
+				}
 			} else if (scheduler == null) {
 				scheduler = new Scheduler();
 				scheduler.schedule(schedulingPattern, new Runnable() {
