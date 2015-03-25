@@ -98,7 +98,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 		this.defaultMeaningLanguage = defaultLanguage;
 
 		this.setUserInSession = true;
-		this.checkDefaultVersionConflictDaoExceptionInSession = false;
+		this.checkDefaultVersionConflictDaoExceptionInSession = true;
 
 		this.entitySaveOrUpdateListenerMap = new HashMap<Class<? extends IEntity>, List<IEntitySaveOrUpdateListener<?>>>();
 	}

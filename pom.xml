@@ -277,7 +277,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-			<url>https://nexus.synaptix-labs.com/content/groups/public_release</url>
+			<url>http://nexus.synaptix-labs.com/content/groups/public_release</url>
 		</repository>
 		<repository>
 			<id>synaptix-snapshots-repository</id>
@@ -287,7 +287,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<url>https://nexus.synaptix-labs.com/content/groups/public_snapshots</url>
+			<url>http://nexus.synaptix-labs.com/content/groups/public_snapshots</url>
 		</repository>
 		<repository>
 			<id>java.net-Public</id>
@@ -779,11 +779,11 @@
 	<distributionManagement>
 		<repository>
 			<id>synaptix-releases-repository</id>
-			<url>https://nexus.synaptix-labs.com/content/repositories/releases/</url>
+			<url>http://nexus.synaptix-labs.com/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>synaptix-snapshots-repository</id>
-			<url>https://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
+			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>

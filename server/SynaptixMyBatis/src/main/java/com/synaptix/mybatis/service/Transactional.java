@@ -20,8 +20,9 @@ public @interface Transactional {
 
 	/**
 	 * Checks the version of the entities saved.<br/>
-	 * If different, throws a {@link VersionConflictServiceException}
+	 * If different, throws a {@link VersionConflictServiceException}<br/>
+	 * Default value is true
 	 */
-	boolean checkVersionConflict() default false;
+	boolean checkVersionConflict() default true;
 
 }

@@ -187,9 +187,9 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		public Object invoke(MethodInvocation invocation) throws Throwable {
 			Transactional transactionnel = invocation.getMethod().getAnnotation(Transactional.class);
 			try {
-				if ((transactionnel.checkVersionConflict()) && (daoSession instanceof IDaoSessionExt)) {
+				if (daoSession instanceof IDaoSessionExt) {
 					if (!sqlSessionManager.isManagedSessionStarted()) {
-						((IDaoSessionExt) daoSession).setCheckVersionConflictDaoExceptionInSession(true);
+						((IDaoSessionExt) daoSession).setCheckVersionConflictDaoExceptionInSession(transactionnel.checkVersionConflict());
 					}
 				}
 				daoSession.begin();
