@@ -190,8 +190,10 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 								}
 
 								if ((cellInformation != null) && (cellInformation.getHorizontalCellSpan() > 1)) {
-									if ((maxHeight <= 1) || (cellInformation.getHorizontalCellSpan() < exportTable.getExportWidth())) { // otherwise will be done by the last region
-																																		// merge
+									// merge horizontal, check if invasive first
+									if ((maxHeight <= 1) || (cellColumn != 0) || (cellInformation.getHorizontalCellSpan() < exportTable.getExportWidth())) { // otherwise will be done by the last
+																																								// region
+										// merge
 										for (int k = columnIndex + 1; k <= cellInformation.getHorizontalCellSpan() - 1; k++) {
 											XSSFCell cell2 = createCell(tableSheet, cellRow, cellColumn + k, table);
 											if (cell2 != null) {
@@ -210,6 +212,7 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 									}
 									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellInformation.getVerticalCellSpan() + cellRow - 1, cellColumn, cellColumn));
 								} else if ((maxHeight > exportTable.getExportHeight()) && (rowIndex == 0)) {
+									// invasive
 									for (int k = 0; k <= maxHeight - exportTable.getExportHeight(); k++) {
 										for (int p = 0; p < cellInformation.getHorizontalCellSpan(); p++) {
 											XSSFCell cell2 = createCell(tableSheet, k + cellRow, cellColumn + p, table);
