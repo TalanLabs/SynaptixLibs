@@ -10,13 +10,27 @@ public abstract class AbstractSynaptixAuthsBundleModule extends AbstractModule {
 
 	private final Class<? extends Annotation> annotationType;
 
+	private final Annotation annotation;
+
 	public AbstractSynaptixAuthsBundleModule() {
-		this(null);
+		super();
+
+		this.annotationType = null;
+		this.annotation = null;
 	}
 
 	public AbstractSynaptixAuthsBundleModule(Class<? extends Annotation> annotationType) {
 		super();
+
 		this.annotationType = annotationType;
+		this.annotation = null;
+	}
+
+	public AbstractSynaptixAuthsBundleModule(Annotation annotation) {
+		super();
+
+		this.annotationType = null;
+		this.annotation = annotation;
 	}
 
 	/**
@@ -24,9 +38,11 @@ public abstract class AbstractSynaptixAuthsBundleModule extends AbstractModule {
 	 * 
 	 * @param authsBundleClass
 	 */
-	public final <T extends AuthsBundle> void bindAuthsBundle(Class<T> authsBundleClass) {
+	protected final <T extends AuthsBundle> void bindAuthsBundle(Class<T> authsBundleClass) {
 		if (annotationType != null) {
 			bind(authsBundleClass).annotatedWith(annotationType).toProvider(new SynaptixAuthsBundleProvider<T>(annotationType, authsBundleClass)).in(Scopes.SINGLETON);
+		} else if (annotation != null) {
+			bind(authsBundleClass).annotatedWith(annotation).toProvider(new SynaptixAuthsBundleProvider<T>(annotationType, authsBundleClass)).in(Scopes.SINGLETON);
 		} else {
 			bind(authsBundleClass).toProvider(new SynaptixAuthsBundleProvider<T>(authsBundleClass)).in(Scopes.SINGLETON);
 		}

@@ -38,7 +38,7 @@ public abstract class AbstractSynaptixConstantsBundleModule extends AbstractModu
 	 * 
 	 * @param authsBundleClass
 	 */
-	public final <T extends ConstantsBundle> void bindConstantsBundle(Class<T> constantsBundleClass) {
+	protected final <T extends ConstantsBundle> void bindConstantsBundle(Class<T> constantsBundleClass) {
 		if (annotationType != null) {
 			bind(constantsBundleClass).annotatedWith(annotationType).toProvider(new SynaptixConstantsBundleProvider<T>(annotationType, constantsBundleClass)).in(Scopes.SINGLETON);
 		} else if (annotation != null) {

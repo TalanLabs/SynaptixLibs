@@ -11,31 +11,35 @@ import com.synaptix.auth.AuthsBundleManager;
 
 public class SynaptixAuthsBundleProvider<T extends AuthsBundle> implements Provider<T> {
 
-	private final Class<? extends Annotation> annotationType;
+	private final Key<AuthsBundleManager> key;
 
 	private final Class<T> authsBundleClass;
 
 	private AuthsBundleManager authsBundleManager;
 
 	public SynaptixAuthsBundleProvider(Class<T> authsBundleClass) {
-		this(null, authsBundleClass);
+		super();
+
+		this.key = Key.get(AuthsBundleManager.class);
+		this.authsBundleClass = authsBundleClass;
 	}
 
 	public SynaptixAuthsBundleProvider(Class<? extends Annotation> annotationType, Class<T> authsBundleClass) {
 		super();
 
-		this.annotationType = annotationType;
+		this.key = Key.get(AuthsBundleManager.class, annotationType);
+		this.authsBundleClass = authsBundleClass;
+	}
+
+	public SynaptixAuthsBundleProvider(Annotation annotation, Class<T> authsBundleClass) {
+		super();
+
+		this.key = Key.get(AuthsBundleManager.class, annotation);
 		this.authsBundleClass = authsBundleClass;
 	}
 
 	@Inject
 	public void setInjector(Injector injector) {
-		Key<AuthsBundleManager> key;
-		if (annotationType != null) {
-			key = Key.get(AuthsBundleManager.class, annotationType);
-		} else {
-			key = Key.get(AuthsBundleManager.class);
-		}
 		authsBundleManager = injector.getInstance(key);
 		authsBundleManager.addBundle(authsBundleClass);
 	}
