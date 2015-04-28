@@ -12,7 +12,7 @@
 				from all_tab_columns where owner = #{dbName}
 				order by table_name, column_name
 	</select>
-	
+
 	<select id="getConstraints" resultMap="com.synaptix.deployer.model.IConstraint">
 		select c.table_name, c.constraint_name,
 			c.constraint_type as constraint_type,
