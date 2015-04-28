@@ -48,23 +48,20 @@ public class InsertMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(entityClass, null, "insert");
 
 		MappedStatement mappedStatement = null;
-		synchronized (entityClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new InsertSqlSource<E>(entityClass), SqlCommandType.INSERT);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", Integer.class, new ArrayList<ResultMapping>(), null);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(entityClass);
-				if (cacheResult != null) {
-					msBuilder.flushCacheRequired(true);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new InsertSqlSource<E>(entityClass), SqlCommandType.INSERT);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", Integer.class, new ArrayList<ResultMapping>(), null);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(entityClass);
+			if (cacheResult != null) {
+				msBuilder.flushCacheRequired(true);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

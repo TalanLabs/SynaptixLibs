@@ -11,31 +11,35 @@ import com.synaptix.constants.shared.ConstantsBundle;
 
 public class SynaptixConstantsBundleProvider<T extends ConstantsBundle> implements Provider<T> {
 
-	private final Class<? extends Annotation> annotationType;
+	private final Key<ConstantsBundleManager> key;
 
 	private final Class<T> constantsBundleClass;
 
 	private ConstantsBundleManager constantsBundleManager;
 
 	public SynaptixConstantsBundleProvider(Class<T> constantsBundleClass) {
-		this(null, constantsBundleClass);
+		super();
+
+		this.key = Key.get(ConstantsBundleManager.class);
+		this.constantsBundleClass = constantsBundleClass;
 	}
 
 	public SynaptixConstantsBundleProvider(Class<? extends Annotation> annotationType, Class<T> constantsBundleClass) {
 		super();
 
-		this.annotationType = annotationType;
+		this.key = Key.get(ConstantsBundleManager.class, annotationType);
+		this.constantsBundleClass = constantsBundleClass;
+	}
+
+	public SynaptixConstantsBundleProvider(Annotation annotation, Class<T> constantsBundleClass) {
+		super();
+
+		this.key = Key.get(ConstantsBundleManager.class, annotation);
 		this.constantsBundleClass = constantsBundleClass;
 	}
 
 	@Inject
 	public void setInjector(Injector injector) {
-		Key<ConstantsBundleManager> key;
-		if (annotationType != null) {
-			key = Key.get(ConstantsBundleManager.class, annotationType);
-		} else {
-			key = Key.get(ConstantsBundleManager.class);
-		}
 		constantsBundleManager = injector.getInstance(key);
 		constantsBundleManager.addBundle(constantsBundleClass);
 	}

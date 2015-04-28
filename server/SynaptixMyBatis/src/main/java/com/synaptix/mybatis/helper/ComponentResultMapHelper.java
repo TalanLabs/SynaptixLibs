@@ -70,16 +70,12 @@ public class ComponentResultMapHelper {
 			String key = buildResultMapKey(clazz, null, "simple");
 
 			ResultMap resultMap;
-			synchronized (lock) {
-				if (synaptixConfiguration.hasComponentResultMap(key)) {
-					resultMap = synaptixConfiguration.getComponentResultMap(key);
-				} else {
-					ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, clazz, new ArrayList<ResultMapping>(), null);
-					resultMap = inlineResultMapBuilder.build();
-					synaptixConfiguration.addResultMap(resultMap);
-				}
+			if (!synaptixConfiguration.hasComponentResultMap(key)) {
+				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, clazz, new ArrayList<ResultMapping>(), null);
+				resultMap = inlineResultMapBuilder.build();
+				synaptixConfiguration.addResultMap(resultMap);
 			}
-
+			resultMap = synaptixConfiguration.getComponentResultMap(key);
 			return resultMap;
 		}
 	}
@@ -88,16 +84,13 @@ public class ComponentResultMapHelper {
 		String key = buildResultMapKey(componentClass, null, "simple");
 
 		ResultMap resultMap;
-		synchronized (lock) {
-			if (synaptixConfiguration.hasComponentResultMap(key)) {
-				resultMap = synaptixConfiguration.getComponentResultMap(key);
-			} else {
-				List<ResultMapping> resultMappings = createResultMappings(componentClass, null, null, propertyNamePrefix, false);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
-				resultMap = inlineResultMapBuilder.build();
-				synaptixConfiguration.addResultMap(resultMap);
-			}
+		if (!synaptixConfiguration.hasComponentResultMap(key)) {
+			List<ResultMapping> resultMappings = createResultMappings(componentClass, null, null, propertyNamePrefix, false);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
+			resultMap = inlineResultMapBuilder.build();
+			synaptixConfiguration.addResultMap(resultMap);
 		}
+		resultMap = synaptixConfiguration.getComponentResultMap(key);
 
 		return resultMap;
 	}
@@ -119,18 +112,14 @@ public class ComponentResultMapHelper {
 		String key = buildResultMapKey(componentClass, cs, "nested");
 
 		ResultMap resultMap;
-		synchronized (lock) {
-			if (synaptixConfiguration.hasComponentResultMap(key)) {
-				resultMap = synaptixConfiguration.getComponentResultMap(key);
-			} else {
-				Set<String> pns = extractPropertyNames(componentClass, columns, propertyNamePrefix);
-				List<ResultMapping> resultMappings = createResultMappings(componentClass, pns, columns, propertyNamePrefix, true);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
-				resultMap = inlineResultMapBuilder.build();
-				synaptixConfiguration.addResultMap(resultMap);
-			}
+		if (!synaptixConfiguration.hasComponentResultMap(key)) {
+			Set<String> pns = extractPropertyNames(componentClass, columns, propertyNamePrefix);
+			List<ResultMapping> resultMappings = createResultMappings(componentClass, pns, columns, propertyNamePrefix, true);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
+			resultMap = inlineResultMapBuilder.build();
+			synaptixConfiguration.addResultMap(resultMap);
 		}
-
+		resultMap = synaptixConfiguration.getComponentResultMap(key);
 		return resultMap;
 	}
 
@@ -293,16 +282,17 @@ public class ComponentResultMapHelper {
 	public ResultMap getResultMapWithNested(Class<? extends IComponent> componentClass) {
 		String key = buildResultMapKey(componentClass, null, "normal");
 		ResultMap resultMap;
-		synchronized (lock) {
-			if (synaptixConfiguration.hasComponentResultMap(key)) {
-				resultMap = synaptixConfiguration.getComponentResultMap(key);
-			} else {
-				List<ResultMapping> resultMappings = _createResultMappings1(componentClass);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
-				resultMap = inlineResultMapBuilder.build();
-				synaptixConfiguration.addResultMap(resultMap);
+		if (!synaptixConfiguration.hasComponentResultMap(key)) {
+			List<ResultMapping> resultMappings = _createResultMappings1(componentClass);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
+			resultMap = inlineResultMapBuilder.build();
+			synchronized (lock) {
+				if (!synaptixConfiguration.hasComponentResultMap(key)) {
+					synaptixConfiguration.addResultMap(resultMap);
+				}
 			}
 		}
+		resultMap = synaptixConfiguration.getComponentResultMap(key);
 
 		return resultMap;
 	}
@@ -314,13 +304,15 @@ public class ComponentResultMapHelper {
 	 * @return
 	 */
 	public ResultMap createResultMap(Class<? extends IComponent> componentClass) {
+		String key = componentClass.getName();
 		ResultMap resultMap;
-		synchronized (lock) {
+		if (!synaptixConfiguration.hasComponentResultMap(key)) {
 			List<ResultMapping> resultMappings = _createResultMappings2(componentClass, false);
-			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, componentClass.getName(), componentClass, resultMappings, null);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key, componentClass, resultMappings, null);
 			resultMap = inlineResultMapBuilder.build();
 			synaptixConfiguration.addResultMap(resultMap);
 		}
+		resultMap = synaptixConfiguration.getComponentResultMap(key);
 		return resultMap;
 	}
 

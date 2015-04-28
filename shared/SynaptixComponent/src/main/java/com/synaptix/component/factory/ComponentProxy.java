@@ -28,13 +28,15 @@ import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescript
 
 class ComponentProxy implements InvocationHandler, Serializable {
 
-	private static final ObjectStreamField[] serialPersistentFields = { new ObjectStreamField("componentClass", IComponent.class), new ObjectStreamField("propertyValueMap", Map.class) };
+	private static final ObjectStreamField[] serialPersistentFields = { new ObjectStreamField("componentClassName", String.class), new ObjectStreamField("propertyValueMap", Map.class) };
 
 	private static Log LOG = LogFactory.getLog(ComponentProxy.class);
 
 	private static final long serialVersionUID = -1210441501657033411L;
 
 	protected Class<? extends IComponent> componentClass;
+
+	protected String componentClassName;
 
 	private transient ComponentDescriptor componentDescriptor;
 
@@ -46,10 +48,21 @@ class ComponentProxy implements InvocationHandler, Serializable {
 
 	protected Map<String, Object> propertyValueMap;
 
+	@SuppressWarnings("unchecked")
+	ComponentProxy(String componentClassName) throws ClassNotFoundException {
+		super();
+
+		this.componentClass = (Class<? extends IComponent>) Class.forName(componentClassName);
+		this.componentClassName = componentClassName;
+
+		initialize();
+	}
+
 	ComponentProxy(Class<? extends IComponent> componentClass) {
 		super();
 
 		this.componentClass = componentClass;
+		this.componentClassName = componentClass.getName();
 
 		initialize();
 	}
@@ -118,8 +131,11 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	protected Object invoke(ComponentBeanMethod bm, Object proxy, Method method, Object[] args) throws Throwable {
 		Object res = null;
 		switch (bm) {
-		case COMPUTED:
-			res = computed(proxy, bm.inferName(method), args);
+		case COMPUTED_GET:
+			res = computed(proxy, bm.inferName(method) + bm.name(), args);
+			break;
+		case COMPUTED_SET:
+			res = computed(proxy, bm.inferName(method) + bm.name(), args);
 			break;
 		case GET:
 			res = getter(proxy, bm.inferName(method));
@@ -188,6 +204,7 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			Object instance = getComputeInstanceMap().get(clazz);
 			if (instance == null) {
 				instance = ComponentFactory.getInstance().getComputedFactory().createInstance(clazz);
+				getComputeInstanceMap().put(clazz, instance);
 			}
 			try {
 				List<Object> list = new ArrayList<Object>();
@@ -411,13 +428,22 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeObject(componentClass);
+		// out.writeObject(componentClass);
+		out.writeObject(componentClassName);
 		out.writeObject(propertyValueMap);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		componentClass = (Class<? extends IComponent>) in.readObject();
+		// componentClass = (Class<? extends IComponent>) in.readObject();
+		Object firstObject = in.readObject();
+		if (firstObject instanceof String) {
+			componentClassName = (String) firstObject;
+			componentClass = (Class<? extends IComponent>) Class.forName(componentClassName);
+		} else { // retrocompatibility
+			componentClass = (Class<? extends IComponent>) firstObject;
+			componentClassName = componentClass.getName();
+		}
 		propertyValueMap = (Map<String, Object>) in.readObject();
 	}
 

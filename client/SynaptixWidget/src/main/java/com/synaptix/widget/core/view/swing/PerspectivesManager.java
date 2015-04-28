@@ -12,7 +12,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.Icon;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
@@ -46,12 +49,33 @@ public class PerspectivesManager {
 
 	private final List<Perspective> personalPerspectives = new ArrayList<Perspective>();
 
+	private final ActionMap defaultActionMap;
+
+	private final InputMap defaultInputMap;
+
 	public PerspectivesManager(SyDockingContext dockingContext) {
 		super();
+
+		this.defaultActionMap = new ActionMap();
+		this.defaultInputMap = new InputMap();
 
 		this.dockingContext = dockingContext;
 
 		UIManager.put("DockingDesktop.closeActionAccelerator", KeyStroke.getKeyStroke(87, InputEvent.CTRL_DOWN_MASK)); // ctrl + w
+	}
+
+	public final void addDefaultKeyStroke(Object actionMapKey, KeyStroke keyStroke, Action action) {
+		defaultActionMap.put(actionMapKey, action);
+		defaultInputMap.put(keyStroke, actionMapKey);
+
+		@SuppressWarnings("unchecked")
+		ArrayList<DockingDesktop> desktopList = dockingContext.getDesktopList();
+		if (desktopList != null) {
+			for (DockingDesktop d : desktopList) {
+				d.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, defaultInputMap.get(keyStroke));
+				d.getActionMap().put(actionMapKey, defaultActionMap.get(actionMapKey));
+			}
+		}
 	}
 
 	public final void clear() {
@@ -447,8 +471,20 @@ public class PerspectivesManager {
 			}
 
 			for (final DockingDesktop d : desktopList) {
-				d.getInputMap().clear();
+				d.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).clear();
 				d.getActionMap().clear();
+
+				if (defaultInputMap.keys() != null) {
+					for (KeyStroke keyStroke : defaultInputMap.keys()) {
+						d.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, defaultInputMap.get(keyStroke));
+					}
+				}
+				if (defaultActionMap.keys() != null) {
+					for (Object object : defaultActionMap.keys()) {
+						d.getActionMap().put(object, defaultActionMap.get(object));
+					}
+				}
+
 				if (!perspectives.isEmpty()) {
 					for (Perspective p : perspectives) {
 						if (p.getKeyStroke() != null) {

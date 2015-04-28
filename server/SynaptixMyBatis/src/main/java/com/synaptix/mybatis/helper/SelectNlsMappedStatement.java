@@ -48,23 +48,20 @@ public class SelectNlsMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, columns, "nlsSelect");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectNlsSqlSource<E>(componentClass, columnName), SqlCommandType.SELECT);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", String.class, new ArrayList<ResultMapping>(), null);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectNlsSqlSource<E>(componentClass, columnName), SqlCommandType.SELECT);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", String.class, new ArrayList<ResultMapping>(), null);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

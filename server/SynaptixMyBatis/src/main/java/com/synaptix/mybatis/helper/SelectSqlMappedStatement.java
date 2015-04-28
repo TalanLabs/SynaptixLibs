@@ -55,24 +55,21 @@ public class SelectSqlMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, null, "selectSql-" + sql);
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMap(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMap(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSqlSource(sql), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSqlSource(sql), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
@@ -88,24 +85,21 @@ public class SelectSqlMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, CollectionHelper.asSet(typeClass.getName()), "selectSql-" + sql);
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMap(typeClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMap(typeClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSqlSource(sql), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSqlSource(sql), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

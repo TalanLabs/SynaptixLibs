@@ -97,14 +97,14 @@ public class ComponentDescriptor implements Serializable {
 	}
 
 	protected void addMethod(Method method, ComponentBeanMethod bm) {
-		if (ComponentBeanMethod.COMPUTED.equals(bm)) {
+		if ((ComponentBeanMethod.COMPUTED_GET == bm) || (ComponentBeanMethod.COMPUTED_SET == bm)) {
 			IComponent.Computed computed = method.getAnnotation(IComponent.Computed.class);
 			Class<?> clazz = computed.value();
 			Method m = findMethod(clazz, method);
 			if (m != null) {
 				String propertyName = bm.inferName(method);
 				ComputedMethodDescriptor computedMethodDescriptor = new ComputedMethodDescriptor(method.toGenericString(), clazz, m);
-				computedMethodDescriptorMap.put(propertyName, computedMethodDescriptor);
+				computedMethodDescriptorMap.put(propertyName + bm.name(), computedMethodDescriptor);
 				addPropertyName(method, bm, propertyName);
 			} else {
 				List<Class<?>> ps = new ArrayList<Class<?>>();
@@ -113,7 +113,7 @@ public class ComponentDescriptor implements Serializable {
 
 				throw new RuntimeException(method.getReturnType() + " " + method.getName() + "(" + Arrays.toString(ps.toArray()) + ") not found in " + clazz);
 			}
-		} else if (ComponentBeanMethod.GET.equals(bm)) {
+		} else if (ComponentBeanMethod.GET == bm) {
 			String propertyName = bm.inferName(method);
 			addPropertyName(method, bm, propertyName);
 		}
@@ -181,7 +181,7 @@ public class ComponentDescriptor implements Serializable {
 		PropertyDescriptor cf = new PropertyDescriptor(propertyName, returnType, equalsKey, propertyExtensionDescriptorMap);
 		componentFieldMap.put(propertyName, cf);
 		propertyDescriptors.add(cf);
-		if (!ComponentBeanMethod.COMPUTED.equals(bm)) {
+		if ((ComponentBeanMethod.COMPUTED_GET != bm) && (ComponentBeanMethod.COMPUTED_SET != bm)) {
 			propertyNames.add(propertyName);
 		}
 		if (equalsKey) {

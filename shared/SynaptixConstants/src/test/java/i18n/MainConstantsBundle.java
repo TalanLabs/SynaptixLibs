@@ -15,7 +15,7 @@ public class MainConstantsBundle {
 	 */
 	public static void main(String[] args) {
 
-		DefaultConstantsBundleManager manager = new DefaultConstantsBundleManager(new DefaultConstantsLocaleSession(Locale.ENGLISH));
+		DefaultConstantsBundleManager manager = new DefaultConstantsBundleManager(new DefaultConstantsLocaleSession(Locale.FRENCH));
 		manager.addBundle(SousConstantsBundle.class);
 		manager.addBundle(MyConstantsBundle.class);
 		manager.addBundle(LieuConstantsBundle.class);
@@ -26,7 +26,7 @@ public class MainConstantsBundle {
 		MyConstantsBundle cb = manager.getBundle(MyConstantsBundle.class);
 
 		System.out.println(cb.map().get("key1"));
-		System.out.println(cb.map().get("existspas"));
+		// System.out.println(cb.map().get("existspas"));
 
 		//
 		// LieuConstantsBundle l = manager.getBundle(LieuConstantsBundle.class);

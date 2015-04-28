@@ -100,30 +100,27 @@ public class SelectNestedMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, cs, "selectSuggest");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap;
-				if (columns == null) {
-					inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
-				} else {
-					inlineResultMap = componentResultMapHelper.getNestedResultMap(componentClass, columns);
-				}
-
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSuggestNestedSqlSource<E>(componentClass, columns), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.fetchSize(maxRow);
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap;
+			if (columns == null) {
+				inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+				inlineResultMap = componentResultMapHelper.getNestedResultMap(componentClass, columns);
 			}
+
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectSuggestNestedSqlSource<E>(componentClass, columns), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.fetchSize(maxRow);
+				msBuilder.useCache(true);
+			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

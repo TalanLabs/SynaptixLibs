@@ -1,11 +1,17 @@
 package com.synaptix.widget.view.swing;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -47,6 +53,10 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 	private boolean isMultiSel;
 
 	public ListFilterDialog(GenericObjectToString<E> objectToString) {
+		this(objectToString, null);
+	}
+
+	public ListFilterDialog(GenericObjectToString<E> objectToString, String defaultFilter) {
 		super();
 
 		this.objectToString = objectToString;
@@ -54,6 +64,8 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 		initComponents();
 
 		initialize();
+
+		filter.setText(defaultFilter);
 	}
 
 	private void initComponents() {
@@ -85,6 +97,35 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 		MyListener listener = new MyListener();
 		jList.addListSelectionListener(listener);
 		jList.addMouseListener(listener);
+
+		filter.addActionListener(new AbstractAction() {
+
+			private static final long serialVersionUID = 6081810563922060664L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (jList.getSelectedIndex() >= 0) {
+					acceptAction.actionPerformed(e);
+				}
+			}
+		});
+		filter.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
+					if (jList.getSelectedIndex() >= 0) {
+						jList.setSelectedIndex(jList.getSelectedIndex() - 1);
+						jList.ensureIndexIsVisible(jList.getSelectedIndex());
+					}
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					if (jList.getSelectedIndex() < jList.getModel().getSize() - 1) {
+						jList.setSelectedIndex(jList.getSelectedIndex() + 1);
+						jList.ensureIndexIsVisible(jList.getSelectedIndex());
+					}
+				}
+			}
+		});
 	}
 
 	public void setCellRenderer(ListCellRenderer cellRenderer) {
@@ -211,17 +252,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 			this.subList = new ArrayList<E>();
 			if (list != null) {
-				if ((filterText == null) || (filterText.isEmpty())) {
-					subList.addAll(list);
-				} else {
-					Pattern patt = convertFilterToPattern(filterText);
-					for (E e : list) {
-						String toS = objectToString.getString(e);
-						if ((toS != null) && (patt.matcher(toS).matches())) {
-							subList.add(e);
-						}
-					}
-				}
+				subList.addAll(filter(filterText, objectToString, list, isCaseSensitive, -1));
 			}
 			fireContentsChanged(this, 0, CollectionHelper.size(list));
 			// does the new list contains some of the previous selected items?
@@ -244,30 +275,14 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 				// else, we clear the selection
 				jList.getSelectionModel().clearSelection();
 			}
-			updateValidation();
-		}
 
-		/**
-		 * Converts the filter to a pattern. Also depends on the case sensitivity parameter
-		 * 
-		 * @param filterText
-		 * @return Corresponding pattern
-		 */
-		private Pattern convertFilterToPattern(String filterText) {
-			String regex = filterText;
-			int flags = 0;
-			// neutralisation
-			regex = regex.replaceAll("\\.", "\\\\\\.");
-			// evolution for jokers
-			regex = regex.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-			// case sensitivity
-			if (!isCaseSensitive) {
-				flags = Pattern.CASE_INSENSITIVE;
+			if (subList.size() == 1) {
+				jList.setSelectedIndex(0);
+			} else {
+				jList.setSelectedValue(null, false);
 			}
-			// searches even if doesn't end the same way
-			regex = regex.concat(".*");
-			Pattern patt = Pattern.compile(regex, flags);
-			return patt;
+
+			updateValidation();
 		}
 
 		@Override
@@ -282,6 +297,67 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 			}
 			return subList.get(index);
 		}
+	}
+
+	public static String removeDiacriticalMarks(String string) {
+		return Normalizer.normalize(string, Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	}
+
+	/**
+	 * Filter a list of objects with given filterText, using its descriptive string
+	 * 
+	 * @param max
+	 *            maximum number of results, -1 for all
+	 * @return
+	 */
+	public static <E> List<E> filter(String filterText, GenericObjectToString<E> objectToString, List<E> list, boolean isCaseSensitive, int max) {
+		List<E> resultList = new ArrayList<E>();
+		if ((filterText == null) || (filterText.isEmpty())) {
+			if (max >= 0) {
+				for (int i = 0; i < max; i++) {
+					resultList.add(list.get(i));
+				}
+			} else {
+				resultList.addAll(list);
+			}
+		} else {
+			Pattern patt = convertFilterToPattern(filterText, isCaseSensitive);
+			int listSize = list.size();
+			int i = max >= 0 ? max : listSize;
+			int idx = 0;
+			while (i > 0 && idx < listSize) {
+				E e = list.get(idx++);
+				String toS = removeDiacriticalMarks(objectToString.getString(e));
+				if ((toS != null) && (patt.matcher(toS).matches())) {
+					resultList.add(e);
+					i--;
+				}
+			}
+		}
+		return resultList;
+	}
+
+	/**
+	 * Converts the filter to a pattern. Also depends on the case sensitivity parameter
+	 * 
+	 * @param filterText
+	 * @return Corresponding pattern
+	 */
+	private static Pattern convertFilterToPattern(String filterText, boolean isCaseSensitive) {
+		String regex = removeDiacriticalMarks(filterText);
+		int flags = 0;
+		// neutralisation
+		regex = regex.replaceAll("\\.", "\\\\\\.");
+		// evolution for jokers
+		regex = regex.replaceAll("\\*", ".*").replaceAll("\\?", ".");
+		// case sensitivity
+		if (!isCaseSensitive) {
+			flags = Pattern.CASE_INSENSITIVE;
+		}
+		// searches even if doesn't end the same way
+		regex = regex.concat(".*");
+		Pattern patt = Pattern.compile(regex, flags);
+		return patt;
 	}
 
 	private class MyListener extends MouseAdapter implements ListSelectionListener {

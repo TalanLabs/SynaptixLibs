@@ -380,13 +380,18 @@ public class ProcessingChannel extends AbstractChannel implements PluggableChann
 			this.pchannel = pchannel;
 		}
 
-		public synchronized boolean pushToWork(int i) {
-			if (pendingList.size() <= i) {
-				return false;
+		public boolean pushToWork(int i) {
+			AgentRunnable runnable = null;
+			synchronized (pendingList) {
+				if (pendingList.size() <= i) {
+					return false;
+				}
+				runnable = pendingList.remove(i);
 			}
-			AgentRunnable runnable = pendingList.remove(i);
 			Thread thread = new AgentThread(runnable, pchannel);
-			runningList.add(thread);
+			synchronized (runningList) {
+				runningList.add(thread);
+			}
 			thread.start();
 
 			// System.out.println("RUNNNING ON "+pchannel.getName()+" = "+runningCount());
@@ -394,17 +399,21 @@ public class ProcessingChannel extends AbstractChannel implements PluggableChann
 			return true;
 		}
 
-		public synchronized void pushToWait(AgentRunnable runnable) {
-			pendingList.add(runnable);
-			if (pendingList.size() >= maxWaitingAgents) {
-				pchannel.notifyOverload();
+		public void pushToWait(AgentRunnable runnable) {
+			synchronized (pendingList) {
+				pendingList.add(runnable);
+				if (pendingList.size() >= maxWaitingAgents) {
+					pchannel.notifyOverload();
+				}
 			}
 		}
 
-		public synchronized void workDone(Thread thread) {
-			runningList.remove(thread);
-			if (runningList.size() == 0) {
-				pchannel.notifyIdling();
+		public void workDone(Thread thread) {
+			synchronized (runningList) {
+				runningList.remove(thread);
+				if (runningList.size() == 0) {
+					pchannel.notifyIdling();
+				}
 			}
 		}
 
@@ -416,9 +425,11 @@ public class ProcessingChannel extends AbstractChannel implements PluggableChann
 			return runningList.size();
 		}
 
-		public synchronized void checkLoad() {
-			if (pendingList.size() < maxWaitingAgents) {
-				pchannel.notifyUnderload();
+		public void checkLoad() {
+			synchronized (pendingList) {
+				if (pendingList.size() < maxWaitingAgents) {
+					pchannel.notifyUnderload();
+				}
 			}
 		}
 	}

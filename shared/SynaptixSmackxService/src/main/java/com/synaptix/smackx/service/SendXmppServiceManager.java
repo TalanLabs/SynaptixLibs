@@ -36,7 +36,7 @@ public class SendXmppServiceManager {
 			return null;
 		}
 		synchronized (instances) {
-			SendXmppServiceManager manager = instances.get(connection);
+			SendXmppServiceManager manager = instances.get(connection.getConnectionID());
 			if (manager == null) {
 				manager = new SendXmppServiceManager(connection);
 				instances.put(connection.getConnectionID(), manager);

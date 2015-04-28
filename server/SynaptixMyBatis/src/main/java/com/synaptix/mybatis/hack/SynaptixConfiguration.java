@@ -24,6 +24,10 @@ public class SynaptixConfiguration extends Configuration {
 
 	private static final Log LOG = LogFactory.getLog(SynaptixConfiguration.class);
 
+	private static final Integer lockResultMap = new Integer(0);
+
+	private static final Integer lockMappedStatement = new Integer(1);
+
 	private static final Pattern findEntityByIdPattern = Pattern.compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*/findEntityById");
 
 	private static final Pattern findChildrenByIdParentPattern = Pattern.compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*/findChildrenByIdParent\\?[a-zA-Z_$][a-zA-Z\\d_$]*");
@@ -225,6 +229,24 @@ public class SynaptixConfiguration extends Configuration {
 		if (super.hasStatement(statementName)) {
 			mappedStatements.remove(statementName);
 			mappedStatements.put(statementName, mappedStatement);
+		}
+	}
+
+	@Override
+	public void addResultMap(ResultMap rm) {
+		synchronized (lockResultMap) {
+			if (!hasComponentResultMap(rm.getId())) {
+				super.addResultMap(rm);
+			}
+		}
+	}
+
+	@Override
+	public void addMappedStatement(MappedStatement ms) {
+		synchronized (lockMappedStatement) {
+			if (!hasComponentStatement(ms.getId())) {
+				super.addMappedStatement(ms);
+			}
 		}
 	}
 }

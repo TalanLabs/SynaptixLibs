@@ -84,23 +84,20 @@ public class PaginationMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, null, "countPagination");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new CountPaginationSqlSource<E>(componentClass), SqlCommandType.SELECT);
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", Integer.class, new ArrayList<ResultMapping>(), null);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new CountPaginationSqlSource<E>(componentClass), SqlCommandType.SELECT);
+			ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(synaptixConfiguration, key + "-Inline", Integer.class, new ArrayList<ResultMapping>(), null);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMapBuilder.build()));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
@@ -121,25 +118,22 @@ public class PaginationMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, cs, "selectPagination");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getNestedResultMap(componentClass, columns);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getNestedResultMap(componentClass, columns);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectPaginationNestedSqlSource<E>(componentClass), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.fetchSize(maxRow);
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new SelectPaginationNestedSqlSource<E>(componentClass), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.fetchSize(maxRow);
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

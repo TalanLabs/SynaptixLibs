@@ -37,7 +37,7 @@ public abstract class AbstractFlux implements Serializable, IFlux {
 
 	/**
 	 * There is no need to set filename when using setFile from import flux
-	 * 
+	 *
 	 * @param filename
 	 */
 	public void setFilename(String filename) {
@@ -59,10 +59,18 @@ public abstract class AbstractFlux implements Serializable, IFlux {
 
 	@Override
 	public void addMessageListener(IMessageListener messageListener) {
+		addMessageListener(-1, messageListener);
+	}
+
+	public void addMessageListener(int index, IMessageListener messageListener) {
 		if (messageListenerList == null) {
 			messageListenerList = new ArrayList<IMessageListener>();
 		}
-		messageListenerList.add(messageListener);
+		if (index >= 0) {
+			messageListenerList.add(index > messageListenerList.size() ? messageListenerList.size() : index, messageListener);
+		} else {
+			messageListenerList.add(messageListener);
+		}
 	}
 
 	@Override

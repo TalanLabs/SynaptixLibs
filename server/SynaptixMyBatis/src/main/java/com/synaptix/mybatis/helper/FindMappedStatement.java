@@ -69,50 +69,44 @@ public class FindMappedStatement {
 	public <E extends IComponent> MappedStatement createFindEntityById(Class<E> componentClass) {
 		String key = new StringBuilder().append(componentClass.getName()).append("/findEntityById").toString();
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, EntityFields.id().name(),
-						false), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, EntityFields.id().name(), false),
+					SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
 	public <E extends IComponent> MappedStatement createFindChildrenByIdParent(Class<E> componentClass, String idParentPropertyName) {
 		String key = new StringBuilder().append(componentClass.getName()).append("/findChildrenByIdParent?").append(idParentPropertyName).toString();
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, idParentPropertyName, true),
-						SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, idParentPropertyName, true),
+					SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
@@ -120,25 +114,26 @@ public class FindMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, CollectionHelper.asSet(propertyName, String.valueOf(useCheckCancel)), "findComponentsByPropertyName");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, propertyName, useCheckCancel),
-						SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, propertyName, useCheckCancel),
+					SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
+			}
+			mappedStatement = msBuilder.build();
+			synchronized (componentClass) {
+				if (!synaptixConfiguration.hasComponentStatement(key)) {
+					synaptixConfiguration.addMappedStatement(mappedStatement);
 				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 			}
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
@@ -146,25 +141,22 @@ public class FindMappedStatement {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, CollectionHelper.asSet(propertyName, idTarget, String.valueOf(useCheckCancel)), "findComponentsByPropertyName");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, null, idTarget, propertyName,
-						useCheckCancel), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, null, idTarget, propertyName,
+					useCheckCancel), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 
@@ -174,25 +166,22 @@ public class FindMappedStatement {
 				"findComponentsByAssoPropertyName");
 
 		MappedStatement mappedStatement = null;
-		synchronized (componentClass) {
-			if (!synaptixConfiguration.hasComponentStatement(key)) {
-				ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
+		if (!synaptixConfiguration.hasComponentStatement(key)) {
+			ResultMap inlineResultMap = componentResultMapHelper.getResultMapWithNested(componentClass);
 
-				MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, assoSqlTableName, idSource,
-						idTarget, propertyName, useCheckCancel), SqlCommandType.SELECT);
-				msBuilder.resultMaps(Arrays.asList(inlineResultMap));
-				SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
-				if (cacheResult != null && cacheResult.isEnabled()) {
-					msBuilder.flushCacheRequired(false);
-					msBuilder.cache(cacheResult.getCache());
-					msBuilder.useCache(true);
-				}
-				mappedStatement = msBuilder.build();
-				synaptixConfiguration.addMappedStatement(mappedStatement);
-			} else {
-				mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
+			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, assoSqlTableName, idSource,
+					idTarget, propertyName, useCheckCancel), SqlCommandType.SELECT);
+			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
+			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
+			if (cacheResult != null && cacheResult.isEnabled()) {
+				msBuilder.flushCacheRequired(false);
+				msBuilder.cache(cacheResult.getCache());
+				msBuilder.useCache(true);
 			}
+			mappedStatement = msBuilder.build();
+			synaptixConfiguration.addMappedStatement(mappedStatement);
 		}
+		mappedStatement = synaptixConfiguration.getComponentMappedStatement(key);
 		return mappedStatement;
 	}
 

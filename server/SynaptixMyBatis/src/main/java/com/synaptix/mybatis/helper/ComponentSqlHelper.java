@@ -16,6 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.type.JdbcType;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.google.inject.Inject;
 import com.synaptix.common.helper.CollectionHelper;
@@ -374,6 +376,7 @@ public class ComponentSqlHelper {
 			dp = finalObject.getDatabasePropertyExtensionDescriptor();
 		}
 
+		Class<?> columnClass = null;
 		String sqlName = "";
 		if (dp != null) {
 			if ((dp.getCollection() != null) && (dp.getCollection().getIdSource() != null) && (!dp.getCollection().getIdSource().isEmpty())) {
@@ -382,6 +385,7 @@ public class ComponentSqlHelper {
 			} else if ((dp.getColumn() != null) && (dp.getColumn().getSqlName() != null)) {
 				sqlName = dp.getColumn().getSqlName();
 				sqlName = "t" + (join.getAlias() != null ? join.getAlias() : "") + "." + sqlName;
+				columnClass = propertyDescriptor.getPropertyClass();
 			} else if (dp.getNlsColumn() != null) {
 				String pr = new StringBuilder("t").append(join.getAlias() != null ? join.getAlias() : "").append(".").toString();
 				StringBuilder sb = new StringBuilder();
@@ -446,18 +450,32 @@ public class ComponentSqlHelper {
 			// if object is a boolean, we simplify the request
 			res = new StringBuilder(sqlName).append(" = ").append(getField(prefix, propertyDescriptor, key, null, null)).toString();
 		} else if (Binome.class.isAssignableFrom(entry.getValue().getClass())) {
-			// if there is a binome, we use >= value1 (if present) and/or <=
-			// value2 (if present)
+			// if there is a binome, we use >= value1 (if present) and/or <= value2 (if present)
+
 			StringBuilder exist = new StringBuilder();
 			Binome<?, ?> val = (Binome<?, ?>) entry.getValue();
 			if (val.getValue1() != null) {
-				exist.append(new StringBuilder(sqlName).append(" >= ").append(getField(prefix, propertyDescriptor, key, "value1", null)).toString());
+				String sqlName2 = sqlName;
+				Class<?> javaType = null;
+				if ((columnClass == LocalDateTime.class) && (val.getValue1() instanceof LocalDate)) {
+					// LocalDateTime >= LocalDate => trunc(LocalDateTime) >= LocalDate
+					sqlName2 = String.format("trunc(%s)", sqlName);
+					javaType = LocalDate.class;
+				}
+				exist.append(new StringBuilder(sqlName2).append(" >= ").append(getField(prefix, propertyDescriptor, key, "value1", null, javaType)).toString());
 			}
 			if (val.getValue1() != null && val.getValue2() != null) {
 				exist.append(" AND ");
 			}
 			if (val.getValue2() != null) {
-				exist.append(new StringBuilder(sqlName).append(" <= ").append(getField(prefix, propertyDescriptor, key, "value2", null)).toString());
+				String sqlName2 = sqlName;
+				Class<?> javaType = null;
+				if ((columnClass == LocalDateTime.class) && (val.getValue2() instanceof LocalDate)) {
+					// LocalDateTime <= LocalDate => trunc(LocalDateTime) <= LocalDate
+					sqlName2 = String.format("trunc(%s)", sqlName);
+					javaType = LocalDate.class;
+				}
+				exist.append(new StringBuilder(sqlName2).append(" <= ").append(getField(prefix, propertyDescriptor, key, "value2", null, javaType)).toString());
 			}
 			res = exist.toString();
 		} else if ((IdRaw.class.isAssignableFrom(entry.getValue().getClass())) || (Enum.class.isAssignableFrom(entry.getValue().getClass()))) {
@@ -552,15 +570,12 @@ public class ComponentSqlHelper {
 
 	/**
 	 * prefix.fix_fieldName([index])(.id).subfix(,jdbcType=...)
-	 * 
-	 * @param prefix
-	 * @param field
-	 * @param fix
-	 * @param subfix
-	 * @param index
-	 * @return
 	 */
 	private String getField(String prefix, PropertyDescriptor field, String fix, String subfix, Integer index) {
+		return getField(prefix, field, fix, subfix, index, null);
+	}
+
+	private String getField(String prefix, PropertyDescriptor field, String fix, String subfix, Integer index, Class<?> javaType) {
 		DatabasePropertyExtensionDescriptor dp = (DatabasePropertyExtensionDescriptor) field.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class);
 		StringBuilder sb = new StringBuilder("#{");
 		sb.append(prefix).append(".");
@@ -568,25 +583,27 @@ public class ComponentSqlHelper {
 			sb.append(fix.replaceAll("\\.", "_")).append("_");
 		}
 		sb.append(field.getPropertyName());
-		Class<?> javaType = field.getPropertyClass();
-		if (index != null) {
-			sb.append("[").append(index).append("]");
-			javaType = null;
-		}
+		if (javaType == null) {
+			javaType = field.getPropertyClass();
+			if (index != null) {
+				sb.append("[").append(index).append("]");
+				javaType = null;
+			}
 
-		if (IEntity.class.isAssignableFrom(field.getPropertyClass())) { // if
-																		// field
-																		// is an
-																		// entity,
-																		// we
-																		// compare
-																		// the
-																		// ids
-			sb.append(".id");
-			javaType = java.io.Serializable.class;
-		}
-		if (java.util.Collection.class.isAssignableFrom(field.getPropertyClass()) && "id".equals(subfix)) {
-			javaType = java.io.Serializable.class;
+			if (IEntity.class.isAssignableFrom(field.getPropertyClass())) { // if
+																			// field
+																			// is an
+																			// entity,
+																			// we
+																			// compare
+																			// the
+																			// ids
+				sb.append(".id");
+				javaType = java.io.Serializable.class;
+			}
+			if (java.util.Collection.class.isAssignableFrom(field.getPropertyClass()) && "id".equals(subfix)) {
+				javaType = java.io.Serializable.class;
+			}
 		}
 		if (subfix != null) {
 			sb.append(".").append(subfix);

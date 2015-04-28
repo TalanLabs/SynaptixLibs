@@ -54,6 +54,7 @@
 
 		<guava.version>15.0</guava.version>
 		<cron4j.version>2.2.5</cron4j.version>
+		<log4j.version>1.2.17</log4j.version>
 
 		<logback.configurationFile>${root-directory}/etc/maven-annotation-logback.xml</logback.configurationFile>
 		<generated.sources.dir>${project.build.directory}/generated-sources/apt</generated.sources.dir>
@@ -773,7 +774,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
+			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>

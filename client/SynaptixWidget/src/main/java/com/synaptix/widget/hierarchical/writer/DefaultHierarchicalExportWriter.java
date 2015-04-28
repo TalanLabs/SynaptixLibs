@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -148,6 +150,7 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 		int headerSize = 0;
 		int titleSize = 0;
 		Map<Integer, Integer> columnMap = new HashMap<Integer, Integer>();
+		Set<String> table = new HashSet<String>();
 		for (IExportableTable[] exportableTableSubPart : exportTableParts) {
 			int maxHeight = 0;
 			for (IExportableTable exportTable : exportableTableSubPart) {
@@ -167,13 +170,12 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 				for (int rowIndex = 0; rowIndex < exportTable.getExportHeight(); rowIndex++) {
 					for (int columnIndex = 0; columnIndex < exportTable.getExportWidth(); columnIndex++) {
 						int cellRow = rowIndex + rowOffset;
-						XSSFRow rh = tableSheet.getRow(cellRow);
 						int cellColumn = columnIndex + columnOffset;
 
-						if (rh.getCell(cellColumn) == null) {
-							XSSFCell cell = rh.createCell(cellColumn);
+						XSSFCell cell = createCell(tableSheet, cellRow, cellColumn, table);
+						if (cell != null) {
 							maxColumnCreated = Math.max(maxColumnCreated, cellColumn);
-							if (groupColumn < 2) { // we don't want to add compted columns
+							if (groupColumn < 2) { // we don't want to add computed columns
 								maxColumnWithoutComputed = Math.max(maxColumnWithoutComputed, cellColumn);
 							}
 							columnMap.put(cellColumn, Math.max(exportTable.getColumnWidth(columnIndex), columnMap.get(cellColumn) != null ? columnMap.get(cellColumn) : 0));
@@ -182,33 +184,42 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 							if ((title) || ((cellInformation != null) && (cellInformation.getObject() != null))) {
 
 								displayObjectInCell(cell, cellInformation.getObject(), objectsToStringByClassMap, styleMap, exportTable.getForcedType(rowIndex, columnIndex), createHelper);
+
+								if (title) {
+									cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TITLE));
+								}
+
 								if ((cellInformation != null) && (cellInformation.getHorizontalCellSpan() > 1)) {
-									for (int k = columnIndex + 1; k <= cellInformation.getHorizontalCellSpan() - 1; k++) {
-										XSSFCell cell2 = rh.createCell(cellColumn + k);
-										cell2.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+									if ((maxHeight <= 1) || (cellInformation.getHorizontalCellSpan() < exportTable.getExportWidth())) { // otherwise will be done by the last region
+																																		// merge
+										for (int k = columnIndex + 1; k <= cellInformation.getHorizontalCellSpan() - 1; k++) {
+											XSSFCell cell2 = createCell(tableSheet, cellRow, cellColumn + k, table);
+											if (cell2 != null) {
+												cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+											}
+										}
+										tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellRow, cellColumn, cellColumn + cellInformation.getHorizontalCellSpan() - 1));
 									}
-									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellRow, cellColumn, cellColumn + cellInformation.getHorizontalCellSpan() - 1));
-									columnIndex += cellInformation.getHorizontalCellSpan() - 1;
 								}
 								if ((cellInformation != null) && (cellInformation.getVerticalCellSpan() > 1)) {
 									for (int k = 1; k < cellInformation.getVerticalCellSpan(); k++) {
-										XSSFRow rh2 = tableSheet.getRow(k + cellRow);
-										if (rh2.getCell(cellColumn) == null) {
-											XSSFCell cell2 = rh2.createCell(cellColumn);
+										XSSFCell cell2 = createCell(tableSheet, k + cellRow, cellColumn, table);
+										if (cell2 != null) {
 											cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
 										}
 									}
 									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellInformation.getVerticalCellSpan() + cellRow - 1, cellColumn, cellColumn));
 								} else if ((maxHeight > exportTable.getExportHeight()) && (rowIndex == 0)) {
-									for (int k = 1; k <= maxHeight - exportTable.getExportHeight() + rowIndex; k++) {
-										XSSFRow rh2 = tableSheet.getRow(k + rowIndex);
-										XSSFCell cell2 = rh2.createCell(cellColumn);
-										cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+									for (int k = 0; k <= maxHeight - exportTable.getExportHeight(); k++) {
+										for (int p = 0; p < cellInformation.getHorizontalCellSpan(); p++) {
+											XSSFCell cell2 = createCell(tableSheet, k + cellRow, cellColumn + p, table);
+											if (cell2 != null) {
+												cell2.setCellStyle(title ? styleMap.get(IHierarchicalExportWriter.Type.TITLE) : styleMap.get(IHierarchicalExportWriter.Type.TEXT));
+											}
+										}
 									}
-									tableSheet.addMergedRegion(new CellRangeAddress(0, maxHeight - exportTable.getExportHeight() + rowIndex, cellColumn, cellColumn));
-								}
-								if (title) {
-									cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TITLE));
+									tableSheet.addMergedRegion(new CellRangeAddress(cellRow, cellRow + maxHeight - exportTable.getExportHeight(), cellColumn, cellColumn
+											+ cellInformation.getHorizontalCellSpan() - 1));
 								}
 							} else {
 								cell.setCellStyle(styleMap.get(IHierarchicalExportWriter.Type.TEXT));
@@ -245,6 +256,16 @@ public class DefaultHierarchicalExportWriter<E extends IComponent, F extends Ser
 				out.close();
 			}
 		}
+	}
+
+	private XSSFCell createCell(XSSFSheet tableSheet, int cellRow, int cellColumn, Set<String> table) {
+		String key = cellRow + "-" + cellColumn;
+		if (!table.add(key)) {
+			return null;
+		}
+		XSSFRow rh = tableSheet.getRow(cellRow);
+		table.add(key);
+		return rh.createCell(cellColumn);
 	}
 
 	private void putBorders(XSSFCellStyle cs) {

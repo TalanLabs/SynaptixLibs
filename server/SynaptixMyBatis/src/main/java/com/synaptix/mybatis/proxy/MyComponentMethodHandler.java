@@ -61,8 +61,9 @@ class MyComponentMethodHandler<E extends IComponent> implements MethodHandler, I
 							ComponentBeanMethod cbm = componentDescriptor.getComponentBeanMethod(method.toGenericString());
 							if (cbm != null) {
 								switch (cbm) {
-								case COMPUTED:
-									lazyLoader.loadAll();
+								case COMPUTED_GET:
+								case COMPUTED_SET:
+									// lazyLoader.loadAll(); // devrait fonctionner sans lazy loading, la méthode computed concernée va charger les objets nécessaires
 									break;
 								case GET:
 								case SET: {

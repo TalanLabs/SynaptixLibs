@@ -56,6 +56,8 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	private List<ISortOrder> orderList;
 
+	private Map<String, Object> valueFilterMapBeforeChange = new HashMap<String, Object>();
+
 	private Map<String, Object> valueFilterMap = new HashMap<String, Object>();
 
 	private IWaitWorker loadCountPaginationWorker;
@@ -313,6 +315,8 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 		cancelWork();
 		reset();
 
+		valueFilterMapBeforeChange = new HashMap<String, Object>();
+		valueFilterMapBeforeChange.putAll(valueFilterMap);
 		completeFilters(valueFilterMap);
 
 		loadComponents(true);
@@ -438,7 +442,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 					getSearchComponentsView().setPaginationView(currentPage, fp, fp, nl, nl);
 				}
 				if (fire) {
-					fireSearchListener(Collections.unmodifiableMap(valueFilterMap));
+					fireSearchListener(valueFilterMapBeforeChange != null ? Collections.unmodifiableMap(valueFilterMapBeforeChange) : null);
 				}
 			}
 

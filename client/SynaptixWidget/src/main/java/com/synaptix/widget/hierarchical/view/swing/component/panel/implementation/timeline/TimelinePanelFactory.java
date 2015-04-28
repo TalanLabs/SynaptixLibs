@@ -35,5 +35,4 @@ public class TimelinePanelFactory<E extends IComponent, L extends IHierarchicalL
 	protected FooterPanel<LocalDate, E, LocalDate, L> createFooterPanel(HierarchicalPanel<LocalDate, E, LocalDate, L> parent) {
 		return new TimelineFooterPanel<E, L>(super.configurationContext, parent);
 	}
-
 }

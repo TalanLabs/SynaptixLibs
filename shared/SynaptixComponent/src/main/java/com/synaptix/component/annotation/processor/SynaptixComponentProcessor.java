@@ -169,7 +169,7 @@ public class SynaptixComponentProcessor extends GenProcessor {
 			for (ExecutableElement executableElement : reflection.getMethods()) {
 				ComponentBeanMethod cbm = ComponentBeanMethod.which(executableElement);
 				switch (cbm) {
-				case COMPUTED:
+				case COMPUTED_GET:
 				case GET:
 					String propertyName = cbm.inferName(executableElement);
 					if (!dejaVus.contains(propertyName)) {
@@ -218,7 +218,7 @@ public class SynaptixComponentProcessor extends GenProcessor {
 			for (ExecutableElement executableElement : reflection.getMethods()) {
 				ComponentBeanMethod cbm = ComponentBeanMethod.which(executableElement);
 				switch (cbm) {
-				case COMPUTED:
+				case COMPUTED_GET:
 				case GET:
 					String propertyName = cbm.inferName(executableElement);
 					if (!dejaVus.contains(propertyName)) {
@@ -366,7 +366,7 @@ public class SynaptixComponentProcessor extends GenProcessor {
 					writer.println("\t\tsetter(\"{0}\",{1});", cbm.inferName(executableElement), setVe.getSimpleName().toString());
 					writer.println("\t}");
 					break;
-				case COMPUTED:
+				case COMPUTED_GET:
 					IComponent.Computed computed = executableElement.getAnnotation(IComponent.Computed.class);
 					StringBuilder pSb = new StringBuilder();
 					if (executableElement.getParameters() != null && !executableElement.getParameters().isEmpty()) {

@@ -424,52 +424,44 @@ public class DefaultDaoSession implements IDaoSessionExt {
 
 	@SuppressWarnings("unchecked")
 	private final <T extends IEntity> void fireBeforeSaveEntity(T entity) {
-		if (entitySaveOrUpdateListenerMap != null) {
-			Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
-			List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
-			if (entityListenerList != null) {
-				for (IEntitySaveOrUpdateListener<?> entitySaveListener : entityListenerList) {
-					((IEntitySaveOrUpdateListener<T>) entitySaveListener).beforeSave(entity);
-				}
+		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
+		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
+		if (entityListenerList != null) {
+			for (IEntitySaveOrUpdateListener<?> entitySaveListener : entityListenerList) {
+				((IEntitySaveOrUpdateListener<T>) entitySaveListener).beforeSave(entity);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private final <T extends IEntity> void fireBeforeUpdateEntity(T entity) {
-		if (entitySaveOrUpdateListenerMap != null) {
-			Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
-			List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
-			if (entityListenerList != null) {
-				for (IEntitySaveOrUpdateListener<?> entityUpdateListener : entityListenerList) {
-					((IEntitySaveOrUpdateListener<T>) entityUpdateListener).beforeUpdate(entity);
-				}
+		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
+		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
+		if (entityListenerList != null) {
+			for (IEntitySaveOrUpdateListener<?> entityUpdateListener : entityListenerList) {
+				((IEntitySaveOrUpdateListener<T>) entityUpdateListener).beforeUpdate(entity);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private final <T extends IEntity> void fireAfterSaveEntity(T entity) {
-		if (entitySaveOrUpdateListenerMap != null) {
-			Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
-			List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
-			if (entityListenerList != null) {
-				for (IEntitySaveOrUpdateListener<?> entitySaveListener : entityListenerList) {
-					((IEntitySaveOrUpdateListener<T>) entitySaveListener).afterSave(entity);
-				}
+		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
+		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
+		if (entityListenerList != null) {
+			for (IEntitySaveOrUpdateListener<?> entitySaveListener : entityListenerList) {
+				((IEntitySaveOrUpdateListener<T>) entitySaveListener).afterSave(entity);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private final <T extends IEntity> void fireAfterUpdateEntity(T entity) {
-		if (entitySaveOrUpdateListenerMap != null) {
-			Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
-			List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
-			if (entityListenerList != null) {
-				for (IEntitySaveOrUpdateListener<?> entityUpdateListener : entityListenerList) {
-					((IEntitySaveOrUpdateListener<T>) entityUpdateListener).afterUpdate(entity);
-				}
+		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
+		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
+		if (entityListenerList != null) {
+			for (IEntitySaveOrUpdateListener<?> entityUpdateListener : entityListenerList) {
+				((IEntitySaveOrUpdateListener<T>) entityUpdateListener).afterUpdate(entity);
 			}
 		}
 	}

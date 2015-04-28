@@ -10,19 +10,36 @@ import com.synaptix.component.IComponent;
 
 public enum ComponentBeanMethod {
 
-	COMPUTED {
+	COMPUTED_GET {
 		@Override
 		public boolean matches(Method method) {
 			if (method.getAnnotation(IComponent.Computed.class) == null) {
 				return false;
 			}
-			return true;
+			return GET.matches(method);
 		}
 
 		@Override
 		public String inferName(Method method) {
 			if (GET.matches(method)) {
 				return GET.inferName(method);
+			}
+			return method.toGenericString();
+		}
+	},
+	COMPUTED_SET {
+		@Override
+		public boolean matches(Method method) {
+			if (method.getAnnotation(IComponent.Computed.class) == null) {
+				return false;
+			}
+			return SET.matches(method);
+		}
+
+		@Override
+		public String inferName(Method method) {
+			if (SET.matches(method)) {
+				return SET.inferName(method);
 			}
 			return method.toGenericString();
 		}
