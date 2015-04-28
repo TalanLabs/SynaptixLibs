@@ -43,7 +43,7 @@
 		 and cc.constraint_name = c.constraint_name
 		 order by c.table_name, c.constraint_type desc, c.constraint_name
 	</select>
-	
+
 	<update id="callDeactivateConstraint" statementType="CALLABLE">
 		begin
 			DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,'CONSTRAINTS',false);
