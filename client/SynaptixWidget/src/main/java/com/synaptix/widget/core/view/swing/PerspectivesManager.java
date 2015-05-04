@@ -37,9 +37,9 @@ import com.vlsolutions.swing.docking.event.DockableStateChangeListener;
 
 /**
  * Permet de gérer les perspectives du docking
- * 
+ *
  * @author Gaby
- * 
+ *
  */
 public class PerspectivesManager {
 
@@ -69,7 +69,7 @@ public class PerspectivesManager {
 		defaultInputMap.put(keyStroke, actionMapKey);
 
 		@SuppressWarnings("unchecked")
-		ArrayList<DockingDesktop> desktopList = dockingContext.getDesktopList();
+		List<DockingDesktop> desktopList = dockingContext.getDesktopList();
 		if (desktopList != null) {
 			for (DockingDesktop d : desktopList) {
 				d.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, defaultInputMap.get(keyStroke));
@@ -85,7 +85,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Ajoute une perspective par défaut
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param xml
@@ -96,7 +96,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Ajoute une perspective par defaut
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param icon
@@ -122,7 +122,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Ajoute une perspective par défaut
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param xml
@@ -133,7 +133,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Ajoute une perspective personelle
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param icon
@@ -164,7 +164,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Efface une perspective personelle
-	 * 
+	 *
 	 * @param id
 	 */
 	public void removePersonalPerspective(String id) {
@@ -180,7 +180,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Modifie une perspective
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param icon
@@ -212,7 +212,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Donne toutes les perspectives par defaut
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Perspective> getDefaultPerspectives() {
@@ -221,7 +221,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Donne toutes les perspectives personelles
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Perspective> getPersonalPerspectives() {
@@ -230,7 +230,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Retrouve une perspective par defaut par son id
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -240,7 +240,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Retrouve une perspective personelle par son id
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -262,7 +262,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Active une perspective, qu'elle soit par defaut ou personelle. La defaut est prioritaire.
-	 * 
+	 *
 	 * @param id
 	 * @throws Exception
 	 */
@@ -278,7 +278,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Sauvegarde le workspace courant dans une perspective personelle
-	 * 
+	 *
 	 * @param id
 	 * @param name
 	 * @param icon
@@ -299,7 +299,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Renvoie le xml du workspace
-	 * 
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -326,7 +326,7 @@ public class PerspectivesManager {
 
 	/**
 	 * Change le workspace courant
-	 * 
+	 *
 	 * @param xml
 	 * @throws Exception
 	 */
@@ -456,7 +456,7 @@ public class PerspectivesManager {
 	 */
 	public final void registerStrokes() {
 		@SuppressWarnings("unchecked")
-		ArrayList<DockingDesktop> desktopList = dockingContext.getDesktopList();
+		List<DockingDesktop> desktopList = dockingContext.getDesktopList();
 		if (desktopList != null) {
 
 			List<Perspective> perspectives = new ArrayList<Perspective>();

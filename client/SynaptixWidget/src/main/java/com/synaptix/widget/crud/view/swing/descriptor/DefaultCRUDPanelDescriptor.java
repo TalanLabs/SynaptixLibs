@@ -1,10 +1,14 @@
 package com.synaptix.widget.crud.view.swing.descriptor;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -66,7 +70,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 	/**
 	 * Get a CRUD management controller
-	 * 
+	 *
 	 * @return
 	 */
 	protected final ICRUDManagementController<G> getCRUDManagementController() {
@@ -138,6 +142,28 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 				}
 			});
 		}
+
+		table.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+		table.getActionMap().put("Enter", new AbstractAction() {
+
+			private static final long serialVersionUID = 8505503582611662534L;
+
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				if ((getDefaultEnterAction() != null) && (getDefaultEnterAction().isEnabled())) {
+					getDefaultEnterAction().actionPerformed(ae);
+				}
+			}
+		});
+		// table.addKeyListener(new KeyAdapter() {
+		// @Override
+		// public void keyTyped(KeyEvent e) {
+		// if ((!e.isConsumed()) && (e.getKeyCode() == KeyEvent.VK_ENTER) || (e.getKeyChar() == '\n')) {
+		//
+		// e.consume();
+		// }
+		// }
+		// });
 	}
 
 	protected void updateEnabledActions() {
@@ -154,7 +180,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 	/**
 	 * Get default double click action
-	 * 
+	 *
 	 * @return
 	 */
 	protected Action getDefaultDoubleClickAction() {
@@ -179,6 +205,10 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 	protected final Action getDeleteAction() {
 		return deleteAction;
+	}
+
+	protected Action getDefaultEnterAction() {
+		return getEditAction();
 	}
 
 	private class AddAction extends AbstractAddAction {
