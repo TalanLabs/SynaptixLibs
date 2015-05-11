@@ -2,6 +2,9 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
 
 <module>
-	<inherits name="com.synaptix.gwt.SynaptixComponent" />
-	<inherits name="com.synaptix.gwt.SynaptixConstants" />
+	<generate-with
+		class="com.synaptix.gwt.rebind.component.ComponentDtoGenerator">
+		<when-type-assignable
+			class="com.synaptix.gwt.shared.component.IComponentDto" />
+	</generate-with>
 </module>
