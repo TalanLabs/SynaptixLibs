@@ -1,13 +1,129 @@
 package com.synaptix.gwt.shared.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.synaptix.gwt.shared.component.IComponentDto;
 import com.synaptix.gwt.shared.field.IFieldDto;
 
 public class ComponentDtoHelper {
+
+	/**
+	 * Build a components map with list and propertyName
+	 * 
+	 * @param components
+	 * @param keyPropertyName
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <F, E extends IComponentDto> Map<F, List<E>> buildComponentsMap(List<E> components, String keyPropertyName) {
+		Map<F, List<E>> map = new HashMap<F, List<E>>();
+		if (components != null && !components.isEmpty()) {
+			for (E component : components) {
+				F key = (F) component.straightGetProperty(keyPropertyName);
+				if (key != null) {
+					List<E> list = map.get(key);
+					if (list == null) {
+						list = new ArrayList<E>();
+						map.put(key, list);
+					}
+					list.add(component);
+				}
+			}
+		}
+		return map;
+	}
+
+	/**
+	 * Extract property name in components list
+	 * 
+	 * @param components
+	 * @param keyPropertyName
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <F, E extends IComponentDto> List<F> extractValues(List<E> components, String propertyName) {
+		List<F> res = new ArrayList<F>();
+		if (components != null && !components.isEmpty()) {
+			for (E component : components) {
+				F value = component != null ? (F) component.straightGetProperty(propertyName) : null;
+				res.add(value);
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Find a component by propertyName and value
+	 * 
+	 * @param components
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	public static final <E extends IComponentDto> E findComponentBy(List<E> components, String propertyName, Object value) {
+		E res = null;
+		if (value != null && components != null && !components.isEmpty()) {
+			Iterator<E> it = components.iterator();
+			while (it.hasNext() && res == null) {
+				E component = it.next();
+				Object key = component.straightGetProperty(propertyName);
+				if (key != null && key.equals(value)) {
+					res = component;
+				}
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Get index for component list
+	 * 
+	 * @param components
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	public static final <E extends IComponentDto> int indexComponentOf(List<E> components, String propertyName, Object value) {
+		int res = -1;
+		if (value != null && components != null && !components.isEmpty()) {
+			int i = 0;
+			Iterator<E> it = components.iterator();
+			while (it.hasNext() && res == -1) {
+				E component = it.next();
+				Object key = component.straightGetProperty(propertyName);
+				if (key != null && key.equals(value)) {
+					res = i;
+				}
+				i++;
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Find all components by propertyName and value
+	 * 
+	 * @param components
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	public static final <E extends IComponentDto> List<E> findComponentsBy(List<E> components, String propertyName, Object value) {
+		List<E> res = new ArrayList<E>();
+		if (value != null && components != null && !components.isEmpty()) {
+			for (E component : components) {
+				Object key = component.straightGetProperty(propertyName);
+				if (key != null && key.equals(value)) {
+					res.add(component);
+				}
+			}
+		}
+		return res;
+	}
 
 	/**
 	 * Check equals content of componentDto
