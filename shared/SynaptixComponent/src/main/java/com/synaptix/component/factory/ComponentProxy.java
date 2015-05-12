@@ -234,6 +234,12 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	}
 
 	protected void straightSetProperty(Object proxy, String propertyName, Object value) {
+		try {
+			if (getDescriptor().getComputedMethodDescriptor(propertyName + ComponentBeanMethod.COMPUTED_SET.name()) != null) {
+				computed(proxy, propertyName + ComponentBeanMethod.COMPUTED_SET.name(), new Object[] { value });
+			}
+		} catch (Exception e) {
+		}
 		setter(proxy, propertyName, value);
 	}
 
@@ -247,15 +253,15 @@ class ComponentProxy implements InvocationHandler, Serializable {
 
 	/**
 	 * Optimized... almost!
-	 * 
+	 *
 	 * @param proxy
 	 * @param propertyName
 	 * @return
 	 */
 	protected final Object straightGetProperty(Object proxy, String propertyName) {
 		try {
-			if (getDescriptor().getComputedMethodDescriptor(propertyName) != null) {
-				return computed(proxy, propertyName, null);
+			if (getDescriptor().getComputedMethodDescriptor(propertyName + ComponentBeanMethod.COMPUTED_GET.name()) != null) {
+				return computed(proxy, propertyName + ComponentBeanMethod.COMPUTED_GET.name(), null);
 			}
 		} catch (Exception e) {
 		}
