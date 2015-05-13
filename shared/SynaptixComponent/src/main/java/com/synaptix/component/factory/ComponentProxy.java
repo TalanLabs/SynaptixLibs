@@ -237,6 +237,7 @@ class ComponentProxy implements InvocationHandler, Serializable {
 		try {
 			if (getDescriptor().getComputedMethodDescriptor(propertyName + ComponentBeanMethod.COMPUTED_SET.name()) != null) {
 				computed(proxy, propertyName + ComponentBeanMethod.COMPUTED_SET.name(), new Object[] { value });
+				return;
 			}
 		} catch (Exception e) {
 		}
