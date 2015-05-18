@@ -41,7 +41,7 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		super();
 
 		if (configInputStream != null) {
-			SynaptixXMLConfigBuilder parser = new SynaptixXMLConfigBuilder(configInputStream, null, null);
+			SynaptixXMLConfigBuilder parser = new SynaptixXMLConfigBuilder(configInputStream, System.getProperty("mybatisEnvironment"), null);
 			configuration = parser.parse();
 		} else {
 			configuration = new SynaptixConfiguration();
