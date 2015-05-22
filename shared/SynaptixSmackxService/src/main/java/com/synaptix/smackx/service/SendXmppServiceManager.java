@@ -1,9 +1,7 @@
 package com.synaptix.smackx.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -31,7 +29,7 @@ public class SendXmppServiceManager {
 
 	private static final Map<String, SendXmppServiceManager> instances = new WeakHashMap<String, SendXmppServiceManager>();
 
-	public static SendXmppServiceManager getInstance(final XMPPConnection connection) {
+	public static SendXmppServiceManager getInstance(final XMPPConnection connection, final XmppConnectionInformation xmppConnectionInformation) {
 		if (connection == null) {
 			return null;
 		}
@@ -39,6 +37,7 @@ public class SendXmppServiceManager {
 			SendXmppServiceManager manager = instances.get(connection.getConnectionID());
 			if (manager == null) {
 				manager = new SendXmppServiceManager(connection);
+				manager.xmppConnectionInformation = xmppConnectionInformation;
 				instances.put(connection.getConnectionID(), manager);
 
 				connection.addConnectionListener(new MyConnectionListener(connection));
@@ -72,72 +71,34 @@ public class SendXmppServiceManager {
 
 	private final XMPPConnection connection;
 
-	private IReWaitResult defaultReWaitResult;
-
-	private long defaultTimeout;
-
-	private List<IServiceMessageRecveidListener> listenerList;
+	private XmppConnectionInformation xmppConnectionInformation;
 
 	public SendXmppServiceManager(XMPPConnection connection) {
 		this.connection = connection;
-		initialize();
-	}
-
-	private void initialize() {
-		listenerList = new ArrayList<IServiceMessageRecveidListener>();
-		defaultTimeout = 60000;
-	}
-
-	public void addServiceMessageRecveidListener(IServiceMessageRecveidListener l) {
-		synchronized (listenerList) {
-			listenerList.add(l);
-		}
-	}
-
-	public void removeServiceMessageRecveidListener(IServiceMessageRecveidListener l) {
-		synchronized (listenerList) {
-			listenerList.remove(l);
-		}
 	}
 
 	protected void fireMessageRecveidChanged(IServiceMessageRecveid m) {
-		synchronized (listenerList) {
-			for (IServiceMessageRecveidListener l : listenerList) {
+		synchronized (xmppConnectionInformation.getListenerList()) {
+			for (IServiceMessageRecveidListener l : xmppConnectionInformation.getListenerList()) {
 				l.messageRecveidChanged(m);
 			}
 		}
 	}
 
 	protected void fireMessageRecveidAdded(IServiceMessageRecveid m) {
-		synchronized (listenerList) {
-			for (IServiceMessageRecveidListener l : listenerList) {
+		synchronized (xmppConnectionInformation.getListenerList()) {
+			for (IServiceMessageRecveidListener l : xmppConnectionInformation.getListenerList()) {
 				l.messageRecveidAdded(m);
 			}
 		}
 	}
 
-	public void setDefaultReWaitResult(IReWaitResult reWaitResult) {
-		this.defaultReWaitResult = reWaitResult;
-	}
-
-	public IReWaitResult getDefaultReWaitResult() {
-		return defaultReWaitResult;
-	}
-
-	public void setDefaultTimeout(long defaultTimeout) {
-		this.defaultTimeout = defaultTimeout;
-	}
-
-	public long getDefaultTimeout() {
-		return defaultTimeout;
-	}
-
 	public Object sendMessage(String serviceFactoryName, String serviceName, String methodName, Class<?>[] argTypes, Object[] args) throws Exception {
-		return sendMessage(serviceFactoryName, serviceName, methodName, argTypes, args, defaultTimeout, defaultReWaitResult);
+		return sendMessage(serviceFactoryName, serviceName, methodName, argTypes, args, xmppConnectionInformation.getDefaultTimeout(), xmppConnectionInformation.getDefaultReWaitResult());
 	}
 
 	public Object sendMessage(String serviceFactoryName, String serviceName, String methodName, Class<?>[] argTypes, Object[] args, long timeout) throws Exception {
-		return sendMessage(serviceFactoryName, serviceName, methodName, argTypes, args, timeout, defaultReWaitResult);
+		return sendMessage(serviceFactoryName, serviceName, methodName, argTypes, args, timeout, xmppConnectionInformation.getDefaultReWaitResult());
 	}
 
 	public Object sendMessage(String serviceFactoryName, String serviceName, String methodName, Class<?>[] argTypes, Object[] args, long timeout, IReWaitResult reWaitResult) throws Exception {
@@ -231,7 +192,7 @@ public class SendXmppServiceManager {
 			log.debug("Timeout response packet currentID : " + currentID);
 
 			StringBuilder sb = new StringBuilder();
-			sb.append("Je n'ai pas reçus la réponse à temps ( + de ");
+			sb.append("Je n'ai pas reçu la réponse à temps ( + de ");
 			sb.append(timeout / 1000);
 			sb.append(" secondes)");
 
