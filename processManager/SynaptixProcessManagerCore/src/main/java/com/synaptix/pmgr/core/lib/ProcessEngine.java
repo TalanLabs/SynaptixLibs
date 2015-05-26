@@ -186,7 +186,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 				}
 			}
 			try {
-				if (!netinterface.isUp()) {
+				if (netinterface != null && !netinterface.isUp()) {
 					displayNetworkDevice(System.err);
 					return null;
 				}
