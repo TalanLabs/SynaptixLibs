@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -36,13 +37,13 @@ public class GuicePluginManager {
 	private static IIntegratorFactory integratorFactory;
 
 	public static void initPlugins(Log logger, String pmgrName) {
-		initProcessManager(logger, pmgrName);
+		initProcessManager(logger, pmgrName, null);
 		initGates(logger);
 		initHeartbeats();
 	}
 
-	public static void initProcessManager(Log logger, String pmgrName) {
-		Engine engine = ProcessEngine.getInstance(pmgrName);
+	public static void initProcessManager(Log logger, String pmgrName, Properties properties) {
+		Engine engine = ProcessEngine.getInstance(pmgrName, properties);
 		if (engine.getLogger() == null) {
 			engine.setLogger(logger);
 		}
@@ -60,7 +61,7 @@ public class GuicePluginManager {
 		Set<IImportProcessDefinition<?>> importProcessDefinitionSet = integratorFactory.getImportProcessDefinitionSet();
 		if ((importProcessDefinitionSet != null) && (!importProcessDefinitionSet.isEmpty())) {
 			for (IImportProcessDefinition<?> importProcessDefinition : importProcessDefinitionSet) {
-				if (ProcessType.PROCESSING_GROUP.equals(importProcessDefinition.getProcessType())) {
+				if (ProcessType.PROCESSING_GROUP == importProcessDefinition.getProcessType()) {
 					List<PluggableChannel> channels = buildChannelGroup(importProcessDefinition.getName(), importProcessDefinition.getMaxWorking(), importProcessDefinition.getMaxWaiting(),
 							integratorFactory.getAgent(importProcessDefinition.getAgentClass()), engine);
 					for (PluggableChannel channel : channels) {
@@ -79,7 +80,7 @@ public class GuicePluginManager {
 		Set<IExportProcessDefinition<?>> exportProcessDefinitionSet = integratorFactory.getExportProcessDefinitionSet();
 		if ((exportProcessDefinitionSet != null) && (!exportProcessDefinitionSet.isEmpty())) {
 			for (IExportProcessDefinition<?> exportProcessDefinition : exportProcessDefinitionSet) {
-				if (ProcessType.PROCESSING_GROUP.equals(exportProcessDefinition.getProcessType())) {
+				if (ProcessType.PROCESSING_GROUP == exportProcessDefinition.getProcessType()) {
 					List<PluggableChannel> channels = buildChannelGroup(exportProcessDefinition.getName(), exportProcessDefinition.getMaxWorking(), exportProcessDefinition.getMaxWaiting(),
 							integratorFactory.getAgent(exportProcessDefinition.getAgentClass()), engine);
 					for (PluggableChannel channel : channels) {

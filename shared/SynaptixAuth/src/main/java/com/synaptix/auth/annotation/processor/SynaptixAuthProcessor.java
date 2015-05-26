@@ -30,20 +30,15 @@ public class SynaptixAuthProcessor extends GenProcessor {
 	private void processFields(Element element) {
 		BuilderGenerationHelper writer = null;
 		try {
-			ReflectionHelper reflection = new ReflectionHelper(
-					getEnvironment(), (TypeElement) element);
+			ReflectionHelper reflection = new ReflectionHelper(getEnvironment(), (TypeElement) element);
 			String dtoElementSimpleName = reflection.getSimpleClassName();
 			String dtoSimpleName = rename(dtoElementSimpleName) + "Methods";
 			String packageName = reflection.getPackageName();
-			String dtoClassName = packageName != null && !packageName.isEmpty() ? packageName
-					+ '.' + dtoSimpleName
-					: dtoSimpleName;
+			String dtoClassName = packageName != null && !packageName.isEmpty() ? packageName + '.' + dtoSimpleName : dtoSimpleName;
 
-			printMessage("Generating '" + dtoClassName + "' from '"
-					+ dtoElementSimpleName + "'.");
+			printMessage("Generating '" + dtoClassName + "' from '" + dtoElementSimpleName + "'.");
 
-			Writer sourceWriter = getEnvironment().getFiler()
-					.createSourceFile(dtoClassName, element).openWriter();
+			Writer sourceWriter = getEnvironment().getFiler().createSourceFile(dtoClassName, element).openWriter();
 			writer = new BuilderGenerationHelper(sourceWriter);
 
 			if (packageName != null && !packageName.isEmpty()) {
@@ -63,29 +58,14 @@ public class SynaptixAuthProcessor extends GenProcessor {
 				AuthBeanMethod cbm = AuthBeanMethod.which(executableElement);
 				switch (cbm) {
 				case CALL_BOOLEAN:
-					String methodName = executableElement.getSimpleName()
-							.toString();
-					AuthsBundle.Key key = executableElement
-							.getAnnotation(AuthsBundle.Key.class);
-					writer.println("\tprivate static IAuthMethod {0} = null;",
-							methodName);
-					writer.println(
-							"\tpublic static final IAuthMethod {0}() { if ({0} == null) { {0} = new DefaultAuthMethod({1}.class, \"{2}\", \"{3}\"); } return {0}; }",
-							methodName, dtoElementSimpleName, key.object(),
-							key.action());
-					String uri = new StringBuilder()
-							.append(packageName != null
-									&& !packageName.isEmpty() ? packageName
-									+ '.' + dtoElementSimpleName
-									: dtoElementSimpleName).append("@")
-							.append("object=")
-							.append(URLEncoder.encode(key.object(), "UTF-8"))
-							.append("&action=")
-							.append(URLEncoder.encode(key.action(), "UTF-8"))
-							.toString();
-					writer.println(
-							"\tpublic static final String {0}String = \"{1}\";",
-							methodName, uri);
+					String methodName = executableElement.getSimpleName().toString();
+					AuthsBundle.Key key = executableElement.getAnnotation(AuthsBundle.Key.class);
+					writer.println("\tprivate static IAuthMethod {0} = null;", methodName);
+					writer.println("\tpublic static final IAuthMethod {0}() { if ({0} == null) { {0} = new DefaultAuthMethod({1}.class, \"{2}\", \"{3}\"); } return {0}; }", methodName,
+							dtoElementSimpleName, key.object(), key.action());
+					String uri = new StringBuilder().append(packageName != null && !packageName.isEmpty() ? packageName + '.' + dtoElementSimpleName : dtoElementSimpleName).append("@")
+							.append("object=").append(URLEncoder.encode(key.object(), "UTF-8")).append("&action=").append(URLEncoder.encode(key.action(), "UTF-8")).toString();
+					writer.println("\tpublic static final String {0}String = \"{1}\";", methodName, uri);
 
 					writer.println();
 					break;
@@ -108,8 +88,7 @@ public class SynaptixAuthProcessor extends GenProcessor {
 		String res = name;
 		if (name.length() > 2) {
 			String second = name.substring(1, 2);
-			boolean startI = name.substring(0, 1).equals("I")
-					&& second.toUpperCase().equals(second);
+			boolean startI = name.substring(0, 1).equals("I") && second.toUpperCase().equals(second);
 			if (startI) {
 				res = name.substring(1);
 			}

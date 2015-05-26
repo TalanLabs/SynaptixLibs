@@ -51,7 +51,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 
 	/**
 	 * Retourne l'instance. Si on la crée, alors on utilise les propriétés données
-	 * 
+	 *
 	 * @param id
 	 * @param classLoader
 	 * @param properties
@@ -146,8 +146,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 	}
 
 	private synchronized static Engine buildEngine(String id, Properties properties) {
-		count++;
-		if (count > 1) {
+		if (count > 0) {
 			try {
 				throw new Exception("BaseEngine crée 2 fois");
 			} catch (Exception ex) {
@@ -163,6 +162,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 			}
 		}
 		if (properties != null) {
+			count++;
 			String registryRmiPort = properties.getProperty("engine" + id + ".rmiport", "1099");
 			try {
 				LocateRegistry.createRegistry(Integer.parseInt(registryRmiPort));
@@ -497,6 +497,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 	public static void shutdown() {
 		try {
 			getInstance().shutdown();
+			count--;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
