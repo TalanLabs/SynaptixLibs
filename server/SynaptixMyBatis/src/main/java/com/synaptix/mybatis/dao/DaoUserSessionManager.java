@@ -15,6 +15,7 @@ public class DaoUserSessionManager {
 
 	public void updateDaoUserSession() {
 		if (sqlSessionManager.isManagedSessionStarted()) {
+			sqlSessionManager.clearCache();
 			synaptixUserSession.insertTempUserSession(sqlSessionManager.getConnection());
 		}
 	}
