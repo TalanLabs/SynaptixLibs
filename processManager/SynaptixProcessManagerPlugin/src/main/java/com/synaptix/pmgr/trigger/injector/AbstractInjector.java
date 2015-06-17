@@ -15,11 +15,11 @@ import com.synaptix.tmgr.libs.tasks.filesys.FolderEventTriggerTask.FileTriggerEv
 /**
  * An abstract injector used to import flux<br>
  * Use annotation ImportFlux to define a root work directory
- * 
+ *
  * @param M
  *            Message class
  * @author Nicolas P
- * 
+ *
  */
 public abstract class AbstractInjector<M extends AbstractImportFlux> extends AbstractMsgInjector implements IInjector<M> {
 
@@ -43,7 +43,7 @@ public abstract class AbstractInjector<M extends AbstractImportFlux> extends Abs
 
 	/**
 	 * Name of the directory, also used for receiving messages using t_jms_binding
-	 * 
+	 *
 	 * @return directory name
 	 */
 	@Override
@@ -109,7 +109,7 @@ public abstract class AbstractInjector<M extends AbstractImportFlux> extends Abs
 				LOG.error("Null content");
 			}
 		}
-		if (flux.getFile() != null) {
+		if ((getDelay() > 0) && (flux.getFile() != null)) {
 			retryFile(flux.getFile(), flux);
 		}
 		LOG.error("EXCEPTION - Flux not played", e);
