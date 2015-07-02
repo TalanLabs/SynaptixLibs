@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>client</artifactId>
 		<groupId>com.synaptix</groupId>
-		<version>4.2.10-SNAPSHOT</version>
+		<version>4.2.10</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>SynaptixSwing</artifactId>
