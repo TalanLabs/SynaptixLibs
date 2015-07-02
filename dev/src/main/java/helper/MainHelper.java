@@ -17,7 +17,6 @@ import mapper.ZipMapper;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.combo.WidestComboPopupPrototype;
-import org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -49,6 +48,7 @@ import com.synaptix.swing.JDialogModel;
 import com.synaptix.swing.utils.Manager;
 import com.synaptix.widget.guice.SwingConstantsBundleManager;
 import com.synaptix.widget.guice.SynaptixWidgetModule;
+import com.synaptix.widget.skin.SubstanceFlatWhiteLookAndFeel;
 
 public class MainHelper {
 
@@ -62,7 +62,7 @@ public class MainHelper {
 		try {
 			// UIManager.setLookAndFeel(new GabyLookAndFeel());
 
-			UIManager.setLookAndFeel(new SubstanceNebulaLookAndFeel());
+			UIManager.setLookAndFeel(new SubstanceFlatWhiteLookAndFeel());
 			UIManager.put(SubstanceLookAndFeel.COMBO_POPUP_PROTOTYPE, new WidestComboPopupPrototype());
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
@@ -97,6 +97,8 @@ public class MainHelper {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1280, 800);
+		// AWTUtilitiesWrapper.setWindowOpaque(frame, false);
+
 		return frame;
 	}
 

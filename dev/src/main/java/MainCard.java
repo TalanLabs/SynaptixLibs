@@ -26,9 +26,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.swing.utils.FontAwesomeHelper;
-import com.synaptix.swing.utils.ToolBarFactory;
 import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.view.swing.RoundedBorder;
 
@@ -52,7 +52,7 @@ public class MainCard {
 				split3.setDividerLocation(300);
 				split3.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-				frame.getContentPane().add(createPanel("Titre de la fenêtre 1"), BorderLayout.CENTER);
+				frame.getContentPane().add(createContent(), BorderLayout.CENTER);
 
 				frame.setSize(800, 600);
 				frame.setVisible(true);
@@ -61,17 +61,25 @@ public class MainCard {
 	}
 
 	private static JComponent createContent() {
-		JTable table = new JTable(new DefaultTableModel(100, 10));
+		JTable table = new JTable(new DefaultTableModel(100, 10) {
+			@Override
+			public Object getValueAt(int row, int column) {
+				return row + " " + column;
+			}
+		});
 		table.setPreferredScrollableViewportSize(new Dimension(0, 200));
 
 		FormLayout layout = new FormLayout("FILL:PREF:GROW(1.0)");
 		DefaultFormBuilder builder = new DefaultFormBuilder(layout);
 		builder.setDefaultDialogBorder();
-		builder.append(ToolBarFactory.buildToolBar(new MyAction(), null, new MyAction(), new MyAction()));
+		builder.append(ButtonBarFactory.buildLeftAlignedBar(new JButton(new MyAction()), new JButton(new MyAction()), new JButton(new MyAction())));
 		builder.appendRow(builder.getLineGapSpec());
 		builder.appendRow("FILL:PREF:GROW(1.0)");
 		builder.nextLine(2);
 		builder.append(new JScrollPane(table));
+		JButton test = new JButton("Test");
+		test.setEnabled(false);
+		builder.append(ButtonBarFactory.buildLeftAlignedBar(test));
 		return builder.getPanel();
 	}
 
