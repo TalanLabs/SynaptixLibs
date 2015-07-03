@@ -1,12 +1,16 @@
 import helper.MainHelper;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXHeader;
+import org.pushingpixels.flamingo.api.common.JCommandButton;
+import org.pushingpixels.flamingo.api.ribbon.RibbonElementPriority;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -17,6 +21,8 @@ import com.synaptix.swing.WaitComponentFeedbackPanel;
 import com.synaptix.widget.core.controller.AbstractController;
 import com.synaptix.widget.core.view.swing.IDockable;
 import com.synaptix.widget.core.view.swing.IDockingContextView;
+import com.synaptix.widget.core.view.swing.IRibbonContextView;
+import com.synaptix.widget.core.view.swing.RibbonContext;
 import com.synaptix.widget.core.view.swing.SyDockingContext;
 import com.vlsolutions.swing.docking.DockKey;
 import com.vlsolutions.swing.docking.Dockable;
@@ -65,7 +71,7 @@ public class MainFrontend {
 		}
 	}
 
-	private static class MyView extends WaitComponentFeedbackPanel implements IView, IDockable, IDockingContextView {
+	private static class MyView extends WaitComponentFeedbackPanel implements IView, IDockable, IDockingContextView, IRibbonContextView {
 
 		SyDockingContext dockingContext;
 
@@ -119,6 +125,20 @@ public class MainFrontend {
 			dockingContext.setDockableState(d, new DockableState(null, d, DockableState.Location.HIDDEN));
 
 			dockingContext.showDockable(this);
+		}
+
+		@Override
+		public void initializeRibbonContext(RibbonContext ribbonContext) {
+			JCommandButton translationManagementCb = new JCommandButton("Test");
+			translationManagementCb.setCommandButtonKind(JCommandButton.CommandButtonKind.ACTION_ONLY);
+			translationManagementCb.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dockingContext.showDockable(dockKey.getKey());
+				}
+			});
+
+			ribbonContext.addRibbonTask("Tools", 9999).addRibbonBand("Service", 1).addCommandeButton(translationManagementCb, RibbonElementPriority.TOP);
 		}
 
 		public void show() {

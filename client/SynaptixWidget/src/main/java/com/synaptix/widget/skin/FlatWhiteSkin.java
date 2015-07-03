@@ -11,6 +11,7 @@ import org.pushingpixels.substance.api.DecorationAreaType;
 import org.pushingpixels.substance.api.SubstanceColorScheme;
 import org.pushingpixels.substance.api.SubstanceColorSchemeBundle;
 import org.pushingpixels.substance.api.SubstanceSkin;
+import org.pushingpixels.substance.api.colorscheme.DarkGrayColorScheme;
 import org.pushingpixels.substance.api.colorscheme.LightGrayColorScheme;
 import org.pushingpixels.substance.api.painter.border.ClassicBorderPainter;
 import org.pushingpixels.substance.api.painter.border.CompositeBorderPainter;
@@ -33,7 +34,13 @@ public class FlatWhiteSkin extends SubstanceSkin {
 		SubstanceColorScheme disabledScheme = new LightGrayColorScheme().tint(0.35).named("FlatWhite Disabled");
 
 		SubstanceColorSchemeBundle defaultSchemeBundle = new SubstanceColorSchemeBundle(activeScheme, enabledScheme, disabledScheme);
-		defaultSchemeBundle.registerColorScheme(new WhiteColorScheme(), ColorSchemeAssociationKind.TAB, ComponentState.SELECTED);
+		defaultSchemeBundle.registerColorScheme(enabledScheme, ColorSchemeAssociationKind.TAB, ComponentState.SELECTED);
+		defaultSchemeBundle.registerColorScheme(enabledScheme, ColorSchemeAssociationKind.TAB_BORDER, ComponentState.SELECTED);
+
+		// Enabled false
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.7), ColorSchemeAssociationKind.FILL, findComponentState("editable disabled"));
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.8), ColorSchemeAssociationKind.FILL, findComponentState("uneditable"));
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.5), ColorSchemeAssociationKind.FILL, findComponentState("uneditable disabled"));
 
 		this.registerDecorationAreaSchemeBundle(defaultSchemeBundle, DecorationAreaType.NONE);
 
@@ -62,6 +69,19 @@ public class FlatWhiteSkin extends SubstanceSkin {
 				return scheme.tint(0.9f);
 			}
 		}));
+	}
+
+	/*
+	 * Hack de merde pour trouver le bon state
+	 */
+	private ComponentState findComponentState(String name) {
+		for (ComponentState cs : ComponentState.getAllStates()) {
+			String s = cs.toString();
+			if (s.startsWith(name + " :")) {
+				return cs;
+			}
+		}
+		return null;
 	}
 
 	/*

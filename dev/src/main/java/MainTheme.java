@@ -46,9 +46,23 @@ public class MainTheme {
 		DefaultFormBuilder builder = new DefaultFormBuilder(layout);
 		builder.setDefaultDialogBorder();
 		for (int i = 0; i < 5; i++) {
-			JTextField textField = new JTextField();
+			JTextField textField = new JTextField("blalblblalb");
 			builder.append("Text " + i, textField);
 		}
+
+		JTextField disabledTextField = new JTextField("blalblblalb");
+		disabledTextField.setEnabled(false);
+		builder.append("Disabled ", disabledTextField);
+
+		JTextField editableTextField = new JTextField("blalblblalb");
+		editableTextField.setEditable(false);
+		builder.append("NoEditable ", editableTextField);
+
+		JTextField otherTextField = new JTextField("blalblblalb");
+		otherTextField.setEnabled(false);
+		otherTextField.setEditable(false);
+		builder.append("Disabled/NoEditable ", otherTextField);
+
 		return builder.getPanel();
 	}
 
