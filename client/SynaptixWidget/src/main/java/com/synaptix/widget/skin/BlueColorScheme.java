@@ -2,50 +2,49 @@ package com.synaptix.widget.skin;
 
 import java.awt.Color;
 
-import org.pushingpixels.substance.api.colorscheme.BaseLightColorScheme;
+import org.pushingpixels.substance.api.colorscheme.BaseDarkColorScheme;
 
-public class WhiteColorScheme extends BaseLightColorScheme {
-
+public class BlueColorScheme extends BaseDarkColorScheme {
 	/**
 	 * The main ultra-light color.
 	 */
-	private static final Color mainUltraDarkColor = new Color(100, 100, 100);
+	private static final Color mainUltraDarkColor = new Color(0, 61, 107);
 
 	/**
 	 * The main extra light color.
 	 */
-	private static final Color mainDarkColor = new Color(180, 180, 180);
+	private static final Color mainDarkColor = new Color(0, 79, 139);
 
 	/**
 	 * The main light color.
 	 */
-	private static final Color mainMidColor = new Color(210, 210, 210);
+	private static final Color mainMidColor = new Color(16, 151, 255);
 
 	/**
 	 * The main medium color.
 	 */
-	private static final Color mainLightColor = new Color(225, 225, 225);
+	private static final Color mainLightColor = new Color(68, 174, 225);
 
 	/**
 	 * The main dark color.
 	 */
-	private static final Color mainExtraLightColor = new Color(240, 240, 240);
+	private static final Color mainExtraLightColor = new Color(121, 197, 255);
 
 	/**
 	 * The main ultra-dark color.
 	 */
-	private static final Color mainUltraLightColor = new Color(250, 250, 250);
+	private static final Color mainUltraLightColor = new Color(169, 218, 255);
 
 	/**
 	 * The foreground color.
 	 */
-	private static final Color foregroundColor = Color.black;
+	private static final Color foregroundColor = Color.white;
 
 	/**
 	 * Creates a new <code></code> color scheme.
 	 */
-	public WhiteColorScheme() {
-		super("White");
+	public BlueColorScheme() {
+		super("Dark Gray");
 	}
 
 	/*
@@ -55,7 +54,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getForegroundColor() {
-		return WhiteColorScheme.foregroundColor;
+		return BlueColorScheme.foregroundColor;
 	}
 
 	/*
@@ -65,7 +64,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getUltraLightColor() {
-		return WhiteColorScheme.mainUltraLightColor;
+		return BlueColorScheme.mainUltraLightColor;
 	}
 
 	/*
@@ -75,7 +74,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getExtraLightColor() {
-		return WhiteColorScheme.mainExtraLightColor;
+		return BlueColorScheme.mainExtraLightColor;
 	}
 
 	/*
@@ -85,7 +84,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getLightColor() {
-		return WhiteColorScheme.mainLightColor;
+		return BlueColorScheme.mainLightColor;
 	}
 
 	/*
@@ -95,7 +94,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getMidColor() {
-		return WhiteColorScheme.mainMidColor;
+		return BlueColorScheme.mainMidColor;
 	}
 
 	/*
@@ -105,7 +104,7 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getDarkColor() {
-		return WhiteColorScheme.mainDarkColor;
+		return BlueColorScheme.mainDarkColor;
 	}
 
 	/*
@@ -115,6 +114,6 @@ public class WhiteColorScheme extends BaseLightColorScheme {
 	 */
 	@Override
 	public Color getUltraDarkColor() {
-		return WhiteColorScheme.mainUltraDarkColor;
+		return BlueColorScheme.mainUltraDarkColor;
 	}
 }

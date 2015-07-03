@@ -1,18 +1,21 @@
 package com.synaptix.widget.skin;
 
+import java.awt.Insets;
+
+import javax.swing.AbstractButton;
+
+import org.pushingpixels.substance.api.ColorSchemeAssociationKind;
 import org.pushingpixels.substance.api.ColorSchemeTransform;
+import org.pushingpixels.substance.api.ComponentState;
 import org.pushingpixels.substance.api.DecorationAreaType;
 import org.pushingpixels.substance.api.SubstanceColorScheme;
 import org.pushingpixels.substance.api.SubstanceColorSchemeBundle;
 import org.pushingpixels.substance.api.SubstanceSkin;
-import org.pushingpixels.substance.api.colorscheme.LightAquaColorScheme;
 import org.pushingpixels.substance.api.colorscheme.LightGrayColorScheme;
 import org.pushingpixels.substance.api.painter.border.ClassicBorderPainter;
 import org.pushingpixels.substance.api.painter.border.CompositeBorderPainter;
 import org.pushingpixels.substance.api.painter.border.DelegateBorderPainter;
 import org.pushingpixels.substance.api.painter.decoration.FlatDecorationPainter;
-import org.pushingpixels.substance.api.painter.fill.ClassicFillPainter;
-import org.pushingpixels.substance.api.painter.highlight.ClassicHighlightPainter;
 import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
 
 public class FlatWhiteSkin extends SubstanceSkin {
@@ -25,11 +28,13 @@ public class FlatWhiteSkin extends SubstanceSkin {
 	 * Creates a new <code>FlatWhite</code> skin.
 	 */
 	public FlatWhiteSkin() {
-		SubstanceColorScheme activeScheme = new LightAquaColorScheme().tint(0.3).named("FlatWhite Active");
-		SubstanceColorScheme enabledScheme = new WhiteColorScheme();
+		SubstanceColorScheme activeScheme = new BlueColorScheme().named("FlatWhite Active");
+		SubstanceColorScheme enabledScheme = new WhiteColorScheme().tint(0.3);
 		SubstanceColorScheme disabledScheme = new LightGrayColorScheme().tint(0.35).named("FlatWhite Disabled");
 
 		SubstanceColorSchemeBundle defaultSchemeBundle = new SubstanceColorSchemeBundle(activeScheme, enabledScheme, disabledScheme);
+		defaultSchemeBundle.registerColorScheme(new WhiteColorScheme(), ColorSchemeAssociationKind.TAB, ComponentState.SELECTED);
+
 		this.registerDecorationAreaSchemeBundle(defaultSchemeBundle, DecorationAreaType.NONE);
 
 		this.registerAsDecorationArea(enabledScheme, DecorationAreaType.PRIMARY_TITLE_PANE, DecorationAreaType.SECONDARY_TITLE_PANE, DecorationAreaType.HEADER, DecorationAreaType.FOOTER,
@@ -37,13 +42,20 @@ public class FlatWhiteSkin extends SubstanceSkin {
 
 		this.registerAsDecorationArea(disabledScheme, DecorationAreaType.PRIMARY_TITLE_PANE_INACTIVE, DecorationAreaType.SECONDARY_TITLE_PANE_INACTIVE);
 
-		setSelectedTabFadeStart(0.2);
-		setSelectedTabFadeEnd(0.4);
+		setSelectedTabFadeStart(0.0);
+		setSelectedTabFadeEnd(0.0);
 
-		this.buttonShaper = new ClassicButtonShaper();
-		this.fillPainter = new ClassicFillPainter();
+		this.buttonShaper = new ClassicButtonShaper() {
+			@Override
+			public float getCornerRadius(AbstractButton button, Insets insets) {
+				return 0;
+			}
+		};
+		this.fillPainter = new FlatFillPainter();
 		this.decorationPainter = new FlatDecorationPainter();
-		this.highlightPainter = new ClassicHighlightPainter();
+		this.highlightPainter = new FlatHighlightPainter() {
+
+		};
 		this.borderPainter = new CompositeBorderPainter("FlatWhite", new ClassicBorderPainter(), new DelegateBorderPainter("FlatWhite Inner", new ClassicBorderPainter(), new ColorSchemeTransform() {
 			@Override
 			public SubstanceColorScheme transform(SubstanceColorScheme scheme) {
