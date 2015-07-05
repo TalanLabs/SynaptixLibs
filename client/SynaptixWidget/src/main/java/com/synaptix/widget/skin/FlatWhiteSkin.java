@@ -38,9 +38,9 @@ public class FlatWhiteSkin extends SubstanceSkin {
 		defaultSchemeBundle.registerColorScheme(enabledScheme, ColorSchemeAssociationKind.TAB_BORDER, ComponentState.SELECTED);
 
 		// Enabled false
-		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.7), ColorSchemeAssociationKind.FILL, findComponentState("editable disabled"));
-		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.8), ColorSchemeAssociationKind.FILL, findComponentState("uneditable"));
-		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.5), ColorSchemeAssociationKind.FILL, findComponentState("uneditable disabled"));
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.8), ColorSchemeAssociationKind.FILL, findComponentState("editable disabled"));
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.9), ColorSchemeAssociationKind.FILL, findComponentState("uneditable"));
+		defaultSchemeBundle.registerColorScheme(new DarkGrayColorScheme().tint(0.8), ColorSchemeAssociationKind.FILL, findComponentState("uneditable disabled"));
 
 		this.registerDecorationAreaSchemeBundle(defaultSchemeBundle, DecorationAreaType.NONE);
 
