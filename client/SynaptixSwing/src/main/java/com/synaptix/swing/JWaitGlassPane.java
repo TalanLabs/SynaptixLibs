@@ -1,13 +1,13 @@
 package com.synaptix.swing;
 
 import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -28,26 +28,25 @@ import javax.swing.Timer;
 
 public class JWaitGlassPane extends JPanel {
 
+	private static final long serialVersionUID = 832328991458849283L;
+
 	public static final int TYPE_DIRECTION_LEFT_TO_RIGHT = 1;
 
 	public static final int TYPE_DIRECTION_RIGHT_TO_LEFT = 2;
 
 	public static final int TYPE_DIRECTION_PING_PONG = 3;
 
-	public static final ImageIcon ICON_CLIENT;
+	public static final Image ICON_CLIENT;
 
-	public static final ImageIcon ICON_DATABASE_SERVER;
+	public static final Image ICON_DATABASE_SERVER;
 
-	public static final ImageIcon ICON_SERVER;
+	public static final Image ICON_SERVER;
 
-	public static final ImageIcon ICON_PDF_SERVER;
-
-	private static final long serialVersionUID = 1L;
+	public static final Image ICON_PDF_SERVER;
 
 	private static final float FPS = 5.0f;
 
-	private static final String TEXT_DEFAULT = SwingMessages
-			.getString("JWaitGlassPane.0"); //$NON-NLS-1$
+	private static final String TEXT_DEFAULT = SwingMessages.getString("JWaitGlassPane.0"); //$NON-NLS-1$
 
 	private static final AlphaComposite compositeHalf;
 
@@ -55,11 +54,11 @@ public class JWaitGlassPane extends JPanel {
 
 	private static final RenderingHints hints;
 
-	private static final Color COLOR_DEFAULT_BIG;
+	public static final Color COLOR_DEFAULT_BIG;
 
-	private static final Color COLOR_DEFAULT_HALF;
+	public static final Color COLOR_DEFAULT_HALF;
 
-	private static final Color COLOR_DEFAULT_NORMAL;
+	public static final Color COLOR_DEFAULT_NORMAL;
 
 	private int nbFigure;
 
@@ -69,9 +68,9 @@ public class JWaitGlassPane extends JPanel {
 
 	private int typeDirection;
 
-	private ImageIcon iconLeft;
+	private Image iconLeft;
 
-	private ImageIcon iconRight;
+	private Image iconRight;
 
 	private Color colorBig;
 
@@ -86,35 +85,25 @@ public class JWaitGlassPane extends JPanel {
 	private Timer animatorTimer;
 
 	static {
-		ICON_CLIENT = new ImageIcon(JWaitGlassPane.class
-				.getResource("/images/client.png")); //$NON-NLS-1$
-		ICON_DATABASE_SERVER = new ImageIcon(JWaitGlassPane.class
-				.getResource("/images/database.png")); //$NON-NLS-1$
-		ICON_SERVER = new ImageIcon(JWaitGlassPane.class
-				.getResource("/images/server.png")); //$NON-NLS-1$
-		ICON_PDF_SERVER = new ImageIcon(JWaitGlassPane.class
-				.getResource("/images/mimepdf.png")); //$NON-NLS-1$
+		ICON_CLIENT = new ImageIcon(JWaitGlassPane.class.getResource("/images/client.png")).getImage(); //$NON-NLS-1$
+		ICON_DATABASE_SERVER = new ImageIcon(JWaitGlassPane.class.getResource("/images/database.png")).getImage(); //$NON-NLS-1$
+		ICON_SERVER = new ImageIcon(JWaitGlassPane.class.getResource("/images/server.png")).getImage(); //$NON-NLS-1$
+		ICON_PDF_SERVER = new ImageIcon(JWaitGlassPane.class.getResource("/images/mimepdf.png")).getImage(); //$NON-NLS-1$
 
-		compositeHalf = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				0.5f);
-		compositeAll = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				0.75f);
+		compositeHalf = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+		compositeAll = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f);
 
-		hints = new RenderingHints(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		hints.put(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.put(RenderingHints.KEY_FRACTIONALMETRICS,
-				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		hints = new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.put(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-		COLOR_DEFAULT_BIG = new Color(127, 0, 0);
-		COLOR_DEFAULT_HALF = new Color(255, 100, 100);
-		COLOR_DEFAULT_NORMAL = new Color(255, 220, 220);
+		COLOR_DEFAULT_BIG = new Color(0, 0, 127);
+		COLOR_DEFAULT_HALF = new Color(100, 100, 255);
+		COLOR_DEFAULT_NORMAL = new Color(220, 220, 255);
 	}
 
 	public JWaitGlassPane() {
-		this(TYPE_DIRECTION_PING_PONG, TEXT_DEFAULT, ICON_CLIENT,
-				ICON_DATABASE_SERVER);
+		this(TYPE_DIRECTION_PING_PONG, TEXT_DEFAULT, ICON_CLIENT, ICON_DATABASE_SERVER);
 	}
 
 	public JWaitGlassPane(final int type) {
@@ -125,12 +114,11 @@ public class JWaitGlassPane extends JPanel {
 		this(TYPE_DIRECTION_PING_PONG, text, ICON_CLIENT, ICON_DATABASE_SERVER);
 	}
 
-	public JWaitGlassPane(final ImageIcon iconLeft, final ImageIcon iconRight) {
-		this(TYPE_DIRECTION_PING_PONG, "", ICON_CLIENT, ICON_DATABASE_SERVER); //$NON-NLS-1$
+	public JWaitGlassPane(final Image iconLeft, final Image iconRight) {
+		this(TYPE_DIRECTION_PING_PONG, "", iconLeft, iconRight); //$NON-NLS-1$
 	}
 
-	public JWaitGlassPane(final int typeDirection, final String text,
-			final ImageIcon iconLeft, final ImageIcon iconRight) {
+	public JWaitGlassPane(final int typeDirection, final String text, final Image iconLeft, final Image iconRight) {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setOpaque(false);
@@ -180,19 +168,19 @@ public class JWaitGlassPane extends JPanel {
 		super.setVisible(v);
 	}
 
-	public ImageIcon getIconLeft() {
+	public Image getIconLeft() {
 		return iconLeft;
 	}
 
-	public void setIconLeft(final ImageIcon iconLeft) {
+	public void setIconLeft(final Image iconLeft) {
 		this.iconLeft = iconLeft;
 	}
 
-	public ImageIcon getImageRight() {
+	public Image getImageRight() {
 		return iconRight;
 	}
 
-	public void setIconRight(final ImageIcon iconRight) {
+	public void setIconRight(final Image iconRight) {
 		this.iconRight = iconRight;
 	}
 
@@ -251,9 +239,7 @@ public class JWaitGlassPane extends JPanel {
 		this.setVisible(false);
 	}
 
-	protected Area buildFigure(final int typeDirection, final int direction,
-			final int currentCycle, final int currentPosition, final int width,
-			final int height) {
+	protected Area buildFigure(final int typeDirection, final int direction, final int currentCycle, final int currentPosition, final int width, final int height) {
 		Area area = null;
 
 		// Arrow right
@@ -334,17 +320,16 @@ public class JWaitGlassPane extends JPanel {
 		int x2 = width / 2 + betwenIcon / 2 - widthHeightImage / 2;
 
 		// Affichage des 2 icones
-		if (iconLeft != null)
-			g2.drawImage(iconLeft.getImage(), x1, y1, widthHeightImage,
-					widthHeightImage, null);
-		if (iconRight != null)
-			g2.drawImage(iconRight.getImage(), x2, y1, widthHeightImage,
-					widthHeightImage, null);
+		if (iconLeft != null) {
+			g2.drawImage(iconLeft, x1, y1, widthHeightImage, widthHeightImage, null);
+		}
+		if (iconRight != null) {
+			g2.drawImage(iconRight, x2, y1, widthHeightImage, widthHeightImage, null);
+		}
 
 		// Affichage des fléches
 		if (viewK2000) {
-			int x4 = width / 2 - betwenIcon / 2 + widthHeightImage / 2
-					+ betwenFigure / 2;
+			int x4 = width / 2 - betwenIcon / 2 + widthHeightImage / 2 + betwenFigure / 2;
 			for (int i = 0; i < nbFigure; i++) {
 				int rayon = betwenFigure / 2;
 				if (i == currentCycle) {
@@ -353,36 +338,32 @@ public class JWaitGlassPane extends JPanel {
 				} else if ((i == currentCycle - 1) || (i == currentCycle + 1)) {
 					g2.setPaint(colorHalf);
 					rayon += (rayon * 25) / 100;
-				} else if (typeDirection != TYPE_DIRECTION_PING_PONG
-						&& ((currentCycle == 0 && i == nbFigure - 1) || (currentCycle == nbFigure - 1 && i == 0))) {
+				} else if (typeDirection != TYPE_DIRECTION_PING_PONG && ((currentCycle == 0 && i == nbFigure - 1) || (currentCycle == nbFigure - 1 && i == 0))) {
 					g2.setPaint(colorHalf);
 					rayon += (rayon * 20) / 100;
 				} else {
 					g2.setPaint(colorNormal);
 				}
 
-				Area area = buildFigure(typeDirection, direction, currentCycle,
-						i, rayon, rayon);
+				Area area = buildFigure(typeDirection, direction, currentCycle, i, rayon, rayon);
 
 				double y2 = height / 2 - heightAnimation - rayon / 2;
 				double x3 = x4 + i * betwenFigure - rayon / 2;
-				AffineTransform at = AffineTransform.getTranslateInstance(x3,
-						y2);
+				AffineTransform at = AffineTransform.getTranslateInstance(x3, y2);
 				area.transform(at);
 
 				g2.fill(area);
 
-				g2.setStroke(new BasicStroke(stroke));
-				g2.setPaint(Color.BLACK);
-				g2.draw(area);
+				// g2.setStroke(new BasicStroke(stroke));
+				// g2.setPaint(Color.BLACK);
+				// g2.draw(area);
 			}
 		}
 
 		// Affichage du text
 		if (text != null && text.length() > 0) {
 			FontRenderContext context = g2.getFontRenderContext();
-			Font font = this.getFont().deriveFont(Font.BOLD,
-					widthHeightImage / 5);
+			Font font = this.getFont().deriveFont(Font.BOLD, widthHeightImage / 5);
 			FontMetrics fm = g2.getFontMetrics(font);
 			String temp = new String(text);
 			while (fm.stringWidth(temp) >= width) {

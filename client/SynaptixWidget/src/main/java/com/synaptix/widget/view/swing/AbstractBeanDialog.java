@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -134,7 +135,9 @@ public abstract class AbstractBeanDialog<E> extends JPanel {
 
 		beanExtensionDialogListModel = new DefaultListModel();
 		list = new JList(beanExtensionDialogListModel);
+		list.setBorder(BorderFactory.createEmptyBorder());
 		listScrollPane = new JArrowScrollPane(list);
+		listScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
 		allPanel = new JPanel(new BorderLayout());
 

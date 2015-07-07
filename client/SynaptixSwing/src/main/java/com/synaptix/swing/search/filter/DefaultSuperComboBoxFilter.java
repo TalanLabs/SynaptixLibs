@@ -13,22 +13,31 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import com.synaptix.swing.search.AbstractFilter;
+import com.synaptix.swing.utils.GenericObjectToString;
 
 public class DefaultSuperComboBoxFilter<E> extends AbstractFilter {
 
-	private String id;
+	protected String id;
 
-	private String name;
+	protected String name;
 
-	private JComboBox comboBox;
+	protected JComboBox comboBox;
 
-	private JComboBox defaultComboBox;
+	protected JComboBox defaultComboBox;
 
-	private ListModel listModel;
+	protected ListModel listModel;
 
-	private ObjectToKey<E> otk;
+	protected ObjectToKey<E> otk;
 
 	public DefaultSuperComboBoxFilter(String id, String name, int width, ListModel listModel, ObjectToKey<E> otk, ListCellRenderer renderer) {
+		this(id, name, width, listModel, otk, null, renderer);
+	}
+
+	public DefaultSuperComboBoxFilter(String id, String name, int width, ListModel listModel, ObjectToKey<E> otk, GenericObjectToString<E> os) {
+		this(id, name, width, listModel, otk, os, null);
+	}
+
+	protected DefaultSuperComboBoxFilter(String id, String name, int width, ListModel listModel, ObjectToKey<E> otk, GenericObjectToString<E> os, ListCellRenderer renderer) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -37,6 +46,9 @@ public class DefaultSuperComboBoxFilter<E> extends AbstractFilter {
 		this.otk = otk;
 
 		comboBox = new JComboBox(new MyComboBoxModel(listModel));
+		if (os != null) {
+			renderer = createRenderer(comboBox, os);
+		}
 		if (renderer != null) {
 			comboBox.setRenderer(renderer);
 		}
@@ -53,6 +65,10 @@ public class DefaultSuperComboBoxFilter<E> extends AbstractFilter {
 		// }
 
 		initialize();
+	}
+
+	protected ListCellRenderer createRenderer(JComboBox comboBox, GenericObjectToString<E> os) {
+		return null;
 	}
 
 	@Override

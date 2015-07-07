@@ -1,16 +1,22 @@
 package helper;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 import mapper.CountryMapper;
 import mapper.ZipMapper;
@@ -22,6 +28,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.factory.DefaultComputedFactory;
 import com.synaptix.constants.ConstantsBundleManager;
@@ -46,9 +55,11 @@ import com.synaptix.service.IServiceFactory;
 import com.synaptix.service.ServicesManager;
 import com.synaptix.swing.JDialogModel;
 import com.synaptix.swing.utils.Manager;
+import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.guice.SwingConstantsBundleManager;
 import com.synaptix.widget.guice.SynaptixWidgetModule;
 import com.synaptix.widget.skin.SubstanceFlatWhiteLookAndFeel;
+import com.synaptix.widget.view.swing.helper.IconHelper;
 
 public class MainHelper {
 
@@ -72,6 +83,8 @@ public class MainHelper {
 
 		JDialogModel.setActiveSave(true);
 		JDialogModel.setMultiScreen(true);
+
+		IconHelper.setUseFontAwesome(true);
 	}
 
 	private static final void initSyPreferences() {
@@ -123,6 +136,29 @@ public class MainHelper {
 
 	public static Injector getClientInjector() {
 		return clientInjector;
+	}
+
+	public static JComponent createTable() {
+		JTable table = new JTable(new DefaultTableModel(100, 10) {
+			@Override
+			public Object getValueAt(int row, int column) {
+				return row + " " + column;
+			}
+		});
+		table.setPreferredScrollableViewportSize(new Dimension(0, 200));
+
+		FormLayout layout = new FormLayout("FILL:PREF:GROW(1.0)");
+		DefaultFormBuilder builder = new DefaultFormBuilder(layout);
+		builder.setDefaultDialogBorder();
+		builder.append(ButtonBarFactory.buildLeftAlignedBar(new JButton(new MyAction()), new JButton(new MyAction()), new JButton(new MyAction())));
+		builder.appendRow(builder.getLineGapSpec());
+		builder.appendRow("FILL:PREF:GROW(1.0)");
+		builder.nextLine(2);
+		builder.append(new JScrollPane(table));
+		JButton test = new JButton("Test");
+		test.setEnabled(false);
+		builder.append(ButtonBarFactory.buildLeftAlignedBar(test));
+		return builder.getPanel();
 	}
 
 	private static class MyClientModule extends AbstractModule {
@@ -184,6 +220,12 @@ public class MainHelper {
 
 		public void setLocale(Locale locale) {
 			this.locale = locale;
+		}
+	}
+
+	private static class MyAction extends AbstractAddAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
 		}
 	}
 }

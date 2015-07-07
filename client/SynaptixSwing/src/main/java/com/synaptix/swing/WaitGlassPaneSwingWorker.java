@@ -1,10 +1,10 @@
 package com.synaptix.swing;
 
+import java.awt.Image;
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 
 import com.synaptix.client.view.IWaitWorker;
@@ -20,9 +20,9 @@ public abstract class WaitGlassPaneSwingWorker<T> {
 
 	private int direction;
 
-	private ImageIcon leftImage;
+	private Image leftImage;
 
-	private ImageIcon rightImage;
+	private Image rightImage;
 
 	private boolean showWait;
 
@@ -40,11 +40,11 @@ public abstract class WaitGlassPaneSwingWorker<T> {
 		this(showWait, JWaitGlassPane.ICON_CLIENT, JWaitGlassPane.ICON_DATABASE_SERVER);
 	}
 
-	public WaitGlassPaneSwingWorker(boolean showWait, ImageIcon leftImage, ImageIcon rightImage) {
-		this(showWait, JWaitGlassPane.TYPE_DIRECTION_RIGHT_TO_LEFT, JWaitGlassPane.ICON_CLIENT, JWaitGlassPane.ICON_DATABASE_SERVER);
+	public WaitGlassPaneSwingWorker(boolean showWait, Image leftImage, Image rightImage) {
+		this(showWait, JWaitGlassPane.TYPE_DIRECTION_RIGHT_TO_LEFT, leftImage, rightImage);
 	}
 
-	public WaitGlassPaneSwingWorker(boolean showWait, int direction, ImageIcon leftImage, ImageIcon rightImage) {
+	public WaitGlassPaneSwingWorker(boolean showWait, int direction, Image leftImage, Image rightImage) {
 		swingWorker = new MySwingWorker();
 
 		this.showWait = showWait;

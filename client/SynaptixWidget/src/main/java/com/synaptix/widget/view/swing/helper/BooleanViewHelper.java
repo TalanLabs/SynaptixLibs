@@ -6,10 +6,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 import com.synaptix.swing.search.Filter;
-import com.synaptix.swing.search.filter.DefaultSuperComboBoxFilter;
 import com.synaptix.swing.search.filter.DefaultSuperComboBoxFilter.ObjectToKey;
 import com.synaptix.swing.utils.GenericObjectToString;
-import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceListCellRenderer;
+import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceComboBoxRenderer;
+import com.synaptix.widget.search.filter.SubstanceSuperComboBoxFilter;
 import com.synaptix.widget.util.StaticWidgetHelper;
 
 public class BooleanViewHelper {
@@ -22,18 +22,22 @@ public class BooleanViewHelper {
 			}
 		};
 
-		return new DefaultSuperComboBoxFilter<Boolean>(id, name, 75, new DefaultComboBoxModel(new Boolean[] { null, true, false }), booleanObjectToKey,
-				createBooleanTypeGenericSubstanceListCellRenderer(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().all()));
+		return new SubstanceSuperComboBoxFilter<Boolean>(id, name, 75, new DefaultComboBoxModel(new Boolean[] { null, true, false }), booleanObjectToKey,
+				createBooleanGenericObjectToString(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().all()));
 	}
 
 	public static final JComboBox createBooleanComboBox() {
 		JComboBox res = new JComboBox(new Boolean[] { null, true, false });
-		res.setRenderer(createBooleanTypeGenericSubstanceListCellRenderer(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none()));
+		res.setRenderer(createBooleanTypeGenericSubstanceComboBoxCellRenderer(res, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none()));
 		return res;
 	}
 
-	public static final TypeGenericSubstanceListCellRenderer<Boolean> createBooleanTypeGenericSubstanceListCellRenderer(final String nullText) {
-		return new TypeGenericSubstanceListCellRenderer<Boolean>(new GenericObjectToString<Boolean>() {
+	public static final TypeGenericSubstanceComboBoxRenderer<Boolean> createBooleanTypeGenericSubstanceComboBoxCellRenderer(JComboBox comboBox, final String nullText) {
+		return new TypeGenericSubstanceComboBoxRenderer<Boolean>(comboBox, createBooleanGenericObjectToString(nullText));
+	}
+
+	public static final GenericObjectToString<Boolean> createBooleanGenericObjectToString(final String nullText) {
+		return new GenericObjectToString<Boolean>() {
 			@Override
 			public String getString(Boolean t) {
 				if (t != null) {
@@ -45,7 +49,7 @@ public class BooleanViewHelper {
 				}
 				return nullText;
 			}
-		});
+		};
 	}
 
 }

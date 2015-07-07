@@ -16,6 +16,7 @@ import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceComboBoxRenderer;
 import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceListCellRenderer;
 import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceTableCellRenderer;
+import com.synaptix.widget.search.filter.SubstanceSuperComboBoxFilter;
 import com.synaptix.widget.util.StaticWidgetHelper;
 
 public class EnumViewHelper {
@@ -89,12 +90,12 @@ public class EnumViewHelper {
 				listModel.addElement(value);
 			}
 		}
-		DefaultSuperComboBoxFilter<E> filter = new DefaultSuperComboBoxFilter<E>(id, name, 75, listModel, new ObjectToKey<E>() {
+		SubstanceSuperComboBoxFilter<E> filter = new SubstanceSuperComboBoxFilter<E>(id, name, 75, listModel, new ObjectToKey<E>() {
 			@Override
 			public Serializable getKey(E e) {
 				return e;
 			}
-		}, new TypeGenericSubstanceListCellRenderer<E>(new GenericObjectToString<E>() {
+		}, new GenericObjectToString<E>() {
 			@Override
 			public String getString(E t) {
 				if ((displayCode) && (t != null)) {
@@ -102,7 +103,7 @@ public class EnumViewHelper {
 				}
 				return EnumViewHelper.getString(t, map, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().all());
 			}
-		}));
+		});
 		return filter;
 	}
 

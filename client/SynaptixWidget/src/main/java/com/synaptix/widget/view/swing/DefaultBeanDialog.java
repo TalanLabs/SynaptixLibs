@@ -26,6 +26,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.pushingpixels.flamingo.api.common.JScrollablePanel;
+import org.pushingpixels.flamingo.api.common.JScrollablePanel.ScrollType;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -34,7 +37,6 @@ import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.synaptix.client.view.IView;
 import com.synaptix.common.helper.CollectionHelper;
-import com.synaptix.swing.JArrowScrollPane;
 import com.synaptix.swing.JDialogModel;
 import com.synaptix.swing.WaitComponentFeedbackPanel;
 import com.synaptix.swing.utils.GUIWindow;
@@ -180,7 +182,10 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 	}
 
 	protected JComponent createListScrollPane(JList list) {
-		return new JArrowScrollPane(list);
+		JScrollablePanel<JList> pageScrollablePanel = new JScrollablePanel<JList>(list, ScrollType.VERTICALLY);
+		// JArrowScrollPane arrowScrollPane = new JArrowScrollPane(list);
+		// arrowScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		return pageScrollablePanel;
 	}
 
 	private JComponent buildContents() {

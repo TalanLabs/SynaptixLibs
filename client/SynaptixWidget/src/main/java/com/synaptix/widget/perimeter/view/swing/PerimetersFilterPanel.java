@@ -22,7 +22,7 @@ import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.widget.perimeter.view.swing.descriptor.DefaultPerimeterDescriptor;
 import com.synaptix.widget.perimeter.view.swing.descriptor.IPerimeterDescriptor;
 import com.synaptix.widget.perimeter.view.swing.descriptor.IPerimeterDescriptor.IPerimeterSearchAxis;
-import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceListCellRenderer;
+import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceComboBoxRenderer;
 import com.synaptix.widget.util.StaticWidgetHelper;
 import com.synaptix.widget.view.swing.helper.IToolBarActionsBuilder;
 
@@ -102,7 +102,7 @@ public class PerimetersFilterPanel<E extends IComponent> extends AbstractPerimet
 
 		if (hasPerimeterSearchAxis()) {
 			axisCombobox = new JComboBox(perimeterDescriptor.getPerimeterSearchAxisList().toArray(new IPerimeterSearchAxis[perimeterDescriptor.getPerimeterSearchAxisList().size()]));
-			axisCombobox.setRenderer(new TypeGenericSubstanceListCellRenderer<IPerimeterSearchAxis>(new GenericObjectToString<IPerimeterSearchAxis>() {
+			axisCombobox.setRenderer(new TypeGenericSubstanceComboBoxRenderer<IPerimeterSearchAxis>(axisCombobox, new GenericObjectToString<IPerimeterSearchAxis>() {
 				@Override
 				public String getString(IPerimeterSearchAxis t) {
 					return t.getName();

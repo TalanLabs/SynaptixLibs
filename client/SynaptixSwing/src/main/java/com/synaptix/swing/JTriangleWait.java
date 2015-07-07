@@ -20,7 +20,7 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 
 	private static final long serialVersionUID = -4216494310085850301L;
 
-	private static final int FPS = 10;
+	public static final int FPS = 10;
 
 	private static final int HEIGHT = 32;
 
@@ -66,8 +66,7 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 		traineColors = new Color[this.traineLenght];
 		for (int i = 0; i < traineLenght; i++) {
 			int alpha = (int) (traineColor.getAlpha() * ((double) (traineLenght - i) / (double) traineLenght));
-			traineColors[i] = new Color(traineColor.getRed(), traineColor
-					.getGreen(), traineColor.getBlue(), alpha);
+			traineColors[i] = new Color(traineColor.getRed(), traineColor.getGreen(), traineColor.getBlue(), alpha);
 		}
 	}
 
@@ -186,14 +185,10 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
-		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Color[] colors = userTraineColors != null
-				&& userTraineColors.length > 0 ? userTraineColors
-				: traineColors;
+		Color[] colors = userTraineColors != null && userTraineColors.length > 0 ? userTraineColors : traineColors;
 
 		int finCycle = (currentCycle - (traineLenght - 1));
 		int rayon = Math.min(this.getHeight(), this.getWidth()) / 2;
@@ -201,10 +196,8 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 		double delta = Math.PI * 2 / nbTriangle;
 		double angle = 0;
 		for (int i = 0; i < nbTriangle; i++) {
-			if ((i <= currentCycle && i >= finCycle)
-					|| (i > currentCycle && i - nbTriangle >= finCycle)) {
-				int current = i <= currentCycle ? currentCycle - i
-						: (nbTriangle - i) + currentCycle;
+			if ((i <= currentCycle && i >= finCycle) || (i > currentCycle && i - nbTriangle >= finCycle)) {
+				int current = i <= currentCycle ? currentCycle - i : (nbTriangle - i) + currentCycle;
 				current = current >= 0 && current < colors.length ? current : 0;
 				Color c = colors[current];
 				paintTriangle(g2, c, rayon, angle, delta);
@@ -213,8 +206,7 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 		}
 	}
 
-	private void paintTriangle(Graphics2D g2, Color color, int rayon,
-			double angle, double deltaAngle) {
+	private void paintTriangle(Graphics2D g2, Color color, int rayon, double angle, double deltaAngle) {
 		int dh = fullComponent ? rayon : waitHeight / 2;
 
 		int dx = fullComponent ? this.getWidth() / 2 - rayon : 0;
@@ -224,9 +216,7 @@ public class JTriangleWait extends JComponent implements IAnimationComponent {
 
 		double rr = rayon - yy * 2;
 
-		Arc2D grand = new Arc2D.Double(-rayon, -rayon, rayon * 2, rayon * 2,
-				180 - Math.toDegrees(deltaAngle) / 2 + 2, Math
-						.toDegrees(deltaAngle) - 2, Arc2D.PIE);
+		Arc2D grand = new Arc2D.Double(-rayon, -rayon, rayon * 2, rayon * 2, 180 - Math.toDegrees(deltaAngle) / 2 + 2, Math.toDegrees(deltaAngle) - 2, Arc2D.PIE);
 		Ellipse2D petit = new Ellipse2D.Double(-rr, -rr, rr * 2, rr * 2);
 
 		Area a = new Area(grand);

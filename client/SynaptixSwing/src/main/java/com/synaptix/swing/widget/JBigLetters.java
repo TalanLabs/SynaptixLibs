@@ -17,6 +17,8 @@ public class JBigLetters extends JComponent {
 
 	private static final long serialVersionUID = -5133102565941295233L;
 
+	private static boolean round = true;
+
 	private static final Font defaultFont = new Font("Tahoma", Font.BOLD, 10); //$NON-NLS-1$
 
 	private Color contourColor = new Color(192, 192, 192);
@@ -37,6 +39,14 @@ public class JBigLetters extends JComponent {
 		super();
 
 		this.setFont(defaultFont);
+	}
+
+	public static void setRound(boolean round) {
+		JBigLetters.round = round;
+	}
+
+	public static boolean isRound() {
+		return round;
 	}
 
 	public void setText(String text) {
@@ -114,10 +124,8 @@ public class JBigLetters extends JComponent {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g.create();
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
 		int w = this.getWidth();
 		int h = this.getHeight();
@@ -162,17 +170,24 @@ public class JBigLetters extends JComponent {
 		}
 
 		g2.setColor(fondColor);
-		g2.fillRoundRect(x, y, w - 1, h - 1, aw, ah);
+		if (round) {
+			g2.fillRoundRect(x, y, w - 1, h - 1, aw, ah);
+		} else {
+			g2.fillRect(x, y, w - 1, h - 1);
+		}
 
 		g2.setColor(contourColor);
-		g2.drawRoundRect(x, y, w - 1, h - 1, aw, ah);
+		if (round) {
+			g2.drawRoundRect(x, y, w - 1, h - 1, aw, ah);
+		} else {
+			g2.drawRect(x, y, w - 1, h - 1);
+		}
 
 		g2.dispose();
 	}
 
 	private void paintFirstLetter(Graphics2D g2, int x, int y, int w, int h) {
-		GlyphVector firstLetterGV = this.getFont().createGlyphVector(
-				g2.getFontRenderContext(), firstLetter);
+		GlyphVector firstLetterGV = this.getFont().createGlyphVector(g2.getFontRenderContext(), firstLetter);
 		Shape firstLetterShape = firstLetterGV.getOutline();
 
 		Rectangle2D rect = firstLetterShape.getBounds2D();
@@ -191,8 +206,7 @@ public class JBigLetters extends JComponent {
 	}
 
 	private void paintBottomText(Graphics2D g2, int x, int y, int w, int h) {
-		GlyphVector otherGV = this.getFont().createGlyphVector(
-				g2.getFontRenderContext(), bottomText);
+		GlyphVector otherGV = this.getFont().createGlyphVector(g2.getFontRenderContext(), bottomText);
 		Shape bottomTextShape = otherGV.getOutline();
 
 		Rectangle2D rect = bottomTextShape.getBounds2D();

@@ -37,6 +37,8 @@ public class JDialogModel {
 
 	private static boolean multiScreen;
 
+	private static boolean showTitle;
+
 	private JSyDialog dialog;
 
 	private String title;
@@ -73,6 +75,7 @@ public class JDialogModel {
 
 	static {
 		activeSave = false;
+		showTitle = true;
 	}
 
 	public JDialogModel(Component parent, String title, JComponent contents, Action[] actions) {
@@ -100,11 +103,11 @@ public class JDialogModel {
 	}
 
 	public JDialogModel(Component parent, String title, String subTitle, JComponent contents, Action[] actions, ActionListener actionListenerClose) {
-		this(parent, title, subTitle, true, contents, actions, actionListenerClose);
+		this(parent, title, subTitle, showTitle, contents, actions, actionListenerClose);
 	}
 
 	public JDialogModel(Component parent, String title, String subTitle, JComponent contents, Action[] actions, ActionListener actionListenerOpen, ActionListener actionListenerClose) {
-		this(parent, title, subTitle, true, contents, actions, actionListenerOpen, actionListenerClose);
+		this(parent, title, subTitle, showTitle, contents, actions, actionListenerOpen, actionListenerClose);
 	}
 
 	public JDialogModel(Component parent, String title, String subTitle, boolean showTitle, JComponent contents, Action[] actions, ActionListener actionListenerClose) {
@@ -371,6 +374,14 @@ public class JDialogModel {
 
 	public static void setMultiScreen(boolean multiScreen) {
 		JDialogModel.multiScreen = multiScreen;
+	}
+
+	public static void setShowTitle(boolean showTitle) {
+		JDialogModel.showTitle = showTitle;
+	}
+
+	public static boolean isShowTitle() {
+		return showTitle;
 	}
 
 	public void setGlassPane(Component glassPane) {
