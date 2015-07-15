@@ -166,6 +166,12 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Importer des données ...")
 	public String importDatasHellip();
 
+	@DefaultStringValue("Charger")
+	public String uploadHellip();
+
+	@DefaultStringValue("Télécharger")
+	public String downloadHellip();
+
 	@DefaultStringValue("Fichier Csv (csv)")
 	public String csvFile();
 

@@ -5,15 +5,15 @@ import javax.swing.AbstractAction;
 import com.synaptix.widget.util.StaticWidgetHelper;
 import com.synaptix.widget.view.swing.helper.IconHelper;
 
-public abstract class AbstractImportAction extends AbstractAction {
+public abstract class AbstractDownloadAction extends AbstractAction {
 
 	private static final long serialVersionUID = -3382073337044300487L;
 
-	public AbstractImportAction() {
-		this(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().importDatasHellip());
+	public AbstractDownloadAction() {
+		this(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().downloadHellip());
 	}
 
-	public AbstractImportAction(String text) {
+	public AbstractDownloadAction(String text) {
 		super(text, IconHelper.Icons.DOWNLOAD.getIcon()); //$NON-NLS-1$
 	}
 }

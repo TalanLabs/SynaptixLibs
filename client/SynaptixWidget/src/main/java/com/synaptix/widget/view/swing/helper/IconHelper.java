@@ -39,15 +39,16 @@ public class IconHelper {
 				"com/synaptix/widget/actions/view/swing/iconCut.png"), DELETE("fa-remove", "com/synaptix/widget/actions/view/swing/iconDelete.png"), DOWN("fa-arrow-down",
 				"com/synaptix/widget/actions/view/swing/iconDown.png"), EDIT("fa-edit", "com/synaptix/widget/actions/view/swing/iconEdit.png"), EXPORT_EXCEL("fa-file-excel-o",
 				"com/synaptix/widget/actions/view/swing/iconExcel.gif"), EXPORT_PDF("fa-file-pdf-o", "com/synaptix/widget/actions/view/swing/iconPdf.png"), EXPORT_TXT("fa-file-text-o",
-				"com/synaptix/widget/actions/view/swing/iconTextDocument.png"), FINISH(null, null), HELP("fa-question", "com/synaptix/widget/actions/view/swing/iconHelp.png"), IMPORT("fa-download",
-				"com/synaptix/widget/actions/view/swing/iconDownload.png"), MAP("fa-map-marker", "com/synaptix/widget/actions/view/swing/iconMap.png"), NEXT("fa-step-forward",
-				"com/synaptix/widget/actions/view/swing/iconNext.png"), NO(null, null), OPTIONS("fa-gear", "com/synaptix/widget/actions/view/swing/iconOption.png"), PASTE("fa-paste",
-				"com/synaptix/widget/actions/view/swing/iconPaste.png"), PREVIOUS("fa-step-backward", "com/synaptix/widget/actions/view/swing/iconPrevious.png"), PRINT("fa-print",
-				"com/synaptix/widget/actions/view/swing/iconPrint.png"), REDO("fa-repeat", "com/synaptix/widget/actions/view/swing/iconRedo.png"), REFRESH("fa-refresh",
-				"com/synaptix/widget/actions/view/swing/iconRefresh.png"), REMOVE("fa-remove", "com/synaptix/widget/actions/view/swing/iconRemove.png"), SAVE("fa-save",
-				"com/synaptix/widget/actions/view/swing/iconSave.png"), SEARCH("fa-search", "com/synaptix/widget/actions/view/swing/iconSearch.png"), SEND("fa-upload",
-				"com/synaptix/widget/actions/view/swing/iconSend.png"), SETTINGS("fa-gear", "com/synaptix/widget/actions/view/swing/iconSettings.png"), UNDO("fa-undo",
-				"com/synaptix/widget/actions/view/swing/iconUndo.png"), UP("fa-arrow-up", "com/synaptix/widget/actions/view/swing/iconUp.png"), YES(null, null);
+				"com/synaptix/widget/actions/view/swing/iconTextDocument.png"), FINISH(null, null), HELP("fa-question", "com/synaptix/widget/actions/view/swing/iconHelp.png"), DOWNLOAD("fa-download",
+				"com/synaptix/widget/actions/view/swing/iconDownload.png"), UPLOAD("fa-upload", "com/synaptix/widget/actions/view/swing/iconUpload.png"), MAP("fa-map-marker",
+				"com/synaptix/widget/actions/view/swing/iconMap.png"), NEXT("fa-step-forward", "com/synaptix/widget/actions/view/swing/iconNext.png"), NO(null, null), OPTIONS("fa-gear",
+				"com/synaptix/widget/actions/view/swing/iconOption.png"), PASTE("fa-paste", "com/synaptix/widget/actions/view/swing/iconPaste.png"), PREVIOUS("fa-step-backward",
+				"com/synaptix/widget/actions/view/swing/iconPrevious.png"), PRINT("fa-print", "com/synaptix/widget/actions/view/swing/iconPrint.png"), REDO("fa-repeat",
+				"com/synaptix/widget/actions/view/swing/iconRedo.png"), REFRESH("fa-refresh", "com/synaptix/widget/actions/view/swing/iconRefresh.png"), REMOVE("fa-remove",
+				"com/synaptix/widget/actions/view/swing/iconRemove.png"), SAVE("fa-save", "com/synaptix/widget/actions/view/swing/iconSave.png"), SEARCH("fa-search",
+				"com/synaptix/widget/actions/view/swing/iconSearch.png"), SEND("fa-upload", "com/synaptix/widget/actions/view/swing/iconSend.png"), SETTINGS("fa-gear",
+				"com/synaptix/widget/actions/view/swing/iconSettings.png"), UNDO("fa-undo", "com/synaptix/widget/actions/view/swing/iconUndo.png"), UP("fa-arrow-up",
+				"com/synaptix/widget/actions/view/swing/iconUp.png"), YES(null, null);
 
 		private final String faName;
 
