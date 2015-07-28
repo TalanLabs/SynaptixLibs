@@ -9,23 +9,29 @@ public abstract class AbstractObservable<E> implements Observable<E> {
 
 	protected List<ObserverListener<E>> listenerList;
 
+	private boolean enableListeners = true;
+
 	public AbstractObservable() {
 		value = null;
 		listenerList = new ArrayList<ObserverListener<E>>();
 	}
 
+	@Override
 	public void addObserverListener(ObserverListener<E> l) {
 		listenerList.add(l);
 	}
 
+	@Override
 	public void removeObserverListener(ObserverListener<E> l) {
 		listenerList.remove(l);
 	}
 
+	@Override
 	public E getValue() {
 		return value;
 	}
 
+	@Override
 	public void setValue(E e) {
 		this.value = e;
 
@@ -33,10 +39,15 @@ public abstract class AbstractObservable<E> implements Observable<E> {
 	}
 
 	protected void fireChangedValues(E e) {
-		for (int i = listenerList.size() - 1; i >= 0; i--) {
-			ObserverListener<E> l = listenerList.get(i);
-			l.changedValue(this, e);
-
+		if (enableListeners) {
+			for (int i = listenerList.size() - 1; i >= 0; i--) {
+				ObserverListener<E> l = listenerList.get(i);
+				l.changedValue(this, e);
+			}
 		}
+	}
+
+	public void setEnableListeners(boolean enableListeners) {
+		this.enableListeners = enableListeners;
 	}
 }
