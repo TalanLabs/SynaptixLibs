@@ -7,6 +7,7 @@ import com.synaptix.widget.SynaptixWidgetClient;
 import com.synaptix.widget.core.view.swing.SyDockingContext;
 import com.synaptix.widget.error.view.swing.ErrorInfoErrorViewManager;
 import com.synaptix.widget.util.StaticWidgetHelper;
+import com.synaptix.widget.view.swing.GlobalListener;
 
 public class SynaptixWidgetModule extends AbstractModule {
 
@@ -22,5 +23,9 @@ public class SynaptixWidgetModule extends AbstractModule {
 		bind(ErrorViewManager.class).to(ErrorInfoErrorViewManager.class).in(Singleton.class);
 
 		bind(SynaptixWidgetClient.class).in(Singleton.class);
+
+		GlobalListener globalListener = new GlobalListener();
+		bind(GlobalListener.class).toInstance(globalListener);
+		requestInjection(globalListener);
 	}
 }
