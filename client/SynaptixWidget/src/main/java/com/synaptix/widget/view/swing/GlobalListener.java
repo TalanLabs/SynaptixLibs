@@ -26,11 +26,11 @@ import com.synaptix.widget.guice.SwingConstantsBundleManager;
 
 public class GlobalListener {
 
-	@Inject
+	@Inject(optional = true)
 	@SwingConstantsBundleManager
 	private ConstantsBundleManager constantsBundleManager;
 
-	@Inject
+	@Inject(optional = true)
 	@SwingConstantsBundleManager
 	private DefaultConstantsLocaleSession defaultConstantsLocaleSession;
 
@@ -56,6 +56,9 @@ public class GlobalListener {
 	}
 
 	private void dispatchMouseClicOnComponent(Component component) {
+		if ((constantsBundleManager == null) || (defaultConstantsLocaleSession == null)) {
+			return;
+		}
 		try {
 			String text = null;
 
