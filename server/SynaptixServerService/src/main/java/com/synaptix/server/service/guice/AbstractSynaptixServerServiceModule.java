@@ -8,9 +8,7 @@ import com.google.inject.Singleton;
 public abstract class AbstractSynaptixServerServiceModule extends AbstractModule {
 
 	/**
-	 * /** Bind a service delegate
-	 * 
-	 * @param serviceDelegateClass
+	 * Bind a service delegate
 	 */
 	protected final void bindDelegate(Class<?> serviceDelegateClass) {
 		checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
@@ -19,9 +17,6 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 
 	/**
 	 * Bind a service delegate
-	 * 
-	 * @param serviceDelegateClass
-	 * @param serviceDelegateImplClass
 	 */
 	protected final <E, F extends E> void bindDelegate(Class<E> serviceDelegateClass, Class<F> serviceDelegateImplClass) {
 		checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
@@ -32,7 +27,7 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 
 	/**
 	 * Bind a synaptix service
-	 * 
+	 *
 	 * @param serviceClass
 	 * @param serverServiceImplClass
 	 */
