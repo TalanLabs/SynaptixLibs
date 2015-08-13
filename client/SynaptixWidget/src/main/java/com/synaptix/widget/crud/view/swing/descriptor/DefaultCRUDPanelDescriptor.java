@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionListener;
 import com.synaptix.constants.shared.ConstantsWithLookingBundle;
 import com.synaptix.entity.IEntity;
 import com.synaptix.swing.JSyTable;
+import com.synaptix.swing.table.Column;
 import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.actions.view.swing.AbstractCloneAction;
 import com.synaptix.widget.actions.view.swing.AbstractDeleteAction;
@@ -143,7 +144,14 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2 && getDefaultSearchComponentsPanel().getTable().getSelectedRowCount() == 1
 							&& getDefaultDoubleClickAction() != null) {
-						getDefaultDoubleClickAction().actionPerformed(new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, ""));
+
+						int idx = getDefaultSearchComponentsPanel().getTable().getSelectedColumn();
+						if (idx > -1) {
+							Column column = getTablePageComponentsPanel().getComponentTableModel().getColumn(idx);
+							if ((column != null) && (!column.isEditable())) {
+								getDefaultDoubleClickAction().actionPerformed(new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, ""));
+							}
+						}
 					}
 				}
 			});
