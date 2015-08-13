@@ -1,10 +1,14 @@
 package com.synaptix.widget.crud.controller;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
 import com.synaptix.common.util.IResultCallback;
+import com.synaptix.component.factory.ComponentFactory;
+import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.entity.EntityFields;
 import com.synaptix.entity.IEntity;
 import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IEntityService;
@@ -19,7 +23,7 @@ import com.synaptix.widget.viewworker.view.AbstractLoadingViewWorker;
 
 /**
  * A CRUD Controller, create a table and filter and action CRUD
- * 
+ *
  * @param <V>
  *            View factory
  * @param <E>
@@ -28,7 +32,7 @@ import com.synaptix.widget.viewworker.view.AbstractLoadingViewWorker;
  *            Pagination entity which
  */
 public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFactory, E extends IEntity, G extends IEntity> extends AbstractComponentsManagementController<V, G> implements
-		ICRUDManagementController<G> {
+		ICRUDManagementController<G>, ICRUDContext<E> {
 
 	public enum DialogAction {
 
@@ -39,6 +43,8 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	protected final Class<E> crudComponentClass;
 
 	private final Class<? extends ICRUDEntityService<E>> crudEntityServiceClass;
+
+	private int selectedTabIndex;
 
 	public AbstractCRUDManagementController(V viewFactory, Class<E> crudComponentClass, Class<G> paginationComponentClass) {
 		this(viewFactory, crudComponentClass, paginationComponentClass, null, null);
@@ -54,14 +60,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Create a CRUD management view descriptor. NOT CALL use getCRUDManagementViewDescriptor()
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract ICRUDManagementViewDescriptor<G> createCRUDManagementViewDescriptor();
 
 	/**
 	 * Get a CRUD manamgement view descriptor
-	 * 
+	 *
 	 * @return
 	 */
 	protected final ICRUDManagementViewDescriptor<G> getCRUDManagementViewDescriptor() {
@@ -75,7 +81,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Create a CRUD dialog controller
-	 * 
+	 *
 	 * @param dialogAction
 	 * @param entity
 	 * @return
@@ -84,7 +90,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Get a CRUD Entity service
-	 * 
+	 *
 	 * @return
 	 */
 	protected final ICRUDEntityService<E> getCRUDEntityService() {
@@ -93,7 +99,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Get a entity service
-	 * 
+	 *
 	 * @return
 	 */
 	protected final IEntityService getEntityService() {
@@ -102,7 +108,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Get a unicity error
-	 * 
+	 *
 	 * @param description
 	 * @return
 	 */
@@ -205,16 +211,18 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	protected void _showEntity(final E crudEntity) {
 		ICRUDDialogController<E> crudDialogController = newCRUDDialogController(DialogAction.SHOW, crudEntity);
 		if (crudDialogController != null) {
+			crudDialogController.setCRUDContext(this);
 			crudDialogController.showEntity(getView(), crudEntity);
 		}
 	}
 
 	/**
 	 * Show a dialog for edit entity
-	 * 
+	 *
 	 * @param entity
 	 */
 	@Override
+	@Deprecated
 	public void editEntity(final G paginationEntity) {
 		loadEntity(paginationEntity.getId(), new IResultCallback<E>() {
 			@Override
@@ -226,6 +234,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		});
 	}
 
+	// used to add only
 	protected void _editEntity(final E crudEntity) {
 		ICRUDDialogController<E> crudDialogController = newCRUDDialogController(DialogAction.EDIT, crudEntity);
 		if (crudDialogController != null) {
@@ -233,7 +242,9 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		}
 	}
 
+	// used to add only
 	protected void _editEntity(ICRUDDialogController<E> crudDialogController, final IView view, final E crudEntity) {
+		crudDialogController.setCRUDContext(this);
 		crudDialogController.editEntity(view, crudEntity, new IResultCallback<E>() {
 			@Override
 			public void setResult(final E entity) {
@@ -275,7 +286,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Show a dialog for confirmation delete entity
-	 * 
+	 *
 	 * @param entity
 	 */
 	@Override
@@ -322,7 +333,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Show a dialog for clone entity
-	 * 
+	 *
 	 * @param entity
 	 */
 	@Override
@@ -386,7 +397,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Method called for loading a entity with pagination entity
-	 * 
+	 *
 	 * @param id
 	 * @param resultCallback
 	 * @return
@@ -419,7 +430,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Load a full entity from database. This method is called within a view worker
-	 * 
+	 *
 	 * @param crudComponentClass
 	 * @param id
 	 * @return entity
@@ -430,7 +441,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Edit a entity, with other view
-	 * 
+	 *
 	 * @param view
 	 * @param id
 	 */
@@ -446,5 +457,87 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 				}
 			}
 		});
+	}
+
+	@Override
+	public boolean hasPrevious(Serializable id) {
+		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
+		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		return idList.indexOf(id) + 1 > 1;
+	}
+
+	@Override
+	public boolean hasNext(Serializable id) {
+		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
+		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		return idList.indexOf(id) + 1 < idList.size();
+	}
+
+	@Override
+	public void showPrevious(Serializable id) {
+		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
+		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		int idx = idList.indexOf(id);
+		if (idx > 0) {
+			Serializable previousId = idList.get(idx - 1);
+			G component = ComponentFactory.getInstance().createInstance(componentClass);
+			component.setId(previousId);
+			getCRUDManagementViewDescriptor().selectLine(idx - 1);
+			showEntity(component);
+		}
+	}
+
+	@Override
+	public void showNext(Serializable id) {
+		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
+		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		int idx = idList.indexOf(id);
+		if (idx < idList.size()) {
+			Serializable nextId = idList.get(idx + 1);
+			G component = ComponentFactory.getInstance().createInstance(componentClass);
+			component.setId(nextId);
+			getCRUDManagementViewDescriptor().selectLine(idx + 1);
+			showEntity(component);
+		}
+	}
+
+	@Override
+	public void saveBean(final E entity) {
+		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<Serializable>() {
+			@Override
+			protected Serializable doLoading() throws Exception {
+				return editCRUDEntity(entity);
+			}
+
+			@Override
+			public void success(Serializable e) {
+				editEntitySuccess(e); // to confirm, we lose the scroll, not that great
+			}
+
+			@Override
+			public void fail(Throwable t) {
+				if (t.getCause() instanceof ServiceException) {
+					ServiceException err = (ServiceException) t.getCause();
+					if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+						getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
+						// _editEntity(entity); // we are in browse mode
+					} else {
+						getViewFactory().showErrorMessageDialog(getView(), t);
+					}
+				} else {
+					getViewFactory().showErrorMessageDialog(getView(), t);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void setSelectedTabIndex(int selectedTabIndex) {
+		this.selectedTabIndex = selectedTabIndex;
+	}
+
+	@Override
+	public int getSelectedTabIndex() {
+		return selectedTabIndex;
 	}
 }

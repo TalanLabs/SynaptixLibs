@@ -129,7 +129,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get a current viewFactory
-	 * 
+	 *
 	 * @return
 	 */
 	public V getSearchComponentsViewFactory() {
@@ -138,7 +138,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get view descriptor
-	 * 
+	 *
 	 * @return
 	 */
 	public final IViewDescriptor<E> getViewDescriptor() {
@@ -152,7 +152,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get a search components view
-	 * 
+	 *
 	 * @return
 	 */
 	protected final ISearchTablePageComponentsView<E> getSearchComponentsView() {
@@ -166,7 +166,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Create a search components view. NOT CALL, use getSearchComponentsView()
-	 * 
+	 *
 	 * @return
 	 */
 	protected ISearchTablePageComponentsView<E> createSearchComponentsView() {
@@ -175,7 +175,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Create a view descriptor. NOT CALL, use getViewDescriptor()
-	 * 
+	 *
 	 * @param searchComponentsContext
 	 * @return
 	 */
@@ -183,7 +183,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get a size page
-	 * 
+	 *
 	 * @return
 	 */
 	public final int getSizePage() {
@@ -192,7 +192,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Change size page
-	 * 
+	 *
 	 * @param sizePage
 	 */
 	protected final void setSizePage(int sizePage) {
@@ -229,7 +229,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Some filters can be added here
-	 * 
+	 *
 	 * @param filters
 	 */
 	protected void completeFilters(final Map<String, Object> filters) {
@@ -240,7 +240,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Count pagination, use pagination service or default
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @return
 	 */
@@ -254,7 +254,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Overwrite for change default service
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @return
 	 */
@@ -264,7 +264,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Select pagination, use pagination service or default
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @param from
 	 * @param to
@@ -284,7 +284,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 	 * Select pagination for excel<br/>
 	 * By default, uses the standard pagination<br/>
 	 * This method is called within a loading view worker
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @param from
 	 * @param to
@@ -298,7 +298,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Overwrite for change default service
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @param from
 	 * @param to
@@ -377,7 +377,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Add a search listener to be notified when a new search was performed
-	 * 
+	 *
 	 * @param searchListener
 	 */
 	protected final void addSearchListener(SearchListener searchListener) {
@@ -389,7 +389,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Fire a listener
-	 * 
+	 *
 	 * @param unmodifiableMap
 	 */
 	private void fireSearchListener(Map<String, Object> valueFilterMap) {
@@ -402,7 +402,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Load components for "from" to "to", ordered by "order"
-	 * 
+	 *
 	 * @param from
 	 * @param to
 	 * @param count
@@ -459,7 +459,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Set load components result
-	 * 
+	 *
 	 * @param components
 	 */
 	protected void setComponentsResult(List<E> components) {
@@ -467,7 +467,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Sets the pagination (such as count and pageNumber) according to the number of elements
-	 * 
+	 *
 	 * @param count
 	 */
 	private void setPagination(int count) {
@@ -478,7 +478,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Computes the number of pages needed for a certain amount of results
-	 * 
+	 *
 	 * @param count
 	 */
 	private int calcPageNumber(int count) {
@@ -565,7 +565,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Cancel loading
-	 * 
+	 *
 	 * @return true if stopped (or was working)
 	 */
 	public final void cancelWork() {
@@ -617,7 +617,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * The minimum size selectable from the the select page size dialog. By default: 100
-	 * 
+	 *
 	 * @return
 	 */
 	protected int getMinSizePage() {
@@ -626,7 +626,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * The maximum size selectable from the the select page size dialog. By default: 1000
-	 * 
+	 *
 	 * @return
 	 */
 	protected int getMaxSizePage() {
@@ -643,7 +643,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get the column list
-	 * 
+	 *
 	 * @return
 	 */
 	protected Set<String> getColumns() {
@@ -652,7 +652,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Set max excel export line
-	 * 
+	 *
 	 * @param maxExcelExportLine
 	 */
 	protected final void setMaxExcelExportLine(int maxExcelExportLine) {
@@ -661,7 +661,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 
 	/**
 	 * Get max excel export line
-	 * 
+	 *
 	 * @return
 	 */
 	protected final int getMaxExcelExportLine() {

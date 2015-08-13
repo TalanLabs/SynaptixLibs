@@ -59,7 +59,7 @@ public abstract class AbstractBeanDialog<E> extends JPanel {
 
 	private DefaultListModel beanExtensionDialogListModel;
 
-	private JList list;
+	protected JList list;
 
 	private JArrowScrollPane listScrollPane;
 

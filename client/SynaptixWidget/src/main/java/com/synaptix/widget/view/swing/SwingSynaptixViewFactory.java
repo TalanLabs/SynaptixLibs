@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileFilter;
 import com.synaptix.client.view.IView;
 import com.synaptix.component.IComponent;
 import com.synaptix.constants.shared.ConstantsWithLookingBundle;
+import com.synaptix.entity.IEntity;
 import com.synaptix.swing.utils.GUIWindow;
 import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.view.swing.SwingDefaultViewFactory;
@@ -32,6 +33,7 @@ import com.synaptix.widget.view.IViewDescriptor;
 import com.synaptix.widget.view.dialog.IBeanDialogView;
 import com.synaptix.widget.view.dialog.IBeanExtensionDialogView;
 import com.synaptix.widget.view.dialog.IBeanWizardDialogView;
+import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;
 import com.synaptix.widget.view.dialog.TextDialog;
 import com.synaptix.widget.view.swing.descriptor.AbstractSearchViewDescriptor;
 import com.synaptix.widget.view.swing.dialog.AbstractBeanExtensionDialog;
@@ -40,7 +42,7 @@ public class SwingSynaptixViewFactory extends SwingDefaultViewFactory implements
 
 	/**
 	 * Get a component for IView
-	 * 
+	 *
 	 * @param parent
 	 * @return
 	 */
@@ -219,6 +221,27 @@ public class SwingSynaptixViewFactory extends SwingDefaultViewFactory implements
 			list.add((AbstractBeanExtensionDialog<E>) e);
 		}
 		return new DefaultBeanDialog<E>(true, acceptEnabled, acceptActionLabel, cancelActionLabel, closeActionLabel, list.toArray(new IBeanExtensionDialogView[list.size()]));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E extends IEntity, F extends IBeanExtensionDialogView<E>> ICRUDBeanDialogView<E> newCRUDBeanDialogView(F... beanExtensionDialogViews) {
+		List<AbstractBeanExtensionDialog<E>> list = new ArrayList<AbstractBeanExtensionDialog<E>>();
+		for (IBeanExtensionDialogView<E> e : beanExtensionDialogViews) {
+			list.add((AbstractBeanExtensionDialog<E>) e);
+		}
+		return new DefaultCRUDBeanDialog<E>(list.toArray(new IBeanExtensionDialogView[list.size()]));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E extends IEntity, F extends IBeanExtensionDialogView<E>> ICRUDBeanDialogView<E> newCRUDBeanDialogView(boolean acceptEnabled, String acceptActionLabel, String cancelActionLabel,
+			String closeActionLabel, F... beanExtensionDialogViews) {
+		List<AbstractBeanExtensionDialog<E>> list = new ArrayList<AbstractBeanExtensionDialog<E>>();
+		for (IBeanExtensionDialogView<E> e : beanExtensionDialogViews) {
+			list.add((AbstractBeanExtensionDialog<E>) e);
+		}
+		return new DefaultCRUDBeanDialog<E>(true, acceptEnabled, acceptActionLabel, cancelActionLabel, closeActionLabel, list.toArray(new IBeanExtensionDialogView[list.size()]));
 	}
 
 	@Override

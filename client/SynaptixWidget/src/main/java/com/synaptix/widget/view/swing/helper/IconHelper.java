@@ -48,7 +48,7 @@ public class IconHelper {
 				"com/synaptix/widget/actions/view/swing/iconRemove.png"), SAVE("fa-save", "com/synaptix/widget/actions/view/swing/iconSave.png"), SEARCH("fa-search",
 				"com/synaptix/widget/actions/view/swing/iconSearch.png"), SEND("fa-upload", "com/synaptix/widget/actions/view/swing/iconSend.png"), SETTINGS("fa-gear",
 				"com/synaptix/widget/actions/view/swing/iconSettings.png"), UNDO("fa-undo", "com/synaptix/widget/actions/view/swing/iconUndo.png"), UP("fa-arrow-up",
-				"com/synaptix/widget/actions/view/swing/iconUp.png"), YES(null, null);
+				"com/synaptix/widget/actions/view/swing/iconUp.png"), YES(null, null), SHOW("fa-eye", "com/synaptix/widget/actions/view/swing/show.png");
 
 		private final String faName;
 

@@ -77,7 +77,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 	protected JList list;
 
-	protected JComponent listScrollPane;
+	protected JScrollablePanel<JList> listScrollPane;
 
 	protected CardLayout cardLayout;
 
@@ -91,7 +91,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 	private BeanExtensionDialogCellRenderer<E> beanExtensionDialogCellRenderer = new DefaultBeanExtensionDialogCellRenderer<E>();
 
-	private boolean readOnly;
+	protected boolean readOnly;
 
 	private String id;
 
@@ -107,10 +107,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 	public DefaultBeanDialog(IBeanExtensionDialogView<E>... beanExtensionDialogs) {
 		this(true, beanExtensionDialogs);
-	}
-
-	protected final Action getAcceptAction() {
-		return acceptAction;
 	}
 
 	public DefaultBeanDialog(boolean hideListIfAlone, IBeanExtensionDialogView<E>... beanExtensionDialogs) {
@@ -181,7 +177,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		return list;
 	}
 
-	protected JComponent createListScrollPane(JList list) {
+	protected JScrollablePanel<JList> createListScrollPane(JList list) {
 		JScrollablePanel<JList> pageScrollablePanel = new JScrollablePanel<JList>(list, ScrollType.VERTICALLY);
 		// JArrowScrollPane arrowScrollPane = new JArrowScrollPane(list);
 		// arrowScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -192,7 +188,11 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		return allPanel;
 	}
 
-	private JComponent buildAllPanel() {
+	protected Component buildSimplePanel() {
+		return getComponent(beanExtensionDialogs.get(0));
+	}
+
+	protected JComponent buildAllPanel() {
 		FormLayout layout = new FormLayout("FILL:75DLU:NONE,FILL:DEFAULT:GROW(1.0)", //$NON-NLS-1$
 				"FILL:DEFAULT:GROW(1.0)"); //$NON-NLS-1$
 		PanelBuilder builder = new PanelBuilder(layout);
@@ -245,10 +245,10 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		if (useCardLayout) {
 			allPanel.add(buildAllPanel(), BorderLayout.CENTER);
 		} else {
-			allPanel.add(getComponent(beanExtensionDialogs.get(0)), BorderLayout.CENTER);
+			allPanel.add(buildSimplePanel(), BorderLayout.CENTER);
 		}
 
-		if (!readOnly) {
+		if (!readOnly && !showCloseOnly()) {
 			List<Action> actionTabList = buildActionTab();
 			if (acceptAndReopenOption) {
 				final AcceptAndReopenAction acceptAndReopenAction = new AcceptAndReopenAction();
@@ -264,17 +264,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				actionTabList.add(0, acceptAndReopenAction);
 			}
 			Action[] actionTab = actionTabList.toArray(new Action[actionTabList.size()]);
-			if (getOthersActions().length != 0) {
-
-				List<Action> actionList = new ArrayList<Action>();
-				actionList.add(getAcceptAction());
-				for (Action a : getOthersActions()) {
-					actionList.add(a);
-					a.setEnabled(false);
-				}
-				actionList.add(closeAction);
-				actionTab = actionList.toArray(new Action[actionList.size()]);
-			}
 
 			dialog = new JDialogModel(getComponent(parent), title, subtitle, this, actionTab, new OpenActionListener(), cancelAction);
 		} else {
@@ -299,13 +288,21 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		return returnValue;
 	}
 
+	protected boolean showCloseOnly() {
+		return false;
+	}
+
 	/**
 	 * Build the action tab
-	 * 
+	 *
 	 * @return
 	 */
 	protected List<Action> buildActionTab() {
 		return CollectionHelper.asListOf(Action.class, getAcceptAction(), cancelAction);
+	}
+
+	protected final Action getAcceptAction() {
+		return acceptAction;
 	}
 
 	protected Component getComponent(IView parent) {
@@ -343,10 +340,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		return valueMap;
 	}
 
-	protected Action[] getOthersActions() {
-		return new Action[] {};
-	}
-
 	private void updateValidator() {
 		ValidationResult result = new ValidationResult();
 		for (ValidationResult r : validatorMap.values()) {
@@ -354,9 +347,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 		validationResultModel.setResult(result);
 		getAcceptAction().setEnabled(!result.hasErrors());
-		for (Action a : getOthersActions()) {
-			a.setEnabled(!result.hasErrors());
-		}
 	}
 
 	@Override
@@ -389,10 +379,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				}
 			}
 
-			beanExtensionDialogListModel.clear();
-			for (IBeanExtensionDialogView<E> ex : beanExtensionDialogs) {
-				beanExtensionDialogListModel.addElement(ex);
-			}
+			fillListModel();
 
 			for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
 				b.setBean(bean, valueMap, readOnly, creation);
@@ -402,7 +389,16 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				b.openDialog();
 			}
 
-			list.setSelectedIndex(0);
+			if (list.getSelectedIndex() == -1) {
+				list.setSelectedIndex(0);
+			}
+		}
+	}
+
+	protected void fillListModel() {
+		beanExtensionDialogListModel.clear();
+		for (IBeanExtensionDialogView<E> ex : beanExtensionDialogs) {
+			beanExtensionDialogListModel.addElement(ex);
 		}
 	}
 
@@ -426,7 +422,9 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				b.commit(bean, valueMap);
 			}
 
-			closeDialog();
+			if (closeOnAccept()) {
+				closeDialog();
+			}
 		}
 	}
 
@@ -537,5 +535,12 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			int index = beanExtensionDialogListModel.indexOf(source);
 			beanExtensionDialogListModel.set(index, source);
 		}
+	}
+
+	/**
+	 * When saving, should the dialog be closed?
+	 */
+	protected boolean closeOnAccept() {
+		return true;
 	}
 }

@@ -41,7 +41,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Langue")
 	public String language();
 
-	@DefaultStringValue("Choisissez un fichier ...")
+	@DefaultStringValue("Choisissez un fichier...")
 	public String chooseAFileEllipsis();
 
 	@DefaultStringValue("Annuler")
@@ -82,7 +82,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Administration")
 	public String administration();
 
-	@DefaultStringValue("Ajouter ...")
+	@DefaultStringValue("Ajouter...")
 	@Description("Function who open dialog for add object")
 	public String addEllipsis();
 
@@ -163,7 +163,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Page {0}")
 	public String numOfPage(int currentPage);
 
-	@DefaultStringValue("Importer des données ...")
+	@DefaultStringValue("Importer des données...")
 	public String importDatasHellip();
 
 	@DefaultStringValue("Charger")
@@ -187,13 +187,13 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Supprimer tout")
 	public String deleteAll();
 
-	@DefaultStringValue("Ajouter un favoris ...")
+	@DefaultStringValue("Ajouter un favoris...")
 	public String addFavoriteHellip();
 
 	@DefaultStringValue("Ajouter un favoris")
 	public String addFavorite();
 
-	@DefaultStringValue("Supprimer un favoris ...")
+	@DefaultStringValue("Supprimer un favoris...")
 	public String deleteFavoriteHellip();
 
 	@DefaultStringValue("Supprimer un favoris")
@@ -217,10 +217,10 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Voulez-vous supprimer l(es) élément(s) sélectionné(s) ?")
 	public String doYouWantToDeleteTheSelectedItemS();
 
-	@DefaultStringValue("Supprimer ...")
+	@DefaultStringValue("Supprimer...")
 	public String deleteEllipsis();
 
-	@DefaultStringValue("Ouvrir la carte ...")
+	@DefaultStringValue("Ouvrir la carte...")
 	public String openMapEllipsis();
 
 	@DefaultStringValue("Options")
@@ -256,7 +256,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Double clic pour supprimer")
 	public String doubleClickToClear();
 
-	@DefaultStringValue("Rechercher ...")
+	@DefaultStringValue("Rechercher...")
 	public String searchEllipsis();
 
 	@DefaultStringValue("Erreur")
@@ -322,7 +322,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Tout désélectionner")
 	public String unselectAll();
 
-	@DefaultStringValue("Editer ...")
+	@DefaultStringValue("Editer...")
 	public String editEllipsis();
 
 	@DefaultStringValue("Gestion des zips invalides")
@@ -331,7 +331,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Sélectionnez un point")
 	public String selectPoint();
 
-	@DefaultStringValue("Dupliquer ...")
+	@DefaultStringValue("Dupliquer...")
 	public String duplicateEllipsis();
 
 	@DefaultStringValue("Score")
@@ -388,7 +388,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Groupe")
 	public String group();
 
-	@DefaultStringValue("Exporter sous excel ...")
+	@DefaultStringValue("Exporter sous excel...")
 	public String exportExcelEllipsis();
 
 	@DefaultStringValue("Fichier excel")
@@ -403,7 +403,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Refaire")
 	public String redo();
 
-	@DefaultStringValue("Annuler ...")
+	@DefaultStringValue("Annuler...")
 	public String cancelEllipsis();
 
 	@DefaultStringValue("Km")
@@ -433,7 +433,7 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Au moins un segment est nécessaire")
 	public String youNeedAtLeastOneSegment();
 
-	@DefaultStringValue("Chargement des noms des lieux ...")
+	@DefaultStringValue("Chargement des noms des lieux...")
 	public String loadingNameplacesEllipsis();
 
 	@DefaultStringValue("Afficher le nom des lieux")
@@ -729,5 +729,11 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 
 	@DefaultStringValue("Lancer une recherche")
 	public String launchSearch();
+
+	@DefaultStringValue("Voir...")
+	public String showEllipsis();
+
+	@DefaultStringValue("Voir")
+	public String show();
 
 }

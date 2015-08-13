@@ -93,7 +93,7 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 
 	/**
 	 * Constructor for a search field widget. Without separate remove button
-	 * 
+	 *
 	 * @param editable
 	 *            If set to true, the widget can be edited.
 	 * @param promptText
@@ -107,7 +107,7 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 
 	/**
 	 * Constructor for a search field widget.
-	 * 
+	 *
 	 * @param editable
 	 *            If set to true, the widget can be edited.
 	 * @param promptText
@@ -135,7 +135,7 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 
 	/**
 	 * Constructor for a search field widget. (No max length, no caps lock, no remove label)
-	 * 
+	 *
 	 * @param editable
 	 *            If set to true, the widget can be edited.
 	 * @param promptText
@@ -163,7 +163,7 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 				}
 			}
 		});
-		nameField.setEditable(editable && isEnabled());
+		nameField.setEditable(editable);
 
 		if (editable) {
 			nameDocumentListener = new NameDocumentListener();
@@ -343,6 +343,8 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 
 			button.setFocusable(true);
 			nameField.setFocusable(false);
+
+			nameField.setEditable(editable && value == null && isEnabled());
 
 			button.transferFocus();
 

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -19,6 +20,7 @@ import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.actions.view.swing.AbstractCloneAction;
 import com.synaptix.widget.actions.view.swing.AbstractDeleteAction;
 import com.synaptix.widget.actions.view.swing.AbstractEditAction;
+import com.synaptix.widget.actions.view.swing.AbstractShowAction;
 import com.synaptix.widget.component.view.swing.descriptor.DefaultComponentsManagementPanelDescriptor;
 import com.synaptix.widget.crud.controller.ICRUDManagementController;
 import com.synaptix.widget.crud.view.descriptor.ICRUDManagementViewDescriptor;
@@ -84,7 +86,11 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		cloneAction = new CloneAction();
 		cloneAction.setEnabled(false);
 
-		editAction = new EditAction();
+		if (getCRUDManagementController().hasAuthWrite()) {
+			editAction = new EditAction();
+		} else {
+			editAction = new ShowAction();
+		}
 		editAction.setEnabled(false);
 
 		deleteAction = new DeleteAction();
@@ -169,7 +175,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 	protected void updateEnabledActions() {
 		if (getDefaultSearchComponentsPanel().getTable().getSelectedRowCount() == 1) {
 			cloneAction.setEnabled(getCRUDManagementController().hasAuthWrite());
-			editAction.setEnabled(getCRUDManagementController().hasAuthWrite());
+			editAction.setEnabled(true);
 			deleteAction.setEnabled(getCRUDManagementController().hasAuthWrite());
 		} else {
 			cloneAction.setEnabled(false);
@@ -211,6 +217,19 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		return getEditAction();
 	}
 
+	@Override
+	public List<G> getComponentList() {
+		// no need to convert line (automatic ordering)
+		return getTablePageComponentsPanel().getComponentTableModel().getComponentList();
+	}
+
+	@Override
+	public void selectLine(int line) {
+		// no need to convert line (automatic ordering)
+		getTablePageComponentsPanel().getTable().getSelectionModel().setSelectionInterval(line, line);
+		getTablePageComponentsPanel().getTable().scrollRectToVisible(getTablePageComponentsPanel().getTable().getCellRect(line, 0, true));
+	}
+
 	private class AddAction extends AbstractAddAction {
 
 		private static final long serialVersionUID = -2209334623415724937L;
@@ -235,6 +254,21 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		}
 	}
 
+	private class ShowAction extends AbstractShowAction {
+
+		private static final long serialVersionUID = 892920133520692619L;
+
+		public ShowAction() {
+			super(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().showEllipsis());
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Default CRUD : consult, then button to edit
+			getCRUDManagementController().showEntity(getSelectedComponent());
+		}
+	}
+
 	private class EditAction extends AbstractEditAction {
 
 		private static final long serialVersionUID = 892920133520692619L;
@@ -245,11 +279,12 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (getCRUDManagementController().hasAuthWrite()) {
-				getCRUDManagementController().editEntity(getSelectedComponent());
-			} else {
-				getCRUDManagementController().showEntity(getSelectedComponent());
-			}
+			// Default CRUD : consult, then button to edit
+			// if (getCRUDManagementController().hasAuthWrite()) {
+			// getCRUDManagementController().editEntity(getSelectedComponent());
+			// } else {
+			getCRUDManagementController().showEntity(getSelectedComponent());
+			// }
 		}
 	}
 

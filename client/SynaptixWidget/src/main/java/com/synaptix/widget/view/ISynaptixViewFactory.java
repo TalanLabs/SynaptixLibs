@@ -8,6 +8,7 @@ import com.synaptix.client.view.IDefaultViewFactory;
 import com.synaptix.client.view.IView;
 import com.synaptix.component.IComponent;
 import com.synaptix.constants.shared.ConstantsWithLookingBundle;
+import com.synaptix.entity.IEntity;
 import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.widget.component.view.IComponentsManagementView;
 import com.synaptix.widget.component.view.ISearchComponentsDialogView;
@@ -16,12 +17,13 @@ import com.synaptix.widget.filefilter.view.IFileFilter;
 import com.synaptix.widget.view.dialog.IBeanDialogView;
 import com.synaptix.widget.view.dialog.IBeanExtensionDialogView;
 import com.synaptix.widget.view.dialog.IBeanWizardDialogView;
+import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;
 
 public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * SHow error message type throwable
-	 * 
+	 *
 	 * @param parent
 	 * @param t
 	 */
@@ -29,7 +31,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show error message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -38,7 +40,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show information message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -47,7 +49,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Ask a question
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -57,7 +59,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show a input dialog
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -67,7 +69,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show a input dialog with initial value
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -78,7 +80,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show a question dialog with options and initialValue
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param message
@@ -90,7 +92,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show html message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param html
@@ -99,7 +101,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show html message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param subtitle
@@ -109,7 +111,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show a text message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param text
@@ -118,7 +120,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Choose a file for open
-	 * 
+	 *
 	 * @param parent
 	 * @param fileFilter
 	 * @return
@@ -127,7 +129,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Choose a file for save
-	 * 
+	 *
 	 * @param parent
 	 * @param filename
 	 * @param fileFilter
@@ -137,7 +139,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Choose a directory
-	 * 
+	 *
 	 * @param parent
 	 * @return
 	 */
@@ -145,7 +147,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Open a edit dialog for comments
-	 * 
+	 *
 	 * @param view
 	 * @param title
 	 * @param message
@@ -157,7 +159,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a bean dialog
-	 * 
+	 *
 	 * @param beanExtensionDialogViews
 	 * @return
 	 */
@@ -165,16 +167,27 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a bean dialog
-	 * 
+	 *
 	 * @param hideListIfAlone
 	 * @param beanExtensionDialogViews
 	 * @return
 	 */
 	public <E, F extends IBeanExtensionDialogView<E>> IBeanDialogView<E> newBeanDialogView(boolean hideListIfAlone, F... beanExtensionDialogViews);
 
+	public <E, F extends IBeanExtensionDialogView<E>> IBeanDialogView<E> newBeanDialogView(boolean acceptEnabled, String acceptActionLabel, String cancelActionLabel, String closeActionLabel,
+			F... beanExtensionDialogViews);
+
+	/**
+	 * Create a CRUD bean dialog
+	 */
+	public <E extends IEntity, F extends IBeanExtensionDialogView<E>> ICRUDBeanDialogView<E> newCRUDBeanDialogView(F... beanExtensionDialogViews);
+
+	public <E extends IEntity, F extends IBeanExtensionDialogView<E>> ICRUDBeanDialogView<E> newCRUDBeanDialogView(boolean acceptEnabled, String acceptActionLabel, String cancelActionLabel,
+			String closeActionLabel, F... beanExtensionDialogViews);
+
 	/**
 	 * Open a dialog to select a page size between min & max
-	 * 
+	 *
 	 * @param parent
 	 * @param min
 	 * @param max
@@ -182,11 +195,8 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 	 */
 	public ISelectSizePageDialogView newSelectSizePageDialog(IView parent, int min, int max);
 
-	public <E, F extends IBeanExtensionDialogView<E>> IBeanDialogView<E> newBeanDialogView(boolean acceptEnabled, String acceptActionLabel, String cancelActionLabel, String closeActionLabel,
-			F... beanExtensionDialogViews);
-
 	/**
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param values
@@ -197,7 +207,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Show a text message
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param text
@@ -206,7 +216,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a search dialog
-	 * 
+	 *
 	 * @param componentClass
 	 * @param constantsBundle
 	 * @param filterColumns
@@ -218,7 +228,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a search dialog
-	 * 
+	 *
 	 * @param componentClass
 	 * @param viewDescriptor
 	 * @return
@@ -227,7 +237,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a components management view
-	 * 
+	 *
 	 * @param componentClass
 	 * @param viewDescriptor
 	 * @return
@@ -236,7 +246,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a search panel
-	 * 
+	 *
 	 * @param componentClass
 	 * @param constantsWithLookingBundle
 	 * @param filterColumns
@@ -248,7 +258,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 
 	/**
 	 * Create a search panel
-	 * 
+	 *
 	 * @param componentClass
 	 * @param viewDescriptor
 	 * @return
@@ -258,7 +268,7 @@ public interface ISynaptixViewFactory extends IDefaultViewFactory {
 	public <E, F extends IBeanExtensionDialogView<E>> IBeanWizardDialogView<E> newBeanWizardDialogView(F... beanExtensionDialogViews);
 
 	/**
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param values
