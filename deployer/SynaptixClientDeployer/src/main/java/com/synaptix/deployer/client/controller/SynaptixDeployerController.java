@@ -121,7 +121,9 @@ public class SynaptixDeployerController extends AbstractController implements ID
 
 		deployerContext.registerController(new DDLController(viewFactory, this));
 
-		deployerContext.registerController(databaseCheckerControllerProvider.get());
+		DatabaseCheckerController controller = databaseCheckerControllerProvider.get();
+		controller.initialize();
+		deployerContext.registerController(controller);
 	}
 
 	public List<ISynaptixEnvironment> getSupportedEnvironments() {

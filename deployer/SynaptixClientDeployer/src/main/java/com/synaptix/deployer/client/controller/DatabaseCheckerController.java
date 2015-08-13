@@ -29,6 +29,7 @@ public class DatabaseCheckerController extends AbstractController {
 
 	private SynaptixDeployerController synaptixDeployerController;
 
+	@Inject(optional = true)
 	private Set<IDatabaseQueryContext<?>> databaseQueryContextSet;
 
 	private IDatabaseCheckerView databaseCheckerView;
@@ -38,20 +39,16 @@ public class DatabaseCheckerController extends AbstractController {
 	private IDatabaseQuery selectedDatabaseQuery;
 
 	@Inject
-	public DatabaseCheckerController(ISynaptixDeployerViewFactory synaptixDeployerViewFactory, SynaptixDeployerController synaptixDeployerController,
-			Set<IDatabaseQueryContext<?>> databaseQueryContextSet) {
+	public DatabaseCheckerController(ISynaptixDeployerViewFactory synaptixDeployerViewFactory, SynaptixDeployerController synaptixDeployerController) {
 		super();
 
 		this.synaptixDeployerViewFactory = synaptixDeployerViewFactory;
 		this.synaptixDeployerController = synaptixDeployerController;
-		this.databaseQueryContextSet = databaseQueryContextSet;
 
 		this.databaseQueryMap = new HashMap<IDatabaseQuery, IDatabaseQueryContext<?>>();
-
-		initialize();
 	}
 
-	private void initialize() {
+	public void initialize() {
 		databaseCheckerView = synaptixDeployerViewFactory.createDatabaseCheckerView(this);
 
 		List<IDatabaseQuery> databaseQueryList = new ArrayList<IDatabaseQuery>();
