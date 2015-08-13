@@ -264,6 +264,17 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				actionTabList.add(0, acceptAndReopenAction);
 			}
 			Action[] actionTab = actionTabList.toArray(new Action[actionTabList.size()]);
+			if (getOthersActions().length != 0) {
+
+				List<Action> actionList = new ArrayList<Action>();
+				actionList.add(getAcceptAction());
+				for (Action a : getOthersActions()) {
+					actionList.add(a);
+					a.setEnabled(false);
+				}
+				actionList.add(closeAction);
+				actionTab = actionList.toArray(new Action[actionList.size()]);
+			}
 
 			dialog = new JDialogModel(getComponent(parent), title, subtitle, this, actionTab, new OpenActionListener(), cancelAction);
 		} else {
@@ -286,6 +297,10 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 
 		return returnValue;
+	}
+
+	protected Action[] getOthersActions() {
+		return new Action[] {};
 	}
 
 	protected boolean showCloseOnly() {

@@ -8,7 +8,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -31,7 +30,7 @@ import com.synaptix.widget.view.swing.helper.ToolBarActionsBuilder;
 /**
  * A default CRUD bean dialog which allows the user to browse between the entities<br/>
  * It also has a toolbar on the top
- * 
+ *
  * @author Nicolas P
  *
  * @param <E>
@@ -146,21 +145,17 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 			toolbarFactory.addComponent(saveButton);
 		}
 
-		if (getOthersActions().length != 0) {
-			for (Action a : getOthersActions()) {
-				toolbarFactory.addAction(a);
-				a.setEnabled(false);
-			}
-		}
+		// if (getOthersActions().length != 0) {
+		// for (Action a : getOthersActions()) {
+		// toolbarFactory.addAction(a);
+		// a.setEnabled(false);
+		// }
+		// }
 		return toolbarFactory.build();
 	}
 
 	public void setReadOnly(boolean readOnly) {
 		saveButton.setEnabled(!readOnly);
-	}
-
-	protected Action[] getOthersActions() {
-		return new Action[] {};
 	}
 
 	@Override
