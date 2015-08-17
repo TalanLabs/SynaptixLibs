@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 
@@ -59,7 +60,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.Engine#setLogger(java.util.logging.Logger)
 	 */
 	@Override
@@ -84,7 +85,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.Engine#getLogger()
 	 */
 	@Override
@@ -119,7 +120,7 @@ public class BaseEngine implements Engine, RegistryListener {
 		}
 		this.registry = registry;
 
-		this.channelslots = new HashMap<String, ChannelSlot>();
+		this.channelslots = new ConcurrentHashMap<String, ChannelSlot>();
 		this.channelSlotsGroup = new HashMap<String, List<ChannelSlot>>();
 
 		registry.addListener(this);
@@ -304,7 +305,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.MessageHandler#handleAll(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -322,7 +323,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.MessageHandler#handleIfLocal(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -352,7 +353,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.MessageHandler#isAvailable(java.lang.String)
 	 */
 	@Override
@@ -431,7 +432,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see com.synaptix.pmgr2.apis.ChannelSlot#getLogger()
 		 */
 		@Override
@@ -441,7 +442,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see com.synaptix.pmgr2.apis.Channel#acceptMessage(java.lang.Object)
 		 */
 		@Override
@@ -461,7 +462,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see com.synaptix.pmgr2.apis.Channel#isAvailable()
 		 */
 		@Override
@@ -552,7 +553,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see com.synaptix.pmgr2.apis.Channel#isLocal()
 		 */
 		@Override
@@ -575,7 +576,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 		/*
 		 * (non-Javadoc)
-		 *
+		 * 
 		 * @see com.synaptix.pmgr2.apis.Channel#activate()
 		 */
 		@Override
@@ -621,7 +622,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.registry.RegistryListener#notifyProviderReg(com.synaptix .registry.Registry, java.lang.String, com.synaptix.registry.ServiceProvider)
 	 */
 	@Override
@@ -648,7 +649,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.registry.RegistryListener#notifyServiceOverload(com.synaptix .registry.Registry, java.lang.String)
 	 */
 	@Override
@@ -666,7 +667,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.registry.RegistryListener#notifyServiceUnderload(com.synaptix .registry.Registry, java.lang.String)
 	 */
 	@Override
@@ -684,7 +685,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.registry.RegistryListener#notifyProviderUnreg(com.synaptix .registry.Registry, java.lang.String, com.synaptix.registry.ServiceProvider)
 	 */
 	@Override
@@ -694,7 +695,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @seecom.synaptix.pmgr2.apis.Engine#setListener(com.synaptix.pmgr2.apis. EngineListener)
 	 */
 	@Override
@@ -704,7 +705,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.Engine#getChannels()
 	 */
 	@Override
@@ -716,7 +717,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.Engine#getRegistry()
 	 */
 	@Override
@@ -726,7 +727,7 @@ public class BaseEngine implements Engine, RegistryListener {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.synaptix.pmgr2.apis.Engine#activateChannels()
 	 */
 	@Override
