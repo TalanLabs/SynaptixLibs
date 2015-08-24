@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.TaskManagerMapper">
+
+	<update id="archiveTaskCluster">
+		call p_task_manager.archive_task_cluster(#{idCluster,javaType=java.io.Serializable})
+	</update>
+	
+	<select id="findBackupByIdCluster" resultMap="com.synaptix.taskmanager.model.ITaskBackup">
+		select * from t_task_backup
+		where id_cluster = #{idCluster,javaType=java.io.Serializable}
+		and rownum = 1
+	</select>
+	
+	<select id="findBackupByIdObjectAndClass" resultMap="com.synaptix.taskmanager.model.ITaskBackup">
+		select * from t_task_backup
+		where id_object = #{idObject,javaType=java.io.Serializable}
+		and object_type = #{objectType,javaType=java.lang.Class}
+		and rownum = 1
+	</select>
+	
+	<update id="flagTasksBackupToLaunch">
+		update t_task_backup
+		set id_process = #{idProcess,javaType=java.io.Serializable},
+		updated_date = #{date,javaType=java.util.Date}
+		where rowid in (
+			select rowid from (
+				select rowid
+				from t_task_backup
+				where nb_retry <![CDATA[<]]> #{maxRetry}
+				and nvl(updated_date, created_date) <![CDATA[<]]> #{date,javaType=java.util.Date} - 10 / 24 / 60
+				order by nvl(updated_date, created_date)
+			)
+			where rownum <![CDATA[<]]> #{nbLines}
+		)
+	</update>
+	
+	<select id="findTasksBackupToLaunch" resultMap="com.synaptix.taskmanager.model.ITaskBackup">
+		select * from t_task_backup
+		where id_process = #{idProcess,javaType=java.io.Serializable}
+	</select>
+
+</mapper>

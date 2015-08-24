@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.TodoMapper">
+
+	<resultMap id="todoFolder" extends="com.synaptix.taskmanager.model.ITodoFolderListView" type="com.synaptix.taskmanager.model.ITodoFolderListView">
+		<result property="todoNumber" column="TODO_NUMBER" />
+	</resultMap>
+
+	<delete id="deleteTasksTodo">
+		DELETE FROM T_TODO
+		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
+	</delete>
+
+	<delete id="deleteTasksTodos">
+		DELETE FROM T_TODO
+		WHERE ID_TASK IN
+		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+			#{item,javaType=java.io.Serializable}
+		</foreach>
+	</delete>
+
+	<select id="selectTodoList" resultMap="com.synaptix.taskmanager.model.ITodo">
+		WITH filtered_todos AS
+				(SELECT t.rowid AS rid,
+						t.id AS id_todo,
+						<choose>
+							<when test="lastTodosFirst == true">
+								ROW_NUMBER() over (PARTITION BY id_object ORDER BY t.status desc, t.created_date desc, t.owner DESC) AS rk_object,
+								ROW_NUMBER() over (PARTITION BY id_task ORDER BY t.status desc, t.created_date desc, t.owner DESC) AS rk_task,
+							</when>
+							<otherwise>
+								ROW_NUMBER() over (PARTITION BY id_object ORDER BY t.status desc, t.created_date, t.owner DESC) AS rk_object,
+								ROW_NUMBER() over (PARTITION BY id_task ORDER BY t.status desc, t.created_date, t.owner DESC) AS rk_task,
+							</otherwise>
+						</choose>
+						t.*
+				FROM T_TODO t
+				LEFT JOIN t_todo_folder tf ON tf.id = t.id_todo_folder
+				<if test="idUser != null">
+				LEFT JOIN t_asso_todofolder_role a ON a.id_todo_folder = tf.id
+				LEFT JOIN t_user_role ur ON ur.id_role = a.id_role
+				</if>
+				WHERE t.id_owner_center = #{idOwnerCenter,javaType=java.io.Serializable}
+					<if test="idUser != null">
+					AND (ur.id_user = #{idUser,javaType=java.io.Serializable}
+						OR NVL(tf.check_restricted, '0') = '0')
+					</if>
+					<if test="todoFolder != null">
+						<choose>
+							<when test="todoFolder.total == true" />
+							<when test="todoFolder.id == null">
+					AND t.id_todo_folder is null
+							</when>
+							<otherwise>
+					AND t.id_todo_folder = #{todoFolder.id,javaType=java.io.Serializable}
+							</otherwise>
+						</choose>
+					</if>
+					<if test="descrLike != ''">
+					AND LOWER(t.description) LIKE lower(#{descrLike,javaType=java.lang.String})
+					</if>
+					<choose>
+						<when test="lastTodosFirst == true">
+							ORDER BY t.status desc, t.created_date desc
+						</when>
+						<otherwise>
+							ORDER BY t.status desc, t.created_date
+						</otherwise>
+					</choose>
+				),
+			todos_on_page as
+				(SELECT rid as rid_todo, id_object FROM
+					(SELECT * FROM
+						(SELECT i.*, ROWNUM AS rn FROM
+							(SELECT * FROM filtered_todos
+							-- Keep only one todo per task and per object
+							WHERE filtered_todos.rk_object = 1
+								AND filtered_todos.rk_task = 1
+							) i
+						WHERE 50 >= ROWNUM
+						) i
+				WHERE rn >= 0
+				))
+		SELECT t.*
+		FROM t_todo t
+		WHERE t.rowid IN (select rid_todo from todos_on_page)
+			OR (t.id_object IN (select id_object from todos_on_page) AND t.id IN (
+				SELECT id_todo FROM filtered_todos WHERE filtered_todos.rk_task = 1))
+		<choose>
+			<when test="lastTodosFirst == true">
+				ORDER BY t.status desc, t.created_date desc
+			</when>
+			<otherwise>
+				ORDER BY t.status desc, t.created_date
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="selectTodoListForObjects" resultMap="com.synaptix.taskmanager.model.ITodo">
+		SELECT filtered_todos.* from (
+			SELECT t.*,
+			ROW_NUMBER() over (PARTITION BY id_task ORDER BY t.status desc, t.created_date, t.owner DESC) AS rk_task
+			FROM T_TODO t
+			LEFT JOIN t_todo_folder tf ON tf.id = t.id_todo_folder
+			<if test="idUser != null">
+				LEFT JOIN t_asso_todofolder_role a ON a.id_todo_folder = tf.id
+				LEFT JOIN t_user_role ur ON ur.id_role = a.id_role
+			</if>
+			WHERE t.id_owner_center = #{idContextCenter,javaType=java.io.Serializable}
+			<if test="idUser != null">
+				AND (ur.id_user = #{idUser,javaType=java.io.Serializable}
+				OR NVL(tf.check_restricted, '0') = '0')
+			</if>
+			<if test="todoFolder != null">
+				<choose>
+					<when test="todoFolder.total == true" />
+					<when test="todoFolder.id == null">
+						AND t.id_todo_folder is null
+					</when>
+					<otherwise>
+						AND t.id_todo_folder = #{todoFolder.id,javaType=java.io.Serializable}
+					</otherwise>
+				</choose>
+			</if>
+			AND t.id_object in
+			<foreach item="item" index="index" collection="idObjects" open="(" separator="," close=")">
+				#{item,javaType=java.io.Serializable}
+			</foreach>
+			ORDER BY t.status desc, t.created_date)filtered_todos
+		WHERE filtered_todos.rk_task = 1
+		ORDER BY filtered_todos.status desc, filtered_todos.created_date
+	</select>
+
+	<update id="updateDescription">
+		update t_todo
+		set DESCRIPTION= #{description,javaType=java.lang.String}
+		where ID_OBJECT = #{idObject,javaType=java.io.Serializable}
+	</update>
+
+	<delete id="deleteTaskErrors">
+		DELETE FROM T_ERROR
+		WHERE ID_TASK IN
+		<foreach item="item" index="index" collection="idTasks" open="(" separator="," close=")">
+			#{item,javaType=java.io.Serializable}
+		</foreach>
+	</delete>
+
+	<update id="updatePendingTodos">
+		update t_todo
+		set STATUS = 'TODO'
+		where ID_TASK = #{idTask,javaType=java.io.Serializable}
+	</update>
+
+	<delete id="deleteObjectTodos">
+		DELETE FROM T_TODO
+		WHERE ID_OBJECT = #{idObject,javaType=java.io.Serializable}
+	</delete>
+</mapper>

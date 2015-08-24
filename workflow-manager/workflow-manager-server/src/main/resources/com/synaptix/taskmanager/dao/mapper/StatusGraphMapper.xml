@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.StatusGraphMapper">
+
+	<cache-ref namespace="com.synaptix.taskmanager.model.IStatusGraph" />
+
+	<select id="selectStatusGraphsByTaskObjectType" resultMap="com.synaptix.taskmanager.model.IStatusGraph">
+	<![CDATA[
+		select a.* from T_STATUS_GRAPH a
+		where
+			a.OBJECT_TYPE = #{objectType,javaType=java.lang.Class}
+			and a.check_cancel = '0'
+	]]>
+	</select>
+
+</mapper>

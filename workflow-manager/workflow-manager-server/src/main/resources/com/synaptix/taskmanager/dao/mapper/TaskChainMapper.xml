@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.TaskChainMapper">
+
+	<cache-ref namespace="com.synaptix.taskmanager.model.ITaskChain" />
+
+	<select id="findTaskChainsByTaskType" resultType="java.io.Serializable">
+		SELECT ID_TASK_CHAIN 
+		FROM T_ASSO_TASK_CHAIN_TYPE  
+		WHERE ID_TASK_TYPE = #{idTaskType,javaType=java.io.Serializable}
+	</select>
+	
+	<select id="findTaskChainCriteriaByTaskChain" resultType="java.io.Serializable">
+		SELECT ID_TASK_CHAIN_CRITERIA 
+		FROM JOIN T_ASSO_TASK_CHAIN_CRIT_CHAIN
+		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=java.io.Serializable}
+	</select>
+	
+	<delete id="deleteAssoTaskChainTaskType">
+		DELETE FROM T_ASSO_TASK_CHAIN_TYPE
+		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=java.io.Serializable}
+	</delete>
+	
+	<delete id="deleteAssoTaskChainCriteriaTaskChain">
+		delete from t_asso_task_chain_type
+		where 1 = 2
+	</delete>
+
+</mapper>

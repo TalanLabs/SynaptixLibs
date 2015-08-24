@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.TaskMapper">
+
+	<cache-ref namespace="com.synaptix.taskmanager.model.ITask" />
+
+	<select id="selectCurrentTasksForCluster" resultMap="com.synaptix.taskmanager.model.ITask">
+	<![CDATA[
+		select a.* from t_task a
+		where
+			a.check_cancel = '0'
+			and a.status = 'CURRENT'
+			and a.dn_on_going_by_cluster = #{idTaskCluster,javaType=java.io.Serializable}
+		order by updated_date desc
+	]]>
+	</select>
+
+	<select id="countTodoCurrentSubTask" resultType="java.lang.Integer">
+	<![CDATA[
+		select count(0) from t_task a
+		where
+			a.check_cancel = '0'
+			and a.id_parent = #{idParentTask,javaType=java.io.Serializable}
+			and (a.status = 'TODO' or a.status = 'CURRENT')
+	]]>
+	</select>
+
+	<select id="selectNextTodoToCurrentTasks" resultMap="com.synaptix.taskmanager.model.ITask">
+	<![CDATA[
+		SELECT a.*
+  		FROM t_task a INNER JOIN t_asso_task_previous_task b ON b.id_task = a.ID
+ 		WHERE a.check_cancel = '0'
+   			AND a.status = 'TODO'
+   			AND b.id_previous_task = #{idPreviousTask,javaType=java.io.Serializable}
+   			AND NOT EXISTS (
+          		SELECT *
+            	FROM t_task u INNER JOIN t_asso_task_previous_task v ON v.id_previous_task = u.ID AND v.id_previous_task <> #{idPreviousTask,javaType=java.io.Serializable}
+           		WHERE u.check_cancel = '0'
+             		AND v.id_task = a.ID
+             		AND (u.status = 'TODO' OR u.status = 'CURRENT'))
+	]]>
+	</select>
+	
+	<select id="selectTodoCurrentSubTasks" resultMap="com.synaptix.taskmanager.model.ITask">
+	<![CDATA[
+		SELECT a.*
+  		FROM t_task a
+ 		WHERE a.check_cancel = '0'
+ 		AND (a.status = 'TODO' OR a.status = 'CURRENT')
+ 		AND a.id_parent = #{idParentTask,javaType=java.io.Serializable}
+	]]>
+	</select>
+	
+	<select id="selectNextTasks" resultMap="com.synaptix.taskmanager.model.ITask">
+	<![CDATA[
+		SELECT a.*
+  		FROM t_task a INNER JOIN t_asso_task_previous_task b ON b.id_task = a.ID
+ 		WHERE a.check_cancel = '0'
+   			AND b.id_previous_task = #{idPreviousTask,javaType=java.io.Serializable}
+   	]]>
+		<if test="idIgnoreTask!=null">
+   	<![CDATA[
+   			AND not exists (select * from t_asso_task_previous_task u where u.id_task = #{idIgnoreTask,javaType=java.io.Serializable} and u.id_previous_task = a.id)
+	]]>
+		</if>
+	</select>
+	
+	<select id="selectPreviousTodoCurrentTasks" resultMap="com.synaptix.taskmanager.model.ITask">
+	<![CDATA[
+		SELECT a.*
+  		FROM t_task a INNER JOIN t_asso_task_previous_task b ON b.id_previous_task = a.ID
+ 		WHERE a.check_cancel = '0'
+   			AND (a.status = 'TODO' OR a.status = 'CURRENT')
+   			AND b.id_task = #{idTask,javaType=java.io.Serializable}
+	]]>
+	</select>
+	
+	<select id="selectTodoManagerTasks" resultMap="com.synaptix.taskmanager.model.IClusterTaskResult">
+	<![CDATA[
+		SELECT a.id as id_task, a.id_cluster
+  		FROM t_task a 
+  		WHERE a.check_cancel = '0'
+   			AND #{currentDate,javaType=org.joda.time.LocalDateTime} >= DN_TODO_CREATED_DATE 
+	]]>
+	</select>
+
+	<select id="findNextTasks" resultType="java.io.Serializable">
+		SELECT ID_TASK
+		FROM T_ASSO_TASK_PREVIOUS_TASK
+		WHERE ID_PREVIOUS_TASK = #{idTask,javaType=java.io.Serializable}
+	</select>
+
+	<select id="findPreviousTasks" resultType="java.io.Serializable">
+		SELECT ID_PREVIOUS_TASK
+		FROM T_ASSO_TASK_PREVIOUS_TASK
+		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
+	</select>
+
+	<delete id="deleteTask">
+		DELETE FROM T_TASK
+		WHERE ID = #{idTask,javaType=java.io.Serializable}
+	</delete>
+
+	<delete id="deleteTasks">
+		DELETE FROM T_TASK
+		WHERE ID IN
+		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+			#{item,javaType=java.io.Serializable}
+		</foreach>
+	</delete>
+	
+	<select id="findTasksToDelete" resultType="java.io.Serializable">
+	<![CDATA[
+		SELECT t.id_task
+		FROM t_asso_task_previous_task t
+		START WITH t.ID_TASK in (
+			select id from t_task
+			where next_status <> #{nextStatus,jdbcType=VARCHAR}
+			and id in(
+				SELECT ID_TASK
+				FROM T_ASSO_TASK_PREVIOUS_TASK
+				WHERE ID_PREVIOUS_TASK = #{idPreviousUpdateTask,javaType=java.io.Serializable})
+		)
+		CONNECT BY PRIOR t.ID_TASK = t.ID_PREVIOUS_TASK
+	]]>
+	</select>
+	
+	<select id="findTasksBy" resultMap="com.synaptix.taskmanager.model.ITask">
+		select t.* from t_task t
+		where
+			t.check_cancel = '0'
+			and t.id_object = #{idObject,javaType=java.io.Serializable}
+			and t.object_type = #{taskObjectClass,javaType=java.lang.Class}
+	</select>
+	
+	<select id="findTasksByCluster" resultMap="com.synaptix.taskmanager.model.ITask">
+		select t.* from t_task t
+		where
+			t.check_cancel = '0'
+			and t.id_cluster = #{idCluster,javaType=java.io.Serializable}
+		order by t.created_date
+	</select>
+	
+	<select id="findTaskArchsByCluster" resultMap="com.synaptix.taskmanager.model.ITask">
+		select t.* from t_task_arch t
+		where
+			t.check_cancel = '0'
+			and t.id_cluster = #{idCluster,javaType=java.io.Serializable}
+		order by t.created_date
+	</select>
+
+    <update id="updateIdCluster">
+        update T_TASK set id_cluster = #{newIdCluster,javaType=java.io.Serializable},
+        dn_on_going_by_cluster = case when dn_on_going_by_cluster is null then null else #{newIdCluster,javaType=java.io.Serializable} end
+        where id_object = #{idObject,javaType=java.io.Serializable}
+    </update>
+
+    <delete id="deleteCluster">
+        delete from t_task_cluster where id = #{id,javaType=java.io.Serializable}
+    </delete>
+
+    <select id="getTaskEndTime" resultType="org.joda.time.LocalDateTime">
+        select t.end_date from t_task t
+        where
+        t.check_cancel = '0'
+        and t.id_object = #{idTaskObject,javaType=java.io.Serializable}
+        and t.service_code = #{taskCode,javaType=java.lang.String}
+    </select>
+
+    <update id="validateTask">
+        update T_TASK set check_user_validation = '1'
+        where id = #{idTask,javaType=java.io.Serializable}
+    </update>
+
+	<delete id="deleteObjectTaskAssos">
+		delete from t_asso_task_previous_task
+		where id_task in (
+			select distinct id_task from t_task t
+			left join t_asso_task_previous_task t1 on t.id = t1.ID_previous_TASK or t.id = t1.ID_TASK
+			where id_object = #{idObject,javaType=java.io.Serializable}
+		)
+	</delete>
+
+	<delete id="deleteObjectTasks">
+		delete from t_task where id_object = #{idObject,javaType=java.io.Serializable}
+	</delete>
+
+	<delete id="removeObjectFromCluster">
+		delete from t_task_cluster_dependency
+		where id_object = #{idObject,javaType=java.io.Serializable}
+	</delete>
+
+    <select id="selectCurrentTaskByIdObject" resultMap="com.synaptix.taskmanager.model.ITask">
+        select t.* from t_task t
+         where t.check_cancel = '0'
+           and t.id_object = #{idObject,javaType=java.io.Serializable}
+           and t.status = 'CURRENT'
+           and t.next_status = 'VAL'
+    </select>
+
+</mapper>

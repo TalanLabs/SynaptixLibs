@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 
 import org.geotools.data.shapefile.ShpFiles;
 import org.geotools.data.shapefile.dbf.DbaseFileReader;
+import org.geotools.data.shapefile.shp.ShapefileException;
 import org.geotools.data.shapefile.shp.ShapefileReader;
 import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
 import org.jdesktop.swingx.mapviewer.util.GeoUtil;
@@ -41,7 +42,12 @@ public class MainShapefile {
 		ShpFiles shpFiles = new ShpFiles("D:/temp/world/tz_world.shp");
 
 		GeometryFactory gf = new GeometryFactory();
-		ShapefileReader shapefileReader = new ShapefileReader(shpFiles, true, true, gf);
+		ShapefileReader shapefileReader = null;
+		try {
+			shapefileReader = new ShapefileReader(shpFiles, true, true, gf);
+		} catch (ShapefileException e) {
+			e.printStackTrace();
+		}
 
 		DbaseFileReader dbaseFileReader = new DbaseFileReader(shpFiles, true, Charset.forName("UTF-8"));
 
