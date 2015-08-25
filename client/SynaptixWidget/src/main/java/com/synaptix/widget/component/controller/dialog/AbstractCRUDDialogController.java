@@ -13,7 +13,7 @@ import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;
 
 /**
  * An abstract CRUD Dialog Controller which allows the user to browse between the entities
- * 
+ *
  * @param <E>
  */
 public abstract class AbstractCRUDDialogController<E extends IEntity> implements ICRUDDialogController<E> {
@@ -135,7 +135,7 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	@Override
 	public void saveBean() {
 		if (crudContext != null) {
-			crudContext.saveBean(getCRUDBeanDialogView().getBean());
+			crudContext.saveBean(getCRUDBeanDialogView().getBean(), getCRUDBeanDialogView());
 		}
 	}
 

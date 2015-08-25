@@ -2,6 +2,7 @@ package com.synaptix.widget.crud.controller;
 
 import java.io.Serializable;
 
+import com.synaptix.client.view.IView;
 import com.synaptix.entity.IEntity;
 
 /**
@@ -36,7 +37,7 @@ public interface ICRUDContext<E extends IEntity> {
 	/**
 	 * Saves the bean (without closing the window)
 	 */
-	public void saveBean(E bean);
+	public void saveBean(E bean, IView parent);
 
 	/**
 	 * Has authorisation to write (copy from ICRUDManagementController)
