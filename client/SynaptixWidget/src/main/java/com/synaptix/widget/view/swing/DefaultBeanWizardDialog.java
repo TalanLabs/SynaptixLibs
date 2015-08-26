@@ -201,7 +201,7 @@ public class DefaultBeanWizardDialog<E> extends WaitComponentFeedbackPanel imple
 
 	/**
 	 * Build the action tab
-	 * 
+	 *
 	 * @return
 	 */
 	protected List<Action> buildActionTab() {
@@ -264,7 +264,7 @@ public class DefaultBeanWizardDialog<E> extends WaitComponentFeedbackPanel imple
 	}
 
 	@Override
-	public void accept() {
+	public void accept(boolean close) {
 		if (finishAction.isEnabled()) {
 			finishAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
 		}

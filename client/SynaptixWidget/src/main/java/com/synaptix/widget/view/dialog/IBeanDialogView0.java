@@ -12,14 +12,14 @@ public interface IBeanDialogView0<E> extends IView {
 
 	/**
 	 * Change title for dialog
-	 * 
+	 *
 	 * @param title
 	 */
 	public void setTitle(String title);
 
 	/**
 	 * Change subtitle for dialog
-	 * 
+	 *
 	 * @param subtitle
 	 */
 	public void setSubtitle(String subtitle);
@@ -29,18 +29,18 @@ public interface IBeanDialogView0<E> extends IView {
 	/**
 	 * Simulates a click on "accept" button
 	 */
-	public void accept();
+	public void accept(boolean close);
 
 	/**
 	 * Return a bean
-	 * 
+	 *
 	 * @return
 	 */
 	public E getBean();
 
 	/**
 	 * Return a value map
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, Object> getValueMap();

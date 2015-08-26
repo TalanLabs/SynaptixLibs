@@ -144,7 +144,7 @@ public class DefaultAuthsBundleManager extends AuthsBundleManager {
 		if (!authExtensionMap.containsKey(authExtensionClass)) {
 			authExtensionMap.put(authExtensionClass, authExtensionProcessor);
 		} else {
-			LOG.warn(authExtensionClass + " already containts");
+			LOG.warn(authExtensionClass + " already contains");
 		}
 	}
 

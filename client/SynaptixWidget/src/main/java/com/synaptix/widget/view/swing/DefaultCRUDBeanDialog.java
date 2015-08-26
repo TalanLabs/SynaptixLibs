@@ -6,23 +6,30 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.client.view.IView;
+import com.synaptix.common.helper.CollectionHelper;
+import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.IEntity;
 import com.synaptix.widget.actions.view.swing.AbstractNextAction;
 import com.synaptix.widget.actions.view.swing.AbstractPreviousAction;
 import com.synaptix.widget.actions.view.swing.AbstractSaveAction;
 import com.synaptix.widget.component.controller.dialog.ICRUDDialogController;
+import com.synaptix.widget.util.StaticWidgetHelper;
 import com.synaptix.widget.view.dialog.IBeanExtensionDialogView;
 import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;
 import com.synaptix.widget.view.swing.helper.ToolBarActionsBuilder;
@@ -43,18 +50,20 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 
 	private JButton nextButton;
 
-	private JButton saveButton;
+	private Action applyAction;
 
 	private JPanel toolbarPanel;
 
 	private ICRUDDialogController<E> crudDialogContext;
+
+	private E originalBean;
 
 	public DefaultCRUDBeanDialog(IBeanExtensionDialogView<E>... beanExtensionDialogs) {
 		this(true, beanExtensionDialogs);
 	}
 
 	public DefaultCRUDBeanDialog(boolean hideListIfAlone, IBeanExtensionDialogView<E>... beanExtensionDialogs) {
-		this(hideListIfAlone, false, null, null, null, beanExtensionDialogs);
+		this(hideListIfAlone, true, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().save(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().cancel(), null, beanExtensionDialogs);
 	}
 
 	public DefaultCRUDBeanDialog(boolean hideListIfAlone, boolean acceptActionEnabled, String acceptActionLabel, String cancelActionLabel, String closeActionLabel,
@@ -74,8 +83,8 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (crudDialogContext != null) {
-					closeDialog();
-					crudDialogContext.showPrevious(bean);
+					// closeDialog();
+					crudDialogContext.showPrevious(bean.getId(), getAcceptAction().isEnabled() && hasChanged());
 				}
 			}
 		});
@@ -86,23 +95,36 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (crudDialogContext != null) {
-					closeDialog();
-					crudDialogContext.showNext(bean);
+					// closeDialog();
+					crudDialogContext.showNext(bean.getId(), getAcceptAction().isEnabled() && hasChanged());
 				}
 			}
 		});
-		saveButton = new JButton(new AbstractSaveAction() {
+		applyAction = new AbstractSaveAction(StaticWidgetHelper.getSynaptixWidgetConstantsBundle().apply()) {
 
 			private static final long serialVersionUID = -1089345142735425536L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (crudDialogContext != null) {
-					accept();
-					crudDialogContext.saveBean();
+					if (hasChanged()) {
+						accept(false);
+						// crudDialogContext.saveBean(DefaultCRUDBeanDialog.this);
+					}
 				}
 			}
-		});
+		};
+	}
+
+	@Override
+	protected void doSave(boolean close) {
+		super.doSave(close);
+
+		if (hasChanged()) {
+			crudDialogContext.saveBean(close ? null : this);
+		} else {
+			closeDialog();
+		}
 	}
 
 	private void buildComponents() {
@@ -141,8 +163,8 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 		if (crudDialogContext != null) {
 			toolbarFactory.addComponent(previousButton);
 			toolbarFactory.addComponent(nextButton);
-			toolbarFactory.addSeparator();
-			toolbarFactory.addComponent(saveButton);
+			// toolbarFactory.addSeparator();
+			// toolbarFactory.addComponent(saveButton);
 		}
 
 		// if (getOthersActions().length != 0) {
@@ -155,7 +177,7 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 	}
 
 	public void setReadOnly(boolean readOnly) {
-		saveButton.setEnabled(!readOnly);
+		applyAction.setEnabled(!readOnly);
 	}
 
 	@Override
@@ -170,15 +192,15 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 
 	@Override
 	protected boolean showCloseOnly() {
-		return crudDialogContext != null && bean.getId() != null;
+		return false; // crudDialogContext != null && bean.getId() != null;
 	}
 
 	@Override
 	public int showDialog(IView parent, String title, String subtitle, E bean, Map<String, Object> valueMap, boolean readOnly, boolean creation, boolean acceptAndReopenOption) {
 		setReadOnly(readOnly);
-		previousButton.setEnabled(crudDialogContext != null && crudDialogContext.hasPrevious(bean));
-		nextButton.setEnabled(crudDialogContext != null && crudDialogContext.hasNext(bean));
-		saveButton.setEnabled(crudDialogContext != null && crudDialogContext.hasAuthWrite());
+		previousButton.setEnabled(crudDialogContext != null && crudDialogContext.hasPrevious(bean.getId()));
+		nextButton.setEnabled(crudDialogContext != null && crudDialogContext.hasNext(bean.getId()));
+		applyAction.setEnabled(crudDialogContext != null && crudDialogContext.hasAuthWrite());
 
 		toolbarPanel.removeAll();
 		JComponent toolbar = buildToolbar();
@@ -191,12 +213,22 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if ("enabled".equals(evt.getPropertyName())) { //$NON-NLS-1$
-					saveButton.setEnabled(crudDialogContext != null && (Boolean) evt.getNewValue());
+					applyAction.setEnabled(crudDialogContext != null && (Boolean) evt.getNewValue());
 				}
 			}
 		});
 
 		return super.showDialog(parent, title, subtitle, bean, valueMap, readOnly, creation, acceptAndReopenOption);
+	}
+
+	@Override
+	protected void openDialog() {
+		super.openDialog();
+
+		this.originalBean = ComponentHelper.clone(bean);
+		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
+			b.commit(originalBean, valueMap);
+		}
 	}
 
 	private void setSelectedTab(int selectedTabItem) {
@@ -222,5 +254,40 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 				}
 			}
 		});
+	}
+
+	@Override
+	protected Action[] getOthersActions() {
+		return new Action[] { applyAction };
+	}
+
+	protected boolean hasChanged() {
+		E newBean = ComponentHelper.clone(bean);
+		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
+			b.commit(newBean, valueMap);
+		}
+		Map<String, Serializable> m1 = ComponentHelper.serializeComponent(newBean);
+		Map<String, Serializable> m2 = ComponentHelper.serializeComponent(originalBean);
+
+		return !equalMaps(m1, m2);
+		// return !m1.equals(m2);
+	}
+
+	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2) {
+		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
+			return false;
+		}
+		for (Object key : m1.keySet()) {
+			Object v1 = m1.get(key);
+			Object v2 = m2.get(key);
+			if (v1 instanceof Map && v2 instanceof Map) {
+				if (!equalMaps((Map<?, ?>) v1, (Map<?, ?>) v2)) {
+					return false;
+				}
+			} else if (!ObjectUtils.equals(v1, v2)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

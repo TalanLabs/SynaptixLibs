@@ -53,6 +53,8 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 	private static final long serialVersionUID = 2124940929569388267L;
 
+	public static final String KEEP_OPENED = "keepOpened";
+
 	private final Map<IBeanExtensionDialogView<E>, ValidationResult> validatorMap;
 
 	protected E bean;
@@ -252,7 +254,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			List<Action> actionTabList = buildActionTab();
 			if (acceptAndReopenOption) {
 				final AcceptAndReopenAction acceptAndReopenAction = new AcceptAndReopenAction();
-				getAcceptAction().addPropertyChangeListener(new PropertyChangeListener() {
+				acceptAction.addPropertyChangeListener(new PropertyChangeListener() {
 
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
@@ -267,12 +269,12 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			if (getOthersActions().length != 0) {
 
 				List<Action> actionList = new ArrayList<Action>();
-				actionList.add(getAcceptAction());
+				actionList.add(acceptAction);
+				actionList.add(cancelAction);
 				for (Action a : getOthersActions()) {
 					actionList.add(a);
-					a.setEnabled(false);
+					// a.setEnabled(false);
 				}
-				actionList.add(closeAction);
 				actionTab = actionList.toArray(new Action[actionList.size()]);
 			}
 
@@ -282,7 +284,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 
 		dialog.setId(id);
-		getAcceptAction().setEnabled(acceptActionEnabled);
+		acceptAction.setEnabled(acceptActionEnabled);
 		dialog.setResizable(true);
 
 		dialog.showDialog();
@@ -313,7 +315,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 	 * @return
 	 */
 	protected List<Action> buildActionTab() {
-		return CollectionHelper.asListOf(Action.class, getAcceptAction(), cancelAction);
+		return CollectionHelper.asListOf(Action.class, acceptAction, cancelAction);
 	}
 
 	protected final Action getAcceptAction() {
@@ -361,7 +363,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			result.addAllFrom(r);
 		}
 		validationResultModel.setResult(result);
-		getAcceptAction().setEnabled(!result.hasErrors());
+		acceptAction.setEnabled(!result.hasErrors());
 	}
 
 	@Override
@@ -374,8 +376,12 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 	}
 
 	@Override
-	public void accept() {
-		getAcceptAction().actionPerformed(null);
+	public void accept(boolean close) {
+		if (close) {
+			acceptAction.actionPerformed(null);
+		} else {
+			acceptAction.actionPerformed(new ActionEvent(acceptAction, 0, KEEP_OPENED));
+		}
 	}
 
 	private final class OpenActionListener implements ActionListener {
@@ -407,7 +413,15 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			if (list.getSelectedIndex() == -1) {
 				list.setSelectedIndex(0);
 			}
+
+			openDialog();
 		}
+	}
+
+	/**
+	 * Called upon dialog opening
+	 */
+	protected void openDialog() {
 	}
 
 	protected void fillListModel() {
@@ -437,10 +451,23 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				b.commit(bean, valueMap);
 			}
 
-			if (closeOnAccept()) {
+			boolean close = e == null || e.getActionCommand() != KEEP_OPENED || closeOnAccept();
+			if (close) {
 				closeDialog();
 			}
+
+			doSave(close);
 		}
+	}
+
+	/**
+	 * The user clicked on the accept button. Here is the implementation of the save part, if not done elsewhere<br/>
+	 * By default, does nothing, let the caller of the dialog decide what to do
+	 *
+	 * @param close
+	 *            - The user asked the dialog to be closed
+	 */
+	protected void doSave(boolean close) {
 	}
 
 	private final class CancelAction extends AbstractCancelAction {

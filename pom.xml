@@ -72,6 +72,7 @@
 		<module>shared</module>
 		<module>test</module>
 		<module>dev</module>
+		<module>workflow-manager</module>
 		<!-- module>redpepper</module -->
 	</modules>
 	<build>
@@ -114,6 +115,7 @@
 					<source>${target.jdk}</source>
 					<target>${target.jdk}</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
+					<proc>none</proc>
 				</configuration>
 			</plugin>
 			<plugin>
