@@ -1,5 +1,7 @@
 package com.synaptix.widget.component.controller.dialog;
 
+import java.io.Serializable;
+
 import com.synaptix.client.view.IView;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.component.factory.ComponentFactory;
@@ -18,15 +20,26 @@ import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;
  */
 public abstract class AbstractCRUDDialogController<E extends IEntity> implements ICRUDDialogController<E> {
 
-	private Class<E> entityClass;
+	public enum CloseAction {
 
-	private String showTitle;
+		/***/
+		SHOW_PREVIOUS,
+		/***/
+		SHOW_NEXT;
 
-	private String addTitle;
+	}
 
-	private String editTitle;
+	private final Class<E> entityClass;
+
+	private final String showTitle;
+
+	private final String addTitle;
+
+	private final String editTitle;
 
 	private ICRUDContext<E> crudContext;
+
+	private CloseAction closeAction;
 
 	public AbstractCRUDDialogController(Class<E> entityClass, String showTitle, String addTitle, String editTitle) {
 		super();
@@ -101,26 +114,38 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	}
 
 	@Override
-	public boolean hasPrevious(E current) {
-		return crudContext != null && crudContext.hasPrevious(current.getId());
+	public boolean hasPrevious(Serializable idCurrent) {
+		return crudContext != null && crudContext.hasPrevious(idCurrent);
 	}
 
 	@Override
-	public boolean hasNext(E current) {
-		return crudContext != null && crudContext.hasNext(current.getId());
+	public boolean hasNext(Serializable idCurrent) {
+		return crudContext != null && crudContext.hasNext(idCurrent);
 	}
 
 	@Override
-	public void showPrevious(E current) {
+	public void showPrevious(Serializable idCurrent, boolean hasChanged) {
 		if (crudContext != null) {
-			crudContext.showPrevious(current.getId());
+			closeAction = CloseAction.SHOW_PREVIOUS;
+			if ((hasChanged) && (crudContext.askSaveChanges(getCRUDBeanDialogView()))) {
+				getCRUDBeanDialogView().accept(true);
+			} else {
+				getCRUDBeanDialogView().closeDialog();
+				crudContext.showPrevious(idCurrent);
+			}
 		}
 	}
 
 	@Override
-	public void showNext(E current) {
+	public void showNext(Serializable idCurrent, boolean hasChanged) {
 		if (crudContext != null) {
-			crudContext.showNext(current.getId());
+			closeAction = CloseAction.SHOW_NEXT;
+			if ((hasChanged) && (crudContext.askSaveChanges(getCRUDBeanDialogView()))) {
+				getCRUDBeanDialogView().accept(true);
+			} else {
+				getCRUDBeanDialogView().closeDialog();
+				crudContext.showNext(idCurrent);
+			}
 		}
 	}
 
@@ -133,9 +158,9 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	}
 
 	@Override
-	public void saveBean() {
+	public void saveBean(IView parent) {
 		if (crudContext != null) {
-			crudContext.saveBean(getCRUDBeanDialogView().getBean(), getCRUDBeanDialogView());
+			crudContext.saveBean(getCRUDBeanDialogView().getBean(), parent, closeAction);
 		}
 	}
 

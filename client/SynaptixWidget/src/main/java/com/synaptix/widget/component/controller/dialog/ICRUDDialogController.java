@@ -1,5 +1,7 @@
 package com.synaptix.widget.component.controller.dialog;
 
+import java.io.Serializable;
+
 import com.synaptix.client.view.IView;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.entity.IEntity;
@@ -47,17 +49,17 @@ public interface ICRUDDialogController<E extends IEntity> {
 	 */
 	public void setCRUDContext(ICRUDContext<E> crudContext);
 
-	public boolean hasPrevious(E current);
+	public boolean hasPrevious(Serializable idCurrent);
 
-	public boolean hasNext(E current);
+	public boolean hasNext(Serializable idCurrent);
 
-	public void showPrevious(E current);
+	public void showPrevious(Serializable idCurrent, boolean hasChanged);
 
-	public void showNext(E current);
+	public void showNext(Serializable idCurrent, boolean hasChanged);
 
 	public boolean hasAuthWrite();
 
-	public void saveBean();
+	public void saveBean(IView parent);
 
 	public void setSelectedTabItem(int selectedIndex);
 

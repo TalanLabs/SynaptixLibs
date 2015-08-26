@@ -736,4 +736,10 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Voir")
 	public String show();
 
+	@DefaultStringValue("Appliquer")
+	public String apply();
+
+	@DefaultStringValue("Il y a des modifications non sauvegardées. Souhaitez-vous les sauvegarder ?")
+	public String thereAreChangesSaveThem();
+
 }

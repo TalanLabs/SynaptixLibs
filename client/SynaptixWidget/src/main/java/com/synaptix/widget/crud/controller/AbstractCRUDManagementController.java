@@ -2,6 +2,7 @@ package com.synaptix.widget.crud.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
@@ -16,7 +17,9 @@ import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IEntityService;
 import com.synaptix.service.IPaginationService;
 import com.synaptix.service.ServiceException;
+import com.synaptix.widget.component.controller.dialog.AbstractCRUDDialogController;
 import com.synaptix.widget.component.controller.dialog.ICRUDDialogController;
+import com.synaptix.widget.component.util.SearchListener;
 import com.synaptix.widget.component.view.IComponentsManagementViewDescriptor;
 import com.synaptix.widget.crud.view.descriptor.ICRUDManagementViewDescriptor;
 import com.synaptix.widget.util.StaticWidgetHelper;
@@ -512,8 +515,8 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
-	public void saveBean(final E entity, IView parent) {
-		getViewFactory().waitFullComponentViewWorker(parent, new AbstractSavingViewWorker<E>() {
+	public void saveBean(final E entity, IView parent, final AbstractCRUDDialogController.CloseAction closeAction) {
+		getViewFactory().waitFullComponentViewWorker(parent != null ? parent : getView(), new AbstractSavingViewWorker<E>() {
 			@Override
 			protected E doSaving() throws Exception {
 				Serializable id = editCRUDEntity(entity);
@@ -526,7 +529,29 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 			@Override
 			public void success(E newEntity) {
 				entity.straightSetProperties(newEntity.straightGetProperties());
-				editEntitySuccess(entity.getId()); // to confirm, we lose the scroll, not that great
+
+				if (closeAction != null) {
+					SearchListener searchListener = new SearchListener() {
+
+						@Override
+						public boolean searchPerformed(Map<String, Object> valueFilterMap) {
+							switch (closeAction) {
+							case SHOW_PREVIOUS:
+								showPrevious(entity.getId());
+								break;
+							case SHOW_NEXT:
+								showNext(entity.getId());
+								break;
+							default:
+								break;
+							}
+
+							return true;
+						}
+					};
+					addSearchListener(searchListener);
+				}
+				editEntitySuccess(entity.getId()); // to confirm, we lose the scroll or might have issues with new lines or lines removed, not that great
 			}
 
 			@Override
@@ -554,5 +579,11 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	@Override
 	public int getSelectedTabIndex() {
 		return selectedTabIndex;
+	}
+
+	@Override
+	public boolean askSaveChanges(IView parent) {
+		return getViewFactory().showQuestionMessageDialog(parent, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().confirmation(),
+				StaticWidgetHelper.getSynaptixWidgetConstantsBundle().thereAreChangesSaveThem());
 	}
 }
