@@ -297,9 +297,7 @@ public class JListToList<E> extends JPanel implements ChangeListener {
 			selectedList.clearSelection();
 		}
 
-		if (allListModel.getSize() == 0) {
-			allList.clearSelection();
-		}
+		allList.clearSelection();
 		if (selectedListModel.getSize() == 0) {
 			selectedList.clearSelection();
 		}
@@ -316,9 +314,7 @@ public class JListToList<E> extends JPanel implements ChangeListener {
 		if (allListModel.getSize() == 0) {
 			allList.clearSelection();
 		}
-		if (selectedListModel.getSize() == 0) {
-			selectedList.clearSelection();
-		}
+		selectedList.clearSelection();
 
 		updateAllActions();
 	}
