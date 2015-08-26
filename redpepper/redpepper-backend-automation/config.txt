@@ -56,8 +56,8 @@ h5. Ref domains
 |limit option status|fr.gefco.tli.psc.ref.model.domains.IEnumLimitOptionStatus|T_TYPE_LIMIT_OPTION_STATUS |
 |trip file type|fr.gefco.tli.psc.ref.model.domains.IEnumTripFileType|T_TYPE_TRIP_FILE |
 |commodity kind|fr.gefco.tli.psc.ref.model.domains.IEnumCommodityKind|T_COMMODITY_KIND|
-|service nature|fr.gefco.tli.psc.taskmanager.model.domains.IEnumServiceNature|T_TYPE_SERVICE_NATURE|
-|task status|fr.gefco.tli.psc.taskmanager.model.domains.IEnumTaskStatus|T_TYPE_TASK_STATUS|
+|service nature|fr.gefco.tli.psc.com.synaptix.taskmanager.model.domains.IEnumServiceNature|T_TYPE_SERVICE_NATURE|
+|task status|fr.gefco.tli.psc.com.synaptix.taskmanager.model.domains.IEnumTaskStatus|T_TYPE_TASK_STATUS|
 
 h5. Entities configuration
 
@@ -84,13 +84,13 @@ h5. Entities configuration
 | offer option type | fr.gefco.tli.psc.ref.model.IOfferOptionType | code |
 |community criteria|fr.gefco.tli.psc.ref.model.ICommunityCriteria|id|
 |software|fr.gefco.tli.psc.ref.model.ISoftware|code|
-|task type|fr.gefco.tli.psc.taskmanager.model.ITaskType|code|
-|task chain|fr.gefco.tli.psc.taskmanager.model.ITaskChain|code|
-|asso task chain type|fr.gefco.tli.psc.taskmanager.model.IAssoTaskChainType|id|
-|status graph|fr.gefco.tli.psc.taskmanager.model.IStatusGraph|id|
-|asso tr task chain criteria chain|fr.gefco.tli.psc.taskmanager.model.IAssoTaskChainCriteriaChain|id|
+|task type|fr.gefco.tli.psc.com.synaptix.taskmanager.model.ITaskType|code|
+|task chain|fr.gefco.tli.psc.com.synaptix.taskmanager.model.ITaskChain|code|
+|asso task chain type|fr.gefco.tli.psc.com.synaptix.taskmanager.model.IAssoTaskChainType|id|
+|status graph|fr.gefco.tli.psc.com.synaptix.taskmanager.model.IStatusGraph|id|
+|asso tr task chain criteria chain|fr.gefco.tli.psc.com.synaptix.taskmanager.model.IAssoTaskChainCriteriaChain|id|
 |tr task chain criteria|fr.gefco.tli.psc.bop.model.ITransportRequestTaskChainCriteria|id|
-|asso co task chain criteria chain|fr.gefco.tli.psc.taskmanager.model.IAssoTaskChainCriteriaChain|id|
+|asso co task chain criteria chain|fr.gefco.tli.psc.com.synaptix.taskmanager.model.IAssoTaskChainCriteriaChain|id|
 |co task chain criteria|fr.gefco.tli.psc.bop.model.ICustomerOrderTaskChainCriteria|id|
 |data rule criteria|fr.gefco.tli.psc.bop.model.IDataRuleCriteria|id|
 |data rule|fr.gefco.tli.psc.bop.model.IDataRule|id|

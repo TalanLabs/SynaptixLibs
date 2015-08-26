@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.synaptix.taskmanager.dao.mapper.TaskClusterDependencyMapper">
+
+	<cache-ref namespace="com.synaptix.taskmanager.model.ITaskClusterDependency" />
+
+	<select id="selectTaskClusterDependenciesByIdTaskCluster" resultMap="com.synaptix.taskmanager.model.ITaskClusterDependency">
+	<![CDATA[
+		select a.* from T_TASK_CLUSTER_DEPENDENCY a
+		where
+			a.ID_CLUSTER = #{idTaskCluster,javaType=java.io.Serializable}
+	]]>
+	</select>
+
+    <update id="updateDependency">
+        update T_TASK_CLUSTER_DEPENDENCY set id_cluster = #{newIdCluster} where id_object = #{idObject,javaType=java.io.Serializable}
+    </update>
+
+</mapper>
