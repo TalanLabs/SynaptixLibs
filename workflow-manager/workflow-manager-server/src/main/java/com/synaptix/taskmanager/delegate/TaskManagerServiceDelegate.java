@@ -20,7 +20,9 @@ import org.joda.time.LocalDateTime;
 import com.google.inject.Inject;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.component.model.IError;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IErrorEntity;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.IGUIDGenerator;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
@@ -43,8 +45,6 @@ import com.synaptix.taskmanager.manager.taskservice.ITaskService;
 import com.synaptix.taskmanager.model.AssoTaskPreviousTaskBuilder;
 import com.synaptix.taskmanager.model.ClusterTaskResultFields;
 import com.synaptix.taskmanager.model.IClusterTaskResult;
-import com.synaptix.component.model.IError;
-import com.synaptix.entity.IErrorEntity;
 import com.synaptix.taskmanager.model.IStatusGraph;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskBackup;
@@ -63,6 +63,7 @@ import com.synaptix.taskmanager.model.domains.TaskStatus;
 import com.synaptix.taskmanager.model.domains.TodoOwner;
 import com.synaptix.taskmanager.model.domains.TodoStatus;
 import com.synaptix.taskmanager.service.AbstractDelegate;
+import com.synaptix.taskmanager.service.ITodoService;
 
 public class TaskManagerServiceDelegate extends AbstractDelegate {
 
@@ -89,6 +90,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	public TaskManagerServiceDelegate() {
 		super();
 	}
+	
+	@Inject
+	private ITodoService todoService;
 
 	private TaskMapper getTaskMapper() {
 		return getMapper(TaskMapper.class);
@@ -669,7 +673,8 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 */
 	private ITodo createTodo(ITask task, TodoOwner owner, IObjectTypeTaskFactory<?> objectTypeTaskFactory, IEntity ownerEntity, IEntity contactEntity) {
 		ITaskService.ITodoDescriptor todoDescriptor = getToDoDescriptor(task);
-		ITodo todo = ComponentFactory.getInstance().createInstance(ITodo.class);
+		ITodo todo = todoService.createTodo(ownerEntity, contactEntity);
+
 		todo.setIdTask(task.getId());
 		String description = objectTypeTaskFactory.getTaskObjectDescription(task.getIdObject());
 		todo.setCode(todoDescriptor.getCode());
@@ -699,21 +704,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 			break;
 		}
 
-		// TODO Extract to psc
-//		if (ownerEntity instanceof IThirdParty) {
-//			todo.setIdOwnerThirdParty(ownerEntity.getId());
-//			todo.setOwnerThirdParty((IThirdParty) ownerEntity);
-//		} else if (ownerEntity instanceof ICenter) {
-//			todo.setIdOwnerCenter(ownerEntity.getId());
-//			todo.setOwnerCenter((ICenter) ownerEntity);
-//		}
-//		if (contactEntity instanceof IThirdParty) {
-//			todo.setIdContactThirdParty(contactEntity.getId());
-//			todo.setContactThirdParty((IThirdParty) contactEntity);
-//		} else if (contactEntity instanceof ICenter) {
-//			todo.setIdContactCenter(contactEntity.getId());
-//			todo.setContactCenter((ICenter) contactEntity);
-//		}
+
 		return todo;
 	}
 

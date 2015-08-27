@@ -1,25 +1,19 @@
 package com.synaptix.taskmanager.service;
 
+import com.synaptix.entity.IEntity;
+import com.synaptix.taskmanager.model.ITodo;
+
+/**
+ * Services for todo management that must be implemented by your project.
+ */
 public interface ITodoService {
-
-//	public List<ITodoFolderListView> findTodoFolders(Serializable idOwnerCenter);
-
 	/**
-	 * Find all Todos which correspond to the executant third party
+	 * Creates a todo for the owner and contact in parameter.
+	 * Only fields specific to your project must be filled.
+	 *
+	 * @param ownerEntity   Owner of the todo: generally a user or a group that will see the todo and have to do it.
+	 * @param contactEntity Contact, user or group that the owner can contact if needed.
+	 * @return ITodo, does not need to be saved, it will be completed and saved by the task manager.
 	 */
-//	public List<ITodo> findExecutantTodosByIdUser(Serializable idUser);
-
-	/**
-	 * @param todoFolder
-	 *            if null <=> see all, if no id <=> see without todo folder
-	 */
-//	public List<ITodo> selectTodoList(Serializable idOwnerCenter, ITodoFolderListView todoFolder, boolean lastTodosFirst, String uriLike);
-
-	/**
-	 * Count all todo for given center, grouped by id_task
-	 */
-//	public int countAllTodo(Serializable idOwnerCenter);
-
-//	public List<ITodo> selectTodoList(Serializable idContextCenter, ITodoFolderListView selectedTodoFolder, List<Serializable> idObjects);
-
+	ITodo createTodo(IEntity ownerEntity, IEntity contactEntity);
 }

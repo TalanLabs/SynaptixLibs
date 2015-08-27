@@ -3,7 +3,7 @@ package com.synaptix.taskmanager.service;
 import com.synaptix.taskmanager.dao.mapper.TodoMapper;
 
 
-public class TodoServerService extends AbstractSimpleService implements ITodoService {
+public abstract class TodoServerService extends AbstractSimpleService implements ITodoService {
 
 	private TodoMapper getTodoMapper() {
 		return getDaoSession().getMapper(TodoMapper.class);
