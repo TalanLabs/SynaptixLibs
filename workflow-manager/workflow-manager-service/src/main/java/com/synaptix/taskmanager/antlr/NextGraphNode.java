@@ -1,7 +1,5 @@
 package com.synaptix.taskmanager.antlr;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class NextGraphNode extends AbstractGraphNode {
 
 	private final AbstractGraphNode firstNode;
@@ -24,6 +22,6 @@ public class NextGraphNode extends AbstractGraphNode {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return new StringBuilder("(").append(firstNode).append("=>").append(nextNode).append(")").toString();
 	}
 }

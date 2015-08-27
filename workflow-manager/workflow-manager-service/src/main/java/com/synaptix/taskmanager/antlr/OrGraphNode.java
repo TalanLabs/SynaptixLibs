@@ -2,11 +2,11 @@ package com.synaptix.taskmanager.antlr;
 
 import java.util.List;
 
-public class ParallelGraphNode extends AbstractGraphNode {
+public class OrGraphNode extends AbstractGraphNode {
 
 	private final List<AbstractGraphNode> nodes;
 
-	public ParallelGraphNode(List<AbstractGraphNode> nodes) {
+	public OrGraphNode(List<AbstractGraphNode> nodes) {
 		super();
 		this.nodes = nodes;
 	}
@@ -24,7 +24,7 @@ public class ParallelGraphNode extends AbstractGraphNode {
 			if (first) {
 				first = false;
 			} else {
-				sb.append(",");
+				sb.append("|");
 			}
 			sb.append(node);
 		}

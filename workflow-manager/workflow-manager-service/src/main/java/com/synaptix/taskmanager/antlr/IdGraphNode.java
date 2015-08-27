@@ -1,7 +1,5 @@
 package com.synaptix.taskmanager.antlr;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class IdGraphNode extends AbstractGraphNode {
 
 	private final String id;
@@ -17,6 +15,6 @@ public class IdGraphNode extends AbstractGraphNode {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		return id;
 	}
 }

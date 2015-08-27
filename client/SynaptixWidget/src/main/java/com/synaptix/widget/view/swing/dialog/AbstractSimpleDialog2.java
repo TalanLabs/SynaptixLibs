@@ -23,6 +23,7 @@ import com.synaptix.swing.utils.GUIWindow;
 import com.synaptix.widget.actions.view.swing.AbstractAcceptAction;
 import com.synaptix.widget.actions.view.swing.AbstractCancelAction;
 import com.synaptix.widget.actions.view.swing.AbstractCloseAction;
+import com.synaptix.widget.view.dialog.ISimpleDialogView;
 import com.synaptix.widget.view.swing.IValidationView;
 
 /**
@@ -30,19 +31,13 @@ import com.synaptix.widget.view.swing.IValidationView;
  * <p>
  * To build the dialog, <code>AbstractSimpleDialog2()</code> and <code>initialize()</code> must be called. <code>initialize()</code> should be called after initialization of the components in the
  * dialog. Then, call the <code>showDialog()</code> to display the dialog.
- * 
+ *
  * @author E407780
- * 
+ *
  */
-public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel implements IValidationView {
+public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel implements IValidationView, ISimpleDialogView {
 
 	private static final long serialVersionUID = 8542499211229848574L;
-
-	public static final int ACCEPT_OPTION = 0;
-
-	public static final int CANCEL_OPTION = 1;
-
-	public static final int CLOSE_OPTION = 2;
 
 	private JDialogModel dialog;
 
@@ -108,14 +103,14 @@ public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel i
 	 * Override this function to build the components in the dialog.
 	 * <p>
 	 * This function is called after the <code>initialize</code> method.
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract JComponent buildEditorPanel();
 
 	/**
 	 * Unique Id for Dialog, save size
-	 * 
+	 *
 	 * @return
 	 */
 	protected String getDialogId() {
@@ -124,7 +119,7 @@ public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel i
 
 	/**
 	 * Opens an editable and resizable dialog
-	 * 
+	 *
 	 * @param view
 	 * @param title
 	 * @param subTitle
@@ -136,7 +131,7 @@ public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel i
 
 	/**
 	 * Opens a resizable dialog
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param subTitle
@@ -149,7 +144,7 @@ public abstract class AbstractSimpleDialog2 extends WaitComponentFeedbackPanel i
 
 	/**
 	 * Displays the dialog
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 * @param subTitle

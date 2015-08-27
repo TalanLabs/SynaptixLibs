@@ -30,11 +30,11 @@ public class GraphCalcHelper {
 		if (graphRule == null) {
 			return true;
 		}
-		GraphCalcLexer lex = new GraphCalcLexer(new ANTLRStringStream(graphRule));
+		GraphCalcOldLexer lex = new GraphCalcOldLexer(new ANTLRStringStream(graphRule));
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		RecognizerSharedState recognizerSharedState = new RecognizerSharedState();
-		GraphCalcParser parser = new GraphCalcParser(tokens, recognizerSharedState);
+		GraphCalcOldParser parser = new GraphCalcOldParser(tokens, recognizerSharedState);
 
 		try {
 			parser.compile();
@@ -54,11 +54,11 @@ public class GraphCalcHelper {
 		if (graphRule == null) {
 			return null;
 		}
-		GraphCalcLexer lex = new GraphCalcLexer(new ANTLRStringStream(graphRule));
+		GraphCalcOldLexer lex = new GraphCalcOldLexer(new ANTLRStringStream(graphRule));
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		RecognizerSharedState recognizerSharedState = new RecognizerSharedState();
-		GraphCalcParser parser = new GraphCalcParser(tokens, recognizerSharedState);
+		GraphCalcOldParser parser = new GraphCalcOldParser(tokens, recognizerSharedState);
 
 		try {
 			AbstractGraphNode node = parser.compile();
@@ -93,11 +93,11 @@ public class GraphCalcHelper {
 		if (graphRule == null) {
 			return null;
 		}
-		GraphCalcLexer lex = new GraphCalcLexer(new ANTLRStringStream(graphRule));
+		GraphCalcOldLexer lex = new GraphCalcOldLexer(new ANTLRStringStream(graphRule));
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		RecognizerSharedState recognizerSharedState = new RecognizerSharedState();
-		GraphCalcParser parser = new GraphCalcParser(tokens, recognizerSharedState);
+		GraphCalcOldParser parser = new GraphCalcOldParser(tokens, recognizerSharedState);
 
 		try {
 			return parser.compile();
@@ -117,11 +117,11 @@ public class GraphCalcHelper {
 		if (graphRule == null) {
 			return null;
 		}
-		GraphCalcLexer lex = new GraphCalcLexer(new ANTLRStringStream(graphRule));
+		GraphCalcOldLexer lex = new GraphCalcOldLexer(new ANTLRStringStream(graphRule));
 		CommonTokenStream tokens = new CommonTokenStream(lex);
 
 		RecognizerSharedState recognizerSharedState = new RecognizerSharedState();
-		GraphCalcParser parser = new GraphCalcParser(tokens, recognizerSharedState);
+		GraphCalcOldParser parser = new GraphCalcOldParser(tokens, recognizerSharedState);
 
 		try {
 			AbstractGraphNode node = parser.compile();
@@ -167,6 +167,17 @@ public class GraphCalcHelper {
 					first = false;
 				} else {
 					sb.append(",");
+				}
+				sb.append(toString(subNode));
+			}
+		} else if (node instanceof OrGraphNode) {
+			OrGraphNode pgn = (OrGraphNode) node;
+			boolean first = true;
+			for (AbstractGraphNode subNode : pgn.getNodes()) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append("|");
 				}
 				sb.append(toString(subNode));
 			}

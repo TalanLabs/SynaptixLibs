@@ -71,8 +71,6 @@ public class MainHelper {
 
 	private static final void initLookAndFeel() {
 		try {
-			// UIManager.setLookAndFeel(new GabyLookAndFeel());
-
 			UIManager.setLookAndFeel(new SubstanceFlatWhiteLookAndFeel());
 			UIManager.put(SubstanceLookAndFeel.COMBO_POPUP_PROTOTYPE, new WidestComboPopupPrototype());
 			JFrame.setDefaultLookAndFeelDecorated(true);
