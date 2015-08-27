@@ -1,4 +1,4 @@
-grammar GraphCalc;
+grammar GraphCalcOld;
 
 tokens {
     NEXT    = '=>' ;
@@ -7,9 +7,9 @@ tokens {
     RPAREN = ')' ;
 }
 
-@lexer::header { package fr.gefco.tli.psc.taskmanager.antlr; }
+@lexer::header { package com.synaptix.taskmanager.antlr; }
 
-@parser::header { package fr.gefco.tli.psc.taskmanager.antlr; import com.synaptix.entity.IEntity; }
+@parser::header { package com.synaptix.taskmanager.antlr; }
 
 @lexer::members {
   @Override
@@ -28,13 +28,13 @@ tokens {
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-compile returns[AbstractNode res] : a=expr EOF { $res=a; } ; 
+compile returns[AbstractGraphNode res] : a=expr EOF { $res=a; } ; 
 
-expr returns[AbstractNode value]: { List<AbstractNode> nodes = new ArrayList<AbstractNode>(); } a=term { nodes.add(a); } ( PARALLEL b=term { nodes.add(b); } )* { $value=nodes.size() == 1 ? nodes.get(0) : new ParallelNode(nodes); };
+expr returns[AbstractGraphNode value]: { List<AbstractGraphNode> nodes = new ArrayList<AbstractGraphNode>(); } a=term { nodes.add(a); } ( PARALLEL b=term { nodes.add(b); } )* { $value=nodes.size() == 1 ? nodes.get(0) : new ParallelGraphNode(nodes); };
 
-term returns[AbstractNode value]: a=factor ( NEXT b=factor )? { $value=b == null ? a : new NextNode(a,b); };
+term returns[AbstractGraphNode value]: a=factor ( NEXT b=factor )? { $value=b == null ? a : new NextGraphNode(a,b); };
  
-factor returns[AbstractNode value]: ID { $value=new IdNode($ID.getText()); } | ( LPAREN a=expr RPAREN ) { $value=a; };
+factor returns[AbstractGraphNode value]: ID { $value=new IdGraphNode($ID.getText()); } | ( LPAREN a=expr RPAREN ) { $value=a; };
  
 /*------------------------------------------------------------------
  * LEXER RULES

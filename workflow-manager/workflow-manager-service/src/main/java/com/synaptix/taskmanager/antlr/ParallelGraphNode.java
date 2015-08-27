@@ -2,8 +2,6 @@ package com.synaptix.taskmanager.antlr;
 
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class ParallelGraphNode extends AbstractGraphNode {
 
 	private final List<AbstractGraphNode> nodes;
@@ -19,6 +17,18 @@ public class ParallelGraphNode extends AbstractGraphNode {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		boolean first = true;
+		for (AbstractGraphNode node : nodes) {
+			if (first) {
+				first = false;
+			} else {
+				sb.append(",");
+			}
+			sb.append(node);
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 }

@@ -56,6 +56,9 @@
 		<cron4j.version>2.2.5</cron4j.version>
 		<log4j.version>1.2.17</log4j.version>
 
+		<antlr3.version>3.5</antlr3.version>
+		<antlr4.version>4.5.1-1</antlr4.version>
+
 		<logback.configurationFile>${root-directory}/etc/maven-annotation-logback.xml</logback.configurationFile>
 		<generated.sources.dir>${project.build.directory}/generated-sources/apt</generated.sources.dir>
 	</properties>
@@ -193,6 +196,27 @@
 					</configuration>
 				</plugin>
 				<plugin>
+					<groupId>org.antlr</groupId>
+					<artifactId>antlr3-maven-plugin</artifactId>
+					<version>${antlr3.version}</version>
+					<configuration>
+						<outputDirectory>${generated.sources.dir}</outputDirectory>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.antlr</groupId>
+					<artifactId>antlr4-maven-plugin</artifactId>
+					<version>${antlr4.version}</version>
+					<configuration>
+						<outputDirectory>${generated.sources.dir}</outputDirectory>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>${gwt.version}</version>
+				</plugin>
+				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>${lifecycle-mapping-plugin.version}</version>
@@ -259,14 +283,47 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.antlr</groupId>
+										<artifactId>
+											antlr3-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.5,)
+										</versionRange>
+										<goals>
+											<goal>antlr</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>true</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.antlr</groupId>
+										<artifactId>
+											antlr4-maven-plugin
+										</artifactId>
+										<versionRange>
+											[4.5.1-1,)
+										</versionRange>
+										<goals>
+											<goal>antlr4</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>true</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>gwt-maven-plugin</artifactId>
-					<version>${gwt.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -759,6 +816,16 @@
 				<version>${cron4j.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr</artifactId>
+				<version>${antlr3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-runtime</artifactId>
+				<version>${antlr4.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
