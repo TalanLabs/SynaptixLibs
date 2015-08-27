@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -376,9 +377,7 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 	}
 
 	/**
-	 * Add a search listener to be notified when a new search was performed
-	 *
-	 * @param searchListener
+	 * Adds a search listener to be notified when a new search was performed
 	 */
 	protected final void addSearchListener(SearchListener searchListener) {
 		if (searchListenerList == null) {
@@ -388,14 +387,27 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 	}
 
 	/**
+	 * Removes a search listener
+	 */
+	protected final boolean removeSearchListener(SearchListener searchListener) {
+		if (searchListenerList != null) {
+			return searchListenerList.remove(searchListener);
+		}
+		return false;
+	}
+
+	/**
 	 * Fire a listener
 	 *
 	 * @param unmodifiableMap
 	 */
 	private void fireSearchListener(Map<String, Object> valueFilterMap) {
 		if (CollectionHelper.isNotEmpty(searchListenerList)) {
-			for (SearchListener searchListener : searchListenerList) {
-				searchListener.searchPerformed(valueFilterMap);
+			Iterator<SearchListener> ite = searchListenerList.iterator();
+			while (ite.hasNext()) {
+				if (ite.next().searchPerformed(valueFilterMap)) {
+					ite.remove();
+				}
 			}
 		}
 	}

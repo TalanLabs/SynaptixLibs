@@ -2,7 +2,9 @@ package com.synaptix.widget.crud.controller;
 
 import java.io.Serializable;
 
+import com.synaptix.client.view.IView;
 import com.synaptix.entity.IEntity;
+import com.synaptix.widget.component.controller.dialog.AbstractCRUDDialogController;
 
 /**
  * A CRUD context which allows the user to browse between the entities
@@ -34,9 +36,9 @@ public interface ICRUDContext<E extends IEntity> {
 	public void showNext(Serializable id);
 
 	/**
-	 * Saves the bean (without closing the window)
+	 * Saves the bean (without closing the window, done prior to this if needed) and does the following action if provided
 	 */
-	public void saveBean(E bean);
+	public void saveBean(E bean, IView parent, AbstractCRUDDialogController.CloseAction closeAction);
 
 	/**
 	 * Has authorisation to write (copy from ICRUDManagementController)
@@ -49,5 +51,10 @@ public interface ICRUDContext<E extends IEntity> {
 	 * The last selected tab
 	 */
 	public int getSelectedTabIndex();
+
+	/**
+	 * There are changes. Ask the user if he wants to save them.
+	 */
+	public boolean askSaveChanges(IView parent);
 
 }

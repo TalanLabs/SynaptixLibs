@@ -2,6 +2,9 @@ package com.synaptix.widget.crud.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.SwingUtilities;
 
 import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
@@ -14,12 +17,15 @@ import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IEntityService;
 import com.synaptix.service.IPaginationService;
 import com.synaptix.service.ServiceException;
+import com.synaptix.widget.component.controller.dialog.AbstractCRUDDialogController;
 import com.synaptix.widget.component.controller.dialog.ICRUDDialogController;
+import com.synaptix.widget.component.util.SearchListener;
 import com.synaptix.widget.component.view.IComponentsManagementViewDescriptor;
 import com.synaptix.widget.crud.view.descriptor.ICRUDManagementViewDescriptor;
 import com.synaptix.widget.util.StaticWidgetHelper;
 import com.synaptix.widget.view.ISynaptixViewFactory;
 import com.synaptix.widget.viewworker.view.AbstractLoadingViewWorker;
+import com.synaptix.widget.viewworker.view.AbstractSavingViewWorker;
 
 /**
  * A CRUD Controller, create a table and filter and action CRUD
@@ -200,10 +206,16 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	public void showEntity(final G paginationEntity) {
 		loadEntity(paginationEntity.getId(), new IResultCallback<E>() {
 			@Override
-			public void setResult(E e) {
-				if (e != null) {
-					_showEntity(e);
-				}
+			public void setResult(final E e) {
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						if (e != null) {
+							_showEntity(e);
+						}
+					}
+				});
 			}
 		});
 	}
@@ -282,6 +294,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	protected void editEntitySuccess(Serializable idEntity) {
 		loadPagination();
+		// after the pagination (asynchronous), we could select the entity if it is still here
 	}
 
 	/**
@@ -502,16 +515,43 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
-	public void saveBean(final E entity) {
-		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<Serializable>() {
+	public void saveBean(final E entity, IView parent, final AbstractCRUDDialogController.CloseAction closeAction) {
+		getViewFactory().waitFullComponentViewWorker(parent != null ? parent : getView(), new AbstractSavingViewWorker<E>() {
 			@Override
-			protected Serializable doLoading() throws Exception {
-				return editCRUDEntity(entity);
+			protected E doSaving() throws Exception {
+				Serializable id = editCRUDEntity(entity);
+				if (id != null) {
+					return loadFullEntity(crudComponentClass, id);
+				}
+				return entity;
 			}
 
 			@Override
-			public void success(Serializable e) {
-				editEntitySuccess(e); // to confirm, we lose the scroll, not that great
+			public void success(E newEntity) {
+				entity.straightSetProperties(newEntity.straightGetProperties());
+
+				if (closeAction != null) {
+					SearchListener searchListener = new SearchListener() {
+
+						@Override
+						public boolean searchPerformed(Map<String, Object> valueFilterMap) {
+							switch (closeAction) {
+							case SHOW_PREVIOUS:
+								showPrevious(entity.getId());
+								break;
+							case SHOW_NEXT:
+								showNext(entity.getId());
+								break;
+							default:
+								break;
+							}
+
+							return true;
+						}
+					};
+					addSearchListener(searchListener);
+				}
+				editEntitySuccess(entity.getId()); // to confirm, we lose the scroll or might have issues with new lines or lines removed, not that great
 			}
 
 			@Override
@@ -539,5 +579,11 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	@Override
 	public int getSelectedTabIndex() {
 		return selectedTabIndex;
+	}
+
+	@Override
+	public boolean askSaveChanges(IView parent) {
+		return getViewFactory().showQuestionMessageDialog(parent, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().confirmation(),
+				StaticWidgetHelper.getSynaptixWidgetConstantsBundle().thereAreChangesSaveThem());
 	}
 }
