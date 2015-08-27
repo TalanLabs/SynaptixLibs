@@ -31,7 +31,6 @@ public class ServerServiceTaskManagerModule extends AbstractSynaptixServerServic
 		bindService(TaskChainServerService.class).with(ITaskChainService.class);
 		bindService(StatusGraphServerService.class).with(IStatusGraphService.class);
 		bindService(TasksServerService.class).with(ITasksService.class);
-//		bindService(TodoServerService.class).with(ITodoService.class);
 		bindService(TodoFolderServerService.class).with(ITodoFolderService.class);
 		bindService(TaskChainCriteriaServerService.class).with(ITaskChainCriteriaService.class);
 
