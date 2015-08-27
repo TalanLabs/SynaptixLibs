@@ -20,7 +20,7 @@ public class EvalGraphCalcVisitor extends GraphCalcBaseVisitor<AbstractGraphNode
 
 	@Override
 	public AbstractGraphNode visitExpr(ExprContext ctx) {
-		return visit(ctx.exprAnd());
+		return visit(ctx.exprOr());
 	}
 
 	@Override
