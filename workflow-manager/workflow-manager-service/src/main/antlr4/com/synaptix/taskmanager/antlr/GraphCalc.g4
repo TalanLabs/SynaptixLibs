@@ -3,8 +3,7 @@ grammar GraphCalc;
 compile: expr EOF
        ;
 
-// A changer pour activer le Or
-expr: exprAnd
+expr: exprOr
     ;
 
 exprOr: exprAnd (OR exprAnd)*

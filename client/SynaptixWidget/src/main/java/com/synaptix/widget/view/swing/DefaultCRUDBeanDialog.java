@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Action;
@@ -23,6 +24,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.client.view.IView;
 import com.synaptix.common.helper.CollectionHelper;
+import com.synaptix.component.IComponent;
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.IEntity;
 import com.synaptix.widget.actions.view.swing.AbstractNextAction;
@@ -266,11 +268,11 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
 			b.commit(newBean, valueMap);
 		}
-		Map<String, Serializable> m1 = ComponentHelper.serializeComponent(newBean);
-		Map<String, Serializable> m2 = ComponentHelper.serializeComponent(originalBean);
+		return !equalComponent(newBean, originalBean);
+	}
 
-		return !equalMaps(m1, m2);
-		// return !m1.equals(m2);
+	private boolean equalComponent(IComponent c1, IComponent c2) {
+		return equalMaps(c1.straightGetProperties(), c2.straightGetProperties());
 	}
 
 	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2) {
@@ -280,14 +282,42 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 		for (Object key : m1.keySet()) {
 			Object v1 = m1.get(key);
 			Object v2 = m2.get(key);
-			if (v1 instanceof Map && v2 instanceof Map) {
-				if (!equalMaps((Map<?, ?>) v1, (Map<?, ?>) v2)) {
-					return false;
-				}
-			} else if (!ObjectUtils.equals(v1, v2)) {
+			if (!equal(v1, v2)) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private boolean equalCollection(Collection<?> m1, Collection<?> m2) {
+		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
+			return false;
+		}
+		Iterator<?> ite1 = m1.iterator();
+		Iterator<?> ite2 = m2.iterator();
+		while (ite1.hasNext()) {
+			Object v1 = ite1.next();
+			Object v2 = ite2.next();
+			if (!equal(v1, v2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean equal(Object o1, Object o2) {
+		if (o1 == o2) {
+			return true;
+		}
+		if ((o1 instanceof IComponent) && (o2 instanceof IComponent)) {
+			return equalComponent((IComponent) o1, (IComponent) o2);
+		}
+		if ((o1 instanceof Map) && (o2 instanceof Map)) {
+			return equalMaps((Map<?, ?>) o1, (Map<?, ?>) o2);
+		}
+		if ((o1 instanceof Collection) && (o2 instanceof Collection)) {
+			return equalCollection((Collection<?>) o1, (Collection<?>) o2);
+		}
+		return ObjectUtils.equals(o1, o2);
 	}
 }
