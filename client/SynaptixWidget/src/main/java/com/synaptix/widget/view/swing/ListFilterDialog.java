@@ -25,6 +25,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -36,9 +38,10 @@ import com.synaptix.common.helper.CollectionHelper;
 import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceListCellRenderer;
 import com.synaptix.widget.util.StaticWidgetHelper;
+import com.synaptix.widget.view.dialog.IListFilterDialogView;
 import com.synaptix.widget.view.swing.dialog.AbstractSimpleDialog2;
 
-public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
+public class ListFilterDialog<E> extends AbstractSimpleDialog2 implements IListFilterDialogView<E> {
 
 	private static final long serialVersionUID = -6379379100104950593L;
 
@@ -52,7 +55,8 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 	private boolean isCaseSensitive;
 	private boolean isMultiSel;
 
-	public ListFilterDialog(GenericObjectToString<E> objectToString) {
+	@Inject
+	public ListFilterDialog(@Assisted GenericObjectToString<E> objectToString) {
 		this(objectToString, null);
 	}
 
@@ -146,7 +150,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 	/**
 	 * Opens the default search dialog (not case sensitive, no multi selection)
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 *            The title of the search dialog
@@ -154,13 +158,14 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 	 *            The list in which the user has to select items
 	 * @return
 	 */
+	@Override
 	public int showDialog(IView parent, String title, List<E> list) {
 		return showDialog(parent, title, list, false, false);
 	}
 
 	/**
 	 * Opens the search dialog
-	 * 
+	 *
 	 * @param parent
 	 * @param title
 	 *            The title of the search dialog
@@ -172,6 +177,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 	 *            true if the user can select many items, false otherwise
 	 * @return
 	 */
+	@Override
 	public int showDialog(IView parent, String title, List<E> list, boolean isCaseSensitive, boolean isMultiSelection) {
 		this.isCaseSensitive = isCaseSensitive;
 		this.isMultiSel = isMultiSelection;
@@ -206,9 +212,10 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 	/**
 	 * The value choosen by the user
-	 * 
+	 *
 	 * @return
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public E getValue() {
 		if (jList.getSelectedIndices().length > 0) {
@@ -219,7 +226,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 	/**
 	 * The values choosen by the user, in case of a multiselection mode
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -305,7 +312,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 	/**
 	 * Filter a list of objects with given filterText, using its descriptive string
-	 * 
+	 *
 	 * @param max
 	 *            maximum number of results, -1 for all
 	 * @return
@@ -339,7 +346,7 @@ public class ListFilterDialog<E> extends AbstractSimpleDialog2 {
 
 	/**
 	 * Converts the filter to a pattern. Also depends on the case sensitivity parameter
-	 * 
+	 *
 	 * @param filterText
 	 * @return Corresponding pattern
 	 */
