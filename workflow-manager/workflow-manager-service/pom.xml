@@ -13,7 +13,7 @@
 
 	<build>
 		<plugins>
-			<!-- plugin>
+			<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr3-maven-plugin</artifactId>
 				<executions>
@@ -42,7 +42,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin>
 		</plugins>
 	</build>
 

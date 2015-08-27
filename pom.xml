@@ -189,6 +189,7 @@
 					<version>${maven-processor-plugin.version}</version>
 					<configuration>
 						<outputDirectory>${generated.sources.dir}</outputDirectory>
+						<failOnError>false</failOnError>
 
 						<systemProperties>
 							<logback.configurationFile>${logback.configurationFile}</logback.configurationFile>
