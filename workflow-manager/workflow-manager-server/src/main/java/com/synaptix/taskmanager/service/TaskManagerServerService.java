@@ -23,6 +23,7 @@ import com.synaptix.mybatis.dao.exceptions.VersionConflictDaoException;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.mybatis.service.EntityServerService;
 import com.synaptix.mybatis.service.Transactional;
+import com.synaptix.server.service.ServiceResultBuilder;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.dao.mapper.TaskMapper;
 import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;

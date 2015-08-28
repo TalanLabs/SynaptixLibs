@@ -49,4 +49,5 @@ public abstract class AbstractCheckNextStatusTaskService extends AbstractTaskSer
 	public Serializable getObject(ITask task) {
 		return task.getIdObject();
 	}
+
 }

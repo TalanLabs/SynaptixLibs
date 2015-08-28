@@ -11,14 +11,12 @@ import com.synaptix.taskmanager.service.ITaskChainService;
 import com.synaptix.taskmanager.service.ITaskManagerService;
 import com.synaptix.taskmanager.service.ITaskServiceDescriptorService;
 import com.synaptix.taskmanager.service.ITasksService;
-import com.synaptix.taskmanager.service.ITodoFolderService;
 import com.synaptix.taskmanager.service.StatusGraphServerService;
 import com.synaptix.taskmanager.service.TaskChainCriteriaServerService;
 import com.synaptix.taskmanager.service.TaskChainServerService;
 import com.synaptix.taskmanager.service.TaskManagerServerService;
 import com.synaptix.taskmanager.service.TaskServiceDescriptorServerService;
 import com.synaptix.taskmanager.service.TasksServerService;
-import com.synaptix.taskmanager.service.TodoFolderServerService;
 
 public class ServerServiceTaskManagerModule extends AbstractSynaptixServerServiceModule implements Module {
 
@@ -31,7 +29,6 @@ public class ServerServiceTaskManagerModule extends AbstractSynaptixServerServic
 		bindService(TaskChainServerService.class).with(ITaskChainService.class);
 		bindService(StatusGraphServerService.class).with(IStatusGraphService.class);
 		bindService(TasksServerService.class).with(ITasksService.class);
-		bindService(TodoFolderServerService.class).with(ITodoFolderService.class);
 		bindService(TaskChainCriteriaServerService.class).with(ITaskChainCriteriaService.class);
 
 		bindDelegate(TaskManagerServiceDelegate.class);

@@ -1,5 +1,7 @@
 package com.synaptix.component.model;
 
+import java.util.Set;
+
 /**
  * The lightest object which contains an object.<br/>
  * Setter is in {@link IServiceWithErrorResult}
@@ -8,11 +10,13 @@ package com.synaptix.component.model;
  */
 public interface IServiceResult<O extends Object> {
 
-	public O getObject();
+	O getObject();
 
 	// Setter is in IServiceWithErrorResult
-	public boolean hasError();
+	boolean hasError();
 
-	public IStackResult getStackResult();
+	IStackResult getStackResult();
+
+	Set<IError> getErrors();
 
 }

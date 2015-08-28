@@ -1,4 +1,4 @@
-package com.synaptix.taskmanager.service;
+package com.synaptix.server.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,15 +6,15 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.synaptix.common.helper.CollectionHelper;
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.model.ErrorEnum;
 import com.synaptix.component.model.IError;
 import com.synaptix.component.model.IServiceResult;
+import com.synaptix.component.model.IServiceResultComponent;
+import com.synaptix.component.model.IServiceWithErrorResult;
 import com.synaptix.component.model.IStackResult;
-
-import com.synaptix.taskmanager.model.IServiceResultComponent;
-import com.synaptix.taskmanager.model.IServiceWithErrorResult;
 
 /**
  * Service Result Container. Can create a IServiceResult using {@link #compileResult(Object)}
@@ -169,7 +169,7 @@ public class ServiceResultContainer {
 		if (serviceResult != null) {
 			if (IServiceWithErrorResult.class.isAssignableFrom(serviceResult.getClass())) {
 				IServiceWithErrorResult<O> serviceWithErrorResult = (IServiceWithErrorResult<O>) serviceResult;
-				if (CollectionHelper.isNotEmpty(serviceWithErrorResult.getErrorSet())) {
+				if (CollectionUtils.isNotEmpty(serviceWithErrorResult.getErrorSet())) {
 					serviceWithErrorResult.setError(true);
 					for (IError error : serviceWithErrorResult.getErrorSet()) {
 						addError(error);

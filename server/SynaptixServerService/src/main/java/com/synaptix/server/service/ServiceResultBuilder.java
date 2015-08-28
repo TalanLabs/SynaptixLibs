@@ -1,4 +1,4 @@
-package com.synaptix.taskmanager.service;
+package com.synaptix.server.service;
 
 import java.io.Serializable;
 

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.synaptix.component.model.IError;
 import com.synaptix.component.model.IServiceResult;
 import com.synaptix.component.model.IStackResult;
-import com.synaptix.taskmanager.model.IServiceWithErrorResult;
+import com.synaptix.component.model.IServiceWithErrorResult;
 import com.synaptix.taskmanager.model.domains.EnumErrorMessages;
 
 public class ExecutionResultBuilder {

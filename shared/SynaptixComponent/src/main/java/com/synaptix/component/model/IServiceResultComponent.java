@@ -1,4 +1,6 @@
-package com.synaptix.taskmanager.model;
+package com.synaptix.component.model;
+
+import java.util.Set;
 
 import com.synaptix.component.IComponent;
 
@@ -8,5 +10,6 @@ import com.synaptix.component.IComponent;
  * @author Nicolas P
  */
 public interface IServiceResultComponent<O extends Object> extends IComponent, IServiceWithErrorResult<O> {
-
+	@Computed(ServiceResultComponentComputed.class)
+	Set<IError> getErrors();
 }
