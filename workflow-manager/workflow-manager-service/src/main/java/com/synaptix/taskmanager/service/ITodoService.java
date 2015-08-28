@@ -8,12 +8,14 @@ import com.synaptix.taskmanager.model.ITodo;
  */
 public interface ITodoService {
 	/**
-	 * Creates a todo for the owner and contact in parameter.
-	 * Only fields specific to your project must be filled.
+	 * Creates a todo for the owner and contact in parameter. Only fields specific to your project must be filled.
 	 *
-	 * @param ownerEntity   Owner of the todo: generally a user or a group that will see the todo and have to do it.
-	 * @param contactEntity Contact, user or group that the owner can contact if needed.
+	 * @param ownerEntity
+	 *            Owner of the todo: generally a user or a group that will see the todo and have to do it.
+	 * @param contactEntity
+	 *            Contact, user or group that the owner can contact if needed.
 	 * @return ITodo, does not need to be saved, it will be completed and saved by the task manager.
 	 */
-	ITodo createTodo(IEntity ownerEntity, IEntity contactEntity);
+	public ITodo createTodo(IEntity ownerEntity, IEntity contactEntity);
+
 }

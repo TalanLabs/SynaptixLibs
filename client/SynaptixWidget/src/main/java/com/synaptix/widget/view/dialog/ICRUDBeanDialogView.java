@@ -5,7 +5,7 @@ import com.synaptix.widget.component.controller.dialog.ICRUDDialogController;
 
 /**
  * A CRUD bean dialog view which allows the user to browse between the entities
- * 
+ *
  * @author Nicolas P
  *
  * @param <E>
@@ -13,5 +13,10 @@ import com.synaptix.widget.component.controller.dialog.ICRUDDialogController;
 public interface ICRUDBeanDialogView<E extends IEntity> extends IBeanDialogView<E> {
 
 	public void setCRUDDialogContext(ICRUDDialogController<E> crudDialogContext);
+
+	/**
+	 * Fix original bean
+	 */
+	public void fixOriginal();
 
 }
