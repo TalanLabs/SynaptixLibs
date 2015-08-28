@@ -1,9 +1,16 @@
 package com.synaptix.widget.component.controller.dialog;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import com.synaptix.client.view.IView;
+import com.synaptix.common.helper.CollectionHelper;
 import com.synaptix.common.util.IResultCallback;
+import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.ICancellable;
@@ -177,5 +184,60 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 			return crudContext.getSelectedTabIndex();
 		}
 		return 0;
+	}
+
+	@Override
+	public boolean hasChanged(E e1, E e2) {
+		return !equalComponent(e1, e2);
+	}
+
+	private boolean equalComponent(IComponent c1, IComponent c2) {
+		return equalMaps(c1.straightGetProperties(), c2.straightGetProperties());
+	}
+
+	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2) {
+		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
+			return false;
+		}
+		for (Object key : m1.keySet()) {
+			Object v1 = m1.get(key);
+			Object v2 = m2.get(key);
+			if (!equal(v1, v2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean equalCollection(Collection<?> m1, Collection<?> m2) {
+		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
+			return false;
+		}
+		Iterator<?> ite1 = m1.iterator();
+		Iterator<?> ite2 = m2.iterator();
+		while (ite1.hasNext()) {
+			Object v1 = ite1.next();
+			Object v2 = ite2.next();
+			if (!equal(v1, v2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean equal(Object o1, Object o2) {
+		if (o1 == o2) {
+			return true;
+		}
+		if ((o1 instanceof IComponent) && (o2 instanceof IComponent)) {
+			return equalComponent((IComponent) o1, (IComponent) o2);
+		}
+		if ((o1 instanceof Map) && (o2 instanceof Map)) {
+			return equalMaps((Map<?, ?>) o1, (Map<?, ?>) o2);
+		}
+		if ((o1 instanceof Collection) && (o2 instanceof Collection)) {
+			return equalCollection((Collection<?>) o1, (Collection<?>) o2);
+		}
+		return ObjectUtils.equals(o1, o2);
 	}
 }
