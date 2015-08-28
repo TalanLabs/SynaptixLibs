@@ -65,4 +65,9 @@ public interface ICRUDDialogController<E extends IEntity> {
 
 	public int getSelectedTabItem();
 
+	/**
+	 * Are the two entities equals?
+	 */
+	public boolean hasChanged(E e1, E e2);
+
 }
