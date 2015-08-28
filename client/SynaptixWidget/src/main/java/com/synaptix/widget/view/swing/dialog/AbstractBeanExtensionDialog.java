@@ -138,9 +138,9 @@ public abstract class AbstractBeanExtensionDialog<E> extends WaitComponentFeedba
 
 	/**
 	 * Set bean for dialog
-	 * 
+	 *
 	 * Call first before openDialog
-	 * 
+	 *
 	 * @param bean
 	 * @param extensionMap
 	 */

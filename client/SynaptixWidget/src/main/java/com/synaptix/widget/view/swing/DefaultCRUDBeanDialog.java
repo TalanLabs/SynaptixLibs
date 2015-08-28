@@ -227,10 +227,7 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 	protected void openDialog() {
 		super.openDialog();
 
-		this.originalBean = ComponentHelper.clone(bean);
-		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
-			b.commit(originalBean, valueMap);
-		}
+		fixOriginal();
 	}
 
 	private void setSelectedTab(int selectedTabItem) {
@@ -319,5 +316,17 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 			return equalCollection((Collection<?>) o1, (Collection<?>) o2);
 		}
 		return ObjectUtils.equals(o1, o2);
+	}
+
+	@Override
+	public void fixOriginal() {
+		this.originalBean = ComponentHelper.clone(bean);
+		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
+			try {
+				b.commit(originalBean, valueMap);
+			} catch (Throwable t) {
+				// do nothing, continue
+			}
+		}
 	}
 }
