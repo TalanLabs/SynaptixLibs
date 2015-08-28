@@ -1,6 +1,7 @@
 package com.synaptix.widget.component.controller.dialog;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -234,6 +235,9 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 		}
 		if ((o1 instanceof Map) && (o2 instanceof Map)) {
 			return equalMaps((Map<?, ?>) o1, (Map<?, ?>) o2);
+		}
+		if ((o1 instanceof byte[]) && (o2 instanceof byte[])) {
+			return Arrays.equals((byte[]) o1, (byte[]) o2);
 		}
 		if ((o1 instanceof Collection) && (o2 instanceof Collection)) {
 			return equalCollection((Collection<?>) o1, (Collection<?>) o2);
