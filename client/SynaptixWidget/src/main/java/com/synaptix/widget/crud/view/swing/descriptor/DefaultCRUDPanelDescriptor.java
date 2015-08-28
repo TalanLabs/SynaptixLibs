@@ -143,7 +143,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2 && getDefaultSearchComponentsPanel().getTable().getSelectedRowCount() == 1
-							&& getDefaultDoubleClickAction() != null) {
+							&& getDefaultDoubleClickAction() != null && getDefaultDoubleClickAction().isEnabled()) {
 
 						int idx = getDefaultSearchComponentsPanel().getTable().getSelectedColumn();
 						if (idx > -1) {

@@ -122,7 +122,7 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 	protected void doSave(boolean close) {
 		super.doSave(close);
 
-		if (hasChanged()) {
+		if ((crudDialogContext != null) && (hasChanged())) {
 			crudDialogContext.saveBean(close ? null : this);
 		} else {
 			closeDialog();
