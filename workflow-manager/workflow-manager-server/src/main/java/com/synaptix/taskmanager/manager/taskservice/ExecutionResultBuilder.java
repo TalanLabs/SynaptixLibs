@@ -5,8 +5,8 @@ import java.util.Set;
 
 import com.synaptix.component.model.IError;
 import com.synaptix.component.model.IServiceResult;
-import com.synaptix.component.model.IStackResult;
 import com.synaptix.component.model.IServiceWithErrorResult;
+import com.synaptix.component.model.IStackResult;
 import com.synaptix.taskmanager.model.domains.EnumErrorMessages;
 
 public class ExecutionResultBuilder {
@@ -20,7 +20,7 @@ public class ExecutionResultBuilder {
 	}
 
 	/**
-	 * Will save the errors contained in the serviceResult
+	 * Will save the errors contained in the serviceResult. If current result desc is null, uses the result text from the stack result
 	 */
 	public <O> ExecutionResultBuilder serviceResult(IServiceResult<O> serviceResult) {
 		if ((serviceResult != null) && (IServiceWithErrorResult.class.isAssignableFrom(serviceResult.getClass()))) {
@@ -28,6 +28,9 @@ public class ExecutionResultBuilder {
 				errors(((IServiceWithErrorResult<O>) serviceResult).getErrorSet());
 			}
 			stackResult(serviceResult.getStackResult());
+			if ((executionResultImpl.resultDesc == null) && (executionResultImpl.stackResult != null)) {
+				resultDesc(executionResultImpl.stackResult.getResultText());
+			}
 		}
 		return this;
 	}

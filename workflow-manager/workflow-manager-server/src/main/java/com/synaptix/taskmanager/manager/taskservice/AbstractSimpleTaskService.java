@@ -22,7 +22,7 @@ public abstract class AbstractSimpleTaskService<F extends ITaskObject<?>> extend
 		return objectType;
 	}
 
-	protected IExecutionResult execute(F taskObject){
+	protected IExecutionResult execute(F taskObject) {
 		return new ExecutionResultBuilder().finished();
 	}
 

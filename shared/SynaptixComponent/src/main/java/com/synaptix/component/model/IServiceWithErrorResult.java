@@ -10,17 +10,17 @@ import java.util.Set;
  */
 public interface IServiceWithErrorResult<O extends Object> extends IServiceResult<O> {
 
-	Set<IError> getErrorSet();
+	public Set<IError> getErrorSet();
 
-	void setErrorSet(Set<IError> errorSet);
-
-	// Getter is in IServiceResult
-	void setStackResult(IStackResult stackResult);
+	public void setErrorSet(Set<IError> errorSet);
 
 	// Getter is in IServiceResult
-	void setObject(O object);
+	public void setStackResult(IStackResult stackResult);
 
 	// Getter is in IServiceResult
-	void setError(boolean hasError);
+	public void setObject(O object);
+
+	// Getter is in IServiceResult
+	public void setError(boolean hasError);
 
 }

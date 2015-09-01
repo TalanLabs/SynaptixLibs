@@ -10,13 +10,16 @@ import java.util.Set;
  */
 public interface IServiceResult<O extends Object> {
 
-	O getObject();
+	public O getObject();
 
 	// Setter is in IServiceWithErrorResult
-	boolean hasError();
+	public boolean hasError();
 
-	IStackResult getStackResult();
+	public IStackResult getStackResult();
 
-	Set<IError> getErrors();
+	/**
+	 * Returns the set of errors (immutable if done correctly)
+	 */
+	public Set<IError> getErrors();
 
 }

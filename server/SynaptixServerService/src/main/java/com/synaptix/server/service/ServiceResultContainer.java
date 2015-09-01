@@ -110,6 +110,9 @@ public class ServiceResultContainer {
 		return compileResult(object, resultCode, null);
 	}
 
+	/**
+	 * Builds a IServiceResult with given object. Also builds a stack with resultCode and resultText, stored in getStackResult()
+	 */
 	public final <O> IServiceResult<O> compileResult(O object, String resultCode, String resultText) {
 		@SuppressWarnings("unchecked")
 		IServiceResultComponent<O> serviceResultComponent = ComponentFactory.getInstance().createInstance(IServiceResultComponent.class);
