@@ -3,6 +3,7 @@ package com.synaptix.taskmanager.guice.child;
 import com.google.inject.Module;
 import com.synaptix.mybatis.guice.AbstractSynaptixMyBatisModule;
 import com.synaptix.taskmanager.dao.mapper.AssoTaskPreviousTaskMapper;
+import com.synaptix.taskmanager.dao.mapper.ErrorMapper;
 import com.synaptix.taskmanager.dao.mapper.StatusGraphMapper;
 import com.synaptix.taskmanager.dao.mapper.TaskChainMapper;
 import com.synaptix.taskmanager.dao.mapper.TaskClusterDependencyMapper;
@@ -15,6 +16,7 @@ public class MyBatisTaskManagerModule extends AbstractSynaptixMyBatisModule impl
 	@Override
 	protected void configure() {
 		addMapperClass(TaskMapper.class);
+		addMapperClass(ErrorMapper.class);
 		addMapperClass(AssoTaskPreviousTaskMapper.class);
 		addMapperClass(TodoMapper.class);
 		addMapperClass(TaskClusterDependencyMapper.class);
