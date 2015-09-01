@@ -10,6 +10,9 @@ import com.synaptix.component.IComponent;
  * @author Nicolas P
  */
 public interface IServiceResultComponent<O extends Object> extends IComponent, IServiceWithErrorResult<O> {
+
+	@Override
 	@Computed(ServiceResultComponentComputed.class)
-	Set<IError> getErrors();
+	public Set<IError> getErrors();
+
 }

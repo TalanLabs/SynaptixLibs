@@ -16,6 +16,7 @@ public class MyBatisTaskManagerModule extends AbstractSynaptixMyBatisModule impl
 	@Override
 	protected void configure() {
 		addMapperClass(TaskMapper.class);
+		addMapperClass(ErrorMapper.class);
 		addMapperClass(AssoTaskPreviousTaskMapper.class);
 		addMapperClass(ErrorMapper.class);
 		addMapperClass(TodoMapper.class);

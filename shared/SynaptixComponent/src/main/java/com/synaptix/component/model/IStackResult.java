@@ -12,24 +12,24 @@ import com.synaptix.component.IComponent;
  */
 public interface IStackResult extends IComponent {
 
-	String getClassName();
+	public String getClassName();
 
-	void setClassName(String className);
+	public void setClassName(String className);
 
-	String getResultCode();
+	public String getResultCode();
 
-	void setResultCode(String resultCode);
+	public void setResultCode(String resultCode);
 
-	String getResultText();
+	public String getResultText();
 
-	void setResultText(String resultText);
+	public void setResultText(String resultText);
 
-	Date getResultDateTime();
+	public Date getResultDateTime();
 
-	void setResultDateTime(Date resultDateTime);
+	public void setResultDateTime(Date resultDateTime);
 
-	List<IStackResult> getStackResultList();
+	public List<IStackResult> getStackResultList();
 
-	void setStackResultList(List<IStackResult> stackResultList);
+	public void setStackResultList(List<IStackResult> stackResultList);
 
 }
