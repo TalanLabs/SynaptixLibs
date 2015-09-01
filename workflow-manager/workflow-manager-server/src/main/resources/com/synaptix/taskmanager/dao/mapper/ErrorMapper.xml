@@ -4,23 +4,6 @@
 
 <mapper namespace="com.synaptix.taskmanager.dao.mapper.ErrorMapper">
 
-	<resultMap id="errorEntityResult" type="com.synaptix.entity.IErrorEntity" extends="com.synaptix.entity.IErrorEntity">
-		<association property="codeMeaning" column="CODE" select="selectCodeMeaning" />
-		<association property="attributeMeaning" column="ATTRIBUTE" select="selectAttributeMeaning"/>
-	</resultMap>
-	
-	<select id="selectCodeMeaning" resultType="java.lang.String">
-		SELECT p_nls.get_nls_server_message('T_NLS_CODE',NLSCODE.ID,'MEANING',NLSCODE.MEANING)
-		FROM T_NLS_CODE NLSCODE
-		WHERE NLSCODE.CODE = #{code,javaType=java.lang.String}
-	</select>
-	
-	<select id="selectAttributeMeaning" resultType="java.lang.String">
-		SELECT p_nls.get_nls_server_message('T_NLS_CODE',NLSCODE.ID,'MEANING',NLSCODE.MEANING)
-		FROM T_NLS_CODE NLSCODE
-		WHERE NLSCODE.CODE = #{attribute,javaType=java.lang.String}
-	</select>
-	
 	<delete id="deleteErrorsByIdObject" parameterType="java.io.Serializable">
 		DELETE FROM T_ERROR
 		WHERE ID_OBJECT = #{idObject,javaType=java.io.Serializable}
@@ -30,19 +13,5 @@
 		DELETE FROM T_ERROR
 		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
 	</delete>
-
-	<select id="pingDB">
-		select sysdate from dual
-	</select>
-
-	<select id="searchErrorsByIdObject" resultMap="errorEntityResult">
-		SELECT * FROM T_ERROR
-		WHERE ID_OBJECT = #{idObject,javaType=java.io.Serializable}
-	</select>
-
-	<select id="findById" resultMap="errorEntityResult">
-		SELECT * FROM T_ERROR
-		WHERE ID = #{id,javaType=java.io.Serializable}
-	</select>
 
 </mapper>
