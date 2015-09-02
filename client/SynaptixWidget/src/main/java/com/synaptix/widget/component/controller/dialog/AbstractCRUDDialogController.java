@@ -189,6 +189,8 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 
 	@Override
 	public boolean hasChanged(E e1, E e2) {
+		cleanEntity(e1);
+		cleanEntity(e2);
 		return !equalComponent(e1, e2);
 	}
 
