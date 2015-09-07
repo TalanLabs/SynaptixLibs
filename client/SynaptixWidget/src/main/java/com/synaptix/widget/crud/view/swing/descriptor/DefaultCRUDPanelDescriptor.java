@@ -88,7 +88,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		cloneAction.setEnabled(false);
 
 		if (getCRUDManagementController().hasAuthWrite()) {
-			editAction = new EditAction();
+			editAction = buildEditAction();
 		} else {
 			editAction = new ShowAction();
 		}
@@ -96,6 +96,13 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 		deleteAction = new DeleteAction();
 		deleteAction.setEnabled(false);
+	}
+
+	/**
+	 * Build edit action. Default is a simple "Edit..." button which calls showEntity(selectedComponent)
+	 */
+	protected Action buildEditAction() {
+		return new EditAction();
 	}
 
 	@Override
