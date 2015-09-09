@@ -10,6 +10,12 @@
 	<artifactId>gwt</artifactId>
 	<packaging>pom</packaging>
 	<name>Synaptix - GWT</name>
+	<properties>
+		<root-directory>${project.basedir}/..</root-directory>
+		<target.jdk>1.7</target.jdk>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<!-- Google Web Toolkit dependencies -->
 		<dependency>
