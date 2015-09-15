@@ -24,7 +24,7 @@ public class EnumViewHelper {
 	/**
 	 * Returns a renderer to translate enumeration into understandable local meaning for user. This renderer is not case sensitive: it accepts lowercase and uppercase. If the code is not found, the
 	 * renderer returns "?".
-	 * 
+	 *
 	 * @param clazz
 	 *            column type
 	 * @param map
@@ -36,6 +36,15 @@ public class EnumViewHelper {
 			@Override
 			public String getString(T t) {
 				return EnumViewHelper.getString(t, map, null);
+			}
+		});
+	}
+
+	public static final <T> TypeGenericSubstanceTableCellRenderer<T> createEnumWithCodeTableCellRenderer(Class<T> clazz, final Map<String, String> map) {
+		return new TypeGenericSubstanceTableCellRenderer<T>(new GenericObjectToString<T>() {
+			@Override
+			public String getString(T t) {
+				return (t != null ? t + " - " : "") + EnumViewHelper.getString(t, map, null);
 			}
 		});
 	}
