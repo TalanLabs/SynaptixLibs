@@ -2,6 +2,7 @@ package com.synaptix.widget.view.swing;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
@@ -48,14 +49,14 @@ public class GlobalListener {
 					MouseEvent me = (MouseEvent) e;
 					if ((me.getID() == MouseEvent.MOUSE_CLICKED) && (me.getButton() == MouseEvent.BUTTON2)) {
 						Component component = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
-						dispatchMouseClicOnComponent(component);
+						dispatchMouseClicOnComponent(component, me.getX(), me.getY());
 					}
 				}
 			}
 		}, eventMask);
 	}
 
-	private void dispatchMouseClicOnComponent(Component component) {
+	private void dispatchMouseClicOnComponent(Object object, int x, int y) {
 		if ((constantsBundleManager == null) || (defaultConstantsLocaleSession == null)) {
 			return;
 		}
@@ -63,28 +64,46 @@ public class GlobalListener {
 			String text = null;
 
 			try {
-				Method method = component.getClass().getMethod("getText", new Class[0]);
+				Method method = object.getClass().getMethod("getText", new Class[0]);
 				if (method != null) {
-					text = (String) method.invoke(component, new Object[0]);
+					text = (String) method.invoke(object, new Object[0]);
 				}
 			} catch (Exception e) {
 			}
 			if (text == null) {
 				try {
-					Method method = component.getClass().getMethod("getTitle", new Class[0]);
+					Method method = object.getClass().getMethod("getTitle", new Class[0]);
 					if (method != null) {
-						text = (String) method.invoke(component, new Object[0]);
+						text = (String) method.invoke(object, new Object[0]);
 					}
 				} catch (Exception e) {
 				}
 			}
-			if ((text == null) && (component instanceof JComponent)) {
-				text = (String) ((JComponent) component).getClientProperty(JComponent.TOOL_TIP_TEXT_KEY);
-			}
-			if ((text == null) && (component instanceof JComboBox)) {
+			if (text == null) {
 				try {
-					JComboBox comboBox = (JComboBox) component;
-					dispatchMouseClicOnComponent(comboBox.getRenderer().getListCellRendererComponent(new JList(comboBox.getSelectedObjects()), comboBox.getSelectedItem(), -1, true, false));
+					Method method = object.getClass().getMethod("getHeaderValue", new Class[0]);
+					if (method != null) {
+						text = (String) method.invoke(object, new Object[0]);
+					}
+				} catch (Exception e) {
+				}
+			}
+			if ((text == null) && (object instanceof JComponent)) {
+				text = (String) ((JComponent) object).getClientProperty(JComponent.TOOL_TIP_TEXT_KEY);
+			}
+			if ((text == null) && (object instanceof JComboBox)) {
+				try {
+					JComboBox comboBox = (JComboBox) object;
+					dispatchMouseClicOnComponent(comboBox.getRenderer().getListCellRendererComponent(new JList(comboBox.getSelectedObjects()), comboBox.getSelectedItem(), -1, true, false), x, y);
+					return;
+				} catch (Exception e) {
+				}
+			}
+			if ((text == null) && (object instanceof JList)) {
+				try {
+					JList list = (JList) object;
+					int index = list.locationToIndex(new Point(x, y));
+					dispatchMouseClicOnComponent(list.getModel().getElementAt(index), x, y);
 					return;
 				} catch (Exception e) {
 				}

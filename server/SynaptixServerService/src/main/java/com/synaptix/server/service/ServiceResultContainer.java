@@ -111,7 +111,8 @@ public class ServiceResultContainer {
 	}
 
 	/**
-	 * Builds a IServiceResult with given object. Also builds a stack with resultCode and resultText, stored in getStackResult()
+	 * Builds a IServiceResult with given object. Also builds a stack with resultCode and resultText, stored in getStackResult()<br/>
+	 * If result text or the name of the service result is null, it shouldn't represent a level when unstacking
 	 */
 	public final <O> IServiceResult<O> compileResult(O object, String resultCode, String resultText) {
 		@SuppressWarnings("unchecked")

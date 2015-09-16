@@ -118,6 +118,9 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 
 		if ((crudDialogContext != null) && (hasChanged())) {
 			crudDialogContext.saveBean(close ? null : this);
+			if (!close) {
+				this.originalBean = ComponentHelper.clone(bean);
+			}
 		} else {
 			closeDialog();
 		}

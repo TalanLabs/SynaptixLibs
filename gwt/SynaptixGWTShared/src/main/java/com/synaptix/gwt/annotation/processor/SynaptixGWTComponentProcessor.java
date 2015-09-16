@@ -30,7 +30,7 @@ import com.synaptix.gwt.annotation.helper.ComponentBeanMethod;
 import com.synaptix.gwt.annotation.helper.ReflectionHelper;
 import com.synaptix.gwt.shared.component.IComponentDto;
 
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes("com.synaptix.gwt.annotation.SynaptixGWTComponent")
 public class SynaptixGWTComponentProcessor extends GenProcessor {
 
