@@ -139,7 +139,7 @@ public class PaginationMappedStatement {
 
 	/**
 	 * Build a count sql
-	 * 
+	 *
 	 * @param componentClass
 	 * @param valueFilterMap
 	 * @return
@@ -194,7 +194,7 @@ public class PaginationMappedStatement {
 
 	/**
 	 * Build a select sql
-	 * 
+	 *
 	 * @param entityClass
 	 * @param valueFilterMap
 	 * @param sortOrders
@@ -246,7 +246,8 @@ public class PaginationMappedStatement {
 		componentSqlHelper.buildOrderJoinMap(sortOrders, joinMap, ed, null, "");
 
 		SQL sqlBuilder = new SQL();
-		sqlBuilder.SELECT("t.ROWID AS a_rowid");
+		String hint = componentSqlHelper.buildHint(ed, filterRootNode);
+		sqlBuilder.SELECT(hint + " t.ROWID AS a_rowid");
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
 		sqlBuilder.FROM(new StringBuilder(sqlTableName).append(" t").toString());
 
@@ -256,6 +257,8 @@ public class PaginationMappedStatement {
 		if (whereFilters != null && !whereFilters.isEmpty()) {
 			sqlBuilder.WHERE(whereFilters);
 		}
+
+		// TODO
 
 		componentSqlHelper.orderBy(sqlBuilder, sortOrders, joinMap, ed);
 

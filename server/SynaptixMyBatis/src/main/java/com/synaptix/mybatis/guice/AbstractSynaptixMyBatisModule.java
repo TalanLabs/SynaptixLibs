@@ -15,6 +15,7 @@ import com.synaptix.component.IComponent;
 import com.synaptix.entity.IEntity;
 import com.synaptix.mybatis.cache.LinkCache;
 import com.synaptix.mybatis.dao.listener.IEntitySaveOrUpdateListener;
+import com.synaptix.mybatis.helper.HintProcess;
 
 public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
@@ -28,7 +29,9 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
 	private MapBinder<Integer, Class<?>> mapperMapBinder;
 
-	private final MapBinder<Class<? extends IEntity>, IEntitySaveOrUpdateListener<?>> getEntitySaveOrUpdateListenerMapBinder() {
+	private Multibinder<HintProcess> hintProcessMultibinder;
+
+	private MapBinder<Class<? extends IEntity>, IEntitySaveOrUpdateListener<?>> getEntitySaveOrUpdateListenerMapBinder() {
 		if (entitySaveOrUpdateListenerMapBinder == null) {
 			entitySaveOrUpdateListenerMapBinder = MapBinder.newMapBinder(binder(), new TypeLiteral<Class<? extends IEntity>>() {
 			}, new TypeLiteral<IEntitySaveOrUpdateListener<?>>() {
@@ -37,7 +40,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 		return entitySaveOrUpdateListenerMapBinder;
 	}
 
-	private final Multibinder<TypeHandler<?>> getTypeHandlerMultibinder() {
+	private Multibinder<TypeHandler<?>> getTypeHandlerMultibinder() {
 		if (typeHandlerMultibinder == null) {
 			typeHandlerMultibinder = Multibinder.newSetBinder(binder(), new TypeLiteral<TypeHandler<?>>() {
 			});
@@ -45,14 +48,14 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 		return typeHandlerMultibinder;
 	}
 
-	private final Multibinder<LinkCache> getLinkCacheMultibinder() {
+	private Multibinder<LinkCache> getLinkCacheMultibinder() {
 		if (linkCacheMultibinder == null) {
 			linkCacheMultibinder = Multibinder.newSetBinder(binder(), LinkCache.class);
 		}
 		return linkCacheMultibinder;
 	}
 
-	private final MapBinder<Integer, Class<?>> getMapperMapBinder() {
+	private MapBinder<Integer, Class<?>> getMapperMapBinder() {
 		if (mapperMapBinder == null) {
 			mapperMapBinder = MapBinder.newMapBinder(binder(), new TypeLiteral<Integer>() {
 			}, new TypeLiteral<Class<?>>() {
@@ -61,9 +64,17 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 		return mapperMapBinder;
 	}
 
+	private Multibinder<HintProcess> getHintProcessBinder() {
+		if (hintProcessMultibinder == null) {
+			hintProcessMultibinder = Multibinder.newSetBinder(binder(), new TypeLiteral<HintProcess>() {
+			});
+		}
+		return hintProcessMultibinder;
+	}
+
 	/**
 	 * Adds the user defined mapper classes.
-	 * 
+	 *
 	 * @param mapperClasses
 	 *            the user defined mapper classes.
 	 */
@@ -73,7 +84,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param <T>
 	 * @param mapperType
 	 */
@@ -84,7 +95,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
 	/**
 	 * Add type handler
-	 * 
+	 *
 	 * @param javaTypeClass
 	 * @param typeHandlerClass
 	 */
@@ -94,7 +105,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
 	/**
 	 * Add link cache, if link class is cleared then parentClass is clear
-	 * 
+	 *
 	 * @param parentClass
 	 * @param linkClass
 	 */
@@ -104,11 +115,20 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
 	/**
 	 * Add entity save listener
-	 * 
+	 *
 	 * @param entityClass
 	 * @param entitySaveOrUpdateListenerClass
 	 */
 	protected final <E extends IEntity> void addEntitySaveOrUpdateListener(Class<E> entityClass, Class<? extends IEntitySaveOrUpdateListener<E>> entitySaveOrUpdateListenerClass) {
 		getEntitySaveOrUpdateListenerMapBinder().addBinding(entityClass).to(entitySaveOrUpdateListenerClass).in(Singleton.class);
+	}
+
+	/**
+	 * Add a hint process
+	 * 
+	 * @param hintProcessClass
+	 */
+	protected final <E extends HintProcess> void addHintProcess(Class<E> hintProcessClass) {
+		getHintProcessBinder().addBinding().to(hintProcessClass).in(Singleton.class);
 	}
 }
