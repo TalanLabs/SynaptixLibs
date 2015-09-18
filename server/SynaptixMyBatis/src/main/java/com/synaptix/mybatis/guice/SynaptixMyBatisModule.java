@@ -3,14 +3,11 @@ package com.synaptix.mybatis.guice;
 import java.io.InputStream;
 import java.util.Locale;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
-import com.google.inject.Inject;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
@@ -20,11 +17,9 @@ import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.component.mapper.ComponentMapperManager;
 import com.synaptix.mybatis.dao.DaoUserSessionManager;
 import com.synaptix.mybatis.dao.IDaoSession;
-import com.synaptix.mybatis.dao.IDaoSessionExt;
 import com.synaptix.mybatis.dao.IDaoUserContext;
 import com.synaptix.mybatis.dao.IGUIDGenerator;
 import com.synaptix.mybatis.dao.IReadDaoSession;
-import com.synaptix.mybatis.dao.exceptions.VersionConflictDaoException;
 import com.synaptix.mybatis.dao.impl.DefaultDaoSession;
 import com.synaptix.mybatis.dao.impl.DefaultGUIDGenerator;
 import com.synaptix.mybatis.dao.impl.MapperCacheLocal;
@@ -71,8 +66,6 @@ import com.synaptix.mybatis.service.Transactional;
 import com.synaptix.server.service.guice.AbstractSynaptixServerServiceModule;
 import com.synaptix.service.IComponentService;
 import com.synaptix.service.IEntityService;
-import com.synaptix.service.ServiceException;
-import com.synaptix.service.exceptions.VersionConflictServiceException;
 
 public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
@@ -173,40 +166,5 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		requestInjection(transactionnelMethodInterceptor);
 
 		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class), transactionnelMethodInterceptor);
-	}
-
-	private class TransactionnelMethodInterceptor implements MethodInterceptor {
-
-		@Inject
-		private IDaoSession daoSession;
-
-		@Inject
-		private SqlSessionManager sqlSessionManager;
-
-		@Override
-		public Object invoke(MethodInvocation invocation) throws Throwable {
-			Transactional transactionnel = invocation.getMethod().getAnnotation(Transactional.class);
-			try {
-				if (daoSession instanceof IDaoSessionExt) {
-					if (!sqlSessionManager.isManagedSessionStarted()) {
-						((IDaoSessionExt) daoSession).setCheckVersionConflictDaoExceptionInSession(transactionnel.checkVersionConflict());
-					}
-				}
-				daoSession.begin();
-				Object res = invocation.proceed();
-				if (transactionnel.commit()) {
-					daoSession.commit();
-				}
-				return res;
-			} catch (ServiceException e) {
-				throw e;
-			} catch (VersionConflictDaoException e) {
-				throw new VersionConflictServiceException();
-			} catch (Exception e) {
-				throw new ServiceException("", e.getMessage(), e);
-			} finally {
-				daoSession.end();
-			}
-		}
 	}
 }

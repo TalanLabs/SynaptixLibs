@@ -14,7 +14,7 @@
 			</dataSource>
 		</environment>
 		<environment id="oracle_thin">
-			<transactionManager type="SYNAPTIX_JDBC" />
+			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
 				<property name="url" value="jdbc:oracle:thin:@gelabpscddb01:1521:DPSC" />
