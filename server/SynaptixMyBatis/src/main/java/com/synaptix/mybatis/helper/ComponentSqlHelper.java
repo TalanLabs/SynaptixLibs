@@ -54,6 +54,9 @@ public class ComponentSqlHelper {
 	@Inject
 	private NodeProcessFactory nodeProcessFactory;
 
+	@Inject(optional = true)
+	private Set<HintProcess> hintProcesses;
+
 	@Inject
 	public ComponentSqlHelper() {
 		super();
@@ -73,7 +76,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Clean value filter map, remove null or empty value
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @return
 	 */
@@ -91,7 +94,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * true if value filter map is no dependency value for build sql
-	 * 
+	 *
 	 * @param valueFilterMap
 	 * @return
 	 */
@@ -181,7 +184,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get a field column name, format MyBatis ex : #{toto}
-	 * 
+	 *
 	 * @param field
 	 * @return
 	 */
@@ -215,7 +218,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get the table name with schema if available
-	 * 
+	 *
 	 * @param ed
 	 * @return
 	 */
@@ -233,7 +236,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get the column name for property name
-	 * 
+	 *
 	 * @param cd
 	 * @param propertyName
 	 * @return
@@ -289,7 +292,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Build a where filter
-	 * 
+	 *
 	 * @param prefix
 	 * @param operator
 	 * @param joinMap
@@ -515,7 +518,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Create order by
-	 * 
+	 *
 	 * @param sqlBuilder
 	 * @param sortOrders
 	 * @param joinMap
@@ -620,7 +623,7 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Transform value in filter
-	 * 
+	 *
 	 * @param componentClass
 	 * @param valueFilterMap
 	 * @return
@@ -648,9 +651,9 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Builds a map for joins<br>
-	 * 
+	 *
 	 * @param valueFilterMap
-	 * 
+	 *
 	 * @param ed
 	 * @return
 	 */
@@ -1108,6 +1111,34 @@ public class ComponentSqlHelper {
 
 	public <E extends IComponent> IFilterContext createFilterContext(Class<E> componentClass, Map<String, Join> joinMap) {
 		return new MyFilterContext<E>(nodeProcessFactory, componentClass, joinMap);
+	}
+
+	public String buildHint(ComponentDescriptor componentDescriptor, Map<String, Object> valueFilterMap) {
+		if (hintProcesses != null) {
+			Iterator<HintProcess> ite = hintProcesses.iterator();
+			while (ite.hasNext()) {
+				HintProcess hintProcess = ite.next();
+				String hint = hintProcess.buildHint(componentDescriptor, valueFilterMap);
+				if (hint != null) {
+					return hint;
+				}
+			}
+		}
+		return "";
+	}
+
+	public String buildHint(ComponentDescriptor componentDescriptor, RootNode rootNode) {
+		if (hintProcesses != null) {
+			Iterator<HintProcess> ite = hintProcesses.iterator();
+			while (ite.hasNext()) {
+				HintProcess hintProcess = ite.next();
+				String hint = hintProcess.buildHint(componentDescriptor, rootNode);
+				if (hint != null) {
+					return hint;
+				}
+			}
+		}
+		return "";
 	}
 
 	private class MyFilterContext<E extends IComponent> extends AbstractFilterContext {
