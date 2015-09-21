@@ -63,12 +63,22 @@ public class DefaultCRUDWithChildrenPanelDescriptor<G extends IEntity, C extends
 
 	public DefaultCRUDWithChildrenPanelDescriptor(RibbonData ribbonData, ConstantsWithLookingBundle constantsWithLookingBundle, String[] filterColumns, String[] tableColumns,
 			Class<C> childComponentClass, ConstantsWithLookingBundle childConstantsWithLookingBundle, String[] childTableColumns) {
-		this(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, childComponentClass, childConstantsWithLookingBundle, childTableColumns, false);
+		this(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, null, childComponentClass, childConstantsWithLookingBundle, childTableColumns, false);
 	}
 
 	public DefaultCRUDWithChildrenPanelDescriptor(RibbonData ribbonData, ConstantsWithLookingBundle constantsWithLookingBundle, String[] filterColumns, String[] tableColumns,
 			Class<C> childComponentClass, ConstantsWithLookingBundle childConstantsWithLookingBundle, String[] childTableColumns, boolean displayEditOnly) {
-		super(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, displayEditOnly);
+		this(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, null, childComponentClass, childConstantsWithLookingBundle, childTableColumns, displayEditOnly);
+	}
+
+	public DefaultCRUDWithChildrenPanelDescriptor(RibbonData ribbonData, ConstantsWithLookingBundle constantsWithLookingBundle, String[] filterColumns, String[] tableColumns,
+			String[] defaultHiddenColumns, Class<C> childComponentClass, ConstantsWithLookingBundle childConstantsWithLookingBundle, String[] childTableColumns) {
+		this(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, null, childComponentClass, childConstantsWithLookingBundle, childTableColumns, false);
+	}
+
+	public DefaultCRUDWithChildrenPanelDescriptor(RibbonData ribbonData, ConstantsWithLookingBundle constantsWithLookingBundle, String[] filterColumns, String[] tableColumns,
+			String[] defaultHiddenColumns, Class<C> childComponentClass, ConstantsWithLookingBundle childConstantsWithLookingBundle, String[] childTableColumns, boolean displayEditOnly) {
+		super(ribbonData, constantsWithLookingBundle, filterColumns, tableColumns, defaultHiddenColumns, displayEditOnly);
 
 		this.childComponentClass = childComponentClass;
 		this.childConstantsWithLookingBundle = childConstantsWithLookingBundle;
