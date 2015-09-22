@@ -71,7 +71,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Create count pagination parameter
-	 * 
+	 *
 	 * @param componentClass
 	 * @param valueFilterMap
 	 * @return
@@ -84,7 +84,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Get count pagination mapped statement
-	 * 
+	 *
 	 * @param componentClass
 	 * @return
 	 */
@@ -111,7 +111,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Create select pagination parameter
-	 * 
+	 *
 	 * @param componentClass
 	 * @param valueFilterMap
 	 * @param from
@@ -131,7 +131,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Get select pagination mapped statement
-	 * 
+	 *
 	 * @param componentClass
 	 * @param columns
 	 * @param maxRow
@@ -164,7 +164,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Build a count sql
-	 * 
+	 *
 	 * @param componentClass
 	 * @param valueFilterMap
 	 * @return
@@ -238,7 +238,7 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Build a select sql
-	 * 
+	 *
 	 * @param entityClass
 	 * @param valueFilterMap
 	 * @param sortOrders
@@ -295,7 +295,8 @@ public class SimplePaginationMappedStatement {
 		componentSqlHelper.buildOrderJoinMap(sortOrders, joinMap, ed, null, "");
 
 		SQL sqlBuilder = new SQL();
-		sqlBuilder.SELECT("t.ROWID AS a_rowid");
+		String hint = componentSqlHelper.buildHint(ed, valueFilterMap);
+		sqlBuilder.SELECT(hint + " t.ROWID AS a_rowid");
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
 		sqlBuilder.FROM(new StringBuilder(sqlTableName).append(" t").toString());
 

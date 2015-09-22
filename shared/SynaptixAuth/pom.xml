@@ -1,14 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	 <parent>
-    <groupId>com.synaptix</groupId>
-    <artifactId>shared</artifactId>
-    <version>4.2.11-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+	<parent>
+		<groupId>com.synaptix</groupId>
+		<artifactId>shared</artifactId>
+		<version>4.2.11-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	<artifactId>SynaptixAuth</artifactId>
 	<name>Synaptix - Shared - Auth</name>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -17,6 +18,20 @@
 				<configuration>
 					<compilerArgument>-proc:none</compilerArgument>
 				</configuration>
+			</plugin>
+			<!-- GWT Maven Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test</goal>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -81,6 +81,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	@Inject
 	private IGUIDGenerator guidGenerator;
 
+	@Inject
+	private ITodoService todoService;
+
 	/**
 	 * Clusters that should be restarted in task manager
 	 */
@@ -90,9 +93,6 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	public TaskManagerServiceDelegate() {
 		super();
 	}
-	
-	@Inject
-	private ITodoService todoService;
 
 	private TaskMapper getTaskMapper() {
 		return getMapper(TaskMapper.class);
@@ -506,8 +506,10 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Create IAssoTaskPreviousTask.
 	 * 
-	 * @param idFirstTask will be set as previous task in the association.
-	 * @param idNextTask will be set as task in the association.
+	 * @param idFirstTask
+	 *            will be set as previous task in the association.
+	 * @param idNextTask
+	 *            will be set as task in the association.
 	 */
 	private void linkTwoTasks(Serializable idFirstTask, Serializable idNextTask) {
 		getAssoTaskPreviousTaskMapper().insertAssoTaskPreviousTask(new AssoTaskPreviousTaskBuilder().idTask(idNextTask).idPreviousTask(idFirstTask).build());
@@ -703,7 +705,6 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 			todo.setStatus(null);
 			break;
 		}
-
 
 		return todo;
 	}
