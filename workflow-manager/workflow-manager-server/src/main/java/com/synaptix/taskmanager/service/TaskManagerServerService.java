@@ -352,7 +352,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			if (StringUtils.isBlank(task.getResultDesc())) { // if result desc is null, we use the one from the first stack
 				task.setResultDesc(stackResult.getResultText());
 			}
-			if (task.getTaskType().getResultDepth() > 0) {
+			if ((task.getTaskType().getResultDepth() > 0) || (task.getTaskType().getResultDepth() == -1)) {
 				StringBuilder sb = new StringBuilder();
 				buildStack(stackResult, 0, task.getTaskType().getResultDepth(), sb);
 				task.setResultDetail(StringUtils.left(sb.toString(), 4000));
