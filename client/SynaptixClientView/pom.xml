@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>client</artifactId>
 		<groupId>com.synaptix</groupId>
-		<version>4.2.11</version>
+		<version>4.2.12-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>SynaptixClientView</artifactId>
