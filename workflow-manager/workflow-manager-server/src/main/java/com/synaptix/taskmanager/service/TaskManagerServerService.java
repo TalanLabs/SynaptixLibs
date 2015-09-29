@@ -32,9 +32,6 @@ import com.synaptix.taskmanager.dao.mapper.TaskMapper;
 import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;
 import com.synaptix.taskmanager.manager.TaskServiceDiscovery;
 import com.synaptix.taskmanager.manager.taskservice.ITaskService;
-import com.synaptix.component.model.IError;
-import com.synaptix.component.model.IServiceResult;
-import com.synaptix.component.model.IStackResult;
 import com.synaptix.taskmanager.model.IStatusGraph;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskCluster;
@@ -368,7 +365,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		updateTask(task);
 	}
 
-	private final void buildStack(IStackResult stackResult, int currentResultDepth, final int maxResultDepth, StringBuilder sb) {
+	private void buildStack(IStackResult stackResult, int currentResultDepth, final int maxResultDepth, StringBuilder sb) {
 		if ((stackResult.getClassName() != null) && (stackResult.getResultText() != null)) { // if resultText is null, we ignore that level
 			if (sb.length() > 0) {
 				sb.append("\n");
