@@ -84,4 +84,13 @@ public interface ITaskManagerService {
 	public void saveErrors(ITask task, Set<IError> errors);
 
 	public ITask selectCurrentTaskByIdObject(Serializable idObject);
+
+	/**
+	 * Returns the shortest path between two statuses.
+	 *
+	 * @param currentStatus start status
+	 * @param nextStatus target status
+	 * @return Empty String if no path was found
+	 */
+	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus);
 }
