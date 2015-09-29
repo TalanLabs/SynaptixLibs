@@ -19,6 +19,9 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import com.google.inject.Inject;
 import com.synaptix.common.helper.CollectionHelper;
 import com.synaptix.component.factory.ComponentFactory;
+import com.synaptix.component.model.IError;
+import com.synaptix.component.model.IServiceResult;
+import com.synaptix.component.model.IStackResult;
 import com.synaptix.mybatis.dao.exceptions.VersionConflictDaoException;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.mybatis.service.EntityServerService;
@@ -249,14 +252,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (Serializable idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
@@ -356,7 +359,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			if (StringUtils.isBlank(task.getResultDesc())) { // if result desc is null, we use the one from the first stack
 				task.setResultDesc(stackResult.getResultText());
 			}
-			if (task.getTaskType().getResultDepth() > 0) {
+			if ((task.getTaskType().getResultDepth() > 0) || (task.getTaskType().getResultDepth() == -1)) {
 				StringBuilder sb = new StringBuilder();
 				buildStack(stackResult, 0, task.getTaskType().getResultDepth(), sb);
 				task.setResultDetail(StringUtils.left(sb.toString(), 4000));
@@ -383,7 +386,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		} else {
 			currentResultDepth -= 1;
 		}
-		if (currentResultDepth + 1 < maxResultDepth) {
+		if ((maxResultDepth == -1) || (currentResultDepth + 1 < maxResultDepth)) {
 			if (CollectionHelper.isNotEmpty(stackResult.getStackResultList())) {
 				for (IStackResult child : stackResult.getStackResultList()) {
 					buildStack(child, currentResultDepth + 1, maxResultDepth, sb);
