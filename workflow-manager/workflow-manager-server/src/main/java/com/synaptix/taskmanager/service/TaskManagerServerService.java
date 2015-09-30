@@ -32,7 +32,6 @@ import com.synaptix.taskmanager.dao.mapper.TaskMapper;
 import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;
 import com.synaptix.taskmanager.manager.TaskServiceDiscovery;
 import com.synaptix.taskmanager.manager.taskservice.ITaskService;
-import com.synaptix.taskmanager.model.IStatusGraph;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskCluster;
 import com.synaptix.taskmanager.model.ITaskObject;
@@ -59,8 +58,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	@Inject
 	private TaskServiceDiscovery taskServiceDiscovery;
 
-	@Inject
-	private StatusGraphServerService statusGraphServerService;
 
 	private static final Log LOG = LogFactory.getLog(TaskManagerServerService.class);
 
@@ -249,14 +246,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (Serializable idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
@@ -504,56 +501,9 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		return getTaskMapper().selectCurrentTaskByIdObject(idObject);
 	}
 
-
 	@Override
+	@Transactional
 	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus) {
-		List<IStatusGraph> statusGraphs = statusGraphServerService.findStatusGraphsBy(taskObjectClass);
-		return getStatusesPaths(statusGraphs, currentStatus, nextStatus);
-	}
-
-
-	protected String getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus) {
-		List<String> statusesPath = getStatusesPaths(statusGraphs, currentStatus, nextStatus, "");
-		if (CollectionUtils.isEmpty(statusesPath)) {
-			return "";
-		}
-
-		String result = statusesPath.get(0);
-		for (String s : statusesPath) {
-			if (s.length() < result.length()) {
-				result = s;
-			}
-		}
-
-		return result.trim();
-	}
-
-	private List<String> getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus, String path) {
-		List<String> nextStatuses = getNextStatuses(statusGraphs, currentStatus);
-		List<String> result = new ArrayList<String>();
-
-		if (CollectionUtils.isEmpty(nextStatuses)) {
-			return result;
-		}
-
-		for (String status : nextStatuses) {
-			if (status.equals(nextStatus)) {
-				result.add(path + " " + status);
-			}
-			List<String> statusesPaths = getStatusesPaths(statusGraphs, status, nextStatus, path + " " + status);
-			result.addAll(statusesPaths);
-		}
-
-		return result;
-	}
-
-	private List<String> getNextStatuses(List<IStatusGraph> statusGraphs, String status) {
-		List<String> statuses = new ArrayList<String>();
-		for (IStatusGraph statusGraph : statusGraphs) {
-			if (status.equals(statusGraph.getCurrentStatus())) {
-				statuses.add(statusGraph.getNextStatus());
-			}
-		}
-		return statuses;
+		return taskManagerServiceDelegate.getStatusPath(taskObjectClass, currentStatus, nextStatus);
 	}
 }

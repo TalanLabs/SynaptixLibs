@@ -6,10 +6,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;
 import com.synaptix.taskmanager.model.IStatusGraph;
 import com.synaptix.taskmanager.model.StatusGraphBuilder;
 
-public class TaskManagerServerServiceTest {
+public class TaskManagerServiceDelegateTest {
 
 	@Test
 	public void testGetStatusesPath() throws Exception {
@@ -21,26 +22,26 @@ public class TaskManagerServerServiceTest {
 		statusGraphs.add(new StatusGraphBuilder().currentStatus("CUR").nextStatus("EXE").build());
 		statusGraphs.add(new StatusGraphBuilder().currentStatus("EXE").nextStatus("CLO").build());
 
-		TaskManagerServerService taskManagerServerService = new TaskManagerServerService();
-		String result = taskManagerServerService.getStatusesPaths(statusGraphs, "TIC", "FAI");
+		TaskManagerServiceDelegate taskManagerServiceDelegate = new TaskManagerServiceDelegate();
+		String result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "TIC", "FAI");
 		Assert.assertEquals("FAI",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "TIC", "CLO");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "TIC", "CLO");
 		Assert.assertEquals("CUR EXE CLO",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "VAL", "CLO");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "CLO");
 		Assert.assertEquals("TIC CUR EXE CLO",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "VAL", "FAI");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "FAI");
 		Assert.assertEquals("TIC FAI",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "VAL", "EXE");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "EXE");
 		Assert.assertEquals("TIC CUR EXE",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "CLO", "EXE");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "CLO", "EXE");
 		Assert.assertEquals("",result);
 
-		result = taskManagerServerService.getStatusesPaths(statusGraphs, "FAI", "FAI");
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "FAI", "FAI");
 		Assert.assertEquals("",result);
 	}
 }

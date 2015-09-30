@@ -84,6 +84,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	@Inject
 	private ITodoService todoService;
 
+	@Inject
+	private StatusGraphServiceDelegate statusGraphServiceDelegate;
+
 	/**
 	 * Clusters that should be restarted in task manager
 	 */
@@ -159,8 +162,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Add task object to cluster.
 	 *
-	 * @param deleteOldTaskCluster
-	 *            If true and task object was already linked to a task cluster, this cluster will be deleted.
+	 * @param deleteOldTaskCluster If true and task object was already linked to a task cluster, this cluster will be deleted.
 	 */
 	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject, boolean deleteOldTaskCluster) {
 		if (idTaskCluster == null || taskObject == null || taskObject.getId() == null) {
@@ -505,11 +507,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 
 	/**
 	 * Create IAssoTaskPreviousTask.
-	 * 
-	 * @param idFirstTask
-	 *            will be set as previous task in the association.
-	 * @param idNextTask
-	 *            will be set as task in the association.
+	 *
+	 * @param idFirstTask will be set as previous task in the association.
+	 * @param idNextTask  will be set as task in the association.
 	 */
 	private void linkTwoTasks(Serializable idFirstTask, Serializable idNextTask) {
 		getAssoTaskPreviousTaskMapper().insertAssoTaskPreviousTask(new AssoTaskPreviousTaskBuilder().idTask(idNextTask).idPreviousTask(idFirstTask).build());
@@ -667,10 +667,8 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 * Creates a todo. <br>
 	 * No daoSession is opened in this method.
 	 *
-	 * @param task
-	 *            Task that created the todo.
-	 * @param objectTypeTaskFactory
-	 *            IObjectTypeTaskFactory
+	 * @param task                  Task that created the todo.
+	 * @param objectTypeTaskFactory IObjectTypeTaskFactory
 	 * @return the new ITodo
 	 */
 	private ITodo createTodo(ITask task, TodoOwner owner, IObjectTypeTaskFactory<?> objectTypeTaskFactory, IEntity ownerEntity, IEntity contactEntity) {
@@ -1058,5 +1056,58 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 
 		List<ITask> allTasks;
 
+	}
+
+	/**
+	 * Get shortest status path between two statuses, as a string. Example : "CUR EXE CLO" Returns an empty string if no path was found.
+	 */
+	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus) {
+		List<IStatusGraph> statusGraphs = statusGraphServiceDelegate.findStatusGraphsBy(taskObjectClass);
+		return getStatusesPaths(statusGraphs, currentStatus, nextStatus);
+	}
+
+	public String getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus) {
+		List<String> statusesPath = getStatusesPaths(statusGraphs, currentStatus, nextStatus, "");
+		if (CollectionUtils.isEmpty(statusesPath)) {
+			return "";
+		}
+
+		String result = statusesPath.get(0);
+		for (String s : statusesPath) {
+			if (s.length() < result.length()) {
+				result = s;
+			}
+		}
+
+		return result.trim();
+	}
+
+	private List<String> getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus, String path) {
+		List<String> nextStatuses = getNextStatuses(statusGraphs, currentStatus);
+		List<String> result = new ArrayList<String>();
+
+		if (CollectionUtils.isEmpty(nextStatuses)) {
+			return result;
+		}
+
+		for (String status : nextStatuses) {
+			if (status.equals(nextStatus)) {
+				result.add(path + " " + status);
+			}
+			List<String> statusesPaths = getStatusesPaths(statusGraphs, status, nextStatus, path + " " + status);
+			result.addAll(statusesPaths);
+		}
+
+		return result;
+	}
+
+	private List<String> getNextStatuses(List<IStatusGraph> statusGraphs, String status) {
+		List<String> statuses = new ArrayList<String>();
+		for (IStatusGraph statusGraph : statusGraphs) {
+			if (status.equals(statusGraph.getCurrentStatus())) {
+				statuses.add(statusGraph.getNextStatus());
+			}
+		}
+		return statuses;
 	}
 }
