@@ -195,8 +195,12 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		} else {
 			cloneAction.setEnabled(false);
 			editAction.setEnabled(false);
-			deleteAction.setEnabled(false);
+			deleteAction.setEnabled(isMultiCancel() && getCRUDManagementController().hasAuthWrite());
 		}
+	}
+
+	protected boolean isMultiCancel() {
+		return false;
 	}
 
 	/**
@@ -313,7 +317,11 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			getCRUDManagementController().deleteEntity(getSelectedComponent());
+			if (isMultiCancel()) {
+				getCRUDManagementController().deleteEntities(getSelectedComponents());
+			} else {
+				getCRUDManagementController().deleteEntity(getSelectedComponent());
+			}
 		}
 	}
 }

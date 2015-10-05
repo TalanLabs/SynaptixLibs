@@ -1,5 +1,7 @@
 package com.synaptix.widget.crud.controller;
 
+import java.util.List;
+
 import com.synaptix.entity.IEntity;
 import com.synaptix.widget.component.controller.IComponentsManagementController;
 
@@ -46,6 +48,13 @@ public interface ICRUDManagementController<G extends IEntity> extends IComponent
 	 * @param paginationEntity
 	 */
 	public void deleteEntity(G paginationEntity);
+
+	/**
+	 * Delete many entities (only called if isMultiCancel returns true)
+	 *
+	 * @param paginationEntity
+	 */
+	public void deleteEntities(List<G> paginationEntityList);
 
 	/**
 	 * Has authorisation to write

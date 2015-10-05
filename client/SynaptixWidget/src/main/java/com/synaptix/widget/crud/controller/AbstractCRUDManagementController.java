@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.poi.ss.formula.eval.NotImplementedException;
+
 import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
 import com.synaptix.common.util.IResultCallback;
@@ -312,6 +314,11 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 				}
 			}
 		});
+	}
+
+	@Override
+	public void deleteEntities(List<G> paginationEntityList) {
+		throw new NotImplementedException("Multi cancel is not implemented");
 	}
 
 	protected void _deleteEntity(final E crudEntity) {
