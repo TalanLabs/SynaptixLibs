@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Table;
 
+import org.joda.time.LocalDate;
+
 import com.synaptix.component.annotation.SynaptixComponent;
 import com.synaptix.entity.IEntity;
 import com.synaptix.entity.ITracable;
@@ -32,4 +34,23 @@ public interface ITaskCluster extends ITracable, IEntity {
 	public List<ITaskClusterDependency> getTaskClusterDependencies();
 
 	public void setTaskClusterDependencies(List<ITaskClusterDependency> taskClusterDependencies);
+
+	/**
+	 * Archive date: day when cluster tasks were moved to T_TASK_ARCH
+	 */
+	@Column(name = "ARCHIVE_DATE")
+	@JdbcType(JdbcTypesEnum.DATE)
+	public LocalDate getArchiveDate();
+	
+	public void setArchiveDate(LocalDate archiveDate);
+
+	/**
+	 * True if cluster tasks have been archived, and deleted.
+	 */
+	@Column(name = "CHECK_TASK_ARCH_DELETED", length = 1)
+	@JdbcType(JdbcTypesEnum.CHAR)
+	public boolean isClusterDeleted();
+
+	public void setCheckTaskArchDeleted(boolean checkTaskArchDeleted);
+
 }

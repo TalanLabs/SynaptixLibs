@@ -93,4 +93,9 @@ public interface ITaskManagerService {
 	 * @return Empty String if no path was found
 	 */
 	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus);
+
+	/**
+	 * Delete an archived task cluster and all tasks that were linked to this cluster.
+	 */
+	void deleteTasksCluster(Serializable idCluster);
 }

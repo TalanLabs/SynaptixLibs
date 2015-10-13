@@ -506,4 +506,10 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus) {
 		return taskManagerServiceDelegate.getStatusPath(taskObjectClass, currentStatus, nextStatus);
 	}
+
+	@Override
+	@Transactional
+	public void deleteTasksCluster(Serializable idCluster) {
+		taskManagerServiceDelegate.deleteTasksCluster(idCluster);
+	}
 }

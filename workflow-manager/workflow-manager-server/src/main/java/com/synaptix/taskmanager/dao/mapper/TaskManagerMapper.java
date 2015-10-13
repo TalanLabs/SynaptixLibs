@@ -21,4 +21,5 @@ public interface TaskManagerMapper {
 
 	public List<ITaskBackup> findTasksBackupToLaunch(@Param("idProcess") Serializable idProcess);
 
+	public void deleteTaskCluster(@Param("idCluster") Serializable idCluster);
 }

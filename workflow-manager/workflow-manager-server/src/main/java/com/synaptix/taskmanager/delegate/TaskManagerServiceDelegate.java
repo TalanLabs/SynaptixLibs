@@ -1110,4 +1110,21 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		}
 		return statuses;
 	}
+
+	/**
+	 * Delete an archived task cluster, and all tasks that were linked to this cluster.
+	 */
+	public void deleteTasksCluster(Serializable idTaskCluster) {
+		if (idTaskCluster == null) {
+			return;
+		}
+		
+		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
+		if (taskCluster != null && !taskCluster.isClusterDeleted()) {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Delete cluster ID=" + taskCluster.getId());
+			}
+			getTaskManagerMapper().deleteTaskCluster(idTaskCluster);
+		}
+	}
 }
