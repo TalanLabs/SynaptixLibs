@@ -215,7 +215,7 @@ public class ComponentFactory {
 		if (!componentExtensionProcessorMap.containsKey(componentExtensionClass)) {
 			componentExtensionProcessorMap.put(componentExtensionClass, componentExtensionProcessor);
 		} else {
-			LOG.warn(componentExtensionClass + " already containts");
+			LOG.warn(componentExtensionClass + " already added");
 		}
 	}
 

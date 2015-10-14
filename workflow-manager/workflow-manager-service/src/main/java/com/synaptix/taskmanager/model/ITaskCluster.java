@@ -49,7 +49,7 @@ public interface ITaskCluster extends ITracable, IEntity {
 	 */
 	@Column(name = "CHECK_TASK_ARCH_DELETED", length = 1)
 	@JdbcType(JdbcTypesEnum.CHAR)
-	public boolean isClusterDeleted();
+	public boolean isCheckTaskArchDeleted();
 
 	public void setCheckTaskArchDeleted(boolean checkTaskArchDeleted);
 

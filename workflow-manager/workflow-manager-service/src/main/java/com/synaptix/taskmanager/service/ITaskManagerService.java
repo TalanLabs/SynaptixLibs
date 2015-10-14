@@ -49,7 +49,7 @@ public interface ITaskManagerService {
 	 * @param idTaskCluster
 	 * @param taskObject
 	 */
-	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject);
+	public abstract  <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject);
 
 	/**
 	 * Skip a task if skippable

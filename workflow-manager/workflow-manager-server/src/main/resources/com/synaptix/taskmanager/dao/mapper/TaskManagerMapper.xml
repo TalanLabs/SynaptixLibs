@@ -42,7 +42,7 @@
 		where id_process = #{idProcess,javaType=java.io.Serializable}
 	</select>
 
-	<update id="archiveTaskCluster">
+	<update id="deleteTaskCluster">
 		call p_task_manager.delete_task_cluster_arch(#{idCluster,javaType=java.io.Serializable})
 	</update>
 </mapper>

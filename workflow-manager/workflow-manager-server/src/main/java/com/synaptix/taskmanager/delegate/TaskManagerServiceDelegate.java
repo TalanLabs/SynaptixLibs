@@ -1118,9 +1118,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		if (idTaskCluster == null) {
 			return;
 		}
-		
+
 		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
-		if (taskCluster != null && !taskCluster.isClusterDeleted()) {
+		if (taskCluster != null && !taskCluster.isCheckTaskArchDeleted()) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Delete cluster ID=" + taskCluster.getId());
 			}

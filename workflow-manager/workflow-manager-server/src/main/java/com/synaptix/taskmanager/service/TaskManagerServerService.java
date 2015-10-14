@@ -508,8 +508,15 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
-	@Transactional
 	public void deleteTasksCluster(Serializable idCluster) {
-		taskManagerServiceDelegate.deleteTasksCluster(idCluster);
+		try {
+			getDaoSession().begin();
+			taskManagerServiceDelegate.deleteTasksCluster(idCluster);
+			getDaoSession().commit();
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		} finally {
+			getDaoSession().end();
+		}
 	}
 }
