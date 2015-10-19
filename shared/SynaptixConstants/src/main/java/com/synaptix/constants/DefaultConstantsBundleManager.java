@@ -22,9 +22,9 @@ import com.synaptix.constants.shared.LocalizableResource;
 
 /**
  * Default implementation ConstantsBundleManage
- * 
+ *
  * @author Gaby
- * 
+ *
  */
 public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
@@ -62,7 +62,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Get a current constants locale session
-	 * 
+	 *
 	 * @return
 	 */
 	public IConstantsLocaleSession getConstantsLocaleSession() {
@@ -177,7 +177,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Get a constants bundle proxy
-	 * 
+	 *
 	 * @param bundleName
 	 * @return
 	 */
@@ -187,7 +187,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Load a local properties, annotation
-	 * 
+	 *
 	 * @param locale
 	 * @param bundleClass
 	 * @return
@@ -201,7 +201,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Load a properties
-	 * 
+	 *
 	 * @param bundleName
 	 * @param locale
 	 * @return
@@ -246,7 +246,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Get a information for constant, description, meaning
-	 * 
+	 *
 	 * @param bundleName
 	 * @param key
 	 * @return
@@ -264,7 +264,7 @@ public class DefaultConstantsBundleManager extends ConstantsBundleManager {
 
 	/**
 	 * Get all information for bundle name
-	 * 
+	 *
 	 * @param bundleName
 	 * @return
 	 */
