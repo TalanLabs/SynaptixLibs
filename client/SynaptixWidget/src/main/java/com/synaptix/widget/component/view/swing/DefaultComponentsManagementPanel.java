@@ -39,7 +39,7 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 
 	/**
 	 * Get components management controller
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -68,7 +68,7 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 
 			this.dockingContext = dockingContext;
 
-			dockKey = new DockKey(getIdDockable(), desc.getTitle());
+			dockKey = new DockKey(desc.getIdDockable(), desc.getTitle());
 			dockKey.setFloatEnabled(true);
 			dockKey.setAutoHideEnabled(false);
 

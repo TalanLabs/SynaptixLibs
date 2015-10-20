@@ -32,19 +32,18 @@ public class EnumViewHelper {
 	 * @return
 	 */
 	public static final <T> TypeGenericSubstanceTableCellRenderer<T> createEnumTableCellRenderer(Class<T> clazz, final Map<String, String> map) {
-		return new TypeGenericSubstanceTableCellRenderer<T>(new GenericObjectToString<T>() {
-			@Override
-			public String getString(T t) {
-				return EnumViewHelper.getString(t, map, null);
-			}
-		});
+		return _createEnumTableCellRenderer(clazz, map, false);
 	}
 
 	public static final <T> TypeGenericSubstanceTableCellRenderer<T> createEnumWithCodeTableCellRenderer(Class<T> clazz, final Map<String, String> map) {
+		return _createEnumTableCellRenderer(clazz, map, true);
+	}
+
+	private static final <T> TypeGenericSubstanceTableCellRenderer<T> _createEnumTableCellRenderer(Class<T> clazz, final Map<String, String> map, final boolean withCode) {
 		return new TypeGenericSubstanceTableCellRenderer<T>(new GenericObjectToString<T>() {
 			@Override
 			public String getString(T t) {
-				return (t != null ? t + " - " : "") + EnumViewHelper.getString(t, map, null);
+				return (t != null && withCode ? t + " - " : "") + EnumViewHelper.getString(t, map, null);
 			}
 		});
 	}
@@ -117,6 +116,14 @@ public class EnumViewHelper {
 	}
 
 	public static final <E extends Enum<E>> JComboBox createEnumComboBox(E[] values, final Map<String, String> map, final boolean addNull) {
+		return _createEnumComboBox(values, map, addNull, false);
+	}
+
+	public static final <E extends Enum<E>> JComboBox createEnumComboBoxWithCode(E[] values, final Map<String, String> map, final boolean addNull) {
+		return _createEnumComboBox(values, map, addNull, true);
+	}
+
+	private static final <E extends Enum<E>> JComboBox _createEnumComboBox(E[] values, final Map<String, String> map, final boolean addNull, final boolean withCode) {
 		DefaultComboBoxModel listModel = new DefaultComboBoxModel();
 		if (addNull) {
 			listModel.addElement(null);
@@ -141,7 +148,7 @@ public class EnumViewHelper {
 		res.setRenderer(new TypeGenericSubstanceComboBoxRenderer<E>(res, new GenericObjectToString<E>() {
 			@Override
 			public String getString(E t) {
-				return EnumViewHelper.getString(t, map, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none());
+				return (t != null && withCode ? t + " - " : "") + EnumViewHelper.getString(t, map, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none());
 			}
 		}));
 		if (!addNull && values != null && values.length > 0) {
