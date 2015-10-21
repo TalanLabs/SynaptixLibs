@@ -40,14 +40,19 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 
 	private Boolean initialized;
 
+	@Inject(optional = true)
 	private Set<IImportProcessDefinition<?>> importProcessDefinitionSet;
 
+	@Inject(optional = true)
 	private Set<IExportProcessDefinition<?>> exportProcessDefinitionSet;
 
+	@Inject(optional = true)
 	private Set<IHeartbeatProcessDefinition> heartbeatProcessDefinitionSet;
 
+	@Inject(optional = true)
 	private Set<ICronProcessDefinition> cronProcessDefinitionSet;
 
+	@Inject(optional = true)
 	private Set<ISimpleProcessDefinition> simpleProcessDefinitionSet;
 
 	@Inject
@@ -63,16 +68,6 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 		this.implInjectorMap = new HashMap<Class<?>, Object>();
 
 		this.injector = injector;
-	}
-
-	@Inject
-	public void setProcessDefinitionSet(Set<IImportProcessDefinition<?>> importProcessDefinitionSet, Set<IExportProcessDefinition<?>> exportProcessDefinitionSet,
-			Set<IHeartbeatProcessDefinition> heartbeatProcessDefinitionSet, Set<ICronProcessDefinition> cronProcessDefinitionSet, Set<ISimpleProcessDefinition> simpleProcessDefinitionSet) {
-		this.importProcessDefinitionSet = importProcessDefinitionSet;
-		this.exportProcessDefinitionSet = exportProcessDefinitionSet;
-		this.heartbeatProcessDefinitionSet = heartbeatProcessDefinitionSet;
-		this.cronProcessDefinitionSet = cronProcessDefinitionSet;
-		this.simpleProcessDefinitionSet = simpleProcessDefinitionSet;
 	}
 
 	protected final synchronized void initIntegratorMap() {
@@ -126,7 +121,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 		if (!implAgentMap.containsKey(type)) {
 			int indexOf = agentList.indexOf(type);
 			if (indexOf < 0) {
-				throw new NotFoundAgentException(type.getName() + " not exist"); //$NON-NLS-1$	
+				throw new NotFoundAgentException(type.getName() + " not exist"); //$NON-NLS-1$
 			}
 			Agent agentImpl = injector.getInstance(agentList.get(indexOf));
 			implAgentMap.put(type, agentImpl);
@@ -141,7 +136,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 		if (!implInjectorMap.containsKey(type)) {
 			int indexOf = injectorList.indexOf(type);
 			if (indexOf < 0) {
-				throw new NotFoundInjectorException(type.getName() + " not exist"); //$NON-NLS-1$	
+				throw new NotFoundInjectorException(type.getName() + " not exist"); //$NON-NLS-1$
 			}
 			IInjector<?> injectorImpl = injector.getInstance(injectorList.get(indexOf));
 			implInjectorMap.put(type, injectorImpl);
