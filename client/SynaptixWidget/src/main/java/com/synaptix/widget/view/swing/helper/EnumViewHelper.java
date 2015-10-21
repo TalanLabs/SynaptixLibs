@@ -43,7 +43,8 @@ public class EnumViewHelper {
 		return new TypeGenericSubstanceTableCellRenderer<T>(new GenericObjectToString<T>() {
 			@Override
 			public String getString(T t) {
-				return (t != null && withCode ? t + " - " : "") + EnumViewHelper.getString(t, map, null);
+				String e = EnumViewHelper.getString(t, map, null);
+				return (t != null && withCode ? t + " - " : "") + (e != null ? e : "");
 			}
 		});
 	}
@@ -148,7 +149,8 @@ public class EnumViewHelper {
 		res.setRenderer(new TypeGenericSubstanceComboBoxRenderer<E>(res, new GenericObjectToString<E>() {
 			@Override
 			public String getString(E t) {
-				return (t != null && withCode ? t + " - " : "") + EnumViewHelper.getString(t, map, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none());
+				String e = EnumViewHelper.getString(t, map, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none());
+				return (t != null && withCode ? t + " - " : "") + (e != null ? e : "");
 			}
 		}));
 		if (!addNull && values != null && values.length > 0) {
