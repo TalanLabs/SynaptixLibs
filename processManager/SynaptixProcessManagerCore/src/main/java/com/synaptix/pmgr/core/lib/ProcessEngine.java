@@ -165,7 +165,8 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 			count++;
 			String registryRmiPort = properties.getProperty("engine" + id + ".rmiport", "1099");
 			try {
-				LocateRegistry.createRegistry(Integer.parseInt(registryRmiPort));
+				LocateRegistry.getRegistry(Integer.parseInt(registryRmiPort));
+				// LocateRegistry.createRegistry(Integer.parseInt(registryRmiPort));
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 			}
