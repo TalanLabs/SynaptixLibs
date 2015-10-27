@@ -498,6 +498,7 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 		try {
 			getInstance().shutdown();
 			count--;
+			engine = null;
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
