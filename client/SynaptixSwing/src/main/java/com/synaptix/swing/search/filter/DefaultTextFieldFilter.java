@@ -75,6 +75,7 @@ public class DefaultTextFieldFilter extends AbstractFilter {
 		this.name = name;
 		textField = new JSyTextField(maxLength, forceUppercase);
 		textField.setPreferredSize(new Dimension(width, textField.getPreferredSize().height));
+		textField.setName(id);
 
 		if (useDefault) {
 			defaultTextField = new JSyTextField(maxLength, forceUppercase);
