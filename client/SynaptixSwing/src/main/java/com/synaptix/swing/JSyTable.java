@@ -137,7 +137,7 @@ public class JSyTable extends JTable {
 
 	/**
 	 * Synaptix table
-	 * 
+	 *
 	 * @param tm
 	 *            tableModel
 	 * @param title
@@ -512,7 +512,7 @@ public class JSyTable extends JTable {
 
 	/**
 	 * Définie un excel renderer pour la class
-	 * 
+	 *
 	 * @param columnClass
 	 * @param excelColumnRenderer
 	 */
@@ -522,7 +522,7 @@ public class JSyTable extends JTable {
 
 	/**
 	 * Renvoie le renderer pour l'excel par defaut pour la class
-	 * 
+	 *
 	 * @param columnClass
 	 * @return
 	 */
@@ -541,7 +541,7 @@ public class JSyTable extends JTable {
 
 	/**
 	 * Renvoie le renderer excel pour la colonne affiché dans la vue
-	 * 
+	 *
 	 * @param column
 	 * @return
 	 */
@@ -598,8 +598,10 @@ public class JSyTable extends JTable {
 				list.add(fc.getRowFilter(this, c.getSearch(), c));
 			}
 		}
-		RowFilter<? super TableModel, ? super Integer> rowFilterAnd = RowFilter.andFilter(list);
-		sorter.setRowFilter(rowFilterAnd);
+		if (sorter != null) {
+			RowFilter<? super TableModel, ? super Integer> rowFilterAnd = RowFilter.andFilter(list);
+			sorter.setRowFilter(rowFilterAnd);
+		}
 
 		updateRowCountLabel();
 	}
@@ -1045,7 +1047,7 @@ public class JSyTable extends JTable {
 		if (mCurrentColumn != null) {
 			String name = this.getModel().getColumnName(mCurrentColumn.getModelIndex());
 
-			mMenuItemHide.setText(MessageFormat.format(SwingMessages.getString("JSyTable.0"), name)); //$NON-NLS-1$ 
+			mMenuItemHide.setText(MessageFormat.format(SwingMessages.getString("JSyTable.0"), name)); //$NON-NLS-1$
 
 			if (tcm.getColumnCount() == 1 || mCurrentColumn.isLock()) {
 				mMenuItemHide.setEnabled(false);

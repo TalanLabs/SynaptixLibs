@@ -9,7 +9,7 @@ import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.dao.mapper.EntitySql;
 
-public class AbstractDelegate {
+public abstract class AbstractDelegate {
 
 	private IDaoSession daoSession;
 
