@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionManager;
 
+import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
@@ -75,15 +76,23 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
 	private final Class<? extends IDaoUserContext> implUserContextClass;
 
+	private final Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass;
+
 	public SynaptixMyBatisModule(InputStream configInputStream, Class<? extends IDaoUserContext> implUserContextClass) {
 		this(configInputStream, Locale.FRENCH, implUserContextClass);
 	}
 
 	public SynaptixMyBatisModule(InputStream configInputStream, Locale defaultMeaningLocale, Class<? extends IDaoUserContext> implUserContextClass) {
+		this(configInputStream, defaultMeaningLocale, implUserContextClass, SynaptixConfigurationProvider.class);
+	}
+
+	public SynaptixMyBatisModule(InputStream configInputStream, Locale defaultMeaningLocale, Class<? extends IDaoUserContext> implUserContextClass,
+			Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass) {
 		super();
 		this.configInputStream = configInputStream;
 		this.defaultMeaningLocale = defaultMeaningLocale;
 		this.implUserContextClass = implUserContextClass;
+		this.configurationProviderClass = configurationProviderClass;
 	}
 
 	@Override
@@ -91,7 +100,7 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		bind(InputStream.class).annotatedWith(Names.named("configInputStream")).toInstance(configInputStream);
 		bind(Locale.class).annotatedWith(Names.named("defaultMeaningLocale")).toInstance(defaultMeaningLocale);
 
-		bind(SynaptixConfiguration.class).toProvider(SynaptixConfigurationProvider.class).in(Scopes.SINGLETON);
+		bind(SynaptixConfiguration.class).toProvider(configurationProviderClass).in(Scopes.SINGLETON);
 		bind(Configuration.class).to(SynaptixConfiguration.class).in(Scopes.SINGLETON);
 
 		bind(SqlSessionManager.class).toProvider(SynaptixSqlSessionManagerProvider.class).in(Scopes.SINGLETON);

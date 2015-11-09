@@ -56,6 +56,13 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		configuration.setUseGeneratedKeys(false);
 		configuration.setDefaultExecutorType(ExecutorType.SIMPLE);
 		configuration.setLocalCacheScope(LocalCacheScope.SESSION);
+		registerTypeHandlers();
+
+		configuration.getLanguageRegistry().register(org.mybatis.scripting.velocity.Driver.class);
+		configuration.getTypeAliasRegistry().registerAlias("velocity", org.mybatis.scripting.velocity.Driver.class);
+	}
+
+	protected void registerTypeHandlers() {
 		configuration.getTypeHandlerRegistry().register(Boolean.class, CharToBooleanTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(boolean.class, CharToBooleanTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(LocalDateTime.class, DateToLocalDateTimeTypeHandler.class);
@@ -65,9 +72,6 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		configuration.getTypeHandlerRegistry().register(IdRaw.class, RawToIdRawTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(IId.class, RawToIIdTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(Serializable.class, RawToSerializableTypeHandler.class);
-
-		configuration.getLanguageRegistry().register(org.mybatis.scripting.velocity.Driver.class);
-		configuration.getTypeAliasRegistry().registerAlias("velocity", org.mybatis.scripting.velocity.Driver.class);
 	}
 
 	@Inject
