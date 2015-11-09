@@ -63,15 +63,19 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 	}
 
 	protected void registerTypeHandlers() {
-		configuration.getTypeHandlerRegistry().register(Boolean.class, CharToBooleanTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(boolean.class, CharToBooleanTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(LocalDateTime.class, DateToLocalDateTimeTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(LocalDate.class, DateToLocalDateTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(LocalTime.class, DateToLocalTimeTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(Duration.class, NumberToDurationTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(IdRaw.class, RawToIdRawTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(IId.class, RawToIIdTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(Serializable.class, RawToSerializableTypeHandler.class);
+		registerHandler(Boolean.class, CharToBooleanTypeHandler.class);
+		registerHandler(boolean.class, CharToBooleanTypeHandler.class);
+		registerHandler(LocalDateTime.class, DateToLocalDateTimeTypeHandler.class);
+		registerHandler(LocalDate.class, DateToLocalDateTypeHandler.class);
+		registerHandler(LocalTime.class, DateToLocalTimeTypeHandler.class);
+		registerHandler(Duration.class, NumberToDurationTypeHandler.class);
+		registerHandler(IdRaw.class, RawToIdRawTypeHandler.class);
+		registerHandler(IId.class, RawToIIdTypeHandler.class);
+		registerHandler(Serializable.class, RawToSerializableTypeHandler.class);
+	}
+
+	protected final void registerHandler(Class<?> javaTypeClass, Class<?> typeHandlerClass) {
+		configuration.getTypeHandlerRegistry().register(javaTypeClass, typeHandlerClass);
 	}
 
 	@Inject
