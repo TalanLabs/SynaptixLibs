@@ -93,7 +93,7 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		configuration.setComponentResultMapHelper(componentResultMapHelper);
 	}
 
-	@Inject
+	@Inject(optional = true)
 	public void setSynaptixUserSession(SynaptixUserSession synaptixUserSession) {
 		configuration.setSynaptixUserSession(synaptixUserSession);
 	}

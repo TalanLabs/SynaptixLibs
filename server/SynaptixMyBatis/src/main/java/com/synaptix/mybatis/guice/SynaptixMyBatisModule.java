@@ -70,44 +70,29 @@ import com.synaptix.service.IEntityService;
 
 public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
-	private final InputStream configInputStream;
-
-	private final Locale defaultMeaningLocale;
-
-	private final Class<? extends IDaoUserContext> implUserContextClass;
-
-	private final Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass;
+	private final MyBatisModuleConfiguration configuration;
 
 	public SynaptixMyBatisModule(InputStream configInputStream, Class<? extends IDaoUserContext> implUserContextClass) {
-		this(configInputStream, Locale.FRENCH, implUserContextClass);
+		this(new MyBatisModuleConfiguration(configInputStream, implUserContextClass));
 	}
 
-	public SynaptixMyBatisModule(InputStream configInputStream, Locale defaultMeaningLocale, Class<? extends IDaoUserContext> implUserContextClass) {
-		this(configInputStream, defaultMeaningLocale, implUserContextClass, SynaptixConfigurationProvider.class);
-	}
-
-	public SynaptixMyBatisModule(InputStream configInputStream, Locale defaultMeaningLocale, Class<? extends IDaoUserContext> implUserContextClass,
-			Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass) {
+	public SynaptixMyBatisModule(MyBatisModuleConfiguration configuration) {
 		super();
-		this.configInputStream = configInputStream;
-		this.defaultMeaningLocale = defaultMeaningLocale;
-		this.implUserContextClass = implUserContextClass;
-		this.configurationProviderClass = configurationProviderClass;
+		this.configuration = configuration;
 	}
 
 	@Override
 	protected final void configure() {
-		bind(InputStream.class).annotatedWith(Names.named("configInputStream")).toInstance(configInputStream);
-		bind(Locale.class).annotatedWith(Names.named("defaultMeaningLocale")).toInstance(defaultMeaningLocale);
+		bind(InputStream.class).annotatedWith(Names.named("configInputStream")).toInstance(configuration.configInputStream);
+		bind(Locale.class).annotatedWith(Names.named("defaultMeaningLocale")).toInstance(configuration.defaultMeaningLocale);
 
-		bind(SynaptixConfiguration.class).toProvider(configurationProviderClass).in(Scopes.SINGLETON);
+		bind(SynaptixConfiguration.class).toProvider(configuration.configurationProviderClass).in(Scopes.SINGLETON);
 		bind(Configuration.class).to(SynaptixConfiguration.class).in(Scopes.SINGLETON);
 
 		bind(SqlSessionManager.class).toProvider(SynaptixSqlSessionManagerProvider.class).in(Scopes.SINGLETON);
 		bind(SqlSession.class).to(SqlSessionManager.class).in(Scopes.SINGLETON);
 		bind(SqlSessionFactory.class).toProvider(SynaptixSqlSessionFactoryProvider.class).in(Scopes.SINGLETON);
 
-		addMapperClass(TempUserSessionMapper.class);
 		addMapperClass(SequenceMapper.class);
 		addMapperClass(BusinessMapper.class);
 		addMapperClass(NlsServerMessageMapper.class);
@@ -115,9 +100,13 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		bind(MapperCacheLocal.class).in(Singleton.class);
 
 		bind(IGUIDGenerator.class).to(DefaultGUIDGenerator.class).in(Singleton.class);
-		bind(IDaoUserContext.class).to(implUserContextClass).in(Singleton.class);
-		bind(SynaptixUserSession.class).in(Singleton.class);
-		bind(DaoUserSessionManager.class).in(Singleton.class);
+		bind(IDaoUserContext.class).to(configuration.implUserContextClass).in(Singleton.class);
+
+		if (configuration.includeUserSession) {
+			addMapperClass(TempUserSessionMapper.class);
+			bind(SynaptixUserSession.class).in(Singleton.class);
+			bind(DaoUserSessionManager.class).in(Singleton.class);
+		}
 
 		bind(DefaultDaoSession.class).in(Singleton.class);
 		bind(IReadDaoSession.class).to(DefaultDaoSession.class).in(Singleton.class);
@@ -175,5 +164,47 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		requestInjection(transactionnelMethodInterceptor);
 
 		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class), transactionnelMethodInterceptor);
+	}
+
+	public static final class MyBatisModuleConfiguration {
+
+		private final InputStream configInputStream;
+
+		private Locale defaultMeaningLocale;
+
+		private Class<? extends IDaoUserContext> implUserContextClass;
+
+		private Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass;
+
+		private boolean includeUserSession;
+
+		public MyBatisModuleConfiguration(InputStream configInputStream, Class<? extends IDaoUserContext> implUserContextClass) {
+			this(configInputStream, Locale.FRENCH, implUserContextClass);
+
+		}
+
+		public MyBatisModuleConfiguration(InputStream configInputStream, Locale defaultMeaningLocale, Class<? extends IDaoUserContext> implUserContextClass) {
+			this.configInputStream = configInputStream;
+			this.defaultMeaningLocale = defaultMeaningLocale;
+			this.implUserContextClass = implUserContextClass;
+			this.configurationProviderClass = SynaptixConfigurationProvider.class;
+			this.includeUserSession = true;
+		}
+
+		public void setDefaultMeaningLocale(Locale defaultMeaningLocale) {
+			this.defaultMeaningLocale = defaultMeaningLocale;
+		}
+
+		public void setImplUserContextClass(Class<? extends IDaoUserContext> implUserContextClass) {
+			this.implUserContextClass = implUserContextClass;
+		}
+
+		public void setConfigurationProviderClass(Class<? extends Provider<SynaptixConfiguration>> configurationProviderClass) {
+			this.configurationProviderClass = configurationProviderClass;
+		}
+
+		public void setIncludeUserSession(boolean includeUserSession) {
+			this.includeUserSession = includeUserSession;
+		}
 	}
 }

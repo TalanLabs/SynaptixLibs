@@ -7,7 +7,7 @@ import com.synaptix.mybatis.hack.SynaptixUserSession;
 
 public class DaoUserSessionManager {
 
-	@Inject
+	@Inject(optional = true)
 	private SynaptixUserSession synaptixUserSession;
 
 	@Inject
@@ -16,7 +16,9 @@ public class DaoUserSessionManager {
 	public void updateDaoUserSession() {
 		if (sqlSessionManager.isManagedSessionStarted()) {
 			sqlSessionManager.clearCache();
-			synaptixUserSession.insertTempUserSession(sqlSessionManager.getConnection());
+			if (synaptixUserSession != null) {
+				synaptixUserSession.insertTempUserSession(sqlSessionManager.getConnection());
+			}
 		}
 	}
 }

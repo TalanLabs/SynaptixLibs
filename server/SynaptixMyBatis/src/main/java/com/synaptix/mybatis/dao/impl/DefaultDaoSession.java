@@ -119,6 +119,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 		return checkDefaultVersionConflictDaoExceptionInSession;
 	}
 
+	// doesn't seem to be used
 	protected TempUserSessionMapper getTempUserSessionMapper() {
 		return getMapper(TempUserSessionMapper.class);
 	}
