@@ -1,11 +1,10 @@
 package com.synaptix.mybatis.guice;
 
-import static com.google.inject.internal.util.$Preconditions.checkArgument;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.ibatis.type.TypeHandler;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
@@ -79,7 +78,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 	 *            the user defined mapper classes.
 	 */
 	protected final void addMapperClass(Class<?> mapperClass) {
-		checkArgument(mapperClass != null, "Parameter 'mapperClass' must not be null");
+		Preconditions.checkArgument(mapperClass != null, "Parameter 'mapperClass' must not be null");
 		bindMapper(mapperClass);
 	}
 
@@ -125,7 +124,7 @@ public abstract class AbstractSynaptixMyBatisModule extends AbstractModule {
 
 	/**
 	 * Add a hint process
-	 * 
+	 *
 	 * @param hintProcessClass
 	 */
 	protected final <E extends HintProcess> void addHintProcess(Class<E> hintProcessClass) {
