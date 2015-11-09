@@ -1,7 +1,6 @@
 package com.synaptix.server.service.guice;
 
-import static com.google.inject.internal.util.$Preconditions.checkArgument;
-
+import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
@@ -11,7 +10,7 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 	 * Bind a service delegate
 	 */
 	protected final void bindDelegate(Class<?> serviceDelegateClass) {
-		checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
+		Preconditions.checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
 		bind(serviceDelegateClass).in(Singleton.class);
 	}
 
@@ -19,8 +18,8 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 	 * Bind a service delegate
 	 */
 	protected final <E, F extends E> void bindDelegate(Class<E> serviceDelegateClass, Class<F> serviceDelegateImplClass) {
-		checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
-		checkArgument(serviceDelegateImplClass != null, "Parameter 'serviceDelegateImplClass' must not be null");
+		Preconditions.checkArgument(serviceDelegateClass != null, "Parameter 'serviceDelegateClass' must not be null");
+		Preconditions.checkArgument(serviceDelegateImplClass != null, "Parameter 'serviceDelegateImplClass' must not be null");
 		bind(serviceDelegateImplClass).in(Singleton.class);
 		bind(serviceDelegateClass).to(serviceDelegateImplClass).in(Singleton.class);
 	}
@@ -32,7 +31,7 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 	 * @param serverServiceImplClass
 	 */
 	protected final <F> ServiceBindingBuilder<F> bindService(final Class<F> implServiceClass) {
-		checkArgument(implServiceClass != null, "Parameter 'implServiceClass' must not be null");
+		Preconditions.checkArgument(implServiceClass != null, "Parameter 'implServiceClass' must not be null");
 		bind(implServiceClass).in(Singleton.class);
 		return new ServiceBindingBuilder<F>() {
 			@Override
