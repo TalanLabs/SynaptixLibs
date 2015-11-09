@@ -15,6 +15,7 @@ import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.EntityFields;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IEntityService;
 import com.synaptix.service.IPaginationService;
@@ -496,10 +497,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	@Override
 	public void showPrevious(Serializable id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
-		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		int idx = idList.indexOf(id);
 		if (idx > 0) {
-			Serializable previousId = idList.get(idx - 1);
+			IId previousId = idList.get(idx - 1);
 			G component = ComponentFactory.getInstance().createInstance(componentClass);
 			component.setId(previousId);
 			getCRUDManagementViewDescriptor().selectLine(idx - 1);
@@ -510,10 +511,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	@Override
 	public void showNext(Serializable id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
-		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		int idx = idList.indexOf(id);
 		if (idx < idList.size()) {
-			Serializable nextId = idList.get(idx + 1);
+			IId nextId = idList.get(idx + 1);
 			G component = ComponentFactory.getInstance().createInstance(componentClass);
 			component.setId(nextId);
 			getCRUDManagementViewDescriptor().selectLine(idx + 1);

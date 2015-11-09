@@ -4,6 +4,7 @@ import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.AbstractComponentFactoryListener;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.impl.DefaultGUIDGenerator;
 
 public class MainProxy {
@@ -17,7 +18,7 @@ public class MainProxy {
 				System.out.println("ici " + interfaceClass + " " + instance);
 
 				if (instance instanceof IEntity) {
-					((IEntity) instance).setId(guid.newGUID());
+					((IEntity) instance).setId(new IdRaw(guid.newGUID()));
 				}
 			}
 		});
