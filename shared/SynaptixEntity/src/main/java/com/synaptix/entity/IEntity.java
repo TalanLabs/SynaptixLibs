@@ -1,7 +1,5 @@
 package com.synaptix.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Version;
@@ -18,9 +16,9 @@ public interface IEntity extends IComponent, IDatabaseComponentExtension, IBusin
 	@EqualsKey
 	@Id
 	@Column(name = "ID", nullable = false)
-	public Serializable getId();
+	public IId getId();
 
-	public void setId(Serializable id);
+	public void setId(IId id);
 
 	@Version
 	@Column(name = "VERSION", precision = 10, nullable = false)
