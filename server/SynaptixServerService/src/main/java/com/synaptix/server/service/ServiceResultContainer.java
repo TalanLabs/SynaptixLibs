@@ -121,6 +121,8 @@ public class ServiceResultContainer {
 		serviceResultComponent.setError(hasError());
 		serviceResultComponent.setObject(object);
 		serviceResultComponent.setStackResult(stackResult);
+		serviceResultComponent.setResultCode(resultCode);
+		serviceResultComponent.setResultText(resultText);
 		stackResult.setResultCode(resultCode);
 		stackResult.setResultText(resultText);
 		stackResult.setResultDateTime(new Date());
