@@ -10,7 +10,7 @@ public interface ITablePageComponentsContext {
 	/**
 	 * Sort page according to specified orders
 	 */
-	public void sortPage(List<ISortOrder> orderList);
+	public void sortPage(List<ISortOrder> orderList, boolean fireRefresh);
 
 	/**
 	 * Go to first page
@@ -39,14 +39,14 @@ public interface ITablePageComponentsContext {
 
 	/**
 	 * Returns the current Page Size
-	 * 
+	 *
 	 * @return
 	 */
 	public int getCurrentPageSize();
 
 	/**
 	 * Export all lines or current page
-	 * 
+	 *
 	 * @param allLines
 	 */
 	public void exportExcel(boolean allLines);

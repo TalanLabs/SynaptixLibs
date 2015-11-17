@@ -13,6 +13,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultFlag;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.type.JdbcType;
 
 import com.google.inject.Inject;
 import com.synaptix.component.IComponent;
@@ -20,6 +21,7 @@ import com.synaptix.component.factory.ComponentDescriptor;
 import com.synaptix.component.factory.ComponentDescriptor.PropertyDescriptor;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.EntityFields;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.DatabasePropertyExtensionDescriptor;
 import com.synaptix.entity.extension.DatabasePropertyExtensionDescriptor.Collection;
 import com.synaptix.entity.extension.IDatabaseComponentExtension;
@@ -58,7 +60,7 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Get a result map
-	 * 
+	 *
 	 * @param clazz
 	 * @return
 	 */
@@ -97,7 +99,7 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Get a nested result map
-	 * 
+	 *
 	 * @param synaptixConfiguration
 	 * @param componentClass
 	 * @param columns
@@ -199,6 +201,9 @@ public class ComponentResultMapHelper {
 					if (EntityFields.id().name().equals(propertyName)) {
 						resultMappingBuilder.flags(Arrays.asList(ResultFlag.ID));
 					}
+					if (IId.class.isAssignableFrom(propertyDescriptor.getPropertyClass())) {
+						resultMappingBuilder.jdbcType(JdbcType.OTHER);
+					}
 					resultMappings.add(resultMappingBuilder.build());
 				} else if (dp.getCollection() != null) {
 					if ((nested) && (StringUtils.isNotBlank(dp.getCollection().getAlias()))) {
@@ -273,7 +278,7 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Get a result map
-	 * 
+	 *
 	 * @param synaptixConfiguration
 	 * @param componentClass
 	 * @param columns
@@ -299,7 +304,7 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Create a simple result map without nested and add to configuration, name is componentClass
-	 * 
+	 *
 	 * @param componentClass
 	 * @return
 	 */
@@ -337,6 +342,9 @@ public class ComponentResultMapHelper {
 					ResultMapping.Builder resultMappingBuilder = new ResultMapping.Builder(synaptixConfiguration, propertyName, dp.getColumn().getSqlName(), propertyDescriptor.getPropertyClass());
 					if (EntityFields.id().name().equals(propertyName)) {
 						resultMappingBuilder.flags(Arrays.asList(ResultFlag.ID));
+					}
+					if (IId.class.isAssignableFrom(propertyDescriptor.getPropertyClass())) {
+						resultMappingBuilder.jdbcType(JdbcType.OTHER);
 					}
 					resultMappings.add(resultMappingBuilder.build());
 				} else if (dp.getCollection() != null) {

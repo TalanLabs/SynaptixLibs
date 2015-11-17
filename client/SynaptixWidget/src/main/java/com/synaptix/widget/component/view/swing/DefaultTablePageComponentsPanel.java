@@ -611,7 +611,7 @@ public class DefaultTablePageComponentsPanel<E extends IComponent> extends WaitC
 						orderList.add(so);
 					}
 				}
-				tablePageComponentContext.sortPage(orderList);
+				tablePageComponentContext.sortPage(orderList, !noResultPanel.isGhost());
 			}
 		}
 	}
@@ -726,7 +726,7 @@ public class DefaultTablePageComponentsPanel<E extends IComponent> extends WaitC
 
 	/**
 	 * Export components in excel file
-	 * 
+	 *
 	 * @param file
 	 * @param components
 	 */

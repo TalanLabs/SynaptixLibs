@@ -502,11 +502,13 @@ public abstract class AbstractSearchComponentsContext<V extends ISynaptixViewFac
 	}
 
 	@Override
-	public void sortPage(List<ISortOrder> orderList) {
+	public void sortPage(List<ISortOrder> orderList, boolean fireRefresh) {
 		if (!SortOrderHelper.equalsSortOrder(this.orderList, orderList)) {
 			// we refresh only if the order has changed
 			this.orderList = orderList;
-			updatePagination();
+			if (fireRefresh) {
+				updatePagination();
+			}
 		}
 	}
 
