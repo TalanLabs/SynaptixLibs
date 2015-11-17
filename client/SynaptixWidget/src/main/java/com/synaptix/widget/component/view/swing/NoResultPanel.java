@@ -53,6 +53,10 @@ public final class NoResultPanel extends JComponent {
 		repaint();
 	}
 
+	public boolean isGhost() {
+		return ghost;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
