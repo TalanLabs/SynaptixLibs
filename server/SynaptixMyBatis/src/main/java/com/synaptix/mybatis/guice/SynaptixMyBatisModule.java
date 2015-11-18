@@ -99,7 +99,7 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
 		bind(MapperCacheLocal.class).in(Singleton.class);
 
-		bind(IGUIDGenerator.class).to(DefaultGUIDGenerator.class).in(Singleton.class);
+		bind(IGUIDGenerator.class).to(configuration.guidGeneratorClass).in(Singleton.class);
 		bind(IDaoUserContext.class).to(configuration.implUserContextClass).in(Singleton.class);
 
 		if (configuration.includeUserSession) {
@@ -178,6 +178,8 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
 		private boolean includeUserSession;
 
+		private Class<? extends IGUIDGenerator> guidGeneratorClass;
+
 		public MyBatisModuleConfiguration(InputStream configInputStream, Class<? extends IDaoUserContext> implUserContextClass) {
 			this(configInputStream, Locale.FRENCH, implUserContextClass);
 
@@ -189,6 +191,7 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 			this.implUserContextClass = implUserContextClass;
 			this.configurationProviderClass = SynaptixConfigurationProvider.class;
 			this.includeUserSession = true;
+			this.guidGeneratorClass = DefaultGUIDGenerator.class;
 		}
 
 		public void setDefaultMeaningLocale(Locale defaultMeaningLocale) {
@@ -205,6 +208,10 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 
 		public void setIncludeUserSession(boolean includeUserSession) {
 			this.includeUserSession = includeUserSession;
+		}
+
+		public void setGuidGeneratorClass(Class<? extends IGUIDGenerator> guidGeneratorClass) {
+			this.guidGeneratorClass = guidGeneratorClass;
 		}
 	}
 }
