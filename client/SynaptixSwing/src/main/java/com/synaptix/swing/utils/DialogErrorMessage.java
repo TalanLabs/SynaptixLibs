@@ -37,8 +37,7 @@ public class DialogErrorMessage extends JPanel {
 
 	public final static int CLOSE_OPTION = 1;
 
-	private final static String TEXT_TITLE = SwingMessages
-			.getString("DialogErrorMessage.0"); //$NON-NLS-1$
+	private final static String TEXT_TITLE = SwingMessages.getString("DialogErrorMessage.0"); //$NON-NLS-1$
 
 	private final static ImageIcon ICON_ERROR;
 
@@ -63,14 +62,12 @@ public class DialogErrorMessage extends JPanel {
 	private int returnValue;
 
 	static {
-		ICON_ERROR = new ImageIcon(
-				DialogErrorMessage.class.getResource("/images/errorIcon.png")); //$NON-NLS-1$
+		ICON_ERROR = new ImageIcon(DialogErrorMessage.class.getResource("/images/errorIcon.png")); //$NON-NLS-1$
 
 		errorMessageBuilder = new DefaultErrorMessageBuilder();
 	}
 
-	public static void setErrorMessageBuilder(
-			ErrorMessageBuilder errorMessageBuilder) {
+	public static void setErrorMessageBuilder(ErrorMessageBuilder errorMessageBuilder) {
 		DialogErrorMessage.errorMessageBuilder = errorMessageBuilder;
 	}
 
@@ -94,15 +91,13 @@ public class DialogErrorMessage extends JPanel {
 		printAction = new PrintAction();
 		if (!Desktop.isDesktopSupported()) {
 			printAction.setEnabled(false);
-			printAction.putValue(Action.SHORT_DESCRIPTION,
-					SwingMessages.getString("DialogErrorMessage.2")); //$NON-NLS-1$
+			printAction.putValue(Action.SHORT_DESCRIPTION, SwingMessages.getString("DialogErrorMessage.2")); //$NON-NLS-1$
 		}
 
 		sendAction = new SendAction();
 		if (!Desktop.isDesktopSupported()) {
 			sendAction.setEnabled(false);
-			sendAction.putValue(Action.SHORT_DESCRIPTION,
-					SwingMessages.getString("DialogErrorMessage.3")); //$NON-NLS-1$
+			sendAction.putValue(Action.SHORT_DESCRIPTION, SwingMessages.getString("DialogErrorMessage.3")); //$NON-NLS-1$
 		}
 	}
 
@@ -134,8 +129,7 @@ public class DialogErrorMessage extends JPanel {
 
 		builder.add(new JLabel(ICON_ERROR), cc.xy(1, 1));
 		builder.add(messageLabel, cc.xy(3, 1, "left,top")); //$NON-NLS-1$
-		builder.addSeparator(
-				SwingMessages.getString("DialogErrorMessage.10"), cc.xyw(1, 3, 3)); //$NON-NLS-1$
+		builder.addSeparator(SwingMessages.getString("DialogErrorMessage.10"), cc.xyw(1, 3, 3)); //$NON-NLS-1$
 		builder.add(new JScrollPane(rapportPane), cc.xyw(1, 5, 3));
 		builder.add(toolBar, cc.xyw(1, 6, 3));
 
@@ -150,18 +144,16 @@ public class DialogErrorMessage extends JPanel {
 		return showDialog(parent, throwable, TEXT_TITLE, text);
 	}
 
-	public int showDialog(Component parent, Throwable throwable, String title,
-			String text) {
+	public int showDialog(Component parent, Throwable throwable, String title, String text) {
 		returnValue = CLOSE_OPTION;
 
 		if (errorMessageBuilder.isShowErrorMessage(throwable)) {
-			dialog = new JDialogModel(parent, title, this,
-					new Action[] { closeAction }, closeAction);
-			dialog.getTitleComponent().setColorBackgroundLow(
-					new Color(255, 0, 0, 255));
-			dialog.getTitleComponent().setColorBackgroundHigh(
-					new Color(255, 100, 75, 255));
-			dialog.getTitleComponent().setPlayAnimation(false);
+			dialog = new JDialogModel(parent, title, this, new Action[] { closeAction }, closeAction);
+			if (dialog.getTitleComponent() != null) {
+				dialog.getTitleComponent().setColorBackgroundLow(new Color(255, 0, 0, 255));
+				dialog.getTitleComponent().setColorBackgroundHigh(new Color(255, 100, 75, 255));
+				dialog.getTitleComponent().setPlayAnimation(false);
+			}
 
 			dialog.setResizable(true);
 
@@ -172,16 +164,14 @@ public class DialogErrorMessage extends JPanel {
 				messageLabel.setText(text);
 			} else {
 				if (errorMessageBuilder != null) {
-					messageLabel.setText(errorMessageBuilder
-							.buildShortMessage(throwable));
+					messageLabel.setText(errorMessageBuilder.buildShortMessage(throwable));
 				} else {
 					messageLabel.setText(""); //$NON-NLS-1$
 				}
 			}
 
 			if (errorMessageBuilder != null) {
-				String rapport = errorMessageBuilder
-						.buildLongMessage(throwable);
+				String rapport = errorMessageBuilder.buildLongMessage(throwable);
 				rapportPane.setText(rapport);
 				rapportPane.setCaretPosition(0);
 			} else {
@@ -202,10 +192,10 @@ public class DialogErrorMessage extends JPanel {
 		public SaveAsAction() {
 			super(SwingMessages.getString("DialogErrorMessage.13")); //$NON-NLS-1$
 
-			this.putValue(Action.SHORT_DESCRIPTION,
-					SwingMessages.getString("DialogErrorMessage.14")); //$NON-NLS-1$
+			this.putValue(Action.SHORT_DESCRIPTION, SwingMessages.getString("DialogErrorMessage.14")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter(new SaveHTMLFileFilter());
@@ -217,29 +207,16 @@ public class DialogErrorMessage extends JPanel {
 					file = new File(file.getAbsolutePath() + ".html"); //$NON-NLS-1$
 				}
 				if (!file.isDirectory()) {
-					if (!file.exists()
-							|| JOptionPane
-									.showConfirmDialog(
-											GUIWindow.getActiveWindow(),
-											MessageFormat.format(
-													SwingMessages
-															.getString("DialogErrorMessage.16"), //$NON-NLS-1$
-													file.getName()),
-											SwingMessages
-													.getString("DialogErrorMessage.17"), //$NON-NLS-1$
-											JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					if (!file.exists() || JOptionPane.showConfirmDialog(GUIWindow.getActiveWindow(), MessageFormat.format(SwingMessages.getString("DialogErrorMessage.16"), //$NON-NLS-1$
+							file.getName()), SwingMessages.getString("DialogErrorMessage.17"), //$NON-NLS-1$
+							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						try {
 							FileWriter writer = new FileWriter(file);
 							writer.write(rapportPane.getText());
 							writer.close();
 						} catch (IOException e1) {
-							JOptionPane
-									.showMessageDialog(
-											GUIWindow.getActiveWindow(),
-											SwingMessages
-													.getString("DialogErrorMessage.18"), //$NON-NLS-1$
-											SwingMessages
-													.getString("DialogErrorMessage.19"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+							JOptionPane.showMessageDialog(GUIWindow.getActiveWindow(), SwingMessages.getString("DialogErrorMessage.18"), //$NON-NLS-1$
+									SwingMessages.getString("DialogErrorMessage.19"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 						}
 					}
 				}
@@ -259,11 +236,12 @@ public class DialogErrorMessage extends JPanel {
 
 		private final class SaveHTMLFileFilter extends FileFilter {
 
+			@Override
 			public boolean accept(File pathname) {
 				boolean res = false;
-				if (pathname.isDirectory())
+				if (pathname.isDirectory()) {
 					res = true;
-				else if (pathname.isFile()) {
+				} else if (pathname.isFile()) {
 					String extension = getExtension(pathname);
 					if (extension != null) {
 						if (extension.equals("html") || extension.equals("htm")) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -274,6 +252,7 @@ public class DialogErrorMessage extends JPanel {
 				return res;
 			}
 
+			@Override
 			public String getDescription() {
 				return SwingMessages.getString("DialogErrorMessage.22"); //$NON-NLS-1$
 			}
@@ -287,16 +266,13 @@ public class DialogErrorMessage extends JPanel {
 		public PrintAction() {
 			super(SwingMessages.getString("DialogErrorMessage.23")); //$NON-NLS-1$
 
-			this.putValue(Action.SHORT_DESCRIPTION,
-					SwingMessages.getString("DialogErrorMessage.24")); //$NON-NLS-1$
+			this.putValue(Action.SHORT_DESCRIPTION, SwingMessages.getString("DialogErrorMessage.24")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane
-					.showMessageDialog(
-							GUIWindow.getActiveWindow(),
-							SwingMessages.getString("DialogErrorMessage.25"), //$NON-NLS-1$
-							SwingMessages.getString("DialogErrorMessage.26"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
+			JOptionPane.showMessageDialog(GUIWindow.getActiveWindow(), SwingMessages.getString("DialogErrorMessage.25"), //$NON-NLS-1$
+					SwingMessages.getString("DialogErrorMessage.26"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
 			try {
 				File file = File.createTempFile("print", ".html"); //$NON-NLS-1$ //$NON-NLS-2$
 				FileWriter writer = new FileWriter(file);
@@ -305,12 +281,8 @@ public class DialogErrorMessage extends JPanel {
 
 				SyDesktop.print(file);
 			} catch (Exception e1) {
-				JOptionPane
-						.showMessageDialog(
-								GUIWindow.getActiveWindow(),
-								SwingMessages
-										.getString("DialogErrorMessage.29"), SwingMessages.getString("DialogErrorMessage.19"), //$NON-NLS-1$ //$NON-NLS-2$
-								JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(GUIWindow.getActiveWindow(), SwingMessages.getString("DialogErrorMessage.29"), SwingMessages.getString("DialogErrorMessage.19"), //$NON-NLS-1$ //$NON-NLS-2$
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -322,10 +294,10 @@ public class DialogErrorMessage extends JPanel {
 		public SendAction() {
 			super(SwingMessages.getString("DialogErrorMessage.31")); //$NON-NLS-1$
 
-			this.putValue(Action.SHORT_DESCRIPTION,
-					SwingMessages.getString("DialogErrorMessage.32")); //$NON-NLS-1$
+			this.putValue(Action.SHORT_DESCRIPTION, SwingMessages.getString("DialogErrorMessage.32")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 		}
 	}
@@ -334,6 +306,7 @@ public class DialogErrorMessage extends JPanel {
 
 		private static final long serialVersionUID = -1165636071113981103L;
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			returnValue = CLOSE_OPTION;
 			dialog.closeDialog();

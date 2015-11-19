@@ -138,8 +138,13 @@ public abstract class ContentPanel<U, E extends IComponent, F extends Serializab
 
 	protected String getCellLabel(final int rowIndex, final int columnIndex) {
 		final U fieldForCurrentColumn = this.parent.getColumnDefinitionAt(columnIndex);
-		final Serializable cellObject = this.parent.getModel().get(rowIndex).getValuesMap().get(fieldForCurrentColumn);
-		final String cellLabel = this.parent.getStringFromObject(cellObject);
+		final String cellLabel;
+		if (this.parent.getModel() != null && this.parent.getModel().get(rowIndex) != null && this.parent.getModel().get(rowIndex).getValuesMap() != null) {
+			final Serializable cellObject = this.parent.getModel().get(rowIndex).getValuesMap().get(fieldForCurrentColumn);
+			cellLabel = this.parent.getStringFromObject(cellObject);
+		} else {
+			cellLabel = null;
+		}
 		return cellLabel;
 	}
 
