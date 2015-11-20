@@ -58,8 +58,6 @@ public class ComponentFactory {
 
 	/**
 	 * Add componentFactoryListener
-	 * 
-	 * @param l
 	 */
 	public void addComponentFactoryListener(IComponentFactoryListener l) {
 		componentFactoryListeners.add(l);
@@ -67,8 +65,6 @@ public class ComponentFactory {
 
 	/**
 	 * Remove componentFactoryListener
-	 * 
-	 * @param l
 	 */
 	public void removeComponentFactoryListener(IComponentFactoryListener l) {
 		componentFactoryListeners.remove(l);
@@ -87,9 +83,6 @@ public class ComponentFactory {
 	 * Désactivé pour le moment
 	 * 
 	 * Create a instance of interfaceClass with impl
-	 * 
-	 * @param interfaceClass
-	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "unused" })
 	private <G extends IComponent> G _createInstance(Class<G> interfaceClass) {
@@ -102,7 +95,7 @@ public class ComponentFactory {
 			String packageName = interfaceClass.getPackage() != null ? interfaceClass.getPackage().getName() : null;
 			String simpleName = rename(interfaceClass.getSimpleName()) + "Impl";
 			try {
-				clazz = (Class<G>) interfaceClass.getClassLoader().loadClass(packageName != null ? new StringBuilder(packageName).append(".").append(simpleName).toString() : simpleName);
+				clazz = (Class<G>) interfaceClass.getClassLoader().loadClass(packageName != null ? packageName + "." + simpleName : simpleName);
 				implMap.put(interfaceClass, clazz);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -116,7 +109,7 @@ public class ComponentFactory {
 		return res;
 	}
 
-	private static final String rename(String name) {
+	private static String rename(String name) {
 		String res = name;
 		if (name.length() > 2) {
 			String second = name.substring(1, 2);
@@ -130,9 +123,6 @@ public class ComponentFactory {
 
 	/**
 	 * Create a instance of interfaceClass with proxy class
-	 * 
-	 * @param interfaceClass
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public <G extends IComponent> G createInstance(Class<G> interfaceClass) {
@@ -146,9 +136,6 @@ public class ComponentFactory {
 
 	/**
 	 * Get descriptor of interfaceClass
-	 * 
-	 * @param componentClass
-	 * @return
 	 */
 	public ComponentDescriptor getDescriptor(Class<? extends IComponent> componentClass) {
 		if (componentClass == null) {
@@ -164,9 +151,6 @@ public class ComponentFactory {
 
 	/**
 	 * Get a descriptor of instance
-	 * 
-	 * @param instance
-	 * @return
 	 */
 	public <G extends IComponent> ComponentDescriptor getDescriptor(G instance) {
 		if (instance == null) {
@@ -177,9 +161,6 @@ public class ComponentFactory {
 
 	/**
 	 * Test if clazz is a assignable a IComponent
-	 * 
-	 * @param clazz
-	 * @return
 	 */
 	public static final boolean isClass(Class<?> clazz) {
 		if (clazz == null) {
@@ -198,9 +179,6 @@ public class ComponentFactory {
 
 	/**
 	 * Add extension
-	 * 
-	 * @param componentExtensionClass
-	 * @param componentExtensionProcessor
 	 */
 	public void addExtension(Class<?> componentExtensionClass, IComponentExtensionProcessor componentExtensionProcessor) {
 		if (componentExtensionClass == null) {
@@ -221,9 +199,6 @@ public class ComponentFactory {
 
 	/**
 	 * Get a component extension processor
-	 * 
-	 * @param componentExtensionClass
-	 * @return
 	 */
 	public IComponentExtensionProcessor getExtension(Class<?> componentExtensionClass) {
 		if (componentExtensionClass == null) {
@@ -234,8 +209,6 @@ public class ComponentFactory {
 
 	/**
 	 * Get all extension class
-	 * 
-	 * @return
 	 */
 	public Set<Class<?>> getExtensionClasss() {
 		return Collections.unmodifiableSet(componentExtensionProcessorMap.keySet());
@@ -243,8 +216,6 @@ public class ComponentFactory {
 
 	/**
 	 * Set computed instanciator
-	 * 
-	 * @param computedFactory
 	 */
 	public void setComputedFactory(IComputedFactory computedFactory) {
 		if (computedFactory == null) {
@@ -255,8 +226,6 @@ public class ComponentFactory {
 
 	/**
 	 * Get computed instanciator
-	 * 
-	 * @return
 	 */
 	public IComputedFactory getComputedFactory() {
 		return computedFactory;
