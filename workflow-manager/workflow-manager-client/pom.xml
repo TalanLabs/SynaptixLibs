@@ -59,11 +59,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.synaptix</groupId>
-			<artifactId>SynaptixSmackxAbonnement</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.mxgraph</groupId>
 			<artifactId>jgraphx</artifactId>
 			<version>1.12.0.2</version>
