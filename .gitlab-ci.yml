@@ -1,14 +1,17 @@
 image: maven:3.3.3-jdk-8
+
 stages:
   - build
   - test
   - deploy
+
 build_job:
   stage: build
   only:
     - master
   script:
     - mvn --batch-mode compile -Dmaven.test.skip=true -Djacoco.skip=true
+
 build_merge_job:
   stage: build
   except:
@@ -17,6 +20,7 @@ build_merge_job:
   script:
     - git merge origin master --no-commit --no-ff
     - mvn --batch-mode compile -Dmaven.test.skip=true -Djacoco.skip=true
+
 test_sonar_preview_job:
   stage: test
   except:
@@ -25,22 +29,25 @@ test_sonar_preview_job:
   script:
     - git merge origin master --no-commit --no-ff
     - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.analysis.mode=preview -Dsonar.issuesReport.console.enable=true -Dsonar.gitlab.commit_sha=$CI_BUILD_REF -Dsonar.gitlab.ref=$CI_BUILD_REF_NAME
+
 test_sonar_job:
   stage: test
   only:
     - master
   script:
     - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=$SONAR_URL
+
 deploy_job:
   stage: deploy
   only:
     - master
   script:
     - mvn --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true
+
 deploy_tags_job:
   stage: deploy
   only:
     - tags
   script:
     - mvn --batch-mode org.codehaus.mojo:versions-maven-plugin:2.1:set -DnewVersion=$CI_BUILD_REF_NAME -DgenerateBackupPoms=false
-    - mvn --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true
+    - mvn --batch-mode clean deploy -Dmaven.test.skip=true -Djacoco.skip=true
