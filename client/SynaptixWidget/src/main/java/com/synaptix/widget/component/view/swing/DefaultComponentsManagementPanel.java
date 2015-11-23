@@ -101,10 +101,12 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 					}
 				});
 
-				String ribbonTaskTitle = ribbonData.getRibbonTaskTitle();
-				String ribbonBandTitle = ribbonData.getRibbonBandTitle();
-				ribbonContext.addRibbonTask(ribbonTaskTitle, ribbonData.getRibbonTaskPriority()).addRibbonBand(ribbonBandTitle, ribbonData.getRibbonBandPriority())
-						.addCommandeButton(cb, ribbonData.getPriority());
+				if (ribbonData.shouldRegisterInRibbon()) {
+					String ribbonTaskTitle = ribbonData.getRibbonTaskTitle();
+					String ribbonBandTitle = ribbonData.getRibbonBandTitle();
+					ribbonContext.addRibbonTask(ribbonTaskTitle, ribbonData.getRibbonTaskPriority()).addRibbonBand(ribbonBandTitle, ribbonData.getRibbonBandPriority())
+							.addCommandeButton(cb, ribbonData.getPriority());
+				}
 				category = ribbonData.getCategory();
 			}
 		}
