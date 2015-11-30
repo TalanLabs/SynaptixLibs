@@ -61,6 +61,9 @@
 
 		<logback.configurationFile>${root-directory}/etc/maven-annotation-logback.xml</logback.configurationFile>
 		<generated.sources.dir>${project.build.directory}/generated-sources/apt</generated.sources.dir>
+
+		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+		<sonar.exclusions>dev/**/*</sonar.exclusions>
 	</properties>
 	<scm>
 		<connection>scm:svn:http://svn.synaptix-labs.com/svn/synaptixfsfs/GabyTools/SynaptixLibs/trunk</connection>
