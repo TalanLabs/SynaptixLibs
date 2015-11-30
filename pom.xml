@@ -63,11 +63,19 @@
 		<generated.sources.dir>${project.build.directory}/generated-sources/apt</generated.sources.dir>
 
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
-		<sonar.exclusions>dev/**/*</sonar.exclusions>
 	</properties>
 	<scm>
-		<connection>scm:svn:http://svn.synaptix-labs.com/svn/synaptixfsfs/GabyTools/SynaptixLibs/trunk</connection>
+        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
+		<connection>scm:git:https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs.git</connection>
 	</scm>
+    <ciManagement>
+        <system>gitlab-ci</system>
+        <url>https://gitlab.synaptix-labs.com/ci/projects/8</url>
+    </ciManagement>
+    <issueManagement>
+        <system>gitlab</system>
+        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs/issues</url>
+    </issueManagement>
 	<modules>
 		<module>SynaptixParent</module>
 		<module>processManager</module>
