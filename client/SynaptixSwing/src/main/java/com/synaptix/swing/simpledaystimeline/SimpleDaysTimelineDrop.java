@@ -2,8 +2,8 @@ package com.synaptix.swing.simpledaystimeline;
 
 import java.awt.datatransfer.Transferable;
 
-import com.synaptix.swing.SimpleDaysTask;
 import com.synaptix.swing.DayDate;
+import com.synaptix.swing.SimpleDaysTask;
 
 public interface SimpleDaysTimelineDrop {
 

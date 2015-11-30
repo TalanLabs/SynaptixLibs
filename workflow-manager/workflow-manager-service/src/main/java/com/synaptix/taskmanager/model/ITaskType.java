@@ -1,19 +1,17 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
 
 import org.joda.time.Duration;
 
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.INlsMessage;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.ICacheComponentExtension.Cache;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 import com.synaptix.service.model.ICancellableEntity;
-
 import com.synaptix.taskmanager.model.domains.ServiceNature;
 
 @SynaptixComponent
@@ -78,9 +76,9 @@ public interface ITaskType extends ITracable, ICancellableEntity, INlsMessage {
 
 	@Column(name = "ID_TODO_FOLDER")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Serializable getIdTodoFolder();
+	public IId getIdTodoFolder();
 
-	public void setIdTodoFolder(Serializable idTodoFolder);
+	public void setIdTodoFolder(IId idTodoFolder);
 
 	@Column(name = "RESULT_DEPTH", nullable = false, length = 1)
 	@JdbcType(JdbcTypesEnum.INTEGER)

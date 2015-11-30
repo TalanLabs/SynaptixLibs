@@ -7,11 +7,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import toto.IPerson;
-
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.widget.view.swing.dialog.AbstractBeanExtensionDialog;
+
+import toto.IPerson;
 
 public class Step2BeanExtensionDialog extends AbstractBeanExtensionDialog<IPerson> {
 

@@ -5,8 +5,6 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 
-import com.synaptix.swing.table.TableRowRenderer;
-
 public class AlternanceHighLightTableRowRenderer implements TableRowRenderer {
 
 	private static final Color color = new Color(200, 227, 255);

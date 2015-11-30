@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Window;
@@ -23,6 +21,8 @@ import javax.swing.table.DefaultTableModel;
 import com.synaptix.swing.JDialogModel;
 import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.actions.view.swing.AbstractEditAction;
+
+import helper.MainHelper;
 
 public class MainPrint {
 

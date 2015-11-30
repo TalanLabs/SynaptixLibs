@@ -1,6 +1,6 @@
-import it.sauronsoftware.cron4j.Scheduler;
-
 import java.util.Date;
+
+import it.sauronsoftware.cron4j.Scheduler;
 
 public class MainCron4j {
 

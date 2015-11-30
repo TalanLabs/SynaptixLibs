@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -8,6 +6,8 @@ import javax.swing.SwingUtilities;
 
 import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.error.view.swing.ErrorInfoErrorViewManager;
+
+import helper.MainHelper;
 
 public class MainErrorView {
 

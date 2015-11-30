@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,6 +43,8 @@ import com.synaptix.widget.calendarday.DefaultCalendarDayRowHeaderRenderer;
 import com.synaptix.widget.calendarday.DefaultYearCalendarDayModel;
 import com.synaptix.widget.calendarday.JCalendarDay;
 import com.synaptix.widget.calendarday.JCalendarDayRowHeader;
+
+import helper.MainHelper;
 
 public class MainCopyScreen {
 

@@ -27,10 +27,10 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 
+import com.synaptix.swing.plaf.PathTreeUI;
+
 import pathTree.JPathTree;
 import pathTree.PathTreeModel;
-
-import com.synaptix.swing.plaf.PathTreeUI;
 
 public class BasicPathTreeUI extends PathTreeUI {
 

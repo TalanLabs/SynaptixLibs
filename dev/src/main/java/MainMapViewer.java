@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.File;
@@ -32,6 +30,8 @@ import com.synaptix.swingx.mapviewer.layers.WaypointsLayer;
 import com.synaptix.swingx.mapviewer.layers.airspace.AreaAirspace;
 import com.synaptix.swingx.mapviewer.layers.airspace.DefaultAirspaceAttributes;
 import com.synaptix.swingx.mapviewer.layers.waypoint.Waypoint;
+
+import helper.MainHelper;
 
 public class MainMapViewer {
 

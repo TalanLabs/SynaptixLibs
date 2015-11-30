@@ -1,7 +1,8 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.List;
+
+import com.synaptix.entity.IId;
 
 public interface ITodoManagementController {
 
@@ -9,5 +10,5 @@ public interface ITodoManagementController {
 
 	void loadTodoFoldersList();
 
-	void refresh(List<Serializable> idObjects);
+	void refresh(List<IId> idObjects);
 }

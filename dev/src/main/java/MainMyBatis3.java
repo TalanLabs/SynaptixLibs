@@ -1,13 +1,12 @@
-import helper.MainHelper;
-
 import java.util.concurrent.CountDownLatch;
 
+import com.synaptix.mybatis.dao.IDaoSession;
+
+import helper.MainHelper;
 import mapper.CountryMapper;
 import mapper.ZipMapper;
 import model.ICountry;
 import model.IZip;
-
-import com.synaptix.mybatis.dao.IDaoSession;
 
 public class MainMyBatis3 {
 

@@ -5,7 +5,6 @@ import java.util.Date;
 
 import com.synaptix.swing.DayDate;
 import com.synaptix.swing.SimpleDaysTask;
-import com.synaptix.swing.utils.DateTimeUtils;
 
 public final class PlanningHelper {
 

@@ -1,7 +1,5 @@
 package com.synaptix.taskmanager.rest;
 
-import java.io.Serializable;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -10,6 +8,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.service.EntityServerService;
 import com.synaptix.service.IEntityService;
@@ -63,7 +62,7 @@ public class TaskManagerRestService {
 	@Path("/startEngineFromCluster")
 	public Response startEngineFromCluster(@QueryParam("idTaskCluster") String idTaskClusterString) {
 		try {
-			Serializable idTaskCluster = new IdRaw(idTaskClusterString);
+			IId idTaskCluster = new IdRaw(idTaskClusterString);
 			getTaskManagerServerService().startEngine(idTaskCluster);
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
@@ -85,7 +84,7 @@ public class TaskManagerRestService {
 	public Response startEngineFromTaskObject(@QueryParam("taskObjectClass") String taskObjectClassString, @QueryParam("idTaskObject") String idTaskObjectString) {
 		try {
 			Class<? extends ITaskObject<?>> taskObjectClass = (Class<? extends ITaskObject<?>>) TaskManagerRestService.class.getClassLoader().loadClass(taskObjectClassString);
-			Serializable idTaskObject = new IdRaw(idTaskObjectString);
+			IId idTaskObject = new IdRaw(idTaskObjectString);
 			ITaskObject<?> taskObject = getEntityServerService().findEntityById(taskObjectClass, idTaskObject);
 			getTaskManagerServerService().startEngine(taskObject);
 		} catch (Exception e) {

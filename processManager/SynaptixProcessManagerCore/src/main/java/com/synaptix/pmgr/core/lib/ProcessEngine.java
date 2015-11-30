@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import nanoxml.XMLElement;
-
 import org.apache.commons.logging.Log;
 
 import com.synaptix.pmgr.core.apis.Engine;
@@ -34,6 +32,8 @@ import com.synaptix.pmgr.registry.RegistrySynchronizer;
 import com.synaptix.pmgr.registry.SynchronizedRegistry;
 import com.synaptix.toolkits.nanoxml.NanoXMLKit;
 import com.synaptix.toolkits.properties.PropertiesKit;
+
+import nanoxml.XMLElement;
 
 public class ProcessEngine { // implements MessageHandler, RegistryListener{
 

@@ -1,6 +1,5 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
 import java.net.URI;
 
 import javax.persistence.Column;
@@ -8,6 +7,7 @@ import javax.persistence.Table;
 
 import com.synaptix.component.annotation.SynaptixComponent;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 import com.synaptix.taskmanager.model.domains.TodoOwner;
@@ -23,9 +23,9 @@ import com.synaptix.taskmanager.model.domains.TodoStatus;
 public interface ITodo extends ITracable, IEntity {
 
 	@Column(name = "ID_TASK")
-	Serializable getIdTask();
+	IId getIdTask();
 
-	void setIdTask(Serializable idTask);
+	void setIdTask(IId idTask);
 
 	@Collection(sqlTableName = "T_TASK", idSource = "ID_TASK", alias = "t_", componentClass = ITask.class)
 	ITask getTask();
@@ -39,9 +39,9 @@ public interface ITodo extends ITracable, IEntity {
 	void setObjectType(Class<? extends ITaskObject<?>> objectType);
 
 	@Column(name = "ID_OBJECT", nullable = false)
-	Serializable getIdObject();
+	IId getIdObject();
 
-	void setIdObject(Serializable idObject);
+	void setIdObject(IId idObject);
 
 	@Column(name = "OWNER", length = 240, nullable = false)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
@@ -74,9 +74,9 @@ public interface ITodo extends ITracable, IEntity {
 	void setDescription(String description);
 
 	@Column(name = "ID_TODO_FOLDER")
-	Serializable getIdTodoFolder();
+	IId getIdTodoFolder();
 
-	void setIdTodoFolder(Serializable idTodoFolder);
+	void setIdTodoFolder(IId idTodoFolder);
 
 	@Collection(sqlTableName = "T_TODO_FOLDER", idSource = "ID_TODO_FOLDER", alias = "tf_", componentClass = ITodoFolder.class)
 	ITodoFolder getTodoFolder();

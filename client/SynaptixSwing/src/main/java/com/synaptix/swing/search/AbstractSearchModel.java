@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.swing.event.EventListenerList;
 
 import com.synaptix.prefs.SyPreferences;
-import com.synaptix.swing.SearchMessages;
 import com.synaptix.swing.event.SearchModelEvent;
 import com.synaptix.swing.event.SearchModelListener;
 

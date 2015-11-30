@@ -8,10 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import path.ExamplePathModel;
-
 import com.synaptix.swing.JChoixPanel;
 import com.synaptix.swing.path.JPath;
+
+import path.ExamplePathModel;
 
 public class MainChoix extends JChoixPanel<JPath> {
 

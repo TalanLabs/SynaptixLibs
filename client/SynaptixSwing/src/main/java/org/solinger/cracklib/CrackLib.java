@@ -1,6 +1,6 @@
 package org.solinger.cracklib;
 
-import java.io.*;
+import java.io.IOException;
 
 public class CrackLib {
 	public static final int MINDIFF = 5;

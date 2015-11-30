@@ -13,11 +13,11 @@ import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 
+import com.synaptix.swing.utils.GraphicsHelper;
+
 import titleheader.CardHeaderActionRenderer;
 import titleheader.CardHeaderTitleRenderer;
 import titleheader.JCardHeader;
-
-import com.synaptix.swing.utils.GraphicsHelper;
 
 public class BasicCardHeaderUI extends CardHeaderUI {
 

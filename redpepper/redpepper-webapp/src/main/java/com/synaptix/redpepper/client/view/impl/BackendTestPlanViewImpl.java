@@ -1,7 +1,5 @@
 package com.synaptix.redpepper.client.view.impl;
 
-import static com.google.gwt.query.client.GQuery.$;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style.Display;
@@ -19,6 +17,8 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.synaptix.redpepper.client.controller.entry.IBackendTestController;
 import com.synaptix.redpepper.client.view.entry.IBackendTestView;
+
+import static com.google.gwt.query.client.GQuery.$;
 
 public class BackendTestPlanViewImpl extends Composite implements IBackendTestView {
 

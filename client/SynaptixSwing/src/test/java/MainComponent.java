@@ -1,7 +1,9 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
 
-import net.sf.jeppers.grid.*;
+import javax.swing.JFrame;
+
+import net.sf.jeppers.grid.JGrid;
+import net.sf.jeppers.grid.JScrollGrid;
 
 /**
  * @author Cameron Zemek

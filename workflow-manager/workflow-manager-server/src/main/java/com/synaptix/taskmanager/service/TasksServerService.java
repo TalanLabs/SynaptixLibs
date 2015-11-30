@@ -1,9 +1,9 @@
 package com.synaptix.taskmanager.service;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.dao.mapper.AssoTaskPreviousTaskMapper;
@@ -27,7 +27,7 @@ public class TasksServerService extends AbstractSimpleService implements ITasksS
 	}
 
 	@Override
-	public List<ITask> findTasksBy(Class<? extends ITaskObject<?>> taskObjectClass, Serializable idObject) {
+	public List<ITask> findTasksBy(Class<? extends ITaskObject<?>> taskObjectClass, IId idObject) {
 		try {
 			getDaoSession().begin();
 			return getTaskMapper().findTasksBy(taskObjectClass, idObject);
@@ -39,7 +39,7 @@ public class TasksServerService extends AbstractSimpleService implements ITasksS
 	}
 
 	@Override
-	public List<ITask> findTasksByCluster(Serializable idCluster) {
+	public List<ITask> findTasksByCluster(IId idCluster) {
 		try {
 			getDaoSession().begin();
 
@@ -57,7 +57,7 @@ public class TasksServerService extends AbstractSimpleService implements ITasksS
 	}
 
 	@Override
-	public List<IAssoTaskPreviousTask> findAssoTaskPreviousTasksBy(Class<? extends ITaskObject<?>> taskObjectClass, Serializable idObject) {
+	public List<IAssoTaskPreviousTask> findAssoTaskPreviousTasksBy(Class<? extends ITaskObject<?>> taskObjectClass, IId idObject) {
 		try {
 			getDaoSession().begin();
 			return getAssoTaskPreviousTaskMapper().selectAssoTaskPreviousTasksBy(taskObjectClass, idObject);
@@ -69,7 +69,7 @@ public class TasksServerService extends AbstractSimpleService implements ITasksS
 	}
 
 	@Override
-	public List<IAssoTaskPreviousTask> findAssoTaskPreviousTasksByCluster(Serializable idCluster) {
+	public List<IAssoTaskPreviousTask> findAssoTaskPreviousTasksByCluster(IId idCluster) {
 		try {
 			getDaoSession().begin();
 

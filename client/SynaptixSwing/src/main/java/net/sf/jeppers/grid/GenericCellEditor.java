@@ -19,8 +19,13 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 /**

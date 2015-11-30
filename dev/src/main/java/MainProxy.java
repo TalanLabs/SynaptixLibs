@@ -1,11 +1,11 @@
-import model.IZip;
-
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.AbstractComponentFactoryListener;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.IEntity;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.impl.DefaultGUIDGenerator;
+
+import model.IZip;
 
 public class MainProxy {
 

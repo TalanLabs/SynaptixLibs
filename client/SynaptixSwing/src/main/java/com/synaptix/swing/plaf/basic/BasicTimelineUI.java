@@ -40,8 +40,6 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 
-import sun.swing.SwingUtilities2;
-
 import com.synaptix.swing.JTimeline;
 import com.synaptix.swing.Task;
 import com.synaptix.swing.TimelineModel;
@@ -53,6 +51,8 @@ import com.synaptix.swing.timeline.TimelineRessource;
 import com.synaptix.swing.timeline.TimelineRessourceModel;
 import com.synaptix.swing.timeline.TimelineTaskRenderer;
 import com.synaptix.swing.utils.DateTimeUtils;
+
+import sun.swing.SwingUtilities2;
 
 public class BasicTimelineUI extends TimelineUI {
 

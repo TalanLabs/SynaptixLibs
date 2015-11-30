@@ -7,8 +7,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
-import com.synaptix.pmgr.trigger.message.IImportFlux;
-
 public abstract class AbstractImportFlux extends AbstractFlux implements IImportFlux {
 
 	private static final long serialVersionUID = -8670505943582717072L;

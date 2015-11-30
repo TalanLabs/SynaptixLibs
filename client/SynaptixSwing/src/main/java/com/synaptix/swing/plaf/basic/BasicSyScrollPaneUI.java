@@ -30,12 +30,12 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 
-import sun.swing.DefaultLookup;
-import sun.swing.UIAction;
-
 import com.synaptix.swing.JSyScrollPane;
 import com.synaptix.swing.SyScrollPaneLayout.UIResource;
 import com.synaptix.swing.plaf.SyScrollPaneUI;
+
+import sun.swing.DefaultLookup;
+import sun.swing.UIAction;
 
 public class BasicSyScrollPaneUI extends SyScrollPaneUI implements ScrollPaneConstants {
 

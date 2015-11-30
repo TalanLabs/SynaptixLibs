@@ -1,6 +1,5 @@
 package com.synaptix.widget.component.controller.dialog;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,6 +15,7 @@ import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.ICancellable;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.widget.crud.controller.ICRUDContext;
 import com.synaptix.widget.view.dialog.IBeanDialogView;
@@ -83,7 +83,7 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	/**
 	 * Clean entity for clone
 	 *
-	 * @param childEntity
+	 * @param entity
 	 */
 	protected void cleanEntityForClone(E entity) {
 		cleanEntity(entity);
@@ -122,17 +122,17 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	}
 
 	@Override
-	public boolean hasPrevious(Serializable idCurrent) {
+	public boolean hasPrevious(IId idCurrent) {
 		return crudContext != null && crudContext.hasPrevious(idCurrent);
 	}
 
 	@Override
-	public boolean hasNext(Serializable idCurrent) {
+	public boolean hasNext(IId idCurrent) {
 		return crudContext != null && crudContext.hasNext(idCurrent);
 	}
 
 	@Override
-	public void showPrevious(Serializable idCurrent, boolean hasChanged) {
+	public void showPrevious(IId idCurrent, boolean hasChanged) {
 		if (crudContext != null) {
 			closeAction = CloseAction.SHOW_PREVIOUS;
 			if ((hasChanged) && (crudContext.askSaveChanges(getCRUDBeanDialogView()))) {
@@ -145,7 +145,7 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	}
 
 	@Override
-	public void showNext(Serializable idCurrent, boolean hasChanged) {
+	public void showNext(IId idCurrent, boolean hasChanged) {
 		if (crudContext != null) {
 			closeAction = CloseAction.SHOW_NEXT;
 			if ((hasChanged) && (crudContext.askSaveChanges(getCRUDBeanDialogView()))) {

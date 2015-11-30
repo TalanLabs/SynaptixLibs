@@ -5,9 +5,6 @@ import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Properties;
 
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
-
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.executor.loader.ResultLoaderMap;
 import org.apache.ibatis.executor.loader.WriteReplaceInterface;
@@ -19,6 +16,9 @@ import org.apache.ibatis.session.Configuration;
 
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
+
+import javassist.util.proxy.MethodHandler;
+import javassist.util.proxy.ProxyFactory;
 
 public class ComponentProxyFactory implements org.apache.ibatis.executor.loader.ProxyFactory {
 

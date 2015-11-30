@@ -15,7 +15,6 @@ import javax.swing.event.DocumentListener;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.synaptix.swing.JDialogModel;
 import com.synaptix.swing.JListToList;
 import com.synaptix.swing.list.AbstractFilters;
 import com.synaptix.swing.utils.Manager;

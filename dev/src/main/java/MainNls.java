@@ -1,13 +1,12 @@
-import helper.MainHelper;
-import helper.MainHelper.DatabaseUserSession;
-
 import java.util.Locale;
-
-import model.ICountry;
 
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
+
+import helper.MainHelper;
+import helper.MainHelper.DatabaseUserSession;
+import model.ICountry;
 
 public class MainNls {
 

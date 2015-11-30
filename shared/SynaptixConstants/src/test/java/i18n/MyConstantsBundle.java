@@ -1,11 +1,11 @@
 package i18n;
 
-import i18n.test.SousConstantsBundle;
-
 import java.util.Map;
 
 import com.synaptix.constants.shared.ConstantsWithLookingBundle;
 import com.synaptix.constants.shared.DefaultDescription;
+
+import i18n.test.SousConstantsBundle;
 
 @DefaultDescription("Coucou")
 public interface MyConstantsBundle extends SousConstantsBundle, ConstantsWithLookingBundle {

@@ -1,10 +1,10 @@
 package com.synaptix.pmgr.core.lib.probe;
 
-import it.sauronsoftware.cron4j.Scheduler;
-
 import com.synaptix.pmgr.core.apis.Engine;
 import com.synaptix.pmgr.core.lib.ProcessEngine;
 import com.synaptix.pmgr.core.lib.ProcessingChannel.Agent;
+
+import it.sauronsoftware.cron4j.Scheduler;
 
 public class CronAgent implements Agent {
 

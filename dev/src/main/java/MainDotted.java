@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -13,6 +11,8 @@ import com.synaptix.swing.utils.GraphicsHelper;
 import com.synaptix.widget.calendarday.AbstractCalendarDayModel;
 import com.synaptix.widget.calendarday.CalendarDayCellRenderer;
 import com.synaptix.widget.calendarday.JCalendarDay;
+
+import helper.MainHelper;
 
 public class MainDotted {
 

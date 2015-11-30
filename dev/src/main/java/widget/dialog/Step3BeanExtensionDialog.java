@@ -5,8 +5,6 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
-import toto.IPerson;
-
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.validation.Severity;
@@ -16,6 +14,8 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.synaptix.swing.widget.JSyTextField;
 import com.synaptix.widget.view.swing.ValidationListener;
 import com.synaptix.widget.view.swing.dialog.AbstractBeanExtensionDialog;
+
+import toto.IPerson;
 
 public class Step3BeanExtensionDialog extends AbstractBeanExtensionDialog<IPerson> {
 

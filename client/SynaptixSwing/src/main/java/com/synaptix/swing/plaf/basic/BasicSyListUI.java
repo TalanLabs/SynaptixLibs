@@ -15,9 +15,9 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.plaf.ComponentUI;
 
-import sun.swing.DefaultLookup;
-
 import com.synaptix.swing.plaf.SyListUI;
+
+import sun.swing.DefaultLookup;
 
 public class BasicSyListUI extends SyListUI {
 

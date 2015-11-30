@@ -49,7 +49,7 @@ public class TaskTypesManagementController extends AbstractPscSimpleNlsCRUDManag
 	public void deleteEntity(ITaskType paginationEntity) {
 		if (getViewFactory().showQuestionMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().validation(),
 				StaticCommonHelper.getCommonConstantsBundle().doYouWantToDeleteTheSelectedItem())) {
-			loadEntity(paginationEntity, new IResultCallback<ITaskType>() {
+			loadEntity(paginationEntity.getId(), new IResultCallback<ITaskType>() {
 				@Override
 				public void setResult(final ITaskType taskType) {
 					if (taskType != null) {

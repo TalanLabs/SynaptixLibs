@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +19,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.widget.renderer.view.swing.TypeGenericSubstanceComboBoxRenderer;
 import com.synaptix.widget.view.swing.helper.EnumViewHelper;
+
+import helper.MainHelper;
 
 public class MainTheme {
 

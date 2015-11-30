@@ -1,6 +1,6 @@
 package com.synaptix.taskmanager.controller.helper;
 
-import java.io.Serializable;
+import com.synaptix.entity.IId;
 
 public interface IStateService {
 
@@ -11,7 +11,7 @@ public interface IStateService {
 	 *            the name of the state
 	 * @param country
 	 *            the name of the country
-	 * @return the Serializable ID of the IState
+	 * @return the IId id of the IState
 	 */
-	public Serializable getIdStateByNameCountry(final String state, final String country);
+	public IId getIdStateByNameCountry(final String state, final String country);
 }

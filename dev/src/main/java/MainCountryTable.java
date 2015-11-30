@@ -1,13 +1,7 @@
-import helper.MainHelper;
-
 import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import model.CountryBuilder;
-import model.CountryFields;
-import model.ICountry;
 
 import com.google.inject.Key;
 import com.synaptix.component.helper.ComponentHelper;
@@ -24,6 +18,10 @@ import com.synaptix.widget.view.swing.SwingSynaptixViewFactory;
 import com.synaptix.widget.view.swing.tablemodel.field.CompositeField;
 
 import constants.CountryTableConstantsBundle;
+import helper.MainHelper;
+import model.CountryBuilder;
+import model.CountryFields;
+import model.ICountry;
 
 public class MainCountryTable {
 

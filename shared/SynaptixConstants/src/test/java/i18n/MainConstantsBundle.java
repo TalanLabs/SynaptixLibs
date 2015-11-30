@@ -1,12 +1,12 @@
 package i18n;
 
-import i18n.test.SousConstantsBundle;
-import i18n.test.TraceConstantsBundle;
-
 import java.util.Locale;
 
 import com.synaptix.constants.DefaultConstantsBundleManager;
 import com.synaptix.constants.DefaultConstantsLocaleSession;
+
+import i18n.test.SousConstantsBundle;
+import i18n.test.TraceConstantsBundle;
 
 public class MainConstantsBundle {
 

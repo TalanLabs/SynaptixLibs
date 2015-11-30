@@ -9,14 +9,14 @@ package com.synaptix.toolkits.io.script.factories;
 
 import java.util.Enumeration;
 
-import nanoxml.XMLElement;
-
 import com.synaptix.toolkits.io.script.AbstractOutputScript;
 import com.synaptix.toolkits.io.script.BlockOutputScript;
 import com.synaptix.toolkits.io.script.CloseOutputScript;
 import com.synaptix.toolkits.io.script.OutOutputScript;
 import com.synaptix.toolkits.io.script.OutputScript;
 import com.synaptix.toolkits.io.script.OutputScriptFactory;
+
+import nanoxml.XMLElement;
 
 /**
  * Projet GPSTrains

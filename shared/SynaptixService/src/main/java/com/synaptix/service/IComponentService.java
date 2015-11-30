@@ -1,11 +1,11 @@
 package com.synaptix.service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.synaptix.component.IComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.service.filter.RootNode;
 import com.synaptix.service.model.ISortOrder;
 
@@ -45,7 +45,7 @@ public interface IComponentService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, Serializable idParent) throws ServiceException;
+	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, IId idParent) throws ServiceException;
 
 	/**
 	 * Get a select suggest, 5 elements

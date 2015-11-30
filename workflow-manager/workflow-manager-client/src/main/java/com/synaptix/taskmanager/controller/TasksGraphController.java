@@ -1,12 +1,12 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
+import com.synaptix.entity.IId;
 import com.synaptix.service.IEntityService;
 import com.synaptix.service.IServiceFactory;
 import com.synaptix.service.ServicesManager;
@@ -62,7 +62,7 @@ public class TasksGraphController extends AbstractController {
 	/**
 	 * Load tasks graph
 	 */
-	public void loadTasksGraphWithIdTask(final Serializable idTask) {
+	public void loadTasksGraphWithIdTask(final IId idTask) {
 		if (loadTasksGraphWaitWorker != null && !loadTasksGraphWaitWorker.isDone()) {
 			loadTasksGraphWaitWorker.cancel(false);
 			loadTasksGraphWaitWorker = null;
@@ -145,7 +145,7 @@ public class TasksGraphController extends AbstractController {
 		taskManagerController.searchErrorsByObject(taskObject);
 	}
 
-	public void showErrors(Serializable idTask) {
+	public void showErrors(IId idTask) {
 		taskManagerController.searchErrorsByTask(idTask);
 	}
 
@@ -157,11 +157,11 @@ public class TasksGraphController extends AbstractController {
 
 	}
 
-	public void showTasks(Serializable idCluster) {
+	public void showTasks(IId idCluster) {
 		taskManagerController.searchTaskByCluster(idCluster);
 	}
 
-	public void startTaskManager(Serializable idCluster) {
+	public void startTaskManager(IId idCluster) {
 		taskManagerController.startTaskManager(idCluster);
 	}
 

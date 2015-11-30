@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +25,8 @@ import com.synaptix.widget.core.view.swing.SyDockingContext;
 import com.vlsolutions.swing.docking.DockKey;
 import com.vlsolutions.swing.docking.Dockable;
 import com.vlsolutions.swing.docking.DockableState;
+
+import helper.MainHelper;
 
 public class MainFrontend {
 

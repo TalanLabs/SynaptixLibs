@@ -19,9 +19,10 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
-import javax.swing.border.*;
-import java.text.*;
+import java.awt.Component;
+import java.text.Format;
+
+import javax.swing.border.EmptyBorder;
 
 /**
  * Generic implementation of <code>GridCellRenderer</code>. This implementation 

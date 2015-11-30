@@ -1,8 +1,7 @@
 package com.synaptix.taskmanager.view.descriptor;
 
-import java.io.Serializable;
-
 import com.synaptix.entity.IErrorEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.widget.component.view.IComponentsManagementViewDescriptor;
 
@@ -21,6 +20,6 @@ public interface IErrorsManagementViewDescriptor extends IComponentsManagementVi
 	 * @param idTask
 	 *            ID of the task.
 	 */
-	public void searchByTask(Serializable idTask);
+	public void searchByTask(IId idTask);
 
 }

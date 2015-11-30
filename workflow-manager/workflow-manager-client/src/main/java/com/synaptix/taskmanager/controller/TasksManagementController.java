@@ -1,8 +1,8 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.Map;
 
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.taskmanager.controller.helper.AbstractWorkflowComponentsManagementController;
 import com.synaptix.taskmanager.model.ITask;
@@ -100,11 +100,11 @@ public class TasksManagementController extends AbstractWorkflowComponentsManagem
 		taskManagerController.searchErrorsByTask(task.getId());
 	}
 
-	public void searchTasksByIdCluster(Serializable idCluster) {
+	public void searchTasksByIdCluster(IId idCluster) {
 		tasksManagementViewDescriptor.searchByCluster(idCluster);
 	}
 
-	public void startTaskManager(final Serializable idCluster) {
+	public void startTaskManager(final IId idCluster) {
 		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<Boolean>() {
 
 			@Override

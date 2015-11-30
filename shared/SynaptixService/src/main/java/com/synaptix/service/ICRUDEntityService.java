@@ -1,8 +1,7 @@
 package com.synaptix.service;
 
-import java.io.Serializable;
-
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 
 /**
  * @param <E>
@@ -17,7 +16,7 @@ public interface ICRUDEntityService<E extends IEntity> {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public Serializable addCRUDEntity(E entity) throws ServiceException;
+	public IId addCRUDEntity(E entity) throws ServiceException;
 
 	/**
 	 * Update an entity
@@ -25,7 +24,7 @@ public interface ICRUDEntityService<E extends IEntity> {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public Serializable editCRUDEntity(E entity) throws ServiceException;
+	public IId editCRUDEntity(E entity) throws ServiceException;
 
 	/**
 	 * Remove an entity
@@ -33,6 +32,6 @@ public interface ICRUDEntityService<E extends IEntity> {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public Serializable removeCRUDEntity(E entity) throws ServiceException;
+	public IId removeCRUDEntity(E entity) throws ServiceException;
 
 }

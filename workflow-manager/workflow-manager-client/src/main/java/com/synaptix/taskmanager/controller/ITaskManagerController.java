@@ -1,10 +1,10 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import com.synaptix.client.view.IView;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.ITaskChain;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.taskmanager.model.ITaskServiceDescriptor;
@@ -51,7 +51,7 @@ public interface ITaskManagerController {
 	 * @param idTask
 	 *            ID of the task.
 	 */
-	void searchErrorsByTask(Serializable idTask);
+	void searchErrorsByTask(IId idTask);
 
 	ISearchDialogContext<ITodoFolder> getTodoFolderSearchDialogContext(IView parent, Map<String, Object> filters);
 
@@ -67,11 +67,11 @@ public interface ITaskManagerController {
 	/**
 	 * Reload todos screen (keeps todo folder selection if possible)
 	 */
-	void refreshTodoList(List<Serializable> idObjects);
+	void refreshTodoList(List<IId> idObjects);
 
 	void reloadTodoDetails();
 
-	void refreshTodoList(Serializable idObject);
+	void refreshTodoList(IId idObject);
 
 	ISearchFieldWidgetContext<ITaskChain> getTaskChainsearchFieldWidgetContext(IView parent, Map<String, Object> filters);
 

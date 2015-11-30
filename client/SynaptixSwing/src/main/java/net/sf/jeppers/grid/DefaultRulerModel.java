@@ -19,10 +19,13 @@
  */
 package net.sf.jeppers.grid;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import javax.swing.SizeSequence;
 import javax.swing.SwingConstants;
-
-import java.io.*;
 
 /**
  * Default implementation of <code>RulerModel</code>. 

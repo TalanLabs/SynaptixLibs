@@ -26,14 +26,6 @@ import javax.swing.TransferHandler;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import simpledaystimeline.common.Hours;
-import simpledaystimeline.common.HoursTransferable;
-import simpledaystimeline.common.MyMissionSimpleDaysTask;
-import simpledaystimeline.common.MySimpleDaysTimelineDayDatesHeaderRenderer;
-import simpledaystimeline.common.MySimpleDaysTimelineDrag;
-import simpledaystimeline.common.MySimpleDaysTimelineDrop;
-import simpledaystimeline.common.MySimpleDaysTimelineModel;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -41,6 +33,14 @@ import com.synaptix.swing.DayDate;
 import com.synaptix.swing.JSimpleDaysTimeline;
 import com.synaptix.swing.simpledaystimeline.SimpleDaysTimelineSelectionModel;
 import com.synaptix.swing.utils.SwingComponentFactory;
+
+import simpledaystimeline.common.Hours;
+import simpledaystimeline.common.HoursTransferable;
+import simpledaystimeline.common.MyMissionSimpleDaysTask;
+import simpledaystimeline.common.MySimpleDaysTimelineDayDatesHeaderRenderer;
+import simpledaystimeline.common.MySimpleDaysTimelineDrag;
+import simpledaystimeline.common.MySimpleDaysTimelineDrop;
+import simpledaystimeline.common.MySimpleDaysTimelineModel;
 
 public class MainSimpleDaysTimeline {
 

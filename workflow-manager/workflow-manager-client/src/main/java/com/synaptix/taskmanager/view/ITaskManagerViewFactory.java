@@ -1,5 +1,6 @@
 package com.synaptix.taskmanager.view;
 
+import com.synaptix.taskmanager.controller.AbstractTodosManagementController;
 import com.synaptix.taskmanager.controller.ErrorsManagementController;
 import com.synaptix.taskmanager.controller.ITaskManagerController;
 import com.synaptix.taskmanager.controller.SimulationTasksGraphController;
@@ -10,7 +11,6 @@ import com.synaptix.taskmanager.controller.TaskTypesManagementController;
 import com.synaptix.taskmanager.controller.TasksGraphController;
 import com.synaptix.taskmanager.controller.TasksManagementController;
 import com.synaptix.taskmanager.controller.TodoFoldersManagementController;
-import com.synaptix.taskmanager.controller.AbstractTodosManagementController;
 import com.synaptix.taskmanager.controller.dialog.edit.TaskTypeDialogController;
 import com.synaptix.taskmanager.model.IStatusGraph;
 import com.synaptix.taskmanager.model.ITaskChain;

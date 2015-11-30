@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.Color;
 import java.awt.Font;
 
@@ -16,6 +14,8 @@ import com.synaptix.widget.xytable.JXYTableColumnFooter;
 import com.synaptix.widget.xytable.JXYTableRowFooter;
 import com.synaptix.widget.xytable.JXYTableRowHeader;
 import com.synaptix.widget.xytable.JXYTableScrollPane;
+
+import helper.MainHelper;
 
 public class MainXYTable {
 

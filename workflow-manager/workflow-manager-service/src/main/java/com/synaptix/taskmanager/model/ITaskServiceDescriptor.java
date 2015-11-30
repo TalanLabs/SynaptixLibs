@@ -2,7 +2,6 @@ package com.synaptix.taskmanager.model;
 
 import com.synaptix.component.IComponent;
 import com.synaptix.component.annotation.SynaptixComponent;
-
 import com.synaptix.taskmanager.model.domains.ServiceNature;
 
 @SynaptixComponent

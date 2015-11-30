@@ -9,12 +9,12 @@ package com.synaptix.toolkits.io;
 
 import java.io.IOException;
 
-import nanoxml.XMLElement;
-
 import com.synaptix.toolkits.io.script.OutputScript;
 import com.synaptix.toolkits.io.script.OutputScriptFactory;
 import com.synaptix.toolkits.io.script.factories.XMLOuputScriptFactory;
 import com.synaptix.toolkits.nanoxml.NanoXMLKit;
+
+import nanoxml.XMLElement;
 
 /**
  * Projet GPSTrains

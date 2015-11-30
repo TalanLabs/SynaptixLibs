@@ -1,8 +1,7 @@
 package workflow;
 
-import java.io.Serializable;
-
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.manager.AbstractObjectTypeTaskFactory;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskChainCriteria;
@@ -14,7 +13,7 @@ public class CustomerOrderObjectTypeTaskFactory extends AbstractObjectTypeTaskFa
 	}
 
 	@Override
-	public String getTaskObjectDescription(Serializable idObject) {
+	public String getTaskObjectDescription(IId idObject) {
 		return "Aucune description pour " + idObject;
 	}
 

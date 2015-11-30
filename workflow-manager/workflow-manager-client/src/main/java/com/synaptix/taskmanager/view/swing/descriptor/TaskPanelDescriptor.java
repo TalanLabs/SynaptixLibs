@@ -26,6 +26,7 @@ import org.pushingpixels.substance.api.renderers.SubstanceDefaultTableCellRender
 import com.synaptix.client.common.util.StaticCommonHelper;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.swing.JSyTable;
 import com.synaptix.swing.search.Filter;
@@ -198,7 +199,7 @@ public class TaskPanelDescriptor extends DefaultComponentsManagementPanelDescrip
 	}
 
 	@Override
-	public void searchByCluster(Serializable idCluster) {
+	public void searchByCluster(IId idCluster) {
 		showDockable();
 
 		getSearchHeader().defaultFilters();

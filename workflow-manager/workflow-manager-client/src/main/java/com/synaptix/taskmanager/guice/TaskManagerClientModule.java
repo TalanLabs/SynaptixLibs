@@ -2,6 +2,7 @@ package com.synaptix.taskmanager.guice;
 
 import com.google.inject.Singleton;
 import com.synaptix.client.common.util.StaticCommonHelper;
+import com.synaptix.taskmanager.controller.ITaskManagerController;
 import com.synaptix.taskmanager.controller.TaskManagerController;
 import com.synaptix.taskmanager.helper.StaticTaskManagerHelper;
 import com.synaptix.taskmanager.helper.TaskManagerHelper;
@@ -13,7 +14,6 @@ import com.synaptix.taskmanager.objecttype.IObjectTypeManager;
 import com.synaptix.taskmanager.urimanager.IURIClientManagerDiscovery;
 import com.synaptix.taskmanager.util.StaticHelper;
 import com.synaptix.taskmanager.view.ITaskManagerViewFactory;
-import com.synaptix.taskmanager.controller.ITaskManagerController;
 import com.synaptix.taskmanager.view.swing.SwingTaskManagerViewFactory;
 
 public class TaskManagerClientModule extends AbstractClientModule {

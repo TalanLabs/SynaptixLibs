@@ -1,8 +1,7 @@
 package com.synaptix.taskmanager.manager;
 
-import java.io.Serializable;
-
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.manager.taskservice.ITaskService;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskChainCriteria;
@@ -15,7 +14,7 @@ public interface IObjectTypeTaskFactory<F extends ITaskObject<?>> {
 	/**
 	 * Get description of the TaskObject
 	 */
-	String getTaskObjectDescription(Serializable idObject);
+	String getTaskObjectDescription(IId idObject);
 
 	/**
 	 * Get a task chain criteria for group task

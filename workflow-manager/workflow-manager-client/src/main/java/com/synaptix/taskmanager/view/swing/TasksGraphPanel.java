@@ -2,7 +2,6 @@ package com.synaptix.taskmanager.view.swing;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -13,6 +12,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.client.common.util.StaticCommonHelper;
+import com.synaptix.entity.IId;
 import com.synaptix.swing.WaitComponentFeedbackPanel;
 import com.synaptix.swing.utils.ToolBarFactory;
 import com.synaptix.taskmanager.controller.TasksGraphController;
@@ -47,9 +47,9 @@ public class TasksGraphPanel extends WaitComponentFeedbackPanel implements ITask
 
 	private Action startTaskManagerAction;
 
-	private Serializable idTask;
+	private IId idTask;
 
-	private Serializable idCluster;
+	private IId idCluster;
 
 	public TasksGraphPanel(TasksGraphController tasksGraphController) {
 		super();

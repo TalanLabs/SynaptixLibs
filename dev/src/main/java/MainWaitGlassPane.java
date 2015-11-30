@@ -1,11 +1,11 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import com.synaptix.swing.JWaitGlassPane;
+
+import helper.MainHelper;
 
 public class MainWaitGlassPane {
 

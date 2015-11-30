@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,6 +35,7 @@ import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.synaptix.client.common.util.StaticCommonHelper;
 import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.controller.TasksGraphController;
 import com.synaptix.taskmanager.helper.TaskManagerHelper;
 import com.synaptix.taskmanager.model.AssoTaskPreviousTaskFields;
@@ -269,7 +269,7 @@ public class JTasksGraphComponent extends AbstractGraphWithDetailsComponent {
 		return mxGraph;
 	}
 
-	public ITask findTaskInList(List<ITask> tasks, Serializable id) {
+	public ITask findTaskInList(List<ITask> tasks, IId id) {
 		ITask task = null;
 		for (ITask iTask : tasks) {
 			if (iTask.getId().equals(id)) {
@@ -315,8 +315,8 @@ public class JTasksGraphComponent extends AbstractGraphWithDetailsComponent {
 				for (ITask task : tasks) {
 					Object v1 = cellMap.get(task.getId().toString());
 
-					List<Serializable> idsOfPreviousTasks = getIdsOfPreviousTasks(tasks, assoTaskPreviousTasks, task);
-					for (Serializable idPreviousTasks : idsOfPreviousTasks) {
+					List<IId> idsOfPreviousTasks = getIdsOfPreviousTasks(tasks, assoTaskPreviousTasks, task);
+					for (IId idPreviousTasks : idsOfPreviousTasks) {
 						graph.insertEdge(parent, null, "", cellMap.get(idPreviousTasks.toString()), v1);
 					}
 				}
@@ -328,8 +328,8 @@ public class JTasksGraphComponent extends AbstractGraphWithDetailsComponent {
 		}
 	}
 
-	private List<Serializable> getIdsOfPreviousTasks(List<ITask> tasks, List<IAssoTaskPreviousTask> assoTaskPreviousTasks, ITask task) {
-		ArrayList<Serializable> resultList = new ArrayList<Serializable>();
+	private List<IId> getIdsOfPreviousTasks(List<ITask> tasks, List<IAssoTaskPreviousTask> assoTaskPreviousTasks, ITask task) {
+		List<IId> resultList = new ArrayList<IId>();
 		List<IAssoTaskPreviousTask> previousTasks = ComponentHelper.findComponentsBy(assoTaskPreviousTasks, AssoTaskPreviousTaskFields.idTask().name(), task.getId());
 
 		if (previousTasks.isEmpty()) {
@@ -343,7 +343,7 @@ public class JTasksGraphComponent extends AbstractGraphWithDetailsComponent {
 			}
 		}
 		for (IAssoTaskPreviousTask iAssoTaskPreviousTask : previousTasks) {
-			Serializable idPreviousTask = iAssoTaskPreviousTask.getIdPreviousTask();
+			IId idPreviousTask = iAssoTaskPreviousTask.getIdPreviousTask();
 			ITask previousTask = findTaskInList(tasks, idPreviousTask);
 			if (previousTask.isCheckGroup()) {
 				if (TaskStatus.TODO.equals(previousTask.getTaskStatus())) {
@@ -369,7 +369,7 @@ public class JTasksGraphComponent extends AbstractGraphWithDetailsComponent {
 		return resultList;
 	}
 
-	private List<ITask> findTaskChildren(List<ITask> tasks, Serializable idParentTask) {
+	private List<ITask> findTaskChildren(List<ITask> tasks, IId idParentTask) {
 		List<ITask> children = ComponentHelper.findComponentsBy(tasks, TaskFields.idParentTask().name(), idParentTask);
 		return children != null ? children : Collections.<ITask>emptyList();
 	}

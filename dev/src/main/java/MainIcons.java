@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -7,6 +5,8 @@ import javax.swing.SwingUtilities;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.widget.view.swing.helper.IconHelper;
+
+import helper.MainHelper;
 
 public class MainIcons {
 

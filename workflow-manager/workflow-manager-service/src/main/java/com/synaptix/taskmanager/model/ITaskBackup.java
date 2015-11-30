@@ -1,12 +1,11 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
 
 import com.synaptix.component.annotation.SynaptixComponent;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 
@@ -15,15 +14,15 @@ import com.synaptix.entity.extension.JdbcTypesEnum;
 public interface ITaskBackup extends IEntity, ITracable {
 
 	@Column(name = "ID_CLUSTER")
-	public Serializable getIdCluster();
+	public IId getIdCluster();
 
-	public void setIdCluster(Serializable idCluster);
+	public void setIdCluster(IId idCluster);
 
 	@Column(name = "ID_OBJECT")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Serializable getIdObject();
+	public IId getIdObject();
 
-	public void setIdObject(Serializable idObject);
+	public void setIdObject(IId idObject);
 
 	@Column(name = "OBJECT_TYPE", length = 512)
 	@JdbcType(JdbcTypesEnum.VARCHAR)

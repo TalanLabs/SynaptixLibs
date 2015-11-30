@@ -1,14 +1,6 @@
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import service.IGabyService;
-import service.impl.AuthPrecondition;
-import service.impl.GabyServerService;
-import service.impl.IPrecondition;
-import service.impl.Precondition;
-import auth.MyAuthsBundle;
-import auth.MyAuthsBundleMethods;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -18,6 +10,14 @@ import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
 import com.synaptix.auth.AuthsBundleManager;
 import com.synaptix.auth.DefaultAuthsBundleManager;
+
+import auth.MyAuthsBundle;
+import auth.MyAuthsBundleMethods;
+import service.IGabyService;
+import service.impl.AuthPrecondition;
+import service.impl.GabyServerService;
+import service.impl.IPrecondition;
+import service.impl.Precondition;
 
 public class MainGuiceService {
 

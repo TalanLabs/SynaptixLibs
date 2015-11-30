@@ -1,6 +1,5 @@
 package com.synaptix.taskmanager.delegate;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +22,7 @@ import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.component.model.IError;
 import com.synaptix.entity.IEntity;
 import com.synaptix.entity.IErrorEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.IGUIDGenerator;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
@@ -90,7 +90,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Clusters that should be restarted in task manager
 	 */
-	private ThreadLocal<Set<Serializable>> clusterIdsQueue = new ThreadLocal<Set<Serializable>>();
+	private ThreadLocal<Set<IId>> clusterIdsQueue = new ThreadLocal<Set<IId>>();
 
 	@Inject
 	public TaskManagerServiceDelegate() {
@@ -128,7 +128,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Archive a cluster : move all tasks to archive table (T_TASK_ARCH).
 	 */
-	public void archiveCluster(Serializable idTaskCluster) {
+	public void archiveCluster(IId idTaskCluster) {
 		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
 		if (taskCluster != null && !taskCluster.isCheckArchive()) {
 			if (LOG.isDebugEnabled()) {
@@ -147,7 +147,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		}
 
 		F to = entityServiceDelegate.findEntityById(ComponentFactory.getInstance().getComponentClass(taskObjectWithCluster), taskObjectWithCluster.getId());
-		Serializable idCluster = to.getIdCluster();
+		IId idCluster = to.getIdCluster();
 
 		addTaskObjectToTaskCluster(idCluster, newTaskObject);
 	}
@@ -155,7 +155,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Add task object to cluster. If object was already linked to a cluster, does not delete old cluster.
 	 */
-	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(IId idTaskCluster, F taskObject) {
 		addTaskObjectToTaskCluster(idTaskCluster, taskObject, false);
 	}
 
@@ -164,7 +164,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 *
 	 * @param deleteOldTaskCluster If true and task object was already linked to a task cluster, this cluster will be deleted.
 	 */
-	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject, boolean deleteOldTaskCluster) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(IId idTaskCluster, F taskObject, boolean deleteOldTaskCluster) {
 		if (idTaskCluster == null || taskObject == null || taskObject.getId() == null) {
 			return;
 		}
@@ -209,7 +209,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 *
 	 * @return ID of the new cluster
 	 */
-	public <E extends Enum<E>, F extends ITaskObject<E>> Serializable createTaskCluster(F taskObject) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IId createTaskCluster(F taskObject) {
 		List<ITask> changedStatusTasks = new ArrayList<ITask>();
 
 		ITaskCluster taskCluster = createTaskCluster();
@@ -250,7 +250,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * create task cluster dependency and create status graph and tasks.
 	 */
-	private <E extends Enum<E>, F extends ITaskObject<E>> void createTaskClusterDependencyToTaskCluster(Serializable idTaskCluster, F taskObject) {
+	private <E extends Enum<E>, F extends ITaskObject<E>> void createTaskClusterDependencyToTaskCluster(IId idTaskCluster, F taskObject) {
 		Class<? extends ITaskObject<?>> taskObjectClass = ComponentFactory.getInstance().getComponentClass(taskObject);
 
 		taskObject.setIdCluster(idTaskCluster);
@@ -266,7 +266,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Create status graph and tasks
 	 */
-	private <E extends Enum<E>, F extends ITaskObject<E>> List<ITask> createTasks(Serializable idTaskCluster, F taskObject) {
+	private <E extends Enum<E>, F extends ITaskObject<E>> List<ITask> createTasks(IId idTaskCluster, F taskObject) {
 		Class<? extends ITaskObject<?>> taskObjectClass = ComponentFactory.getInstance().getComponentClass(taskObject);
 		String currentStatus = taskObject.getStatus() != null ? taskObject.getStatus().name() : null;
 
@@ -308,7 +308,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		return createTasks(idTaskCluster, taskObject, statusGraphs, initTask, currentStatus);
 	}
 
-	private <E extends Enum<E>, F extends ITaskObject<E>> List<ITask> createTasks(Serializable idTaskCluster, F taskObject, List<IStatusGraph> statusGraphs, ITask previousUpdateStatusTask,
+	private <E extends Enum<E>, F extends ITaskObject<E>> List<ITask> createTasks(IId idTaskCluster, F taskObject, List<IStatusGraph> statusGraphs, ITask previousUpdateStatusTask,
 			String currentStatus) {
 		List<ITask> res = new ArrayList<ITask>();
 
@@ -511,7 +511,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 * @param idFirstTask will be set as previous task in the association.
 	 * @param idNextTask  will be set as task in the association.
 	 */
-	private void linkTwoTasks(Serializable idFirstTask, Serializable idNextTask) {
+	private void linkTwoTasks(IId idFirstTask, IId idNextTask) {
 		getAssoTaskPreviousTaskMapper().insertAssoTaskPreviousTask(new AssoTaskPreviousTaskBuilder().idTask(idNextTask).idPreviousTask(idFirstTask).build());
 	}
 
@@ -579,7 +579,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		}
 	}
 
-	private void updateTodoToCurrentStatus(Serializable idTask) {
+	private void updateTodoToCurrentStatus(IId idTask) {
 		getTodoMapper().updatePendingTodos(idTask);
 	}
 
@@ -683,7 +683,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		todo.setObjectType(task.getObjectType());
 		todo.setIdObject(task.getIdObject());
 		todo.setOwner(owner);
-		Serializable idTodoFolder = task.getTaskType().getIdTodoFolder();
+		IId idTodoFolder = task.getTaskType().getIdTodoFolder();
 		if (idTodoFolder == null) {
 			ITaskChainCriteria<? extends Enum<?>> taskChainCriteria = objectTypeTaskFactory.getTaskChainCriteria(task);
 			if (taskChainCriteria != null) {
@@ -725,10 +725,10 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	public void checkTodoManagerTasks() {
 		List<IClusterTaskResult> clusterTaskResults = getTaskMapper().selectTodoManagerTasks(new LocalDateTime());
 		if (clusterTaskResults != null && !clusterTaskResults.isEmpty()) {
-			Map<Serializable, List<IClusterTaskResult>> map = ComponentHelper.buildComponentsMap(clusterTaskResults, ClusterTaskResultFields.idCluster().name());
+			Map<IId, List<IClusterTaskResult>> map = ComponentHelper.buildComponentsMap(clusterTaskResults, ClusterTaskResultFields.idCluster().name());
 			if (map != null && !map.isEmpty()) {
-				for (Entry<Serializable, List<IClusterTaskResult>> entry : map.entrySet()) {
-					Serializable idTaskCluster = entry.getKey();
+				for (Entry<IId, List<IClusterTaskResult>> entry : map.entrySet()) {
+					IId idTaskCluster = entry.getKey();
 					if (idTaskCluster != null) {
 						List<IClusterTaskResult> ctrs = entry.getValue();
 						if (ctrs != null && !ctrs.isEmpty()) {
@@ -848,21 +848,21 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 							tasksLists.getNewTasksToDo().addAll(ctr.firstTasks);
 
 							for (ITask iTask : ctr.firstTasks) {
-								List<Serializable> previousTasks = getTaskMapper().findPreviousTasks(todoTask.getId());
-								for (Serializable idPreviousTask : previousTasks) {
+								List<IId> previousTasks = getTaskMapper().findPreviousTasks(todoTask.getId());
+								for (IId idPreviousTask : previousTasks) {
 									linkTwoTasks(idPreviousTask, iTask.getId());
 								}
 							}
 						}
 
 						for (ITask iTask : ctr.lastTasks) {
-							List<Serializable> nextTasks = getTaskMapper().findNextTasks(todoTask.getId());
-							for (Serializable idNextTask : nextTasks) {
+							List<IId> nextTasks = getTaskMapper().findNextTasks(todoTask.getId());
+							for (IId idNextTask : nextTasks) {
 								linkTwoTasks(iTask.getId(), idNextTask);
 							}
 						}
 					} else {
-						List<Serializable> previousTasks = getTaskMapper().findPreviousTasks(todoTask.getId());
+						List<IId> previousTasks = getTaskMapper().findPreviousTasks(todoTask.getId());
 						List<ITask> nextTasks = getTaskMapper().selectNextTasks(todoTask.getId(), null);
 						if (previousTasks != null && !previousTasks.isEmpty() && nextTasks != null && !nextTasks.isEmpty()) {
 							linkTwoTasks(previousTasks.get(0), nextTasks.get(0).getId());
@@ -932,13 +932,13 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/*
 	 * Delete a task.
 	 */
-	private void deleteTask(Serializable idTask) {
+	private void deleteTask(IId idTask) {
 		getAssoTaskPreviousTaskMapper().deleteTaskAsso(idTask);
 		getTaskMapper().deleteTask(idTask);
 	}
 
-	private List<Serializable> deleteOtherChildPreviousUpdateStatusTasks(ITask task) {
-		List<Serializable> tasksToDelete = getTaskMapper().findTasksToDelete(task.getIdPreviousUpdateStatusTask(), task.getNextStatus());
+	private List<IId> deleteOtherChildPreviousUpdateStatusTasks(ITask task) {
+		List<IId> tasksToDelete = getTaskMapper().findTasksToDelete(task.getIdPreviousUpdateStatusTask(), task.getNextStatus());
 		if (tasksToDelete != null && !tasksToDelete.isEmpty()) {
 			getTodoMapper().deleteTasksTodos(tasksToDelete);
 			getTodoMapper().deleteTaskErrors(tasksToDelete);
@@ -958,7 +958,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		entityServiceDelegate.editEntity(todo, false);
 	}
 
-	public void updateTodoDescription(Serializable idObject, Class<? extends ITaskObject<?>> objectClass) {
+	public void updateTodoDescription(IId idObject, Class<? extends ITaskObject<?>> objectClass) {
 		if (idObject == null) {
 			return;
 		}
@@ -967,11 +967,11 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		getTodoMapper().updateDescription(objectDescription, idObject);
 	}
 
-	public LocalDateTime getTaskEndTime(Serializable idTaskObject, String taskCode) {
+	public LocalDateTime getTaskEndTime(IId idTaskObject, String taskCode) {
 		return getTaskMapper().getTaskEndTime(idTaskObject, taskCode);
 	}
 
-	public void validateTask(Serializable idTask) {
+	public void validateTask(IId idTask) {
 		getTaskMapper().validateTask(idTask);
 	}
 
@@ -983,16 +983,16 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		saveOrUpdateEntity(taskBackup);
 	}
 
-	public ITaskBackup findBackup(Serializable idTaskCluster) {
+	public ITaskBackup findBackup(IId idTaskCluster) {
 		return getTaskManagerMapper().findBackupByIdCluster(idTaskCluster);
 	}
 
-	public <E extends Enum<E>, F extends ITaskObject<E>> ITaskBackup findBackup(Serializable idTaskObject, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> ITaskBackup findBackup(IId idTaskObject, Class<F> objectClass) {
 		return getTaskManagerMapper().findBackupByIdObjectAndClass(idTaskObject, objectClass);
 	}
 
 	public List<ITaskBackup> findTasksBackupToLaunch(int nbLines, int maxRetry) {
-		Serializable idProcess = new IdRaw(guidGenerator.newGUID());
+		IId idProcess = new IdRaw(guidGenerator.newGUID());
 		getTaskManagerMapper().flagTasksBackupToLaunch(idProcess, nbLines, maxRetry, new Date());
 		return getTaskManagerMapper().findTasksBackupToLaunch(idProcess);
 	}
@@ -1000,37 +1000,37 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Add a cluster id to the queue.
 	 */
-	public void addToQueue(Serializable idCluster) {
+	public void addToQueue(IId idCluster) {
 		if (idCluster != null) {
 			getQueue().add(idCluster);
 		}
 	}
 
-	private Set<Serializable> getQueue() {
+	private Set<IId> getQueue() {
 		if (clusterIdsQueue.get() == null) {
-			clusterIdsQueue.set(new CopyOnWriteArraySet<Serializable>());
+			clusterIdsQueue.set(new CopyOnWriteArraySet<IId>());
 		}
 
 		return clusterIdsQueue.get();
 	}
 
-	public Serializable getNextFromQueue() {
+	public IId getNextFromQueue() {
 		if (clusterIdsQueue.get() == null || getQueue().isEmpty()) {
 			return null;
 		}
 
-		Serializable nextIdCluster = getQueue().iterator().next();
+		IId nextIdCluster = getQueue().iterator().next();
 		getQueue().remove(nextIdCluster);
 		return nextIdCluster;
 	}
 
-	public <E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(Serializable idObject, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(IId idObject, Class<F> objectClass) {
 		F taskObject = entityServiceDelegate.findEntityById(objectClass, idObject);
 		addToQueue(taskObject);
 	}
 
 	public <E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(F taskObject) {
-		Serializable idCluster = taskObject.getIdCluster();
+		IId idCluster = taskObject.getIdCluster();
 		if (idCluster == null) {
 			idCluster = createTaskCluster(taskObject);
 		}
@@ -1114,7 +1114,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Delete an archived task cluster, and all tasks that were linked to this cluster.
 	 */
-	public void deleteTasksCluster(Serializable idTaskCluster) {
+	public void deleteTasksCluster(IId idTaskCluster) {
 		if (idTaskCluster == null) {
 			return;
 		}

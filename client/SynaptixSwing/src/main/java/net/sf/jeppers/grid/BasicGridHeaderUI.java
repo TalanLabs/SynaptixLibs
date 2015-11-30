@@ -19,10 +19,16 @@
  */
 package net.sf.jeppers.grid;
 
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.CellRendererPane;
+import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 
 /**
  * GridUI for use with row and column headers.

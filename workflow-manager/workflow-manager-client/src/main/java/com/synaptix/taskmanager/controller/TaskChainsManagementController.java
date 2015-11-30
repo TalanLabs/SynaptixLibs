@@ -156,7 +156,7 @@ public class TaskChainsManagementController extends AbstractPscSimpleCRUDManagem
 	public void deleteEntity(ITaskChain paginationEntity) {
 		if (getViewFactory().showQuestionMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().validation(),
 				StaticCommonHelper.getCommonConstantsBundle().doYouWantToDeleteTheSelectedItem())) {
-			loadEntity(paginationEntity, new IResultCallback<ITaskChain>() {
+			loadEntity(paginationEntity.getId(), new IResultCallback<ITaskChain>() {
 				@Override
 				public void setResult(final ITaskChain taskChain) {
 					if (taskChain != null) {

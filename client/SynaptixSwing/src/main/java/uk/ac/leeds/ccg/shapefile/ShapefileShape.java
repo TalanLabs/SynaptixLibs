@@ -1,5 +1,6 @@
 package uk.ac.leeds.ccg.shapefile;
-import cmp.LEDataStream.*;
+
+import cmp.LEDataStream.LEDataOutputStream;
 
 public interface ShapefileShape {
     public int getShapeType();

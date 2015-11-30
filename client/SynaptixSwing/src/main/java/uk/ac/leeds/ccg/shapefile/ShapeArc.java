@@ -5,8 +5,11 @@
 
 package uk.ac.leeds.ccg.shapefile;
 
-import java.io.*;
-import cmp.LEDataStream.*;
+import java.io.IOException;
+import java.io.Serializable;
+
+import cmp.LEDataStream.LEDataInputStream;
+import cmp.LEDataStream.LEDataOutputStream;
 
 /**
  * Wrapper for a Shapefile arc.

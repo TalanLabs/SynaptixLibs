@@ -3,9 +3,9 @@ package mapper;
 import java.util.List;
 import java.util.Map;
 
-import model.ICountry;
-
 import org.apache.ibatis.annotations.Param;
+
+import model.ICountry;
 
 public interface CountryMapper {
 

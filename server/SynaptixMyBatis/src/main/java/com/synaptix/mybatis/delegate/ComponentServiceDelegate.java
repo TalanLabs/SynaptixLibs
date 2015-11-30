@@ -1,6 +1,5 @@
 package com.synaptix.mybatis.delegate;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import com.google.inject.Inject;
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.helper.FindMappedStatement;
 import com.synaptix.mybatis.helper.PaginationMappedStatement;
@@ -127,7 +127,7 @@ public class ComponentServiceDelegate {
 	 * @param id
 	 * @return
 	 */
-	public <E extends IComponent> E findComponentByPropertyName(Class<E> componentClass, String idPropertyName, Serializable id) throws ServiceException {
+	public <E extends IComponent> E findComponentByPropertyName(Class<E> componentClass, String idPropertyName, IId id) throws ServiceException {
 		MappedStatement mappedStatement = findMappedStatement.getFindComponentsByPropertyNameMappedStatement(componentClass, idPropertyName, false);
 		return daoSession.getSqlSession().<E> selectOne(mappedStatement.getId(), id);
 	}
@@ -140,7 +140,7 @@ public class ComponentServiceDelegate {
 	 * @param idParent
 	 * @return
 	 */
-	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, Serializable idParent) throws ServiceException {
+	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, IId idParent) throws ServiceException {
 		MappedStatement mappedStatement = findMappedStatement.getFindComponentsByPropertyNameMappedStatement(componentClass, idParentPropertyName, true);
 		return daoSession.getSqlSession().<E> selectList(mappedStatement.getId(), idParent);
 	}

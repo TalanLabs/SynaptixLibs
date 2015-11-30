@@ -19,14 +19,33 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
-import java.util.*;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.CellEditor;
+import javax.swing.CellRendererPane;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.ActionMapUIResource;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author <a href="grom@capsicumcorp.com">Cameron Zemek</a>

@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -9,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import com.synaptix.swing.WaitComponentFeedbackPanel;
-import com.synaptix.swing.WaitComponentSwingWorker;
 import com.synaptix.swing.WaitGlassPaneSwingWorker;
 import com.synaptix.swing.utils.Manager;
 

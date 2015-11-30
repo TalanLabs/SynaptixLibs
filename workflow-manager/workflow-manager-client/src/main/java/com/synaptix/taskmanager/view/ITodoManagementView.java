@@ -1,9 +1,9 @@
 package com.synaptix.taskmanager.view;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.synaptix.client.view.IView;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.ITodo;
 import com.synaptix.taskmanager.model.ITodoFolderListView;
 
@@ -11,7 +11,7 @@ public interface ITodoManagementView extends IView {
 
 	void updateDetailsPanel();
 
-	void updateTodos(List<ITodo> todoList, List<Serializable> idObjects);
+	void updateTodos(List<ITodo> todoList, List<IId> idObjects);
 
 	void setTodos(List<ITodo> todoList);
 

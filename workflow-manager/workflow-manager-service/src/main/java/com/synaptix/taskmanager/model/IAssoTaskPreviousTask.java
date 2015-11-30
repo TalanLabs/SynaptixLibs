@@ -1,19 +1,18 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
-
 import com.synaptix.component.IComponent;
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 
 @SynaptixComponent
 public interface IAssoTaskPreviousTask extends IComponent {
 
-	public Serializable getIdTask();
+	public IId getIdTask();
 
-	public void setIdTask(Serializable idTask);
+	public void setIdTask(IId idTask);
 
-	public Serializable getIdPreviousTask();
+	public IId getIdPreviousTask();
 
-	public void setIdPreviousTask(Serializable idPreviousTask);
+	public void setIdPreviousTask(IId idPreviousTask);
 
 }

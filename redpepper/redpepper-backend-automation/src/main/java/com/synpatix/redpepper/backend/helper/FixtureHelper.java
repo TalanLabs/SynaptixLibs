@@ -108,7 +108,7 @@ public class FixtureHelper {
 	 * @param entity
 	 * @return
 	 */
-	public static Serializable getId(IEntity entity) {
+	public static IId getId(IEntity entity) {
 		return entity == null ? null : entity.getId();
 	}
 

@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +16,8 @@ import com.synaptix.swing.utils.GenericObjectToString;
 import com.synaptix.view.swing.WaitComponentSwingViewWorker;
 import com.synaptix.widget.searchfield.context.AbstractSearchFieldWidgetContext;
 import com.synaptix.widget.searchfield.view.swing.DefaultSearchFieldWidget;
+
+import helper.MainHelper;
 
 public class MainSearchWidget {
 

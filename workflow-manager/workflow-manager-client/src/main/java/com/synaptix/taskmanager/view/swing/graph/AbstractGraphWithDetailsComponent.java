@@ -18,6 +18,7 @@ import com.mxgraph.canvas.mxImageCanvas;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -25,7 +26,6 @@ import com.mxgraph.util.mxEventSource;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
-import com.mxgraph.swing.mxGraphComponent;
 
 public abstract class AbstractGraphWithDetailsComponent extends JPanel {
 

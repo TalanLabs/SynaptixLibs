@@ -20,6 +20,7 @@
 package net.sf.jeppers.grid;
 
 import java.util.EventListener;
+
 import javax.swing.event.EventListenerList;
 
 /**

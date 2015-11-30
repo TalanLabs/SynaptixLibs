@@ -1,9 +1,9 @@
 package com.synaptix.taskmanager.controller.dialog.edit;
 
+import com.synaptix.taskmanager.controller.ITaskManagerController;
 import com.synaptix.taskmanager.model.ITaskChain;
 import com.synaptix.taskmanager.util.StaticHelper;
 import com.synaptix.taskmanager.view.ITaskManagerViewFactory;
-import com.synaptix.taskmanager.controller.ITaskManagerController;
 import com.synaptix.widget.component.controller.dialog.AbstractCRUDDialogController;
 import com.synaptix.widget.view.dialog.IBeanExtensionDialogView;
 import com.synaptix.widget.view.dialog.ICRUDBeanDialogView;

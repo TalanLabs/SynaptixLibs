@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import javassist.util.proxy.MethodHandler;
-
 import org.apache.ibatis.executor.loader.ResultLoaderMap;
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.Configuration;
@@ -14,6 +12,8 @@ import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentBeanMethod;
 import com.synaptix.component.factory.ComponentDescriptor;
 import com.synaptix.component.factory.ComponentFactory;
+
+import javassist.util.proxy.MethodHandler;
 
 class MyComponentMethodHandler<E extends IComponent> implements MethodHandler, InvocationHandler {
 

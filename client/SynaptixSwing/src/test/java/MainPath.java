@@ -5,10 +5,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import path.ExamplePathModel;
-
 import com.synaptix.swing.JArrowScrollPane;
 import com.synaptix.swing.path.JPath;
+
+import path.ExamplePathModel;
 
 public class MainPath {
 

@@ -19,11 +19,15 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.io.Serializable;
 import java.text.Format;
-import javax.swing.*;
-import javax.swing.border.*;
+
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 /**
  * Default implementation of <code>CellStyle</code>. 
