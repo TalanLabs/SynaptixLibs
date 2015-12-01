@@ -1,8 +1,8 @@
 package com.synaptix.deployer.dao;
 
-import java.io.Serializable;
 import java.util.Locale;
 
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoUserContext;
 
 public class DeployerDaoContext implements IDaoUserContext {
@@ -13,7 +13,7 @@ public class DeployerDaoContext implements IDaoUserContext {
 	}
 
 	@Override
-	public Serializable getCurrentIdUser() {
+	public IId getCurrentIdUser() {
 		return null;
 	}
 

@@ -33,6 +33,7 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.factory.DefaultComputedFactory;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.entity.extension.BusinessComponentExtensionProcessor;
 import com.synaptix.entity.extension.CacheComponentExtensionProcessor;
@@ -91,7 +92,7 @@ public class MainBytes {
 		}
 
 		@Override
-		public Serializable getCurrentIdUser() {
+		public IId getCurrentIdUser() {
 			// TODO Auto-generated method stub
 			return null;
 		}
