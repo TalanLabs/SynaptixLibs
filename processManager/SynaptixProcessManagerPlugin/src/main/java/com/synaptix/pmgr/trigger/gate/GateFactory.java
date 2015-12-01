@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nanoxml.XMLElement;
-
 import org.apache.commons.logging.Log;
 
 import com.synaptix.pmgr.core.lib.ProcessEngine;
 import com.synaptix.pmgr.trigger.injector.InjectorDefinition;
 import com.synaptix.pmgr.trigger.injector.MessageInjector;
 import com.synaptix.toolkits.nanoxml.NanoXMLKit;
+
+import nanoxml.XMLElement;
 
 public class GateFactory {
 

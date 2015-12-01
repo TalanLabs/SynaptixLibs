@@ -1,7 +1,9 @@
 package uk.ac.leeds.ccg.shapefile;
 
-import java.io.*;
-import cmp.LEDataStream.*;
+import java.io.IOException;
+import java.io.Serializable;
+
+import cmp.LEDataStream.LEDataInputStream;
 
 /**
  * Wrapper for a Shapefile polygon.

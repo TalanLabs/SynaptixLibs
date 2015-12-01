@@ -1,11 +1,10 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
 
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.ICacheComponentExtension.Cache;
 import com.synaptix.entity.extension.JdbcTypesEnum;
@@ -38,9 +37,9 @@ public interface IStatusGraph extends ITracable, ICancellableEntity {
 	public void setNextStatus(String nextStatus);
 
 	@Column(name = "ID_TASK_TYPE")
-	public Serializable getIdTaskType();
+	public IId getIdTaskType();
 
-	public void setIdTaskType(Serializable idTaskType);
+	public void setIdTaskType(IId idTaskType);
 
 	@Collection(sqlTableName = "T_TASK_TYPE", idSource = "ID_TASK_TYPE", alias = "tt_", componentClass = ITaskType.class)
 	public ITaskType getTaskType();

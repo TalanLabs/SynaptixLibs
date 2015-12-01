@@ -1,15 +1,14 @@
 package widget.dialog;
 
-import helper.MainHelper;
-
 import javax.swing.SwingUtilities;
-
-import toto.IPerson;
-import toto.PersonBuilder;
 
 import com.synaptix.widget.view.ISynaptixViewFactory;
 import com.synaptix.widget.view.dialog.IBeanWizardDialogView;
 import com.synaptix.widget.view.swing.SwingSynaptixViewFactory;
+
+import helper.MainHelper;
+import toto.IPerson;
+import toto.PersonBuilder;
 
 public class MainBeanWizardDialog {
 

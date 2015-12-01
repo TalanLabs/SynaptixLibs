@@ -19,8 +19,9 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Rectangle;
+
+import javax.swing.JLabel;
 
 /**
  * StampLabel overrides methods as per the documentation from Sun's JDK 1.4.2

@@ -1,10 +1,9 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
-
-import com.synaptix.common.util.IResultCallback;
-import com.synaptix.taskmanager.controller.dialog.edit.TodoFolderDialogController;
 import com.synaptix.client.common.controller.AbstractPscSimpleNlsCRUDManagementController;
+import com.synaptix.common.util.IResultCallback;
+import com.synaptix.entity.IId;
+import com.synaptix.taskmanager.controller.dialog.edit.TodoFolderDialogController;
 import com.synaptix.taskmanager.helper.StaticTaskManagerHelper;
 import com.synaptix.taskmanager.model.ITodoFolder;
 import com.synaptix.taskmanager.service.ITodoFolderService;
@@ -34,16 +33,16 @@ public class TodoFoldersManagementController extends AbstractPscSimpleNlsCRUDMan
 	}
 
 	@Override
-	protected void addEntitySuccess(final Serializable idTodoFolder) {
+	protected void addEntitySuccess(final IId idTodoFolder) {
 		operationEntity(idTodoFolder);
 	}
 
 	@Override
-	protected void editEntitySuccess(final Serializable idTodoFolder) {
+	protected void editEntitySuccess(final IId idTodoFolder) {
 		operationEntity(idTodoFolder);
 	}
 
-	private void operationEntity(final Serializable idTodoFolder) {
+	private void operationEntity(final IId idTodoFolder) {
 		if (idTodoFolder == null) {
 			_operationEntitySuccess(idTodoFolder);
 		} else {
@@ -67,15 +66,15 @@ public class TodoFoldersManagementController extends AbstractPscSimpleNlsCRUDMan
 		}
 	}
 
-	private void _operationEntitySuccess(final Serializable idTodoFolder) {
+	private void _operationEntitySuccess(final IId idTodoFolder) {
 		loadPagination();
 	}
 
-//	public void editRoles(final Serializable idTodoFolder) {
+//	public void editRoles(final IId idTodoFolder) {
 //		editRoles(idTodoFolder, null);
 //	}
 
-//	private void editRoles(final Serializable idTodoFolder, final Callback callback) {
+//	private void editRoles(final IId idTodoFolder, final Callback callback) {
 //		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<Pair<List<IRole>, List<IRole>>>() {
 //
 //			@Override
@@ -100,7 +99,7 @@ public class TodoFoldersManagementController extends AbstractPscSimpleNlsCRUDMan
 //		});
 //	}
 
-//	private void saveRoles(final Serializable idTodoFolder, final List<IRole> selectedRoles, final Callback callback) {
+//	private void saveRoles(final IId idTodoFolder, final List<IRole> selectedRoles, final Callback callback) {
 //		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractSavingViewWorker<Void>() {
 //
 //			@Override

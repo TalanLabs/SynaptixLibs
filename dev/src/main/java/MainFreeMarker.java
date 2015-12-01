@@ -1,16 +1,13 @@
 import java.io.OutputStreamWriter;
-import java.io.Serializable;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import model.ICountry;
-import model.IZip;
-
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 
 import freemarker.ext.beans.BeansWrapper;
@@ -19,6 +16,8 @@ import freemarker.template.Template;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import model.ICountry;
+import model.IZip;
 
 public class MainFreeMarker {
 
@@ -81,7 +80,7 @@ public class MainFreeMarker {
 			return this;
 		}
 
-		public <E extends IComponent> IZip find(Serializable id) {
+		public <E extends IComponent> IZip find(IId id) {
 			System.out.println(id.getClass());
 			return toto(null);
 		}

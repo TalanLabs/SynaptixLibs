@@ -1,6 +1,5 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import com.google.inject.Provider;
 import com.synaptix.client.service.IFrontendContext;
 import com.synaptix.client.service.IFrontendContextInitialize;
 import com.synaptix.client.view.IView;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.controller.context.TaskChainSearchDialogContext;
 import com.synaptix.taskmanager.controller.context.TaskChainSearchFieldWidgetContext;
 import com.synaptix.taskmanager.controller.context.TaskServiceDescriptorSearchFieldWidgetContext;
@@ -108,7 +108,7 @@ public class TaskManagerController extends AbstractController implements ITaskMa
 	/**
 	 * Show and load tasks graph for idTasks
 	 */
-	public void loadTasksGraph(Serializable idTask) {
+	public void loadTasksGraph(IId idTask) {
 		if (tasksGraphController != null) {
 			tasksGraphController.loadTasksGraphWithIdTask(idTask);
 		}
@@ -159,7 +159,7 @@ public class TaskManagerController extends AbstractController implements ITaskMa
 	}
 
 	@Override
-	public void searchErrorsByTask(Serializable idTask) {
+	public void searchErrorsByTask(IId idTask) {
 		if (errorsManagementController != null) {
 			errorsManagementController.searchErrorsByTask(idTask);
 		}
@@ -182,13 +182,13 @@ public class TaskManagerController extends AbstractController implements ITaskMa
 	}
 
 	@Override
-	public void refreshTodoList(List<Serializable> idObjects) {
+	public void refreshTodoList(List<IId> idObjects) {
 		todosManagementController.refresh(idObjects);
 	}
 
 	@Override
-	public void refreshTodoList(Serializable idObject) {
-		ArrayList<Serializable> list = new ArrayList<Serializable>();
+	public void refreshTodoList(IId idObject) {
+		List<IId> list = new ArrayList<IId>();
 		list.add(idObject);
 		todosManagementController.refresh(list);
 	}
@@ -198,13 +198,13 @@ public class TaskManagerController extends AbstractController implements ITaskMa
 		todosManagementController.reloadTodoDetails();
 	}
 
-	public void searchTaskByCluster(Serializable idCluster) {
+	public void searchTaskByCluster(IId idCluster) {
 		if (tasksManagementController != null) {
 			tasksManagementController.searchTasksByIdCluster(idCluster);
 		}
 	}
 
-	public void startTaskManager(Serializable idCluster) {
+	public void startTaskManager(IId idCluster) {
 		if (tasksManagementController != null) {
 			tasksManagementController.startTaskManager(idCluster);
 		}

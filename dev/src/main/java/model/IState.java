@@ -1,13 +1,12 @@
 package model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.synaptix.component.annotation.SynaptixComponent;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.ICacheComponentExtension.Cache;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 
@@ -28,9 +27,9 @@ public interface IState extends IEntity {
 
 	@Column(name = "ID_COUNTRY", length = 16)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Serializable getIdCountry();
+	public IId getIdCountry();
 
-	public void setIdCountry(Serializable idCountry);
+	public void setIdCountry(IId idCountry);
 
 	@Column(name = "COUNTRY", length = 3)
 	@JdbcType(JdbcTypesEnum.VARCHAR)

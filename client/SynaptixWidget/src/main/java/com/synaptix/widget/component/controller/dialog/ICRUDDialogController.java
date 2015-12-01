@@ -1,10 +1,9 @@
 package com.synaptix.widget.component.controller.dialog;
 
-import java.io.Serializable;
-
 import com.synaptix.client.view.IView;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.widget.crud.controller.ICRUDContext;
 
 /**
@@ -23,8 +22,6 @@ public interface ICRUDDialogController<E extends IEntity> {
 
 	/**
 	 * Show a dialog and show entity
-	 *
-	 * @param resultCallback
 	 */
 	public void showEntity(IView parentView, E entity);
 
@@ -49,13 +46,13 @@ public interface ICRUDDialogController<E extends IEntity> {
 	 */
 	public void setCRUDContext(ICRUDContext<E> crudContext);
 
-	public boolean hasPrevious(Serializable idCurrent);
+	public boolean hasPrevious(IId idCurrent);
 
-	public boolean hasNext(Serializable idCurrent);
+	public boolean hasNext(IId idCurrent);
 
-	public void showPrevious(Serializable idCurrent, boolean hasChanged);
+	public void showPrevious(IId idCurrent, boolean hasChanged);
 
-	public void showNext(Serializable idCurrent, boolean hasChanged);
+	public void showNext(IId idCurrent, boolean hasChanged);
 
 	public boolean hasAuthWrite();
 

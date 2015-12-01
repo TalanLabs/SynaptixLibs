@@ -61,6 +61,7 @@ import com.synaptix.common.helper.CollectionHelper;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
+import com.synaptix.entity.IId;
 import com.synaptix.swing.JSyScrollPane;
 import com.synaptix.swing.WaitComponentFeedbackPanel;
 import com.synaptix.swing.utils.ButtonHelper;
@@ -400,7 +401,7 @@ public class TodoManagementPanel extends WaitComponentFeedbackPanel implements c
 	}
 
 	@Override
-	public void updateTodos(List<ITodo> todoList, List<Serializable> idObjects) {
+	public void updateTodos(List<ITodo> todoList, List<IId> idObjects) {
 		if (todoList == null) {
 			return;
 		}
@@ -425,7 +426,7 @@ public class TodoManagementPanel extends WaitComponentFeedbackPanel implements c
 
 		// Fill map
 		for (ITodo todo : todoList) {
-			Serializable idObject = todo.getIdObject();
+			IId idObject = todo.getIdObject();
 			List<TodoListItem> todosForObject;
 			if (currentTodosMap.containsKey(idObject)) {
 				todosForObject = currentTodosMap.get(idObject);
@@ -473,9 +474,9 @@ public class TodoManagementPanel extends WaitComponentFeedbackPanel implements c
 		recomputeListItemHeight();
 	}
 
-	private void updateSelectedTodo(List<Serializable> idObjects) {
+	private void updateSelectedTodo(List<IId> idObjects) {
 		if (idObjects != null) {
-			Serializable idObject = idObjects.get(0);
+			IId idObject = idObjects.get(0);
 			TodoListItem itemToSelect = null;
 
 			List<Serializable> keys = new ArrayList<Serializable>(currentTodosMap.keySet());
@@ -547,7 +548,7 @@ public class TodoManagementPanel extends WaitComponentFeedbackPanel implements c
 		// Fill map
 		this.currentTodosMap = new LinkedHashMap<Serializable, List<TodoListItem>>();
 		for (ITodo todo : todoList) {
-			Serializable idObject = todo.getIdObject();
+			IId idObject = todo.getIdObject();
 			List<TodoListItem> todosForObject;
 			if (currentTodosMap.containsKey(idObject)) {
 				todosForObject = currentTodosMap.get(idObject);

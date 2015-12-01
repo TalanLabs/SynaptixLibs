@@ -1,7 +1,7 @@
 package service.impl;
 
-import service.IGabyService;
 import auth.MyAuthsBundleMethods;
+import service.IGabyService;
 
 public class GabyServerService implements IGabyService {
 

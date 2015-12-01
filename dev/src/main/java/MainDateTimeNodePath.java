@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.util.Arrays;
 
 import javax.swing.JFrame;
@@ -15,6 +13,8 @@ import com.synaptix.widget.path.view.swing.DateTimeNode;
 import com.synaptix.widget.path.view.swing.DateTimeNodePathModel;
 import com.synaptix.widget.path.view.swing.DefaultBaseLocalNodePathRenderer;
 import com.synaptix.widget.path.view.swing.plaf.basic.HorizontalPathUI;
+
+import helper.MainHelper;
 
 public class MainDateTimeNodePath {
 

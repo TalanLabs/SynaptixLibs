@@ -1,10 +1,10 @@
 package com.synaptix.taskmanager.controller;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import com.synaptix.entity.ErrorEntityFields;
 import com.synaptix.entity.IErrorEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IWithError;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.service.IEntityService;
@@ -72,12 +72,12 @@ public class ErrorsManagementController extends AbstractWorkflowComponentsManage
 	 * @param idTask
 	 *            ID of the task.
 	 */
-	public void searchErrorsByTask(Serializable idTask) {
+	public void searchErrorsByTask(IId idTask) {
 		cancelWork();
 		errorsManagementViewDescriptor.searchByTask(idTask);
 	}
 
-	public void searchTasks(Serializable idObject, Class<? extends IWithError> clazz) {
+	public void searchTasks(IId idObject, Class<? extends IWithError> clazz) {
 		ITaskObject<?> taskObject = (ITaskObject<?>) getServiceFactory().getService(IEntityService.class).findEntityById(clazz, idObject);
 		taskManagerController.searchTasksBy(taskObject);
 	}

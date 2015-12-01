@@ -20,6 +20,7 @@ import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.entity.ErrorEntityFields;
 import com.synaptix.entity.IErrorEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.swing.JSyTable;
 import com.synaptix.taskmanager.controller.ErrorsManagementController;
@@ -96,7 +97,7 @@ public class ErrorsManagementPanelDescriptor extends DefaultComponentsManagement
 	}
 
 	@Override
-	public void searchByTask(Serializable idTask) {
+	public void searchByTask(IId idTask) {
 		showDockable();
 
 		getSearchHeader().defaultFilters();

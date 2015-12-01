@@ -18,9 +18,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
-import mapper.CountryMapper;
-import mapper.ZipMapper;
-
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.combo.WidestComboPopupPrototype;
 
@@ -37,6 +34,7 @@ import com.synaptix.constants.ConstantsBundleManager;
 import com.synaptix.constants.DefaultConstantsBundleManager;
 import com.synaptix.constants.DefaultConstantsLocaleSession;
 import com.synaptix.constants.IConstantsLocaleSession;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.entity.extension.BusinessComponentExtensionProcessor;
 import com.synaptix.entity.extension.CacheComponentExtensionProcessor;
@@ -60,6 +58,9 @@ import com.synaptix.widget.guice.SwingConstantsBundleManager;
 import com.synaptix.widget.guice.SynaptixWidgetModule;
 import com.synaptix.widget.skin.SubstanceFlatWhiteLookAndFeel;
 import com.synaptix.widget.view.swing.helper.IconHelper;
+
+import mapper.CountryMapper;
+import mapper.ZipMapper;
 
 public class MainHelper {
 
@@ -193,7 +194,7 @@ public class MainHelper {
 
 	public static class DatabaseUserSession implements IDaoUserContext {
 
-		private Serializable idUser = new IdRaw("E783ACB641D54922AC6C4309CDC4D668");
+		private IId idUser = new IdRaw("E783ACB641D54922AC6C4309CDC4D668");
 
 		private Locale locale = Locale.ENGLISH;
 
@@ -212,7 +213,7 @@ public class MainHelper {
 			return locale;
 		}
 
-		public void setIdUser(Serializable idUser) {
+		public void setIdUser(IId idUser) {
 			this.idUser = idUser;
 		}
 

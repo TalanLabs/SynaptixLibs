@@ -1,12 +1,12 @@
 package com.synaptix.mybatis.service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.Inject;
 import com.synaptix.component.IComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.delegate.ComponentServiceDelegate;
 import com.synaptix.service.IComponentService;
@@ -57,7 +57,7 @@ public class ComponentServerService implements IComponentService {
 	}
 
 	@Override
-	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, Serializable idParent) throws ServiceException {
+	public <E extends IComponent> List<E> findComponentsByIdParent(Class<E> componentClass, String idParentPropertyName, IId idParent) throws ServiceException {
 		try {
 			daoSession.begin();
 			return componentServiceDelegate.findComponentsByIdParent(componentClass, idParentPropertyName, idParent);

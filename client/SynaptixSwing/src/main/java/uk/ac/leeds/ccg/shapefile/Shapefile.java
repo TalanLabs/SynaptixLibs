@@ -14,8 +14,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Vector;
 
-import com.synaptix.swing.SwingMessages;
-
 import cmp.LEDataStream.LEDataInputStream;
 import cmp.LEDataStream.LEDataOutputStream;
 

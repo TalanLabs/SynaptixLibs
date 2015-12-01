@@ -1,11 +1,11 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
 
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.ICacheComponentExtension.Cache;
 import com.synaptix.entity.extension.JdbcTypesEnum;
@@ -60,9 +60,9 @@ public interface ITaskChainCriteria<T extends Enum<?>> extends ITracable, ICance
 	public void setGraphRuleReadable(String graphRuleReadable);
 
 	@Column(name = "ID_TODO_FOLDER")
-	public Serializable getIdTodoFolder();
+	public IId getIdTodoFolder();
 
-	public void setIdTodoFolder(Serializable idTodoFolder);
+	public void setIdTodoFolder(IId idTodoFolder);
 
 	@Collection(sqlTableName = "T_TODO_FOLDER", idSource = "ID_TODO_FOLDER", alias = "tf_", componentClass = ITodoFolder.class)
 	public ITodoFolder getTodoFolder();

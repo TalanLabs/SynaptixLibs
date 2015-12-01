@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 
@@ -26,6 +24,8 @@ import com.vlsolutions.swing.docking.DockableState;
 import com.vlsolutions.swing.docking.DockingConstants;
 import com.vlsolutions.swing.docking.DockingDesktop;
 import com.vlsolutions.swing.docking.RelativeDockablePosition;
+
+import helper.MainHelper;
 
 public class MainDocking {
 

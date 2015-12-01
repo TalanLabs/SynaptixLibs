@@ -1,6 +1,3 @@
-import helper.MainHelper;
-import mapper.CountryMapper;
-
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.SqlSessionManager;
@@ -8,6 +5,9 @@ import org.apache.ibatis.session.SqlSessionManager;
 import com.synaptix.mybatis.cache.SynaptixCacheListener;
 import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.hack.SynaptixConfiguration;
+
+import helper.MainHelper;
+import mapper.CountryMapper;
 
 public class MainMyBatis {
 

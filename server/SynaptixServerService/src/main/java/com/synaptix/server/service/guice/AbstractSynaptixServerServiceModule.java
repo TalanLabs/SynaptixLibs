@@ -26,9 +26,6 @@ public abstract class AbstractSynaptixServerServiceModule extends AbstractModule
 
 	/**
 	 * Bind a synaptix service
-	 *
-	 * @param serviceClass
-	 * @param serverServiceImplClass
 	 */
 	protected final <F> ServiceBindingBuilder<F> bindService(final Class<F> implServiceClass) {
 		Preconditions.checkArgument(implServiceClass != null, "Parameter 'implServiceClass' must not be null");

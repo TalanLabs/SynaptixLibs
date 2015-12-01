@@ -1,11 +1,10 @@
-import junit.framework.TestCase;
-
 import org.junit.Test;
-
-import test.abonnement.GabyAbonnement;
 
 import com.synaptix.server.abonnement.AbonnementManager;
 import com.synaptix.server.abonnement.NotFoundAbonnementException;
+
+import junit.framework.TestCase;
+import test.abonnement.GabyAbonnement;
 
 public class TestAbonnement extends TestCase {
 

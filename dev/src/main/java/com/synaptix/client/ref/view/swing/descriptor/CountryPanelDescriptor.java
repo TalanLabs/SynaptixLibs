@@ -1,12 +1,11 @@
 package com.synaptix.client.ref.view.swing.descriptor;
 
-import model.CountryFields;
-import model.ICountry;
-
 import com.synaptix.component.helper.ComponentHelper;
 import com.synaptix.widget.component.view.swing.descriptor.DefaultComponentsManagementPanelDescriptor;
 
 import constants.CountryTableConstantsBundle;
+import model.CountryFields;
+import model.ICountry;
 
 public class CountryPanelDescriptor extends DefaultComponentsManagementPanelDescriptor<ICountry> {
 

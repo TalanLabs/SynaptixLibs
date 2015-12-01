@@ -1,11 +1,10 @@
 package com.synaptix.taskmanager.controller.helper;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 
 import com.synaptix.component.IComponent;
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.IDatabaseComponentExtension;
 
 @SynaptixComponent
@@ -18,9 +17,9 @@ public interface INlsMessageData extends IComponent, IDatabaseComponentExtension
 
 	@Column(name = "ID_OBJECT", nullable = false)
 	@EqualsKey
-	public Serializable getIdObject();
+	public IId getIdObject();
 
-	public void setIdObject(Serializable idObject);
+	public void setIdObject(IId idObject);
 
 	@Column(name = "DEFAULT_MEANING", length = 240)
 	public String getDefaultMeaning();

@@ -1,13 +1,13 @@
 package mapper;
 
-import java.io.Serializable;
+import org.apache.ibatis.annotations.Param;
+
+import com.synaptix.entity.IId;
 
 import model.IZip;
 
-import org.apache.ibatis.annotations.Param;
-
 public interface ZipMapper {
 
-	public IZip find(@Param("city") String city, @Param("zip") String zip, @Param("idCountry") Serializable idCountry);
+	public IZip find(@Param("city") String city, @Param("zip") String zip, @Param("idCountry") IId idCountry);
 
 }

@@ -1,7 +1,6 @@
 package com.synaptix.swing.utils;
 
 import com.synaptix.client.view.Perspective;
-import com.synaptix.swing.utils.Utils;
 
 public class DefaultPerspectivesBuilder {
 

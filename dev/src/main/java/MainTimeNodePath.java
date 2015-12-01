@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.util.Arrays;
 
 import javax.swing.JFrame;
@@ -11,10 +9,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.swing.path.JPath;
+import com.synaptix.widget.path.view.swing.DefaultBaseLocalNodePathRenderer;
 import com.synaptix.widget.path.view.swing.TimeNode;
 import com.synaptix.widget.path.view.swing.TimeNodePathModel;
-import com.synaptix.widget.path.view.swing.DefaultBaseLocalNodePathRenderer;
 import com.synaptix.widget.path.view.swing.plaf.basic.HorizontalPathUI;
+
+import helper.MainHelper;
 
 public class MainTimeNodePath {
 

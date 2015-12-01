@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -50,6 +48,8 @@ import com.synaptix.swing.table.SyTableColumn;
 import com.synaptix.swing.table.filter.HourFilterColumn;
 import com.synaptix.swing.utils.DateTimeUtils;
 import com.synaptix.swing.widget.HourExcelColumnRenderer;
+
+import helper.MainHelper;
 
 public class MainSyTable {
 

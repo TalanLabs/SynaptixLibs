@@ -1,7 +1,6 @@
 package com.synaptix.taskmanager.service;
 
 import com.synaptix.service.ICRUDEntityService;
-
 import com.synaptix.taskmanager.model.ITaskChain;
 import com.synaptix.taskmanager.model.ITaskType;
 

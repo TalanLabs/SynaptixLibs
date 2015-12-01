@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,6 +29,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.synaptix.swing.utils.FontAwesomeHelper;
 import com.synaptix.widget.actions.view.swing.AbstractAddAction;
 import com.synaptix.widget.view.swing.RoundedBorder;
+
+import helper.MainHelper;
 
 public class MainCard {
 

@@ -1,10 +1,10 @@
 package com.synaptix.taskmanager.dao.mapper;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.IAssoTaskPreviousTask;
 import com.synaptix.taskmanager.model.ITaskObject;
 
@@ -24,12 +24,12 @@ public interface AssoTaskPreviousTaskMapper {
 	 * @param idObject
 	 * @return
 	 */
-	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTasksBy(@Param("taskObjectClass") Class<? extends ITaskObject<?>> taskObjectClass, @Param("idObject") Serializable idObject);
+	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTasksBy(@Param("taskObjectClass") Class<? extends ITaskObject<?>> taskObjectClass, @Param("idObject") IId idObject);
 
 	/**
 	 * Selects tasks associations for a cluster.
 	 */
-	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTasksByCluster(@Param("idCluster") Serializable idCluster);
+	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTasksByCluster(@Param("idCluster") IId idCluster);
 
 	/**
 	 * Selects tasks associations for a cluster archive
@@ -37,9 +37,9 @@ public interface AssoTaskPreviousTaskMapper {
 	 * @param idCluster
 	 * @return
 	 */
-	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTaskArchsByCluster(@Param("idCluster") Serializable idCluster);
+	public List<IAssoTaskPreviousTask> selectAssoTaskPreviousTaskArchsByCluster(@Param("idCluster") IId idCluster);
 
-	public void deleteTaskAsso(@Param("idTask") Serializable idTask);
+	public void deleteTaskAsso(@Param("idTask") IId idTask);
 
-	public void deleteTasksAssos(@Param("idList") List<Serializable> idTaskList);
+	public void deleteTasksAssos(@Param("idList") List<IId> idTaskList);
 }

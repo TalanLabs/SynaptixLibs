@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
@@ -11,6 +9,8 @@ import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+
+import helper.MainHelper;
 
 public class MainTextEditorDemo extends JFrame {
 

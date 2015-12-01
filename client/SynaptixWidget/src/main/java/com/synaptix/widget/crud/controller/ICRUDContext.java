@@ -1,9 +1,8 @@
 package com.synaptix.widget.crud.controller;
 
-import java.io.Serializable;
-
 import com.synaptix.client.view.IView;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.widget.component.controller.dialog.AbstractCRUDDialogController;
 
 /**
@@ -18,22 +17,22 @@ public interface ICRUDContext<E extends IEntity> {
 	/**
 	 * Does the entity have a previoous one in the current list?
 	 */
-	public boolean hasPrevious(Serializable id);
+	public boolean hasPrevious(IId id);
 
 	/**
 	 * Does the entity have a next one in the current list?
 	 */
-	public boolean hasNext(Serializable id);
+	public boolean hasNext(IId id);
 
 	/**
 	 * Shows the previous entity from the current list
 	 */
-	public void showPrevious(Serializable id);
+	public void showPrevious(IId id);
 
 	/**
 	 * Shows the next entity from the current list
 	 */
-	public void showNext(Serializable id);
+	public void showNext(IId id);
 
 	/**
 	 * Saves the bean (without closing the window, done prior to this if needed) and does the following action if provided

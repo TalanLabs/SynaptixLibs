@@ -1,13 +1,13 @@
-import service.IGabyService;
-import service.ISandraService;
-import service.impl.GabyServerService;
-import service.impl.SandraServerService;
-import auth.MyAuthsBundle;
-
 import com.synaptix.auth.AuthsBundleManager;
 import com.synaptix.auth.DefaultAuthsBundleManager;
 import com.synaptix.client.service.ClientServiceFactory;
 import com.synaptix.client.service.impl.DefaultServiceCommunicator;
+
+import auth.MyAuthsBundle;
+import service.IGabyService;
+import service.ISandraService;
+import service.impl.GabyServerService;
+import service.impl.SandraServerService;
 
 public class MainClientService {
 

@@ -26,7 +26,11 @@
  */
 
 package cmp.LEDataStream;
-import java.io.*;
+
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public
 class LEDataOutputStream implements DataOutput {

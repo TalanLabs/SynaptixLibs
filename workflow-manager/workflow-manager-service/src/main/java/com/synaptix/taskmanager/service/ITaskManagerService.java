@@ -1,11 +1,11 @@
 package com.synaptix.taskmanager.service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 import com.synaptix.component.model.IError;
 import com.synaptix.component.model.IServiceResult;
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.taskmanager.model.ITodo;
@@ -24,16 +24,16 @@ public interface ITaskManagerService {
 	 *            ID of the task object.
 	 * @param objectClass
 	 */
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(Serializable idTaskObject, Class<F> objectClass);
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(IId idTaskObject, Class<F> objectClass);
 
 	/**
 	 * Start engine with cluster
 	 *
-	 * @param idCluster
+	 * @param idTaskCluster
 	 */
-	public IServiceResult<Void> startEngine(Serializable idTaskCluster);
+	public IServiceResult<Void> startEngine(IId idTaskCluster);
 
-	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<Serializable> idTaskObjects, Class<F> objectClass);
+	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<IId> idTaskObjects, Class<F> objectClass);
 
 	/**
 	 * Add task object to task cluster same taskObjectWithCluster, no start engine
@@ -49,7 +49,7 @@ public interface ITaskManagerService {
 	 * @param idTaskCluster
 	 * @param taskObject
 	 */
-	public abstract  <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject);
+	public abstract  <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(IId idTaskCluster, F taskObject);
 
 	/**
 	 * Skip a task if skippable
@@ -58,7 +58,7 @@ public interface ITaskManagerService {
 	 * @param skipComments
 	 * @return true if skipped
 	 */
-	public boolean skipTask(Serializable idTask, String skipComments);
+	public boolean skipTask(IId idTask, String skipComments);
 
 	/**
 	 * Update description of the object in the todo (code field).
@@ -68,12 +68,12 @@ public interface ITaskManagerService {
 	/**
 	 * Update description of the object.
 	 */
-	public void updateTodoDescription(Serializable idObject, Class<? extends ITaskObject<?>> objectClass);
+	public void updateTodoDescription(IId idObject, Class<? extends ITaskObject<?>> objectClass);
 
 	/**
 	 * Set check_user_validation to true.
 	 */
-	public void validateTask(Serializable idTask);
+	public void validateTask(IId idTask);
 
 	<E extends Enum<E>, F extends ITaskObject<E>> void cancelTaskObject(F object);
 
@@ -83,7 +83,7 @@ public interface ITaskManagerService {
 
 	public void saveErrors(ITask task, Set<IError> errors);
 
-	public ITask selectCurrentTaskByIdObject(Serializable idObject);
+	public ITask selectCurrentTaskByIdObject(IId idObject);
 
 	/**
 	 * Returns the shortest path between two statuses.
@@ -97,5 +97,5 @@ public interface ITaskManagerService {
 	/**
 	 * Delete an archived task cluster and all tasks that were linked to this cluster.
 	 */
-	void deleteTasksCluster(Serializable idCluster);
+	void deleteTasksCluster(IId idCluster);
 }

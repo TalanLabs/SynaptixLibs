@@ -1,6 +1,7 @@
 package org.solinger.cracklib;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class Util {
 

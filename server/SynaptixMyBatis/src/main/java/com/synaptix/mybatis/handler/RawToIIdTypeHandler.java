@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import oracle.jdbc.OracleTypes;
-import oracle.sql.RAW;
-
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
@@ -15,6 +12,9 @@ import org.apache.ibatis.type.TypeException;
 
 import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
+
+import oracle.jdbc.OracleTypes;
+import oracle.sql.RAW;
 
 @MappedTypes(IId.class)
 public class RawToIIdTypeHandler extends BaseTypeHandler<IId> {

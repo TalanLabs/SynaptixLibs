@@ -1,10 +1,9 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IWithError;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 
@@ -18,8 +17,8 @@ public interface ITaskObject<E extends Enum<E>> extends IStatusEntity<E>, IWithE
 
 	@Column(name = "ID_CLUSTER")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Serializable getIdCluster();
+	public IId getIdCluster();
 
-	public void setIdCluster(Serializable idCluster);
+	public void setIdCluster(IId idCluster);
 
 }

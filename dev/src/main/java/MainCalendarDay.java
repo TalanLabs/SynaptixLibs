@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -10,6 +8,8 @@ import com.synaptix.widget.calendarday.DefaultMonthCalendarDayModel;
 import com.synaptix.widget.calendarday.DefaultYearCalendarDayModel;
 import com.synaptix.widget.calendarday.JCalendarDay;
 import com.synaptix.widget.calendarday.JCalendarDayRowHeader;
+
+import helper.MainHelper;
 
 public class MainCalendarDay {
 

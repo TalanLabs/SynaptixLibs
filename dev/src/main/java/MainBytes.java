@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 
-import oracle.sql.RAW;
-
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -47,6 +45,8 @@ import com.synaptix.mybatis.dao.IDaoUserContext;
 import com.synaptix.mybatis.guice.AbstractSynaptixMyBatisModule;
 import com.synaptix.mybatis.guice.SynaptixMyBatisModule;
 import com.synaptix.mybatis.handler.RawToSerializableTypeHandler;
+
+import oracle.sql.RAW;
 
 public class MainBytes {
 

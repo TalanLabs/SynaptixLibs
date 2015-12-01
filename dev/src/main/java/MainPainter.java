@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -14,6 +12,8 @@ import org.jdesktop.swingx.auth.PasswordStore;
 import org.jdesktop.swingx.auth.UserNameStore;
 import org.jdesktop.swingx.painter.AlphaPainter;
 import org.jdesktop.swingx.painter.PinstripePainter;
+
+import helper.MainHelper;
 
 public class MainPainter {
 

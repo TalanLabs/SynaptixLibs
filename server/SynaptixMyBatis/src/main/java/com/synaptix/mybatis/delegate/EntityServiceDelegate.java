@@ -1,6 +1,5 @@
 package com.synaptix.mybatis.delegate;
 
-import java.io.Serializable;
 import java.util.Iterator;
 
 import com.google.inject.Inject;
@@ -10,6 +9,7 @@ import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.EntityFields;
 import com.synaptix.entity.ICancellable;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.BusinessPropertyExtensionDescriptor;
 import com.synaptix.entity.extension.IBusinessComponentExtension;
 import com.synaptix.mybatis.dao.IDaoSession;
@@ -136,7 +136,7 @@ public class EntityServiceDelegate {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public <E extends IEntity> E findEntityById(Class<E> entityClass, Serializable id) throws ServiceException {
+	public <E extends IEntity> E findEntityById(Class<E> entityClass, IId id) throws ServiceException {
 		return componentServiceDelegate.findComponentByPropertyName(entityClass, EntityFields.id().name(), id);
 	}
 }

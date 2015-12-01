@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.synaptix.swing.JDateTextField;
 import com.synaptix.swing.utils.Manager;
 import com.synaptix.swing.utils.SwingComponentFactory;
 

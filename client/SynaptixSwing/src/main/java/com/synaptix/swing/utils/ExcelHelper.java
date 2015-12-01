@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import com.synaptix.swing.SwingMessages;
-import com.synaptix.swing.utils.GUIWindow;
 
 public final class ExcelHelper {
 

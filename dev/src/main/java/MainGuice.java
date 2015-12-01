@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -12,6 +10,8 @@ import com.google.inject.Key;
 import com.google.inject.PrivateModule;
 import com.google.inject.Singleton;
 import com.google.inject.util.Modules;
+
+import helper.MainHelper;
 
 public class MainGuice {
 

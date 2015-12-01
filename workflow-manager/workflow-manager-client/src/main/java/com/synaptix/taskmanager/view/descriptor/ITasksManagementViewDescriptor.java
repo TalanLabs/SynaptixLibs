@@ -1,7 +1,6 @@
 package com.synaptix.taskmanager.view.descriptor;
 
-import java.io.Serializable;
-
+import com.synaptix.entity.IId;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.widget.component.view.IComponentsManagementViewDescriptor;
@@ -15,6 +14,6 @@ public interface ITasksManagementViewDescriptor extends IComponentsManagementVie
 	 */
 	public <E extends ITaskObject<?>> void searchBy(E taskObject);
 
-	public void searchByCluster(Serializable idCluster);
+	public void searchByCluster(IId idCluster);
 
 }

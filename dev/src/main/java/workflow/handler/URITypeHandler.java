@@ -7,12 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import oracle.jdbc.OracleTypes;
-
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
 import org.apache.ibatis.type.TypeException;
+
+import oracle.jdbc.OracleTypes;
 
 @MappedTypes(URI.class)
 public class URITypeHandler extends BaseTypeHandler<URI> {

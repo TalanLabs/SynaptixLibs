@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +29,8 @@ import com.synaptix.widget.grid.GridCellModelEvent;
 import com.synaptix.widget.grid.GridCellModelListener;
 import com.synaptix.widget.grid.GridCellTransferable;
 import com.synaptix.widget.grid.JGridCell;
+
+import helper.MainHelper;
 
 public class MainGrid {
 

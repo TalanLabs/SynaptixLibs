@@ -1,8 +1,5 @@
 package com.synaptix.client.ref.controller;
 
-import helper.MainHelper;
-import model.ICountry;
-
 import com.google.inject.Key;
 import com.synaptix.client.ref.view.swing.descriptor.CountryPanelDescriptor;
 import com.synaptix.constants.ConstantsBundleManager;
@@ -15,6 +12,8 @@ import com.synaptix.widget.view.ISynaptixViewFactory;
 import com.synaptix.widget.view.swing.SwingSynaptixViewFactory;
 
 import constants.CountryTableConstantsBundle;
+import helper.MainHelper;
+import model.ICountry;
 
 public class CountriesManagementController extends AbstractComponentsManagementController<ISynaptixViewFactory, ICountry> {
 

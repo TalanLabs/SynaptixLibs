@@ -1,7 +1,6 @@
 package com.synaptix.taskmanager.controller;
 
 import java.awt.Component;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
 import com.synaptix.common.util.IResultCallback;
+import com.synaptix.entity.IId;
 import com.synaptix.service.IServiceFactory;
 import com.synaptix.taskmanager.model.ITodo;
 import com.synaptix.taskmanager.model.ITodoFolderListView;
@@ -139,7 +139,7 @@ public abstract class AbstractTodosManagementController extends AbstractControll
 	/**
 	 * Reload todos for the objects in parameter.
 	 */
-	public void refresh(final List<Serializable> idObjects) {
+	public void refresh(final List<IId> idObjects) {
 		getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<TodoFolderResult>() {
 
 			@Override
@@ -164,7 +164,7 @@ public abstract class AbstractTodosManagementController extends AbstractControll
 		});
 	}
 
-	protected abstract List<ITodo> selectTodoListForObjects(ITodoFolderListView selectedTodoFolder, List<Serializable> idObjects);
+	protected abstract List<ITodo> selectTodoListForObjects(ITodoFolderListView selectedTodoFolder, List<IId> idObjects);
 
 	public void reloadTodoDetails() {
 		todoManagementView.updateDetailsPanel();

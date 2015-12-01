@@ -7,6 +7,7 @@ import java.util.concurrent.CancellationException;
 import com.synaptix.client.view.IWaitWorker;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IPaginationService;
 import com.synaptix.service.ServiceException;
@@ -98,7 +99,7 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 	/**
 	 * Load a childrens
 	 * 
-	 * @param vat
+	 * @param paginationEntity
 	 */
 	@Override
 	public void loadChildren(final G paginationEntity) {
@@ -207,8 +208,8 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 	/**
 	 * Used to copy some particular fields from the parentEntity to the child
 	 * 
-	 * @param entity
-	 * @param paginationEntity
+	 * @param childEntity
+	 * @param parentEntity
 	 */
 	protected void copyParentFields(C childEntity, G parentEntity) {
 	}
@@ -352,7 +353,7 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 	 * @param resultCallback
 	 * @return
 	 */
-	private IWaitWorker loadEntitiesForChild(final Serializable id, final Serializable idChild, final IResultCallback<ChildResult> resultCallback) {
+	private IWaitWorker loadEntitiesForChild(final IId id, final IId idChild, final IResultCallback<ChildResult> resultCallback) {
 		if (id == null) {
 			resultCallback.setResult(null);
 			return null;

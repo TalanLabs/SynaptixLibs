@@ -20,6 +20,7 @@
 package net.sf.jeppers.grid;
 
 import java.awt.Component;
+
 import javax.swing.CellEditor;
 
 /**

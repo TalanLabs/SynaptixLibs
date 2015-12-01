@@ -1,12 +1,12 @@
-import helper.MainHelper;
-import model.ICountry;
-
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.cache.SynaptixCacheListener;
 import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.dao.IDaoSessionExt;
 import com.synaptix.service.IEntityService;
+
+import helper.MainHelper;
+import model.ICountry;
 
 public class MainMyBatis2 {
 

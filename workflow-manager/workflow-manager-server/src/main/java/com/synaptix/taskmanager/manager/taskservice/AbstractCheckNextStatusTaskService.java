@@ -1,15 +1,14 @@
 package com.synaptix.taskmanager.manager.taskservice;
 
-import java.io.Serializable;
-
 import com.google.inject.Inject;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.taskmanager.model.domains.ServiceNature;
 
-public abstract class AbstractCheckNextStatusTaskService extends AbstractTaskService<Serializable> {
+public abstract class AbstractCheckNextStatusTaskService extends AbstractTaskService<IId> {
 
 	@Inject
 	private IDaoSession daoSession;
@@ -33,10 +32,10 @@ public abstract class AbstractCheckNextStatusTaskService extends AbstractTaskSer
 		return executionResult;
 	}
 
-	protected abstract IExecutionResult execute(Serializable idObject);
+	protected abstract IExecutionResult execute(IId idObject);
 
 	@Override
-	public IExecutionResult execute(ITask task, Serializable idObject) {
+	public IExecutionResult execute(ITask task, IId idObject) {
 		return execute(idObject);
 	}
 
@@ -46,7 +45,7 @@ public abstract class AbstractCheckNextStatusTaskService extends AbstractTaskSer
 	}
 
 	@Override
-	public Serializable getObject(ITask task) {
+	public IId getObject(ITask task) {
 		return task.getIdObject();
 	}
 

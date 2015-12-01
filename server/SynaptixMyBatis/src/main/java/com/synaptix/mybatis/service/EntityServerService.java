@@ -1,9 +1,8 @@
 package com.synaptix.mybatis.service;
 
-import java.io.Serializable;
-
 import com.google.inject.Inject;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.service.IEntityService;
@@ -23,8 +22,8 @@ public class EntityServerService implements IEntityService {
 	}
 
 	@Override
-	public <E extends IEntity> Serializable addEntity(E entity) throws ServiceException {
-		Serializable res = null;
+	public <E extends IEntity> IId addEntity(E entity) throws ServiceException {
+		IId res = null;
 		try {
 			daoSession.begin();
 			int count = entityServiceDelegate.addEntity(entity, true);
@@ -43,8 +42,8 @@ public class EntityServerService implements IEntityService {
 	}
 
 	@Override
-	public <E extends IEntity> Serializable editEntity(E entity) throws ServiceException {
-		Serializable res = null;
+	public <E extends IEntity> IId editEntity(E entity) throws ServiceException {
+		IId res = null;
 		try {
 			daoSession.begin();
 			int count = entityServiceDelegate.editEntity(entity, true);
@@ -63,8 +62,8 @@ public class EntityServerService implements IEntityService {
 	}
 
 	@Override
-	public <E extends IEntity> Serializable removeEntity(E entity) throws ServiceException {
-		Serializable res = null;
+	public <E extends IEntity> IId removeEntity(E entity) throws ServiceException {
+		IId res = null;
 		try {
 			daoSession.begin();
 			int count = entityServiceDelegate.removeEntity(entity);
@@ -83,7 +82,7 @@ public class EntityServerService implements IEntityService {
 	}
 
 	@Override
-	public <E extends IEntity> E findEntityById(Class<E> entityClass, Serializable id) throws ServiceException {
+	public <E extends IEntity> E findEntityById(Class<E> entityClass, IId id) throws ServiceException {
 		try {
 			daoSession.begin();
 			return entityServiceDelegate.findEntityById(entityClass, id);

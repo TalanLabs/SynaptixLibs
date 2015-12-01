@@ -1,8 +1,7 @@
 package com.synaptix.service;
 
-import java.io.Serializable;
-
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 
 public interface IEntityService {
 
@@ -14,7 +13,7 @@ public interface IEntityService {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public <E extends IEntity> Serializable addEntity(E entity) throws ServiceException;
+	public <E extends IEntity> IId addEntity(E entity) throws ServiceException;
 
 	/**
 	 * Update an entity
@@ -22,7 +21,7 @@ public interface IEntityService {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public <E extends IEntity> Serializable editEntity(E entity) throws ServiceException;
+	public <E extends IEntity> IId editEntity(E entity) throws ServiceException;
 
 	/**
 	 * Remove an entity
@@ -30,7 +29,7 @@ public interface IEntityService {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public <E extends IEntity> Serializable removeEntity(E entity) throws ServiceException;
+	public <E extends IEntity> IId removeEntity(E entity) throws ServiceException;
 
 	/**
 	 * Find a entity by id
@@ -40,6 +39,6 @@ public interface IEntityService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public <E extends IEntity> E findEntityById(Class<E> entityClass, Serializable id) throws ServiceException;
+	public <E extends IEntity> E findEntityById(Class<E> entityClass, IId id) throws ServiceException;
 
 }

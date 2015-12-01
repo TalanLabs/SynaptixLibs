@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
-
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
@@ -34,6 +29,11 @@ import com.synaptix.redpepper.automation.elements.impl.ElementFactory;
 import com.synaptix.redpepper.automation.elements.impl.WebAutoElement;
 import com.synaptix.redpepper.automation.elements.impl.WebInputElement;
 import com.synaptix.redpepper.web.annotations.gwt.shared.AutoField;
+
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 @SupportedAnnotationTypes("com.synaptix.redpepper.annotation.SynaptixSeleniumFixture")

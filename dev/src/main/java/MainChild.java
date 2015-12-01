@@ -1,5 +1,3 @@
-import model.IZip;
-
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.factory.DefaultComputedFactory;
 import com.synaptix.entity.extension.BusinessComponentExtensionProcessor;
@@ -9,6 +7,8 @@ import com.synaptix.entity.extension.IBusinessComponentExtension;
 import com.synaptix.entity.extension.ICacheComponentExtension;
 import com.synaptix.entity.extension.IDatabaseComponentExtension;
 import com.synaptix.entity.helper.EntityHelper;
+
+import model.IZip;
 
 public class MainChild {
 

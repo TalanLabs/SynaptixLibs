@@ -1,7 +1,5 @@
 package com.synaptix.geotools;
 
-import com.synaptix.geotools.GeoHelper;
-
 public class ConversionMain {
 
 	public static void main(String[] args) {

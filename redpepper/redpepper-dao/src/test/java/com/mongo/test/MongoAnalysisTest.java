@@ -1,8 +1,5 @@
 package com.mongo.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -16,6 +13,9 @@ import org.junit.Test;
 import com.mongo.test.AnalyzedDBObject.Condition;
 import com.mongodb.DBObject;
 import com.mongodb.MongoException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MongoAnalysisTest {
 

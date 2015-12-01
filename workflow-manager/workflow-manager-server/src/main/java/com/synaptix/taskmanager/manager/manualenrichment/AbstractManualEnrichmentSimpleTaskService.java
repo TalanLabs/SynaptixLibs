@@ -2,11 +2,10 @@ package com.synaptix.taskmanager.manager.manualenrichment;
 
 import java.net.URI;
 
-import com.synaptix.taskmanager.model.ITaskObject;
-import com.synaptix.taskmanager.model.domains.ServiceNature;
-
 import com.synaptix.taskmanager.manager.taskservice.AbstractSimpleTaskService;
 import com.synaptix.taskmanager.manager.taskservice.TodoDescriptorBuilder;
+import com.synaptix.taskmanager.model.ITaskObject;
+import com.synaptix.taskmanager.model.domains.ServiceNature;
 
 public abstract class AbstractManualEnrichmentSimpleTaskService<F extends ITaskObject<?>> extends AbstractSimpleTaskService<F> {
 

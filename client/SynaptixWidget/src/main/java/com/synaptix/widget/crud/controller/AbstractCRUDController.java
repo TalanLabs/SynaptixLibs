@@ -6,6 +6,7 @@ import com.synaptix.client.view.IView;
 import com.synaptix.client.view.IWaitWorker;
 import com.synaptix.common.util.IResultCallback;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.service.ICRUDEntityService;
 import com.synaptix.service.IEntityService;
 import com.synaptix.service.IServiceFactory;
@@ -166,7 +167,7 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 	/**
 	 * Show a dialog for edit entity
 	 * 
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	public void editEntity(final G paginationEntity) {
 		loadEntity(paginationEntity.getId(), new IResultCallback<E>() {
@@ -235,7 +236,7 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 	/**
 	 * Show a dialog for confirmation delete entity
 	 * 
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	public void deleteEntity(final G paginationEntity) {
 		if (getViewFactory().showQuestionMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().validation(),
@@ -262,7 +263,7 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 	/**
 	 * Show a dialog for clone entity
 	 * 
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	public void cloneEntity(final G paginationEntity) {
 		loadEntity(paginationEntity.getId(), new IResultCallback<E>() {
@@ -319,7 +320,7 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 	 * @param resultCallback
 	 * @return
 	 */
-	protected final IWaitWorker loadEntity(final Serializable id, final IResultCallback<E> resultCallback) {
+	protected final IWaitWorker loadEntity(final IId id, final IResultCallback<E> resultCallback) {
 		if (id == null) {
 			resultCallback.setResult(null);
 			return null;
@@ -351,7 +352,7 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 	 * @param view
 	 * @param id
 	 */
-	public void editEntity(final IView view, Serializable id) {
+	public void editEntity(final IView view, IId id) {
 		loadEntity(id, new IResultCallback<E>() {
 			@Override
 			public void setResult(E e) {

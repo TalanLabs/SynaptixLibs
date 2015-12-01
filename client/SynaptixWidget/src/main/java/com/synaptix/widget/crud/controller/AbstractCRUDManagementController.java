@@ -1,6 +1,5 @@
 package com.synaptix.widget.crud.controller;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +124,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().unicityConstraintException();
 	}
 
-	private Serializable addCRUDEntity(E entity) {
+	private IId addCRUDEntity(E entity) {
 		if (crudEntityServiceClass != null) {
 			return getCRUDEntityService().addCRUDEntity(entity);
 		} else {
@@ -133,7 +132,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		}
 	}
 
-	private Serializable editCRUDEntity(E entity) {
+	private IId editCRUDEntity(E entity) {
 		if (crudEntityServiceClass != null) {
 			return getCRUDEntityService().editCRUDEntity(entity);
 		} else {
@@ -141,7 +140,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		}
 	}
 
-	private Serializable removeCRUDEntity(E entity) {
+	private IId removeCRUDEntity(E entity) {
 		if (crudEntityServiceClass != null) {
 			return getCRUDEntityService().removeCRUDEntity(entity);
 		} else {
@@ -169,14 +168,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 			@Override
 			public void setResult(final E entity) {
 				if (entity != null) {
-					getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<Serializable>() {
+					getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<IId>() {
 						@Override
-						protected Serializable doLoading() throws Exception {
+						protected IId doLoading() throws Exception {
 							return addCRUDEntity(entity);
 						}
 
 						@Override
-						public void success(Serializable e) {
+						public void success(IId e) {
 							addEntitySuccess(e);
 						}
 
@@ -201,7 +200,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		});
 	}
 
-	protected void addEntitySuccess(Serializable idEntity) {
+	protected void addEntitySuccess(IId idEntity) {
 		loadPagination();
 	}
 
@@ -234,7 +233,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	/**
 	 * Show a dialog for edit entity
 	 *
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	@Override
 	@Deprecated
@@ -264,14 +263,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 			@Override
 			public void setResult(final E entity) {
 				if (entity != null) {
-					getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<Serializable>() {
+					getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<IId>() {
 						@Override
-						protected Serializable doLoading() throws Exception {
+						protected IId doLoading() throws Exception {
 							return editCRUDEntity(entity);
 						}
 
 						@Override
-						public void success(Serializable e) {
+						public void success(IId e) {
 							editEntitySuccess(e);
 						}
 
@@ -295,7 +294,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		});
 	}
 
-	protected void editEntitySuccess(Serializable idEntity) {
+	protected void editEntitySuccess(IId idEntity) {
 		loadPagination();
 		// after the pagination (asynchronous), we could select the entity if it is still here
 	}
@@ -303,7 +302,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	/**
 	 * Show a dialog for confirmation delete entity
 	 *
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	@Override
 	public void deleteEntity(final G paginationEntity) {
@@ -330,14 +329,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	protected void _deleteEntity(final IView view, final E crudEntity) {
-		getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<Serializable>() {
+		getViewFactory().waitFullComponentViewWorker(view, new AbstractLoadingViewWorker<IId>() {
 			@Override
-			protected Serializable doLoading() throws Exception {
+			protected IId doLoading() throws Exception {
 				return removeCRUDEntity(crudEntity);
 			}
 
 			@Override
-			public void success(Serializable e) {
+			public void success(IId e) {
 				deleteEntitySuccess(e);
 			}
 
@@ -348,14 +347,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		});
 	}
 
-	protected void deleteEntitySuccess(Serializable idEntity) {
+	protected void deleteEntitySuccess(IId idEntity) {
 		loadPagination();
 	}
 
 	/**
 	 * Show a dialog for clone entity
 	 *
-	 * @param entity
+	 * @param paginationEntity
 	 */
 	@Override
 	public void cloneEntity(final G paginationEntity) {
@@ -381,14 +380,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 			@Override
 			public void setResult(final E entity) {
 				if (entity != null) {
-					getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<Serializable>() {
+					getViewFactory().waitFullComponentViewWorker(getView(), new AbstractLoadingViewWorker<IId>() {
 						@Override
-						protected Serializable doLoading() throws Exception {
+						protected IId doLoading() throws Exception {
 							return addCRUDEntity(entity);
 						}
 
 						@Override
-						public void success(Serializable e) {
+						public void success(IId e) {
 							cloneEntitySuccess(e);
 						}
 
@@ -412,7 +411,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		});
 	}
 
-	protected void cloneEntitySuccess(Serializable idEntity) {
+	protected void cloneEntitySuccess(IId idEntity) {
 		loadPagination();
 	}
 
@@ -423,7 +422,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	 * @param resultCallback
 	 * @return
 	 */
-	protected final IWaitWorker loadEntity(final Serializable id, final IResultCallback<E> resultCallback) {
+	protected final IWaitWorker loadEntity(final IId id, final IResultCallback<E> resultCallback) {
 		if (id == null) {
 			resultCallback.setResult(null);
 			return null;
@@ -456,7 +455,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	 * @param id
 	 * @return entity
 	 */
-	protected E loadFullEntity(Class<E> crudComponentClass, Serializable id) {
+	protected E loadFullEntity(Class<E> crudComponentClass, IId id) {
 		return getEntityService().findEntityById(crudComponentClass, id);
 	}
 
@@ -466,7 +465,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	 * @param view
 	 * @param id
 	 */
-	public void editEntity(final IView view, Serializable id) {
+	public void editEntity(final IView view, IId id) {
 		loadEntity(id, new IResultCallback<E>() {
 			@Override
 			public void setResult(E e) {
@@ -481,21 +480,21 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
-	public boolean hasPrevious(Serializable id) {
+	public boolean hasPrevious(IId id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
-		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		return idList.indexOf(id) + 1 > 1;
 	}
 
 	@Override
-	public boolean hasNext(Serializable id) {
+	public boolean hasNext(IId id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
-		List<Serializable> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
+		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		return idList.indexOf(id) + 1 < idList.size();
 	}
 
 	@Override
-	public void showPrevious(Serializable id) {
+	public void showPrevious(IId id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
 		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		int idx = idList.indexOf(id);
@@ -509,7 +508,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
-	public void showNext(Serializable id) {
+	public void showNext(IId id) {
 		List<G> componentList = getCRUDManagementViewDescriptor().getComponentList();
 		List<IId> idList = ComponentHelper.extractValues(componentList, EntityFields.id().name());
 		int idx = idList.indexOf(id);
@@ -527,7 +526,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		getViewFactory().waitFullComponentViewWorker(parent != null ? parent : getView(), new AbstractSavingViewWorker<E>() {
 			@Override
 			protected E doSaving() throws Exception {
-				Serializable id = editCRUDEntity(entity);
+				IId id = editCRUDEntity(entity);
 				if (id != null) {
 					return loadFullEntity(crudComponentClass, id);
 				}

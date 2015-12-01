@@ -19,9 +19,12 @@
  */
 package net.sf.jeppers.grid;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
 import java.text.Format;
-import javax.swing.border.*;
+
+import javax.swing.border.Border;
 
 /**
  * Provides rendering information about a cell.

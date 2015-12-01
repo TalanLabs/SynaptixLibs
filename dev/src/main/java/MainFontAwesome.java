@@ -1,5 +1,3 @@
-import helper.MainHelper;
-
 import java.awt.Color;
 
 import javax.swing.JButton;
@@ -7,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import com.synaptix.swing.utils.FontAwesomeHelper;
+
+import helper.MainHelper;
 
 public class MainFontAwesome {
 

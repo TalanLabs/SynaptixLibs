@@ -1,13 +1,12 @@
 package model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.synaptix.component.annotation.SynaptixComponent;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.ICacheComponentExtension.Cache;
 
 @SynaptixComponent
@@ -43,9 +42,9 @@ public interface IZipView extends IEntity {
 	public void setState(String state);
 
 	@Column(name = "ID_STATE")
-	public Serializable getIdState();
+	public IId getIdState();
 
-	public void setIdState(Serializable idState);
+	public void setIdState(IId idState);
 
 	@Column(name = "TIME_ZONE")
 	public String getTimeZone();

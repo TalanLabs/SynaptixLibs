@@ -115,7 +115,7 @@
 //					return new TestResult("Could not parse property " + columnName + " (class: " + propertyClass + ") of value " + propertyValue, ResultKind.ERROR);
 //				} else {
 //					if (component.straightGetPropertyClass(propertyName).isAssignableFrom(IdRaw.class) && IEntity.class.isAssignableFrom(valueToSet.getClass())) {
-//						Serializable id = ((IEntity) valueToSet).getId();
+//						IId id = ((IEntity) valueToSet).getId();
 //						component.straightSetProperty(propertyName, id);
 //					} else {
 //						component.straightSetProperty(propertyName, valueToSet);

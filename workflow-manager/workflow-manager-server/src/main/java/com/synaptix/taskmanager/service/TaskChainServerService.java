@@ -1,10 +1,10 @@
 package com.synaptix.taskmanager.service;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.google.inject.Inject;
 import com.synaptix.component.factory.ComponentFactory;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.delegate.ComponentServiceDelegate;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.mybatis.service.Transactional;
@@ -33,8 +33,8 @@ public class TaskChainServerService extends AbstractSimpleService implements ITa
 	}
 
 	@Override
-	public Serializable addCRUDEntity(ITaskChain entity) throws ServiceException {
-		Serializable res = null;
+	public IId addCRUDEntity(ITaskChain entity) throws ServiceException {
+		IId res = null;
 		try {
 			getDaoSession().begin();
 			int count = entityServiceDelegate.addEntity(entity, true);
@@ -64,8 +64,8 @@ public class TaskChainServerService extends AbstractSimpleService implements ITa
 	}
 
 	@Override
-	public Serializable editCRUDEntity(ITaskChain entity) throws ServiceException {
-		Serializable res = null;
+	public IId editCRUDEntity(ITaskChain entity) throws ServiceException {
+		IId res = null;
 		try {
 			getDaoSession().begin();
 
@@ -103,8 +103,8 @@ public class TaskChainServerService extends AbstractSimpleService implements ITa
 	}
 
 	@Override
-	public Serializable removeCRUDEntity(ITaskChain entity) throws ServiceException {
-		Serializable res = null;
+	public IId removeCRUDEntity(ITaskChain entity) throws ServiceException {
+		IId res = null;
 		try {
 			getDaoSession().begin();
 			int count = entityServiceDelegate.removeEntity(entity);

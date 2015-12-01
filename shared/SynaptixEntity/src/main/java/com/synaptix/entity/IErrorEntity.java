@@ -1,7 +1,5 @@
 package com.synaptix.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Table;
 
@@ -32,9 +30,9 @@ public interface IErrorEntity extends IEntity {
 
 	@Column(name = "ID_OBJECT")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	Serializable getIdObject();
+	IId getIdObject();
 
-	void setIdObject(Serializable idObject);
+	void setIdObject(IId idObject);
 
 	@Column(name = "OBJECT_TYPE", length = 512, nullable = false)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
@@ -56,9 +54,9 @@ public interface IErrorEntity extends IEntity {
 
 	@Column(name = "ID_TASK")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	Serializable getIdTask();
+	IId getIdTask();
 
-	void setIdTask(Serializable idTask);
+	void setIdTask(IId idTask);
 
 	String getCodeMeaning();
 

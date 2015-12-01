@@ -3,7 +3,6 @@ package com.synaptix.client.common.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +23,7 @@ import com.synaptix.client.common.util.StaticCommonHelper;
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.helper.ComponentHelper;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.service.IServiceFactory;
 import com.synaptix.service.ServicesManager;
@@ -328,7 +328,7 @@ public class DefaultNlsMessageExtendedContext implements INlsMessageExtendedCont
 							String key = row.getCell(columnKey).getStringCellValue();
 							String traduction = row.getCell(columnTraduction).getStringCellValue();
 							if (traduction != null && !traduction.trim().isEmpty()) {
-								Serializable idObject = new IdRaw(key);
+								IId idObject = new IdRaw(key);
 
 								INlsMessageData nlsMessageData = ComponentHelper.findComponentBy(nlsMessageDatas, NlsMessageDataFields.idObject().name(), idObject);
 

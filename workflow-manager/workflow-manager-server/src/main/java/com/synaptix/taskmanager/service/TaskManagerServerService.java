@@ -1,6 +1,5 @@
 package com.synaptix.taskmanager.service;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.model.IError;
 import com.synaptix.component.model.IServiceResult;
 import com.synaptix.component.model.IStackResult;
+import com.synaptix.entity.IId;
 import com.synaptix.mybatis.dao.exceptions.VersionConflictDaoException;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.mybatis.service.EntityServerService;
@@ -80,12 +80,12 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Start engine, create cluster if cluster not exist
 	 */
 	@Override
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(Serializable idTaskObject, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(IId idTaskObject, Class<F> objectClass) {
 		if (idTaskObject == null) {
 			return new ServiceResultBuilder<TaskManagerErrorEnum>().compileResult(null);
 		}
 
-		Serializable idCluster;
+		IId idCluster;
 
 		try {
 			getDaoSession().begin();
@@ -111,9 +111,9 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Starts engine, creates cluster if cluster does not exist
 	 */
 	@Override
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<Serializable> idTaskObjects, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<IId> idTaskObjects, Class<F> objectClass) {
 		ServiceResultBuilder<TaskManagerErrorEnum> resultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
-		for (Serializable idTaskObject : idTaskObjects) {
+		for (IId idTaskObject : idTaskObjects) {
 			resultBuilder.ingest(startEngine(idTaskObject, objectClass));
 		}
 
@@ -128,17 +128,17 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	@Transactional(commit = true)
-	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(Serializable idTaskCluster, F taskObject) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> void addTaskObjectToTaskCluster(IId idTaskCluster, F taskObject) {
 		taskManagerServiceDelegate.addTaskObjectToTaskCluster(idTaskCluster, taskObject);
 	}
 
 	@Override
-	public boolean skipTask(Serializable idTask, String skipComments) {
+	public boolean skipTask(IId idTask, String skipComments) {
 		return skipTask(idTask); // TODO refactor ? useless parameter skipComments...
 	}
 
 	@Transactional(commit = true)
-	public <E extends Enum<E>, F extends ITaskObject<E>> Serializable createTaskCluster(F taskObject) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IId createTaskCluster(F taskObject) {
 		return taskManagerServiceDelegate.createTaskCluster(taskObject);
 	}
 
@@ -158,7 +158,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	@Transactional(commit = true)
-	public void updateTodoDescription(Serializable idObject, Class<? extends ITaskObject<?>> objectClass) {
+	public void updateTodoDescription(IId idObject, Class<? extends ITaskObject<?>> objectClass) {
 		taskManagerServiceDelegate.updateTodoDescription(idObject, objectClass);
 	}
 
@@ -167,7 +167,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 */
 	@Transactional(commit = true)
 	@Override
-	public void validateTask(Serializable idTask) {
+	public void validateTask(IId idTask) {
 		taskManagerServiceDelegate.validateTask(idTask);
 	}
 
@@ -179,7 +179,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	/**
 	 * Select cluster's tasks which are at TO DO status.
 	 */
-	private List<ITask> selectCurrentTasksForCluster(Serializable idTaskCluster) {
+	private List<ITask> selectCurrentTasksForCluster(IId idTaskCluster) {
 		try {
 			getDaoSession().begin();
 			return getTaskMapper().selectCurrentTasksForCluster(idTaskCluster);
@@ -191,7 +191,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
-	public IServiceResult<Void> startEngine(Serializable idTaskCluster) {
+	public IServiceResult<Void> startEngine(IId idTaskCluster) {
 		ServiceResultBuilder<TaskManagerErrorEnum> serviceResultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
 
 		if (LOG.isDebugEnabled()) {
@@ -245,7 +245,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 						tasksQueue.addFirst(iTask);
 					}
 
-					for (Serializable idTask : tasksLists.getIdTasksToRemove()) {
+					for (IId idTask : tasksLists.getIdTasksToRemove()) {
 						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
@@ -402,7 +402,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 	}
 
-	private void archiveCluster(Serializable idTaskCluster) {
+	private void archiveCluster(IId idTaskCluster) {
 		try {
 			getDaoSession().begin();
 			taskManagerServiceDelegate.archiveCluster(idTaskCluster);
@@ -446,7 +446,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	/**
 	 * Skip task
 	 */
-	public boolean skipTask(Serializable idTask) {
+	public boolean skipTask(IId idTask) {
 		if (idTask == null) {
 			return false;
 		}
@@ -473,7 +473,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	@Override
 	public IServiceResult<Void> restart() {
 		ServiceResultBuilder<TaskManagerErrorEnum> resultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
-		Serializable nextFromQueue = taskManagerServiceDelegate.getNextFromQueue();
+		IId nextFromQueue = taskManagerServiceDelegate.getNextFromQueue();
 		if (nextFromQueue != null) {
 			resultBuilder.ingest(startEngine(nextFromQueue));
 		}
@@ -488,7 +488,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	public <E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(F taskObject) {
-		Serializable idCluster = taskObject.getIdCluster();
+		IId idCluster = taskObject.getIdCluster();
 		if (idCluster == null) {
 			idCluster = createTaskCluster(taskObject);
 		}
@@ -497,7 +497,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	@Transactional
-	public ITask selectCurrentTaskByIdObject(Serializable idObject) {
+	public ITask selectCurrentTaskByIdObject(IId idObject) {
 		return getTaskMapper().selectCurrentTaskByIdObject(idObject);
 	}
 
@@ -508,7 +508,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
-	public void deleteTasksCluster(Serializable idCluster) {
+	public void deleteTasksCluster(IId idCluster) {
 		try {
 			getDaoSession().begin();
 			taskManagerServiceDelegate.deleteTasksCluster(idCluster);

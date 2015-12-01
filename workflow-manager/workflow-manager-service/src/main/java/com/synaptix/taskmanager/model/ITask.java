@@ -1,6 +1,5 @@
 package com.synaptix.taskmanager.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,6 +9,7 @@ import org.joda.time.Duration;
 import org.joda.time.LocalDateTime;
 
 import com.synaptix.component.annotation.SynaptixComponent;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.ITracable;
 import com.synaptix.entity.extension.JdbcTypesEnum;
 import com.synaptix.service.model.ICancellableEntity;
@@ -33,9 +33,9 @@ public interface ITask extends ITracable, ICancellableEntity {
 	public void setObjectType(Class<? extends ITaskObject<?>> objectType);
 
 	@Column(name = "ID_TASK_TYPE")
-	public Serializable getIdTaskType();
+	public IId getIdTaskType();
 
-	public void setIdTaskType(Serializable idTaskType);
+	public void setIdTaskType(IId idTaskType);
 
 	@Collection(sqlTableName = "T_TASK_TYPE", idSource = "ID_TASK_TYPE", alias = "tt_", componentClass = ITaskType.class)
 	public ITaskType getTaskType();
@@ -43,15 +43,15 @@ public interface ITask extends ITracable, ICancellableEntity {
 	public void setTaskType(ITaskType taskType);
 
 	@Column(name = "ID_CLUSTER", nullable = false)
-	public Serializable getIdCluster();
+	public IId getIdCluster();
 
-	public void setIdCluster(Serializable idCluster);
+	public void setIdCluster(IId idCluster);
 
 	@Column(name = "ID_OBJECT", nullable = false)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Serializable getIdObject();
+	public IId getIdObject();
 
-	public void setIdObject(Serializable idObject);
+	public void setIdObject(IId idObject);
 
 	@Column(name = "NATURE", length = 240)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
@@ -98,9 +98,9 @@ public interface ITask extends ITracable, ICancellableEntity {
 	public void setManagerRole(String managerRole);
 
 	@Column(name = "ID_PARENT")
-	public Serializable getIdParentTask();
+	public IId getIdParentTask();
 
-	public void setIdParentTask(Serializable idParentTask);
+	public void setIdParentTask(IId idParentTask);
 
 	@Column(name = "NEXT_STATUS", length = 240)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
@@ -116,9 +116,9 @@ public interface ITask extends ITracable, ICancellableEntity {
 	public void setCheckGroup(boolean checkGroup);
 
 	@Column(name = "ID_PREVIOUS_UPDATE_STATUS_TASK")
-	public Serializable getIdPreviousUpdateStatusTask();
+	public IId getIdPreviousUpdateStatusTask();
 
-	public void setIdPreviousUpdateStatusTask(Serializable idPreviousUpdateStatusTask);
+	public void setIdPreviousUpdateStatusTask(IId idPreviousUpdateStatusTask);
 
 	@Column(name = "CHECK_TODO_EXECUTANT_CREATED", nullable = false)
 	@JdbcType(JdbcTypesEnum.CHAR)
