@@ -1,5 +1,7 @@
 package com.synaptix.server.service;
 
+import java.io.Serializable;
+
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.model.ErrorEnum;
 import com.synaptix.component.model.IError;
@@ -31,7 +33,7 @@ public class ServiceResultBuilder<E extends ErrorEnum> extends ServiceResultCont
 	 * @return
 	 */
 	public final ServiceResultBuilder<E> addError(E errorCode) {
-		return addError(errorCode, (String) null, null);
+		return addError(errorCode, null, null);
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class ServiceResultBuilder<E extends ErrorEnum> extends ServiceResultCont
 	 * @return
 	 */
 	public final ServiceResultBuilder<E> addError(E errorCode, IId idObject) {
-		return addError(errorCode, idObject, null);
+		return addError(errorCode, "ID", idObject);
 	}
 
 	/**
@@ -60,12 +62,12 @@ public class ServiceResultBuilder<E extends ErrorEnum> extends ServiceResultCont
 	 * Add an error to the error list with given object id and value
 	 *
 	 * @param errorCode
-	 * @param idObject
+	 * @param attribute
 	 * @param value
 	 * @return
 	 */
-	public final ServiceResultBuilder<E> addError(E errorCode, IId idObject, String value) {
-		return addError(errorCode, String.valueOf(idObject), value);
+	public final ServiceResultBuilder<E> addError(E errorCode, String attribute, Serializable value) {
+		return addError(errorCode, attribute, String.valueOf(value));
 	}
 
 	/**

@@ -3,7 +3,6 @@ package helper;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -199,7 +198,7 @@ public class MainHelper {
 		private Locale locale = Locale.ENGLISH;
 
 		@Override
-		public Serializable getCurrentIdUser() {
+		public IId getCurrentIdUser() {
 			return idUser;
 		}
 

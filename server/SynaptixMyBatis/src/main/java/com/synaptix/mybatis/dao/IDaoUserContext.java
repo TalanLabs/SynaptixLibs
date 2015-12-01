@@ -1,11 +1,12 @@
 package com.synaptix.mybatis.dao;
 
-import java.io.Serializable;
 import java.util.Locale;
+
+import com.synaptix.entity.IId;
 
 public interface IDaoUserContext {
 
-	public Serializable getCurrentIdUser();
+	public IId getCurrentIdUser();
 
 	public String getCurrentLogin();
 
