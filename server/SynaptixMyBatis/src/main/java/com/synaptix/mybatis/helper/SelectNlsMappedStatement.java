@@ -71,7 +71,7 @@ public class SelectNlsMappedStatement {
 		SQL sqlBuilder = new SQL();
 		String tableName = componentSqlHelper.getSqlTableName(ed);
 		StringBuilder functionSb = new StringBuilder("P_NLS.get_nls_server_message('");
-		functionSb.append(tableName).append("',#{id,javaType=java.io.Serializable},'").append(columnName).append("',#{defaultMeaning,javaType=String,jdbcType=VARCHAR})");
+		functionSb.append(tableName).append("',#{id,javaType=IId},'").append(columnName).append("',#{defaultMeaning,javaType=String,jdbcType=VARCHAR})");
 		sqlBuilder.SELECT(functionSb.toString());
 		sqlBuilder.FROM("dual");
 

@@ -113,7 +113,7 @@ public class UpdateMappedStatement {
 			}
 		}
 		sqlBuilder.SET("VERSION = #{version,javaType=java.lang.Integer} + 1");
-		sqlBuilder.WHERE("ID = #{id,javaType=java.io.Serializable}");
+		sqlBuilder.WHERE("ID = #{id,javaType=IId}");
 		sqlBuilder.WHERE("VERSION = #{version,javaType=java.lang.Integer}");
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {

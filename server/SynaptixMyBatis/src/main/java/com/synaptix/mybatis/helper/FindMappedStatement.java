@@ -1,6 +1,5 @@
 package com.synaptix.mybatis.helper;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.synaptix.component.factory.ComponentDescriptor.PropertyDescriptor;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.EntityFields;
 import com.synaptix.entity.ICancellable;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.extension.DatabasePropertyExtensionDescriptor;
 import com.synaptix.entity.extension.IDatabaseComponentExtension;
 import com.synaptix.mybatis.cache.SynaptixCacheManager;
@@ -187,7 +187,7 @@ public class FindMappedStatement {
 
 	/**
 	 * Build a find components by property name
-	 * 
+	 *
 	 * @param componentClass
 	 * @param propertyName
 	 * @param useCheckCancel
@@ -367,7 +367,7 @@ public class FindMappedStatement {
 			} else {
 				sql = buildFindComponentsByPropertyName(componentClass, assoSqlTableName, idSource, idTarget, propertyName, useCheckCancel);
 			}
-			sqlSource = sqlSourceParser.parse(sql, Serializable.class, null);
+			sqlSource = sqlSourceParser.parse(sql, IId.class, null);
 		}
 
 		@Override

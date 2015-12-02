@@ -1,9 +1,13 @@
 package com.synaptix.mybatis.handler;
 
+import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import oracle.jdbc.OracleTypes;
+import oracle.sql.RAW;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -13,14 +17,11 @@ import org.apache.ibatis.type.TypeException;
 import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 
-import oracle.jdbc.OracleTypes;
-import oracle.sql.RAW;
-
-@MappedTypes(IId.class)
-public class RawToIIdTypeHandler extends BaseTypeHandler<IId> {
+@MappedTypes({ Serializable.class, IId.class })
+public class RawToIIdTypeHandler extends BaseTypeHandler<Serializable> {
 
 	@Override
-	public void setParameter(PreparedStatement ps, int i, IId parameter, JdbcType jdbcType) throws SQLException {
+	public void setParameter(PreparedStatement ps, int i, Serializable parameter, JdbcType jdbcType) throws SQLException {
 		if (parameter == null) {
 			try {
 				ps.setNull(i, OracleTypes.RAW);
@@ -34,8 +35,17 @@ public class RawToIIdTypeHandler extends BaseTypeHandler<IId> {
 	}
 
 	@Override
-	public void setNonNullParameter(PreparedStatement ps, int i, IId parameter, JdbcType jdbcType) throws SQLException {
-		ps.setObject(i, new MyRAW(RAW.hexString2Bytes(((IdRaw) parameter).getHex())));
+	public void setNonNullParameter(PreparedStatement ps, int i, Serializable parameter, JdbcType jdbcType) throws SQLException {
+		byte[] bs;
+		if (parameter instanceof IdRaw) {
+			IdRaw raw = (IdRaw) parameter;
+			bs = RAW.hexString2Bytes(raw.getHex());
+		} else if (parameter instanceof byte[]) {
+			bs = (byte[]) parameter;
+		} else {
+			throw new SQLException("parameter is not IdRaw or byte[] " + (parameter != null ? parameter.getClass() : ""));
+		}
+		ps.setObject(i, new MyRAW(bs));
 	}
 
 	@Override

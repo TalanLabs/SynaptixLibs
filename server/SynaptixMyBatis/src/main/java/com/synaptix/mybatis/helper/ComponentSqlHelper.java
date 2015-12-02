@@ -27,6 +27,7 @@ import com.synaptix.component.factory.ComponentDescriptor;
 import com.synaptix.component.factory.ComponentDescriptor.PropertyDescriptor;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.entity.IEntity;
+import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.entity.extension.DatabaseClassExtensionDescriptor;
 import com.synaptix.entity.extension.DatabasePropertyExtensionDescriptor;
@@ -196,7 +197,7 @@ public class ComponentSqlHelper {
 		Class<?> javaType = field.getPropertyClass();
 		if (IEntity.class.isAssignableFrom(field.getPropertyClass())) {
 			sb.append(".id");
-			javaType = java.io.Serializable.class;
+			javaType = IId.class;
 		}
 		if (javaType != null) {
 			sb.append(",javaType=").append(javaType.getName());
@@ -602,10 +603,10 @@ public class ComponentSqlHelper {
 																			// the
 																			// ids
 				sb.append(".id");
-				javaType = java.io.Serializable.class;
+				javaType = IId.class;
 			}
 			if (java.util.Collection.class.isAssignableFrom(field.getPropertyClass()) && "id".equals(subfix)) {
-				javaType = java.io.Serializable.class;
+				javaType = IId.class;
 			}
 		}
 		if (subfix != null) {
