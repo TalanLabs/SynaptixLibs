@@ -1,7 +1,6 @@
 package com.synaptix.mybatis.guice;
 
 import java.io.InputStream;
-import java.io.Serializable;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.LocalCacheScope;
@@ -13,7 +12,6 @@ import org.joda.time.LocalTime;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.factory.ComponentObjectFactory;
@@ -27,7 +25,6 @@ import com.synaptix.mybatis.handler.DateToLocalTimeTypeHandler;
 import com.synaptix.mybatis.handler.NumberToDurationTypeHandler;
 import com.synaptix.mybatis.handler.RawToIIdTypeHandler;
 import com.synaptix.mybatis.handler.RawToIdRawTypeHandler;
-import com.synaptix.mybatis.handler.RawToSerializableTypeHandler;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
 import com.synaptix.mybatis.helper.FindMappedStatement;
 import com.synaptix.mybatis.proxy.ComponentProxyFactory;
@@ -70,8 +67,8 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		registerHandler(LocalTime.class, DateToLocalTimeTypeHandler.class);
 		registerHandler(Duration.class, NumberToDurationTypeHandler.class);
 		registerHandler(IdRaw.class, RawToIdRawTypeHandler.class);
-		registerHandler(IId.class, RawToIIdTypeHandler.class);
-		registerHandler(Serializable.class, RawToSerializableTypeHandler.class);
+		// registerHandler(Serializable.class, RawToSerializableTypeHandler.class);
+		registerHandler(RawToIIdTypeHandler.class);
 	}
 
 	protected final void registerHandler(Class<?> javaTypeClass, Class<?> typeHandlerClass) {

@@ -44,7 +44,7 @@ public class SynaptixConfiguration extends Configuration {
 	public SynaptixConfiguration() {
 		super();
 
-		languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
+		// languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
 	public void setFindMappedStatement(FindMappedStatement findMappedStatement) {
@@ -77,7 +77,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has cache without verify and create
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -122,7 +122,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has result map without verify and create component result map
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -154,7 +154,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has statement without verify and create
-	 * 
+	 *
 	 * @param statementName
 	 * @return
 	 */
