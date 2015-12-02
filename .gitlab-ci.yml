@@ -28,14 +28,14 @@ test_sonar_preview_job:
     - tags
   script:
     - git merge origin master --no-commit --no-ff
-    - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.login=gitlab-ci -Dsonar.password=gitlab-ci -Dsonar.analysis.mode=preview -Dsonar.issuesReport.console.enable=true -Dsonar.gitlab.commit_sha=$CI_BUILD_REF -Dsonar.gitlab.ref=$CI_BUILD_REF_NAME
+    - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=http://stx-th2-dev03.vlan-admin.private:9000 -Dsonar.login=gitlab-ci -Dsonar.password=gitlab-ci -Dsonar.analysis.mode=preview -Dsonar.issuesReport.console.enable=true -Dsonar.gitlab.commit_sha=$CI_BUILD_REF -Dsonar.gitlab.ref=$CI_BUILD_REF_NAME
 
 test_sonar_job:
   stage: test
   only:
     - master
   script:
-    - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.login=gitlab-ci -Dsonar.password=gitlab-ci
+    - mvn --batch-mode verify org.codehaus.mojo:sonar-maven-plugin:2.7.1:sonar -Dsonar.host.url=http://stx-th2-dev03.vlan-admin.private:9000 -Dsonar.login=gitlab-ci -Dsonar.password=gitlab-ci
 
 deploy_job:
   stage: deploy
