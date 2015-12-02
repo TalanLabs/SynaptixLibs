@@ -10,12 +10,12 @@
 	<![CDATA[
 		select a.* from T_TASK_CLUSTER_DEPENDENCY a
 		where
-			a.ID_CLUSTER = #{idTaskCluster,javaType=java.io.Serializable}
+			a.ID_CLUSTER = #{idTaskCluster,javaType=IId}
 	]]>
 	</select>
 
     <update id="updateDependency">
-        update T_TASK_CLUSTER_DEPENDENCY set id_cluster = #{newIdCluster} where id_object = #{idObject,javaType=java.io.Serializable}
+        update T_TASK_CLUSTER_DEPENDENCY set id_cluster = #{newIdCluster} where id_object = #{idObject,javaType=IId}
     </update>
 
 </mapper>

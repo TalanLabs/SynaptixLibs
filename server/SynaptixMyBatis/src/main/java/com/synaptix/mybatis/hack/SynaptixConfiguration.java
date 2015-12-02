@@ -9,6 +9,7 @@ import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.scripting.LanguageDriverRegistry;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.transaction.Transaction;
@@ -42,6 +43,8 @@ public class SynaptixConfiguration extends Configuration {
 
 	public SynaptixConfiguration() {
 		super();
+
+		languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
 	public void setFindMappedStatement(FindMappedStatement findMappedStatement) {
@@ -98,6 +101,11 @@ public class SynaptixConfiguration extends Configuration {
 			res = cacheResult != null && cacheResult.getCache() != null;
 		}
 		return res;
+	}
+
+	@Override
+	public LanguageDriverRegistry getLanguageRegistry() {
+		return super.getLanguageRegistry();
 	}
 
 	/**

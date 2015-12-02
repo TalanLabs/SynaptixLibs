@@ -78,6 +78,10 @@ public class SynaptixConfigurationProvider implements Provider<SynaptixConfigura
 		configuration.getTypeHandlerRegistry().register(javaTypeClass, typeHandlerClass);
 	}
 
+	protected final void registerHandler(Class<?> typeHandlerClass) {
+		configuration.getTypeHandlerRegistry().register(typeHandlerClass);
+	}
+
 	@Inject
 	public void setFindMappedStatement(FindMappedStatement findMappedStatement) {
 		configuration.setFindMappedStatement(findMappedStatement);

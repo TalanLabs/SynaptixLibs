@@ -7,6 +7,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.synaptix.entity.IId;
+
 public enum JdbcTypesEnum {
 
 	DOUBLE {
@@ -85,7 +87,7 @@ public enum JdbcTypesEnum {
 	VARCHAR {
 		@Override
 		public boolean matches(Class<?> c) {
-			if (String.class.isAssignableFrom(c) || Serializable.class.isAssignableFrom(c) || Enum.class.isAssignableFrom(c)) {
+			if (String.class.isAssignableFrom(c) || IId.class.isAssignableFrom(c) || Serializable.class.isAssignableFrom(c) || Enum.class.isAssignableFrom(c)) {
 				return true;
 			}
 			return false;

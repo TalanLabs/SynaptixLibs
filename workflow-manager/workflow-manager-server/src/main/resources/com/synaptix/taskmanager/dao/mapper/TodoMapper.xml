@@ -10,14 +10,14 @@
 
 	<delete id="deleteTasksTodo">
 		DELETE FROM T_TODO
-		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
+		WHERE ID_TASK = #{idTask,javaType=IId}
 	</delete>
 
 	<delete id="deleteTasksTodos">
 		DELETE FROM T_TODO
 		WHERE ID_TASK IN
 		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
-			#{item,javaType=java.io.Serializable}
+			#{item,javaType=IId}
 		</foreach>
 	</delete>
 
@@ -42,9 +42,9 @@
 				LEFT JOIN t_asso_todofolder_role a ON a.id_todo_folder = tf.id
 				LEFT JOIN t_user_role ur ON ur.id_role = a.id_role
 				</if>
-				WHERE t.id_owner_center = #{idOwnerCenter,javaType=java.io.Serializable}
+				WHERE t.id_owner_center = #{idOwnerCenter,javaType=IId}
 					<if test="idUser != null">
-					AND (ur.id_user = #{idUser,javaType=java.io.Serializable}
+					AND (ur.id_user = #{idUser,javaType=IId}
 						OR NVL(tf.check_restricted, '0') = '0')
 					</if>
 					<if test="todoFolder != null">
@@ -54,7 +54,7 @@
 					AND t.id_todo_folder is null
 							</when>
 							<otherwise>
-					AND t.id_todo_folder = #{todoFolder.id,javaType=java.io.Serializable}
+					AND t.id_todo_folder = #{todoFolder.id,javaType=IId}
 							</otherwise>
 						</choose>
 					</if>
@@ -108,9 +108,9 @@
 				LEFT JOIN t_asso_todofolder_role a ON a.id_todo_folder = tf.id
 				LEFT JOIN t_user_role ur ON ur.id_role = a.id_role
 			</if>
-			WHERE t.id_owner_center = #{idContextCenter,javaType=java.io.Serializable}
+			WHERE t.id_owner_center = #{idContextCenter,javaType=IId}
 			<if test="idUser != null">
-				AND (ur.id_user = #{idUser,javaType=java.io.Serializable}
+				AND (ur.id_user = #{idUser,javaType=IId}
 				OR NVL(tf.check_restricted, '0') = '0')
 			</if>
 			<if test="todoFolder != null">
@@ -120,13 +120,13 @@
 						AND t.id_todo_folder is null
 					</when>
 					<otherwise>
-						AND t.id_todo_folder = #{todoFolder.id,javaType=java.io.Serializable}
+						AND t.id_todo_folder = #{todoFolder.id,javaType=IId}
 					</otherwise>
 				</choose>
 			</if>
 			AND t.id_object in
 			<foreach item="item" index="index" collection="idObjects" open="(" separator="," close=")">
-				#{item,javaType=java.io.Serializable}
+				#{item,javaType=IId}
 			</foreach>
 			ORDER BY t.status desc, t.created_date)filtered_todos
 		WHERE filtered_todos.rk_task = 1
@@ -136,25 +136,25 @@
 	<update id="updateDescription">
 		update t_todo
 		set DESCRIPTION= #{description,javaType=java.lang.String}
-		where ID_OBJECT = #{idObject,javaType=java.io.Serializable}
+		where ID_OBJECT = #{idObject,javaType=IId}
 	</update>
 
 	<delete id="deleteTaskErrors">
 		DELETE FROM T_ERROR
 		WHERE ID_TASK IN
 		<foreach item="item" index="index" collection="idTasks" open="(" separator="," close=")">
-			#{item,javaType=java.io.Serializable}
+			#{item,javaType=IId}
 		</foreach>
 	</delete>
 
 	<update id="updatePendingTodos">
 		update t_todo
 		set STATUS = 'TODO'
-		where ID_TASK = #{idTask,javaType=java.io.Serializable}
+		where ID_TASK = #{idTask,javaType=IId}
 	</update>
 
 	<delete id="deleteObjectTodos">
 		DELETE FROM T_TODO
-		WHERE ID_OBJECT = #{idObject,javaType=java.io.Serializable}
+		WHERE ID_OBJECT = #{idObject,javaType=IId}
 	</delete>
 </mapper>

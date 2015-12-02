@@ -9,18 +9,18 @@
 	<select id="findTaskChainsByTaskType" resultType="java.io.Serializable">
 		SELECT ID_TASK_CHAIN 
 		FROM T_ASSO_TASK_CHAIN_TYPE  
-		WHERE ID_TASK_TYPE = #{idTaskType,javaType=java.io.Serializable}
+		WHERE ID_TASK_TYPE = #{idTaskType,javaType=IId}
 	</select>
 	
 	<select id="findTaskChainCriteriaByTaskChain" resultType="java.io.Serializable">
 		SELECT ID_TASK_CHAIN_CRITERIA 
 		FROM JOIN T_ASSO_TASK_CHAIN_CRIT_CHAIN
-		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=java.io.Serializable}
+		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
 	</select>
 	
 	<delete id="deleteAssoTaskChainTaskType">
 		DELETE FROM T_ASSO_TASK_CHAIN_TYPE
-		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=java.io.Serializable}
+		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
 	</delete>
 	
 	<delete id="deleteAssoTaskChainCriteriaTaskChain">

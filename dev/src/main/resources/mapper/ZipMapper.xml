@@ -9,7 +9,7 @@
 	<select id="find" resultMap="model.IZip">
 		select * from T_ZIP where CITY = #{city,javaType=java.lang.String}
 			and ZIP = #{zip,javaType=java.lang.String}
-			and id_country = #{idCountry,javaType=java.io.Serializable}
+			and id_country = #{idCountry,javaType=IId}
 	</select>
 
 </mapper>
