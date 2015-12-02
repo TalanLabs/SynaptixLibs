@@ -4,10 +4,14 @@ public final class IdRaw implements IId {
 
 	private static final long serialVersionUID = 1585448539513037798L;
 
-	private String hex;
+	private final String hex;
 
 	public IdRaw(String hex) {
 		super();
+
+		if (hex == null) {
+			throw new IllegalArgumentException("ID cannot be null");
+		}
 
 		this.hex = hex;
 	}
