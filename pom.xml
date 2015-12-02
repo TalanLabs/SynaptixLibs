@@ -70,7 +70,7 @@
 	</scm>
     <ciManagement>
         <system>gitlab-ci</system>
-        <url>https://gitlab.synaptix-labs.com/ci/projects/8</url>
+        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
     </ciManagement>
     <issueManagement>
         <system>gitlab</system>
