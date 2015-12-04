@@ -16,12 +16,10 @@ import com.synaptix.tmgr.libs.tasks.filesys.FolderEventTriggerTask.FileTriggerEv
  * An abstract injector used to import flux<br>
  * Use annotation ImportFlux to define a root work directory
  *
- * @param M
- *            Message class
  * @author Nicolas P
  *
  */
-public abstract class AbstractInjector<M extends AbstractImportFlux> extends AbstractMsgInjector implements IInjector<M> {
+public abstract class AbstractInjector<M extends AbstractImportFlux> extends AbstractMsgInjector implements IInjector {
 
 	private static final Log LOG = LogFactory.getLog(AbstractInjector.class);
 
