@@ -174,8 +174,8 @@ public class GuicePluginManager {
 
 	public static void initGates(Log logger) {
 		GateFactory gateFactory = new GateFactory(GuicePluginManager.class.getClassLoader(), logger);
-		for (Class<? extends IInjector<?>> injectorClass : integratorFactory.getInjectorList()) {
-			IInjector<?> injectorImpl = integratorFactory.getInjector(injectorClass);
+		for (Class<? extends IInjector> injectorClass : integratorFactory.getInjectorList()) {
+			IInjector injectorImpl = integratorFactory.getInjector(injectorClass);
 			gateFactory.buildGate(injectorImpl.getName(), injectorImpl.getDelay(), (MessageInjector) injectorImpl);
 
 		}
@@ -197,14 +197,12 @@ public class GuicePluginManager {
 	}
 
 	private static List<PluggableChannel> buildChannelGroup(String id, int maxWorking, int maxWaiting, Agent agent, Engine engine) {
-		int max_channels = maxWorking;
 		int max_working = 1;
-		int max_waiting = maxWaiting;
 		List<PluggableChannel> channels = new ArrayList<PluggableChannel>();
-		for (int i = 0; i < max_channels; i++) {
+		for (int i = 0; i < maxWorking; i++) {
 			try {
 				String idChannel = id + "_" + i;
-				PluggableChannel chn = new ProcessingChannel(idChannel, max_working, max_waiting, agent, engine);
+				PluggableChannel chn = new ProcessingChannel(idChannel, max_working, maxWaiting, agent, engine);
 				channels.add(chn);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
@@ -212,7 +210,7 @@ public class GuicePluginManager {
 		}
 		try {
 			String idChannel = id + "_DEFAULT";
-			PluggableChannel chn = new ProcessingChannel(idChannel, max_working, max_waiting, agent, engine);
+			PluggableChannel chn = new ProcessingChannel(idChannel, max_working, maxWaiting, agent, engine);
 			channels.add(chn);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

@@ -13,7 +13,7 @@
 
 	<insert id="insertAssoTaskPreviousTask">
 		insert into t_asso_task_previous_task (ID_TASK, ID_PREVIOUS_TASK)
-		values (#{idTask,javaType=java.io.Serializable}, #{idPreviousTask,javaType=java.io.Serializable})
+		values (#{idTask,javaType=IId}, #{idPreviousTask,javaType=IId})
 	</insert>
 
 	<select id="selectAssoTaskPreviousTasksBy" resultMap="assoTaskPreviousTask">
@@ -21,7 +21,7 @@
 			inner join t_task b on a.id_task = b.id
 		where
 			b.check_cancel = '0'
-			and b.id_object = #{idObject,javaType=java.io.Serializable}
+			and b.id_object = #{idObject,javaType=IId}
 			and b.object_type = #{taskObjectClass,javaType=java.lang.Class}
 	</select>
 	
@@ -30,7 +30,7 @@
 			inner join t_task b on a.id_task = b.id
 		where
 			b.check_cancel = '0'
-			and b.id_cluster = #{idCluster,javaType=java.io.Serializable}
+			and b.id_cluster = #{idCluster,javaType=IId}
 		order by b.created_date
 	</select>
 	
@@ -39,25 +39,25 @@
 			inner join t_task_arch b on a.id_task = b.id
 		where
 			b.check_cancel = '0'
-			and b.id_cluster = #{idCluster,javaType=java.io.Serializable}
+			and b.id_cluster = #{idCluster,javaType=IId}
 		order by b.created_date
 	</select>
 
 	<delete id="deleteTaskAsso">
 		DELETE FROM T_ASSO_TASK_PREVIOUS_TASK
-		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
-		OR ID_PREVIOUS_TASK = #{idTask,javaType=java.io.Serializable}
+		WHERE ID_TASK = #{idTask,javaType=IId}
+		OR ID_PREVIOUS_TASK = #{idTask,javaType=IId}
 	</delete>
 
 	<delete id="deleteTasksAssos">
 		DELETE FROM T_ASSO_TASK_PREVIOUS_TASK
 		WHERE ID_TASK in
 		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
-			#{item,javaType=java.io.Serializable}
+			#{item,javaType=IId}
 		</foreach>
 		OR ID_PREVIOUS_TASK in
 		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
-			#{item,javaType=java.io.Serializable}
+			#{item,javaType=IId}
 		</foreach>
 	</delete>
 </mapper>

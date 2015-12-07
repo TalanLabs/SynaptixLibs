@@ -67,7 +67,7 @@ public class DeleteMappedStatement {
 
 		SQL sqlBuilder = new SQL();
 		sqlBuilder.DELETE_FROM(componentSqlHelper.getSqlTableName(ed));
-		sqlBuilder.WHERE("id = #{id,javaType=java.io.Serializable}");
+		sqlBuilder.WHERE("id = #{id,javaType=IId}");
 		sqlBuilder.WHERE("version = #{version,javaType=java.lang.Integer}");
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {

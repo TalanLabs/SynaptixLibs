@@ -6,12 +6,12 @@
 
 	<delete id="deleteErrorsByIdObject" parameterType="java.io.Serializable">
 		DELETE FROM T_ERROR
-		WHERE ID_OBJECT = #{idObject,javaType=java.io.Serializable}
+		WHERE ID_OBJECT = #{idObject,javaType=IId}
 	</delete>
 
 	<delete id="deleteErrorsByIdTask" parameterType="java.io.Serializable">
 		DELETE FROM T_ERROR
-		WHERE ID_TASK = #{idTask,javaType=java.io.Serializable}
+		WHERE ID_TASK = #{idTask,javaType=IId}
 	</delete>
 
 </mapper>

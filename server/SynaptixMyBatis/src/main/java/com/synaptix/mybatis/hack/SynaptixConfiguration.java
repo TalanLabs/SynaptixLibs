@@ -9,6 +9,7 @@ import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.scripting.LanguageDriverRegistry;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.transaction.Transaction;
@@ -42,6 +43,8 @@ public class SynaptixConfiguration extends Configuration {
 
 	public SynaptixConfiguration() {
 		super();
+
+		// languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
 	public void setFindMappedStatement(FindMappedStatement findMappedStatement) {
@@ -74,7 +77,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has cache without verify and create
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -100,6 +103,11 @@ public class SynaptixConfiguration extends Configuration {
 		return res;
 	}
 
+	@Override
+	public LanguageDriverRegistry getLanguageRegistry() {
+		return super.getLanguageRegistry();
+	}
+
 	/**
 	 * Get has result map with verify and create component result map
 	 */
@@ -114,7 +122,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has result map without verify and create component result map
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -146,7 +154,7 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has statement without verify and create
-	 * 
+	 *
 	 * @param statementName
 	 * @return
 	 */

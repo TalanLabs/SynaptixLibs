@@ -27,7 +27,7 @@ public interface IIntegratorFactory {
 	 * 
 	 * @return
 	 */
-	public List<Class<? extends IInjector<?>>> getInjectorList();
+	public List<Class<? extends IInjector>> getInjectorList();
 
 	public <A extends Agent> A getAgent(Class<A> type) throws NotFoundAgentException;
 
@@ -38,7 +38,7 @@ public interface IIntegratorFactory {
 	 * @return
 	 * @throws NotFoundInjectorException
 	 */
-	public <I extends IInjector<?>> I getInjector(Class<I> type) throws NotFoundInjectorException;
+	public <I extends IInjector> I getInjector(Class<I> type) throws NotFoundInjectorException;
 
 	/**
 	 * Get the import process definition set defined using guice injection

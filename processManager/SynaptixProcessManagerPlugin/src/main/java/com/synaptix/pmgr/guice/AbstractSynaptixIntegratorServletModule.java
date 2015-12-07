@@ -12,6 +12,7 @@ import com.synaptix.pmgr.model.IHeartbeatProcessDefinition;
 import com.synaptix.pmgr.model.IImportProcessDefinition;
 import com.synaptix.pmgr.model.ISimpleProcessDefinition;
 import com.synaptix.pmgr.model.ProcessType;
+import com.synaptix.pmgr.trigger.injector.IInjector;
 
 public abstract class AbstractSynaptixIntegratorServletModule extends AbstractModule {
 
@@ -78,5 +79,9 @@ public abstract class AbstractSynaptixIntegratorServletModule extends AbstractMo
 		bind(agentClass).in(Singleton.class);
 
 		getSimpleProcessDefinitionMultibinder().addBinding().toInstance(simpleProcessDefinition);
+	}
+
+	protected final <I extends IInjector> void bindInjector(final Class<I> injectorClass) {
+		bind(injectorClass).in(Singleton.class);
 	}
 }

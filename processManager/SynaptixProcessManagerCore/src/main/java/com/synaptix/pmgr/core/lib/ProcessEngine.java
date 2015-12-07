@@ -53,7 +53,6 @@ public class ProcessEngine { // implements MessageHandler, RegistryListener{
 	 * Retourne l'instance. Si on la crée, alors on utilise les propriétés données
 	 *
 	 * @param id
-	 * @param classLoader
 	 * @param properties
 	 * @return
 	 */

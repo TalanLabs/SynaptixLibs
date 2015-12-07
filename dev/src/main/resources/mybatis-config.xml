@@ -3,6 +3,11 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
+	<typeAliases>
+		<typeAlias alias="IId" type="com.synaptix.entity.IId" />
+	</typeAliases>
+
 	<environments default="oracle_thin">
 		<environment id="h2">
 			<transactionManager type="JDBC" />

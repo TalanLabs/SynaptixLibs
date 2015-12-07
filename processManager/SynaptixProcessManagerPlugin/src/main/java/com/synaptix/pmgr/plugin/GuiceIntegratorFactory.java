@@ -34,7 +34,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 
 	private final Map<Class<?>, Object> implAgentMap;
 
-	private final List<Class<? extends IInjector<?>>> injectorList;
+	private final List<Class<? extends IInjector>> injectorList;
 
 	private final Map<Class<?>, Object> implInjectorMap;
 
@@ -64,7 +64,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 		this.agentList = new ArrayList<Class<? extends Agent>>();
 		this.implAgentMap = new HashMap<Class<?>, Object>();
 
-		this.injectorList = new ArrayList<Class<? extends IInjector<?>>>();
+		this.injectorList = new ArrayList<Class<? extends IInjector>>();
 		this.implInjectorMap = new HashMap<Class<?>, Object>();
 
 		this.injector = injector;
@@ -83,7 +83,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 							addAgent(agentClass);
 						} else if (IInjector.class.isAssignableFrom(beanClass)) {
 							@SuppressWarnings("unchecked")
-							Class<? extends IInjector<?>> injectorClass = (Class<? extends IInjector<?>>) beanClass;
+							Class<? extends IInjector> injectorClass = (Class<? extends IInjector>) beanClass;
 							addInjector(injectorClass);
 						}
 					}
@@ -106,7 +106,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 		agentList.add(agentClass);
 	}
 
-	private <I extends IInjector<?>> void addInjector(Class<I> injectorClass) {
+	private <I extends IInjector> void addInjector(Class<I> injectorClass) {
 		if (injectorClass == null) {
 			throw new IllegalArgumentException("injectorClass is null");
 		}
@@ -131,14 +131,14 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <I extends IInjector<?>> I getInjector(Class<I> type) throws NotFoundInjectorException {
+	public <I extends IInjector> I getInjector(Class<I> type) throws NotFoundInjectorException {
 		initIntegratorMap();
 		if (!implInjectorMap.containsKey(type)) {
 			int indexOf = injectorList.indexOf(type);
 			if (indexOf < 0) {
 				throw new NotFoundInjectorException(type.getName() + " not exist"); //$NON-NLS-1$
 			}
-			IInjector<?> injectorImpl = injector.getInstance(injectorList.get(indexOf));
+			IInjector injectorImpl = injector.getInstance(injectorList.get(indexOf));
 			implInjectorMap.put(type, injectorImpl);
 		}
 		return (I) implInjectorMap.get(type);
@@ -151,7 +151,7 @@ public class GuiceIntegratorFactory implements IIntegratorFactory {
 	}
 
 	@Override
-	public List<Class<? extends IInjector<?>>> getInjectorList() {
+	public List<Class<? extends IInjector>> getInjectorList() {
 		initIntegratorMap();
 		return Collections.unmodifiableList(injectorList);
 	}

@@ -1,7 +1,6 @@
 package com.synaptix.deployer.guice;
 
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -32,7 +31,6 @@ import com.synaptix.mybatis.handler.DateToLocalTimeTypeHandler;
 import com.synaptix.mybatis.handler.NumberToDurationTypeHandler;
 import com.synaptix.mybatis.handler.RawToIIdTypeHandler;
 import com.synaptix.mybatis.handler.RawToIdRawTypeHandler;
-import com.synaptix.mybatis.handler.RawToSerializableTypeHandler;
 import com.synaptix.mybatis.helper.ComponentColumnsCache;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
 import com.synaptix.mybatis.helper.FindMappedStatement;
@@ -123,6 +121,6 @@ public class DeployerConfigurationProvider implements Provider<Configuration> {
 		configuration.getTypeHandlerRegistry().register(Duration.class, NumberToDurationTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(IdRaw.class, RawToIdRawTypeHandler.class);
 		configuration.getTypeHandlerRegistry().register(IId.class, RawToIIdTypeHandler.class);
-		configuration.getTypeHandlerRegistry().register(Serializable.class, RawToSerializableTypeHandler.class);
+//		configuration.getTypeHandlerRegistry().register(Serializable.class, RawToSerializableTypeHandler.class);
 	}
 }
