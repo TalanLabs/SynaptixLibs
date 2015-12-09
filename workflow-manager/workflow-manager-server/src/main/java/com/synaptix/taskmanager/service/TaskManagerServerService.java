@@ -58,7 +58,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	@Inject
 	private TaskServiceDiscovery taskServiceDiscovery;
 
-
 	private static final Log LOG = LogFactory.getLog(TaskManagerServerService.class);
 
 	private TaskMapper getTaskMapper() {
@@ -246,14 +245,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (IId idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
@@ -347,6 +346,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	private void updateTaskWithResult(ITask task, ITaskService.IExecutionResult executionResult) {
 		task.setResultStatus(executionResult.getResultStatus());
+
 		IStackResult stackResult = executionResult.getStackResult();
 		task.setResultDesc(executionResult.getResultDesc());
 		if (stackResult != null) {
