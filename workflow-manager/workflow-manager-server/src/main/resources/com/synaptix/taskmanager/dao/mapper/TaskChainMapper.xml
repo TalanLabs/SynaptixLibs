@@ -14,7 +14,7 @@
 	
 	<select id="findTaskChainCriteriaByTaskChain" resultType="java.io.Serializable">
 		SELECT ID_TASK_CHAIN_CRITERIA 
-		FROM JOIN T_ASSO_TASK_CHAIN_CRIT_CHAIN
+		FROM T_ASSO_TASK_CHAIN_CRIT_CHAIN
 		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
 	</select>
 	

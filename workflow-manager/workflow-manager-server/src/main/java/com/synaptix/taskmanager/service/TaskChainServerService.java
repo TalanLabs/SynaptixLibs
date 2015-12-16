@@ -132,7 +132,7 @@ public class TaskChainServerService extends AbstractSimpleService implements ITa
 	@Override
 	@Transactional
 	public boolean getTaskChainCriteriasFromTaskChain(ITaskChain taskChain) {
-		return !getTaskChainMapper().findTaskChainsByTaskType(taskChain.getId()).isEmpty();
+		return !getTaskChainMapper().findTaskChainCriteriaByTaskChain(taskChain.getId()).isEmpty();
 	}
 
 	// @Override
