@@ -20,6 +20,7 @@ import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.cache.SynaptixCacheManager.CacheResult;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
 import com.synaptix.mybatis.helper.FindMappedStatement;
+import com.synaptix.service.helper.SortOrderHelper;
 
 public class SynaptixConfiguration extends Configuration {
 
@@ -41,9 +42,15 @@ public class SynaptixConfiguration extends Configuration {
 
 	private SynaptixUserSession synaptixUserSession;
 
+	/**
+	 * Used by generated requests. Default is "rowid"
+	 */
+	private String rowidName;
+
 	public SynaptixConfiguration() {
 		super();
 
+		setRowidName("rowid");
 		// languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
@@ -256,5 +263,14 @@ public class SynaptixConfiguration extends Configuration {
 				super.addMappedStatement(ms);
 			}
 		}
+	}
+
+	public final String getRowidName() {
+		return rowidName;
+	}
+
+	public void setRowidName(String rowidName) {
+		SortOrderHelper.getInstance().setRowidName(rowidName);
+		this.rowidName = rowidName;
 	}
 }

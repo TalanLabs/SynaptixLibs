@@ -71,10 +71,6 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Create count pagination parameter
-	 *
-	 * @param componentClass
-	 * @param valueFilterMap
-	 * @return
 	 */
 	public <E extends IComponent> Map<String, Object> createCountSimplePaginationParameter(Class<E> componentClass, Map<String, Object> valueFilterMap) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -84,9 +80,6 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Get count pagination mapped statement
-	 *
-	 * @param componentClass
-	 * @return
 	 */
 	public <E extends IComponent> MappedStatement getCountSimplePaginationMappedStatement(Class<E> componentClass) {
 		String key = MappedStatementHelper.buildMappedStatementKey(componentClass, null, "countSimplePagination");
@@ -111,14 +104,6 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Create select pagination parameter
-	 *
-	 * @param componentClass
-	 * @param valueFilterMap
-	 * @param from
-	 * @param to
-	 * @param sortOrders
-	 * @param columns
-	 * @return
 	 */
 	public <E extends IComponent> Map<String, Object> createSelectSimplePaginationParameter(Class<E> componentClass, Map<String, Object> valueFilterMap, int from, int to, List<ISortOrder> sortOrders) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -131,11 +116,6 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Get select pagination mapped statement
-	 *
-	 * @param componentClass
-	 * @param columns
-	 * @param maxRow
-	 * @return
 	 */
 	public <E extends IComponent> MappedStatement getSelectSimplePaginationMappedStatement(Class<E> componentClass, int maxRow) {
 		Set<String> cs = new HashSet<String>();
@@ -238,12 +218,6 @@ public class SimplePaginationMappedStatement {
 
 	/**
 	 * Build a select sql
-	 *
-	 * @param entityClass
-	 * @param valueFilterMap
-	 * @param sortOrders
-	 * @param columns
-	 * @return
 	 */
 	private <E extends IComponent> BuildSelectSimplePaginationNestedResult buildSelectSimplePagination(Class<E> componentClass, Map<String, Object> valueFilterMap, List<ISortOrder> sortOrders) {
 		String sql = null;
@@ -278,7 +252,7 @@ public class SimplePaginationMappedStatement {
 		sqlBuilder.SELECT("t.*");
 		sqlBuilder.FROM(new StringBuilder("(SELECT i.* FROM (SELECT i.*, ROWNUM AS rn FROM (").append(buildFirstSelect(componentClass, valueFilterMap, sortOrders))
 				.append(") i WHERE ROWNUM <= #{to,javaType=int}) i WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
-		sqlBuilder.WHERE("i.a_rowid = t.ROWID");
+		sqlBuilder.WHERE("i.a_rowid = t." + synaptixConfiguration.getRowidName() + "");
 		sqlBuilder.ORDER_BY("i.rn");
 
 		return sqlBuilder.toString();
@@ -296,7 +270,7 @@ public class SimplePaginationMappedStatement {
 
 		SQL sqlBuilder = new SQL();
 		String hint = componentSqlHelper.buildHint(ed, valueFilterMap);
-		sqlBuilder.SELECT(hint + " t.ROWID AS a_rowid");
+		sqlBuilder.SELECT(hint + " t." + synaptixConfiguration.getRowidName() + " AS a_rowid");
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
 		sqlBuilder.FROM(new StringBuilder(sqlTableName).append(" t").toString());
 

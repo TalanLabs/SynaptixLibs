@@ -146,11 +146,9 @@ public class SelectNestedMappedStatement {
 
 		SQL sqlBuilder = new SQL();
 		sqlBuilder.SELECT("t.*");
-		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(buildFirstSelect(componentClass, filterRootNode, sortOrders))
-				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
-		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
-		sqlBuilder.WHERE("(i.a_rowid = t.ROWID)");
-		sqlBuilder.ORDER_BY("i.rn");
+		String firstSelect = buildFirstSelect(componentClass, filterRootNode, sortOrders);
+
+		buildSelect(sqlTableName, firstSelect, joinMap, sqlBuilder);
 
 		String sql = sqlBuilder.toString();
 
@@ -174,11 +172,9 @@ public class SelectNestedMappedStatement {
 		SQL sqlBuilder = new SQL();
 		componentSqlHelper.selectFields(sqlBuilder, joinMap, ed, null, null, columns, null);
 
-		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(buildFirstSelect(componentClass, filterRootNode, sortOrders))
-				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
-		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
-		sqlBuilder.WHERE("(i.a_rowid = t.ROWID)");
-		sqlBuilder.ORDER_BY("i.rn");
+		String firstSelect = buildFirstSelect(componentClass, filterRootNode, sortOrders);
+
+		buildSelect(sqlTableName, firstSelect, joinMap, sqlBuilder);
 
 		String sql = sqlBuilder.toString();
 
@@ -187,6 +183,14 @@ public class SelectNestedMappedStatement {
 		}
 
 		return new BuildSelectSuggestNestedResult(sql, componentSqlHelper.buildValueFilterMap(context, filterRootNode));
+	}
+
+	protected void buildSelect(String sqlTableName, String firstSelect, Map<String, Join> joinMap, SQL sqlBuilder) {
+		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(firstSelect)
+				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
+		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
+		sqlBuilder.WHERE("(i.a_rowid = t." + synaptixConfiguration.getRowidName() + ")");
+		sqlBuilder.ORDER_BY("i.rn");
 	}
 
 	private <E extends IComponent> BuildSelectSuggestNestedResult buildNestedSelectSuggest(Class<E> componentClass, RootNode filterRootNode, List<ISortOrder> sortOrders, Set<String> columns) {
@@ -208,11 +212,10 @@ public class SelectNestedMappedStatement {
 				sqlBuilder.SELECT(sb.toString());
 			}
 		}
-		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(buildFirstSelect(componentClass, filterRootNode, sortOrders))
-				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
-		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
-		sqlBuilder.WHERE("(i.a_rowid = t.ROWID)");
-		sqlBuilder.ORDER_BY("i.rn");
+
+		String firstSelect = buildFirstSelect(componentClass, filterRootNode, sortOrders);
+
+		buildSelect(sqlTableName, firstSelect, joinMap, sqlBuilder);
 
 		String sql = sqlBuilder.toString();
 
@@ -235,7 +238,7 @@ public class SelectNestedMappedStatement {
 		componentSqlHelper.buildOrderJoinMap(sortOrders, joinMap, ed, null, "");
 
 		SQL sqlBuilder = new SQL();
-		sqlBuilder.SELECT("t.ROWID AS a_rowid");
+		sqlBuilder.SELECT("t." + synaptixConfiguration.getRowidName() + " AS a_rowid");
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
 		sqlBuilder.FROM(new StringBuilder(sqlTableName).append(" t").toString());
 
