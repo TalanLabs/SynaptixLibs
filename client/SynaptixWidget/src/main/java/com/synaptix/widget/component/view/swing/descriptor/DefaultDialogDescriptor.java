@@ -1,5 +1,6 @@
 package com.synaptix.widget.component.view.swing.descriptor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,9 +26,9 @@ import com.synaptix.widget.view.swing.tablemodel.IColumnTableFactory;
 
 /**
  * Abstract panel descriptor with no buttons, no renderers and no specific filters
- * 
+ *
  * @author Nicolas P
- * 
+ *
  */
 public class DefaultDialogDescriptor<E extends IComponent> extends AbstractSearchViewDescriptor<E> implements ISearchComponentsDialogViewDescriptor<E> {
 
@@ -122,7 +123,7 @@ public class DefaultDialogDescriptor<E extends IComponent> extends AbstractSearc
 
 	@Override
 	public List<Filter> getSpecificFilters() {
-		return null;
+		return new ArrayList<Filter>();
 	}
 
 	@Override
@@ -172,7 +173,7 @@ public class DefaultDialogDescriptor<E extends IComponent> extends AbstractSearc
 
 	/**
 	 * Get the column by its column id in the given table
-	 * 
+	 *
 	 * @param table
 	 * @param columnId
 	 * @return
