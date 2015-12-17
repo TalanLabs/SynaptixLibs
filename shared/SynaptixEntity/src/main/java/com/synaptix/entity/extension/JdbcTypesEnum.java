@@ -13,7 +13,7 @@ public enum JdbcTypesEnum {
 
 	DOUBLE {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Double.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -22,7 +22,7 @@ public enum JdbcTypesEnum {
 	},
 	REAL {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Float.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -31,7 +31,7 @@ public enum JdbcTypesEnum {
 	},
 	INTEGER {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Integer.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -40,7 +40,7 @@ public enum JdbcTypesEnum {
 	},
 	NUMERIC {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Number.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -49,7 +49,7 @@ public enum JdbcTypesEnum {
 	},
 	DATE {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Date.class.isAssignableFrom(c) || LocalDateTime.class.isAssignableFrom(c) || LocalTime.class.isAssignableFrom(c) || LocalDate.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -58,7 +58,7 @@ public enum JdbcTypesEnum {
 	},
 	TIMESTAMP {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (Date.class.isAssignableFrom(c)) {
 				return true;
 			}
@@ -67,8 +67,17 @@ public enum JdbcTypesEnum {
 	},
 	CHAR {
 		@Override
-		public boolean matches(Class<?> c) {
-			if (Boolean.class.isAssignableFrom(c) || boolean.class.isAssignableFrom(c)) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
+			if (databaseLanguage == DatabaseLanguage.ORACLE && (Boolean.class.isAssignableFrom(c) || boolean.class.isAssignableFrom(c))) {
+				return true;
+			}
+			return false;
+		}
+	},
+	BOOLEAN {
+		@Override
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
+			if (databaseLanguage == DatabaseLanguage.POSTGRESQL && (Boolean.class.isAssignableFrom(c) || boolean.class.isAssignableFrom(c))) {
 				return true;
 			}
 			return false;
@@ -76,7 +85,7 @@ public enum JdbcTypesEnum {
 	},
 	BLOB {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			if (c.isArray() && c.getComponentType().equals(Byte.TYPE)) {
 				return true;
 			}
@@ -86,8 +95,20 @@ public enum JdbcTypesEnum {
 	},
 	VARCHAR {
 		@Override
-		public boolean matches(Class<?> c) {
-			if (String.class.isAssignableFrom(c) || IId.class.isAssignableFrom(c) || Serializable.class.isAssignableFrom(c) || Enum.class.isAssignableFrom(c)) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
+			if (String.class.isAssignableFrom(c) || Enum.class.isAssignableFrom(c)) {
+				return true;
+			}
+			if (databaseLanguage == DatabaseLanguage.ORACLE && (IId.class.isAssignableFrom(c) || Serializable.class.isAssignableFrom(c))) {
+				return true;
+			}
+			return false;
+		}
+	},
+	OTHER {
+		@Override
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
+			if (databaseLanguage == DatabaseLanguage.POSTGRESQL && (IId.class.isAssignableFrom(c) || Serializable.class.isAssignableFrom(c))) {
 				return true;
 			}
 			return false;
@@ -95,7 +116,7 @@ public enum JdbcTypesEnum {
 	},
 	NONE {
 		@Override
-		public boolean matches(Class<?> c) {
+		public boolean matches(Class<?> c, DatabaseLanguage databaseLanguage) {
 			return true;
 		}
 	};
@@ -103,9 +124,9 @@ public enum JdbcTypesEnum {
 	/**
 	 * Determine which JDBC type a Java type corresponds to.
 	 */
-	public static JdbcTypesEnum which(Class<?> c) {
+	public static JdbcTypesEnum which(Class<?> c, DatabaseLanguage databaseLanguage) {
 		for (JdbcTypesEnum type : JdbcTypesEnum.values()) {
-			if (type.matches(c)) {
+			if (type.matches(c, databaseLanguage)) {
 				return type;
 			}
 		}
@@ -115,5 +136,5 @@ public enum JdbcTypesEnum {
 	/**
 	 * Returns {@code true} if the JdbcTypeEnum matches the class.
 	 */
-	public abstract boolean matches(Class<?> c);
+	public abstract boolean matches(Class<?> c, DatabaseLanguage databaseLanguage);
 }

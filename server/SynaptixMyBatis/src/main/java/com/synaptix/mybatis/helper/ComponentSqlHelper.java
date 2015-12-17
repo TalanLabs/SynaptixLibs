@@ -85,9 +85,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Clean value filter map, remove null or empty value
-	 *
-	 * @param valueFilterMap
-	 * @return
 	 */
 	public Set<String> getCleanFilters(Map<String, Object> valueFilterMap) {
 		Set<String> res = new HashSet<String>();
@@ -103,9 +100,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * true if value filter map is no dependency value for build sql
-	 *
-	 * @param valueFilterMap
-	 * @return
 	 */
 	public boolean isUseSqlCache(Map<String, Object> valueFilterMap) {
 		boolean res = true;
@@ -193,9 +187,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get a field column name, format MyBatis ex : #{toto}
-	 *
-	 * @param field
-	 * @return
 	 */
 	public String getField(PropertyDescriptor field) {
 		DatabasePropertyExtensionDescriptor dp = (DatabasePropertyExtensionDescriptor) field.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class);
@@ -212,7 +203,7 @@ public class ComponentSqlHelper {
 		}
 		if (dp != null) {
 			if (dp.getColumn() != null) {
-				if (!dp.getColumn().isNotNull()) {
+				if (!dp.getColumn().isNotNull() && dp.getColumn().getJdbcType() != null) {
 					sb.append(",jdbcType=").append(dp.getColumn().getJdbcType());
 				}
 			} else if (dp.getNlsColumn() != null) {
@@ -227,9 +218,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get the table name with schema if available
-	 *
-	 * @param ed
-	 * @return
 	 */
 	public String getSqlTableName(ComponentDescriptor ed) {
 		DatabaseClassExtensionDescriptor dc = (DatabaseClassExtensionDescriptor) ed.getClassExtensionDescriptor(IDatabaseComponentExtension.class);
@@ -245,10 +233,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Get the column name for property name
-	 *
-	 * @param cd
-	 * @param propertyName
-	 * @return
 	 */
 	public String getSqlColumnName(ComponentDescriptor cd, String propertyName) {
 		PropertyDescriptor propertyDescriptor = cd.getPropertyDescriptor(propertyName);
@@ -527,11 +511,6 @@ public class ComponentSqlHelper {
 
 	/**
 	 * Create order by
-	 *
-	 * @param sqlBuilder
-	 * @param sortOrders
-	 * @param joinMap
-	 * @param ed
 	 */
 	public void orderBy(SQL sqlBuilder, List<ISortOrder> sortOrders, Map<String, Join> joinMap, ComponentDescriptor ed) {
 		if (sortOrders != null) {

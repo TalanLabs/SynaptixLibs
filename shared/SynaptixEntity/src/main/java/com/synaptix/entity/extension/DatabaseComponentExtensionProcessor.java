@@ -17,6 +17,22 @@ import com.synaptix.entity.extension.IDatabaseComponentExtension.UpperOnly;
 
 public class DatabaseComponentExtensionProcessor extends AbstractComponentExtensionProcessor {
 
+	private final DatabaseLanguage databaseLanguage;
+
+	/**
+	 * Creates a database component extension processor for oracle
+	 */
+	public DatabaseComponentExtensionProcessor() {
+		this(DatabaseLanguage.ORACLE);
+	}
+
+	/**
+	 * Creates a database component extension processor for given language
+	 */
+	public DatabaseComponentExtensionProcessor(DatabaseLanguage db) {
+		this.databaseLanguage = db;
+	}
+
 	@Override
 	public IClassExtensionDescriptor createClassExtensionDescriptor(Class<? extends IComponent> componentClass) {
 		IClassExtensionDescriptor classExtensionDescriptor = null;
@@ -47,8 +63,8 @@ public class DatabaseComponentExtensionProcessor extends AbstractComponentExtens
 				DatabasePropertyExtensionDescriptor.Column col = null;
 				if (column != null) {
 					JdbcTypesEnum jdbcTypeOld = jdbcType != null ? jdbcType.value() : null;
-					if (jdbcTypeOld == null || JdbcTypesEnum.NONE.equals(jdbcTypeOld)) {
-						jdbcTypeOld = JdbcTypesEnum.which(getterMethod.getReturnType());
+					if (jdbcTypeOld == null || JdbcTypesEnum.NONE == jdbcTypeOld) {
+						jdbcTypeOld = JdbcTypesEnum.which(getterMethod.getReturnType(), databaseLanguage);
 					}
 					col = new DatabasePropertyExtensionDescriptor.Column(column.name(), column.length(), !column.nullable(), defaultValue != null ? defaultValue.value() : null, jdbcTypeOld,
 							!column.insertable() && !column.updatable(), upperOnly != null);
@@ -66,4 +82,5 @@ public class DatabaseComponentExtensionProcessor extends AbstractComponentExtens
 		}
 		return propertyExtensionDescriptor;
 	}
+
 }
