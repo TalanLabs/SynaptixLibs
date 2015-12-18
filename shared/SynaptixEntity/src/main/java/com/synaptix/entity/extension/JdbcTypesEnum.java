@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import com.synaptix.component.factory.PrimitiveHelper;
 import com.synaptix.entity.IId;
 
 public enum JdbcTypesEnum {
@@ -125,8 +126,9 @@ public enum JdbcTypesEnum {
 	 * Determine which JDBC type a Java type corresponds to.
 	 */
 	public static JdbcTypesEnum which(Class<?> c, DatabaseLanguage databaseLanguage) {
+		Class<?> c2 = PrimitiveHelper.determineClass(c);
 		for (JdbcTypesEnum type : JdbcTypesEnum.values()) {
-			if (type.matches(c, databaseLanguage)) {
+			if (type.matches(c2, databaseLanguage)) {
 				return type;
 			}
 		}
