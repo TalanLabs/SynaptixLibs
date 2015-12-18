@@ -46,11 +46,13 @@ public class SynaptixConfiguration extends Configuration {
 	 * Used by generated requests. Default is "rowid"
 	 */
 	private String rowidName;
+	private String booleanFalse;
 
 	public SynaptixConfiguration() {
 		super();
 
 		setRowidName("rowid");
+		setBooleanFalse("'0'");
 		// languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
@@ -84,9 +86,6 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has cache without verify and create
-	 *
-	 * @param id
-	 * @return
 	 */
 	public boolean hasComponentCache(String id) {
 		return super.hasCache(id);
@@ -272,5 +271,13 @@ public class SynaptixConfiguration extends Configuration {
 	public void setRowidName(String rowidName) {
 		SortOrderHelper.getInstance().setRowidName(rowidName);
 		this.rowidName = rowidName;
+	}
+
+	public final String getBooleanFalse() {
+		return booleanFalse;
+	}
+
+	public void setBooleanFalse(String booleanFalse) {
+		this.booleanFalse = booleanFalse;
 	}
 }

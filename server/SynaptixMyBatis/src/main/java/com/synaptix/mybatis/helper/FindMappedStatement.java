@@ -230,7 +230,7 @@ public class FindMappedStatement {
 		sqlBuilder.WHERE(new StringBuilder("t.").append(column).append(" = ").append("#{").append(propertyName).append("}").toString());
 		if (useCheckCancel && ICancellable.class.isAssignableFrom(componentClass)) {
 			sqlBuilder.AND();
-			sqlBuilder.WHERE("t.check_cancel = '0'");
+			sqlBuilder.WHERE("t.check_cancel = " + synaptixConfiguration.getBooleanFalse());
 		}
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {
@@ -265,7 +265,7 @@ public class FindMappedStatement {
 		sqlBuilder.WHERE(new StringBuilder("t.").append(column).append(" = ").append("#{").append(propertyName).append("}").toString());
 		if (useCheckCancel && ICancellable.class.isAssignableFrom(componentClass)) {
 			sqlBuilder.AND();
-			sqlBuilder.WHERE("t.check_cancel = '0'");
+			sqlBuilder.WHERE("t.check_cancel = " + synaptixConfiguration.getBooleanFalse());
 		}
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {
@@ -301,7 +301,7 @@ public class FindMappedStatement {
 		sqlBuilder.WHERE(new StringBuilder("a.").append(idSource).append(" = ").append("#{").append(propertyName).append("}").toString());
 		if (useCheckCancel && ICancellable.class.isAssignableFrom(componentClass)) {
 			sqlBuilder.AND();
-			sqlBuilder.WHERE("t.check_cancel = '0'");
+			sqlBuilder.WHERE("t.check_cancel = " + synaptixConfiguration.getBooleanFalse());
 		}
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {
@@ -329,7 +329,7 @@ public class FindMappedStatement {
 		sqlBuilder.WHERE(new StringBuilder("a.").append(idSource).append(" = ").append("#{").append(propertyName).append("}").toString());
 		if (useCheckCancel && ICancellable.class.isAssignableFrom(componentClass)) {
 			sqlBuilder.AND();
-			sqlBuilder.WHERE("t.check_cancel = '0'");
+			sqlBuilder.WHERE("t.check_cancel = " + synaptixConfiguration.getBooleanFalse());
 		}
 		String sql = sqlBuilder.toString();
 		if (LOG.isDebugEnabled()) {
