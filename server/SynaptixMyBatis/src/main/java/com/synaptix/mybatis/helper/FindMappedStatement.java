@@ -1,5 +1,6 @@
 package com.synaptix.mybatis.helper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,8 @@ import org.apache.ibatis.builder.SqlSourceBuilder;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMap;
+import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
@@ -119,6 +122,7 @@ public class FindMappedStatement {
 
 			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, propertyName, useCheckCancel),
 					SqlCommandType.SELECT);
+			msBuilder.parameterMap(new ParameterMap.Builder(synaptixConfiguration, key, IId.class, new ArrayList<ParameterMapping>()).build());
 			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
 			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
 			if (cacheResult != null && cacheResult.isEnabled()) {
@@ -146,6 +150,7 @@ public class FindMappedStatement {
 
 			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, null, idTarget, propertyName,
 					useCheckCancel), SqlCommandType.SELECT);
+			msBuilder.parameterMap(new ParameterMap.Builder(synaptixConfiguration, key, IId.class, new ArrayList<ParameterMapping>()).build());
 			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
 			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
 			if (cacheResult != null && cacheResult.isEnabled()) {
@@ -171,6 +176,7 @@ public class FindMappedStatement {
 
 			MappedStatement.Builder msBuilder = new MappedStatement.Builder(synaptixConfiguration, key, new FindComponentsByPropertyNameSqlSource<E>(componentClass, assoSqlTableName, idSource,
 					idTarget, propertyName, useCheckCancel), SqlCommandType.SELECT);
+			msBuilder.parameterMap(new ParameterMap.Builder(synaptixConfiguration, key, IId.class, new ArrayList<ParameterMapping>()).build());
 			msBuilder.resultMaps(Arrays.asList(inlineResultMap));
 			SynaptixCacheManager.CacheResult cacheResult = cacheManager.getCache(componentClass);
 			if (cacheResult != null && cacheResult.isEnabled()) {
