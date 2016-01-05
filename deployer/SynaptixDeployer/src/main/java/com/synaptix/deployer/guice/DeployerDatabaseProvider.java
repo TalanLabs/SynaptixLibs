@@ -54,7 +54,7 @@ public class DeployerDatabaseProvider implements Provider<SqlSessionFactory> {
 
 	public SqlSessionFactory createEnvironmentId(IConfig config2) {
 		config = config2;
-		Configuration configuration = DatabaseHelper.getInstance().getConfig(config);
+		Configuration configuration = config != null ? DatabaseHelper.getInstance().getConfig(config) : null;
 		if (configuration == null) {
 			DeployerConfigurationProvider configProvider = injector.getProvider(DeployerConfigurationProvider.class).get();
 			if (config != null) {

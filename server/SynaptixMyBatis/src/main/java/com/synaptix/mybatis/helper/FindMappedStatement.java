@@ -193,11 +193,6 @@ public class FindMappedStatement {
 
 	/**
 	 * Build a find components by property name
-	 *
-	 * @param componentClass
-	 * @param propertyName
-	 * @param useCheckCancel
-	 * @return
 	 */
 	private <E extends IComponent> String buildFindComponentsByPropertyName(Class<E> componentClass, String propertyName, boolean useCheckCancel) {
 		ComponentDescriptor ed = ComponentFactory.getInstance().getDescriptor(componentClass);
