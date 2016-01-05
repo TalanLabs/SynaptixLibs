@@ -38,7 +38,7 @@ public class FindMappedStatement {
 
 	private static final Log LOG = LogFactory.getLog(FindMappedStatement.class);
 
-	private static final String PAGINATION_ERROR = "paginationError";
+	private static final String PAGINATION_ERROR = "paginationError"; //$NON-NLS-1$
 
 	private final ComponentSqlHelper componentSqlHelper;
 

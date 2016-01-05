@@ -34,7 +34,6 @@ import com.synaptix.mybatis.handler.RawToIIdTypeHandler;
 import com.synaptix.mybatis.handler.RawToIdRawTypeHandler;
 import com.synaptix.mybatis.helper.ComponentColumnsCache;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
-import com.synaptix.mybatis.helper.FindMappedStatement;
 import com.synaptix.mybatis.proxy.ComponentProxyFactory;
 
 public class DeployerConfigurationProvider implements Provider<Configuration> {
@@ -95,7 +94,7 @@ public class DeployerConfigurationProvider implements Provider<Configuration> {
 	}
 
 	private void initConfig(SynaptixConfiguration configuration) {
-		configuration.setFindMappedStatement(injector.getInstance(FindMappedStatement.class));
+//		configuration.setFindMappedStatement(injector.getInstance(FindMappedStatement.class)); // TODO repare... circular dependency
 		ComponentColumnsCache componentColumnsCache = new ComponentColumnsCache();
 		ComponentResultMapHelper componentResultMapHelper = new ComponentResultMapHelper();
 		configuration.setComponentResultMapHelper(componentResultMapHelper);

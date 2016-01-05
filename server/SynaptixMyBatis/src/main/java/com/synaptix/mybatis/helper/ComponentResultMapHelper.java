@@ -60,9 +60,6 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Get a result map
-	 *
-	 * @param clazz
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public ResultMap getResultMap(Class<?> clazz) {
@@ -99,11 +96,6 @@ public class ComponentResultMapHelper {
 
 	/**
 	 * Get a nested result map
-	 *
-	 * @param synaptixConfiguration
-	 * @param componentClass
-	 * @param columns
-	 * @return
 	 */
 	public ResultMap getNestedResultMap(Class<? extends IComponent> componentClass, Set<String> columns) {
 		return getNestedResultMap(componentClass, columns, null);
