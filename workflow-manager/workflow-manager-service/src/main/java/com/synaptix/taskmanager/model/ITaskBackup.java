@@ -14,31 +14,39 @@ import com.synaptix.entity.extension.JdbcTypesEnum;
 public interface ITaskBackup extends IEntity, ITracable {
 
 	@Column(name = "ID_CLUSTER")
-	public IId getIdCluster();
+	IId getIdCluster();
 
-	public void setIdCluster(IId idCluster);
+	void setIdCluster(IId idCluster);
 
 	@Column(name = "ID_OBJECT")
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public IId getIdObject();
+	IId getIdObject();
 
-	public void setIdObject(IId idObject);
+	void setIdObject(IId idObject);
 
 	@Column(name = "OBJECT_TYPE", length = 512)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public Class<? extends ITaskObject<?>> getObjectType();
+	Class<? extends ITaskObject<?>> getObjectType();
 
-	public void setObjectType(Class<? extends ITaskObject<?>> objectType);
+	void setObjectType(Class<? extends ITaskObject<?>> objectType);
 
 	@Column(name = "NB_RETRY", length = 2, nullable = false)
-	public int getNbRetry();
+	int getNbRetry();
 
-	public void setNbRetry(int nbRetry);
+	void setNbRetry(int nbRetry);
 
 	@Column(name = "SERVICE_CODE", length = 240)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public String getServiceCode();
+	String getServiceCode();
 
-	public void setServiceCode(String serviceCode);
+	void setServiceCode(String serviceCode);
+
+	/**
+	 * The priority of the backup: 0 = top priority
+	 */
+	@Column(name = "PRIORITY", length = 2, nullable = false)
+	int getPriority();
+
+	void setPriority(int priority);
 
 }
