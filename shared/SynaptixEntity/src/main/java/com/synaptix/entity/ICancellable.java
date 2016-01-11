@@ -13,7 +13,7 @@ import com.synaptix.entity.extension.JdbcTypesEnum;
 public interface ICancellable extends IComponent, IDatabaseComponentExtension {
 
 	@Column(name = "CHECK_CANCEL", nullable = false)
-	@JdbcType(JdbcTypesEnum.CHAR)
+//	@JdbcType(JdbcTypesEnum.CHAR) // for postgresql support (Boolean)
 	@DefaultValue("'0'")
 	public boolean getCheckCancel();
 

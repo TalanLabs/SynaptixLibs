@@ -163,7 +163,7 @@ public class SynaptixMyBatisModule extends AbstractSynaptixMyBatisModule {
 		TransactionnelMethodInterceptor transactionnelMethodInterceptor = new TransactionnelMethodInterceptor();
 		requestInjection(transactionnelMethodInterceptor);
 
-		bindInterceptor(Matchers.any(), Matchers.annotatedWith(Transactional.class), transactionnelMethodInterceptor);
+		bindInterceptor(Matchers.any(), NoSyntheticMethodMatcher.INSTANCE.and(Matchers.annotatedWith(Transactional.class)), transactionnelMethodInterceptor);
 	}
 
 	public static final class MyBatisModuleConfiguration {

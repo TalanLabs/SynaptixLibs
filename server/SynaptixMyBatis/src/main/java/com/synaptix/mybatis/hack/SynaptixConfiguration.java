@@ -20,6 +20,7 @@ import com.synaptix.mybatis.cache.SynaptixCacheManager;
 import com.synaptix.mybatis.cache.SynaptixCacheManager.CacheResult;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
 import com.synaptix.mybatis.helper.FindMappedStatement;
+import com.synaptix.service.helper.SortOrderHelper;
 
 public class SynaptixConfiguration extends Configuration {
 
@@ -41,9 +42,17 @@ public class SynaptixConfiguration extends Configuration {
 
 	private SynaptixUserSession synaptixUserSession;
 
+	/**
+	 * Used by generated requests. Default is "rowid"
+	 */
+	private String rowidName;
+	private String booleanFalse;
+
 	public SynaptixConfiguration() {
 		super();
 
+		setRowidName("rowid");
+		setBooleanFalse("'0'");
 		// languageRegistry.setDefaultDriverClass(MyXMLLanguageDriver.class);
 	}
 
@@ -77,9 +86,6 @@ public class SynaptixConfiguration extends Configuration {
 
 	/**
 	 * Get has cache without verify and create
-	 *
-	 * @param id
-	 * @return
 	 */
 	public boolean hasComponentCache(String id) {
 		return super.hasCache(id);
@@ -256,5 +262,22 @@ public class SynaptixConfiguration extends Configuration {
 				super.addMappedStatement(ms);
 			}
 		}
+	}
+
+	public final String getRowidName() {
+		return rowidName;
+	}
+
+	public void setRowidName(String rowidName) {
+		SortOrderHelper.getInstance().setRowidName(rowidName);
+		this.rowidName = rowidName;
+	}
+
+	public final String getBooleanFalse() {
+		return booleanFalse;
+	}
+
+	public void setBooleanFalse(String booleanFalse) {
+		this.booleanFalse = booleanFalse;
 	}
 }

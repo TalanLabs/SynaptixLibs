@@ -25,4 +25,9 @@ public interface IInjector {
 	 */
 	long getDelay();
 
+	/**
+	 * Get the working directory
+	 */
+	File getWorkDir();
+
 }

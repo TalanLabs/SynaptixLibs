@@ -26,6 +26,7 @@ public class SortOrderHelper {
 	private static Log LOG = LogFactory.getLog(SortOrderHelper.class);
 
 	private static SortOrderHelper instance = null;
+	private String rowidName;
 	private AttributeIterator sortIterator;
 
 	private SortOrderHelper() {
@@ -36,142 +37,6 @@ public class SortOrderHelper {
 			instance = new SortOrderHelper();
 		}
 		return instance;
-	}
-
-	/**
-	 * Extract columns
-	 * 
-	 * @param sortOrders
-	 * @return
-	 */
-	public Set<String> extractColumns(List<ISortOrder> sortOrders) {
-		Set<String> res = new HashSet<String>();
-		if (sortOrders != null && !sortOrders.isEmpty()) {
-			for (ISortOrder sortOrder : sortOrders) {
-				res.add(sortOrder.getPropertyName());
-			}
-		}
-		return res;
-	}
-
-	/**
-	 * Transform a list of orders into a plain SQL order syntax
-	 * 
-	 * @param clazz
-	 * @param orderList
-	 * @return
-	 */
-	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList) {
-		return transformToSql(clazz, orderList, null);
-	}
-
-	/**
-	 * If orderlist is null, sort by ROWID
-	 * 
-	 * @param clazz
-	 * @param orderList
-	 * @param defaultTableName
-	 * @return
-	 */
-	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList, String defaultTableName) {
-		return transformToSql(clazz, orderList, defaultTableName, "ROWID");
-	}
-
-	private String processTableName(final String tableNameBuffer, final String elmt) {
-		StringBuilder tableNameBuilder = new StringBuilder(tableNameBuffer);
-		if (tableNameBuilder.length() != 0) {
-			tableNameBuilder.append("_");
-		}
-		tableNameBuilder.append(elmt);
-		return tableNameBuilder.toString();
-	}
-
-	private String processSqlColumn(final String defaultTableName, final String tableNameBuffer, final String elmt, final boolean isAscending, Class<? extends IComponent> clazz,
-			final AttributeIterator sortIterator) {
-		StringBuilder sb = new StringBuilder();
-		String sqlColumnName = getSqlColumnName(sortIterator.getComponentDescriptor(), elmt);
-		if (sqlColumnName == null) {
-			LOG.error("ERROR: in class " + clazz.getSimpleName() + ", sqlName of property " + elmt + " doesn't exist");
-		} else {
-			if (tableNameBuffer.length() != 0) {
-				sb.append(tableNameBuffer).append(".");
-			} else if (defaultTableName != null) {
-				sb.append(defaultTableName).append(".");
-			}
-			sb.append(sqlColumnName.toString());
-			sb.append(isAscending ? " ASC" : " DESC");
-		}
-		return sb.toString();
-	}
-
-	private StringBuilder buildSqlForASortOrder(final String defaultTableName, final ISortOrder so, Class<? extends IComponent> clazz, int position) {
-		StringBuilder tableNameBuffer = new StringBuilder();
-		StringBuilder sb = new StringBuilder();
-		sortIterator = new AttributeIterator(so.getPropertyName(), clazz);
-		while (sortIterator.hasNext()) {
-			String elmt = sortIterator.next();
-			if (sortIterator.isCurrentElmtAnEntity()) {
-				tableNameBuffer = new StringBuilder(processTableName(tableNameBuffer.toString(), elmt));
-			} else {
-				if (position > 0) {
-					sb.append(", ");
-				}
-				sb.append(processSqlColumn(defaultTableName, tableNameBuffer.toString(), elmt, so.isAscending(), clazz, sortIterator));
-			}
-		}
-		return sb;
-	}
-
-	/**
-	 * If orderlist is null, sort by defaultColumnSort
-	 * 
-	 * @param clazz
-	 * @param orderList
-	 * @param defaultTableName
-	 * @param defaultColumnSort
-	 * @return
-	 */
-	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList, String defaultTableName, String defaultColumnSort) {
-		StringBuilder sb = new StringBuilder();
-		if (orderList != null && !orderList.isEmpty()) {
-			int position = 0;
-			for (ISortOrder so : orderList) {
-				sb.append(buildSqlForASortOrder(defaultTableName, so, clazz, position++));
-			}
-		} else {
-			if (defaultTableName != null) {
-				sb.append(defaultTableName).append(".");
-			}
-			sb.append(defaultColumnSort);
-		}
-		return sb.toString();
-	}
-
-	private String getSqlColumnName(ComponentDescriptor cd, String propertyName) {
-		PropertyDescriptor componentField = cd.getPropertyDescriptor(propertyName);
-
-		if (componentField != null) {
-			try {
-				return ((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn().getSqlName();
-			} catch (NullPointerException e) {
-				System.out.println(propertyName);
-				System.out.println(componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class));
-				System.out.println(((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn());
-				System.out.println(((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn().getSqlName());
-			}
-		}
-		return null;
-	}
-
-	public List<ISortOrder> importFromSortKeys(List<SortKey> keyList, String[] columnNames) {
-		List<ISortOrder> orderList = new ArrayList<ISortOrder>();
-		for (SortKey key : keyList) {
-			ISortOrder so = ComponentFactory.getInstance().createInstance(ISortOrder.class);
-			so.setPropertyName(columnNames[key.getColumn()]);
-			so.setAscending((SortOrder.ASCENDING.equals(key.getSortOrder()) ? true : false));
-			orderList.add(so);
-		}
-		return orderList;
 	}
 
 	public static boolean equalsSortOrder(List<ISortOrder> list1, List<ISortOrder> list2) {
@@ -222,7 +87,7 @@ public class SortOrderHelper {
 
 	/**
 	 * Create a sort order list for property
-	 * 
+	 *
 	 * @param propertyName
 	 * @param ascending
 	 * @return
@@ -234,11 +99,132 @@ public class SortOrderHelper {
 		return Arrays.asList(sortOrder);
 	}
 
+	public void setRowidName(String rowidName) {
+		getInstance().rowidName = rowidName;
+	}
+
+	/**
+	 * Extract columns
+	 */
+	public Set<String> extractColumns(List<ISortOrder> sortOrders) {
+		Set<String> res = new HashSet<String>();
+		if (sortOrders != null && !sortOrders.isEmpty()) {
+			for (ISortOrder sortOrder : sortOrders) {
+				res.add(sortOrder.getPropertyName());
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * Transform a list of orders into a plain SQL order syntax
+	 */
+	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList) {
+		return transformToSql(clazz, orderList, null);
+	}
+
+	/**
+	 * If orderlist is null, sort by ROWID
+	 */
+	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList, String defaultTableName) {
+		return transformToSql(clazz, orderList, defaultTableName, rowidName != null ? rowidName : "ROWID");
+	}
+
+	private String processTableName(final String tableNameBuffer, final String elmt) {
+		StringBuilder tableNameBuilder = new StringBuilder(tableNameBuffer);
+		if (tableNameBuilder.length() != 0) {
+			tableNameBuilder.append("_");
+		}
+		tableNameBuilder.append(elmt);
+		return tableNameBuilder.toString();
+	}
+
+	private String processSqlColumn(final String defaultTableName, final String tableNameBuffer, final String elmt, final boolean isAscending, Class<? extends IComponent> clazz,
+									final AttributeIterator sortIterator) {
+		StringBuilder sb = new StringBuilder();
+		String sqlColumnName = getSqlColumnName(sortIterator.getComponentDescriptor(), elmt);
+		if (sqlColumnName == null) {
+			LOG.error("ERROR: in class " + clazz.getSimpleName() + ", sqlName of property " + elmt + " doesn't exist");
+		} else {
+			if (tableNameBuffer.length() != 0) {
+				sb.append(tableNameBuffer).append(".");
+			} else if (defaultTableName != null) {
+				sb.append(defaultTableName).append(".");
+			}
+			sb.append(sqlColumnName);
+			sb.append(isAscending ? " ASC" : " DESC");
+		}
+		return sb.toString();
+	}
+
+	private StringBuilder buildSqlForASortOrder(final String defaultTableName, final ISortOrder so, Class<? extends IComponent> clazz, int position) {
+		StringBuilder tableNameBuffer = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
+		sortIterator = new AttributeIterator(so.getPropertyName(), clazz);
+		while (sortIterator.hasNext()) {
+			String elmt = sortIterator.next();
+			if (sortIterator.isCurrentElmtAnEntity()) {
+				tableNameBuffer = new StringBuilder(processTableName(tableNameBuffer.toString(), elmt));
+			} else {
+				if (position > 0) {
+					sb.append(", ");
+				}
+				sb.append(processSqlColumn(defaultTableName, tableNameBuffer.toString(), elmt, so.isAscending(), clazz, sortIterator));
+			}
+		}
+		return sb;
+	}
+
+	/**
+	 * If orderlist is null, sort by defaultColumnSort
+	 */
+	public String transformToSql(Class<? extends IComponent> clazz, List<ISortOrder> orderList, String defaultTableName, String defaultColumnSort) {
+		StringBuilder sb = new StringBuilder();
+		if (orderList != null && !orderList.isEmpty()) {
+			int position = 0;
+			for (ISortOrder so : orderList) {
+				sb.append(buildSqlForASortOrder(defaultTableName, so, clazz, position++));
+			}
+		} else {
+			if (defaultTableName != null) {
+				sb.append(defaultTableName).append(".");
+			}
+			sb.append(defaultColumnSort);
+		}
+		return sb.toString();
+	}
+
+	private String getSqlColumnName(ComponentDescriptor cd, String propertyName) {
+		PropertyDescriptor componentField = cd.getPropertyDescriptor(propertyName);
+
+		if (componentField != null) {
+			try {
+				return ((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn().getSqlName();
+			} catch (NullPointerException e) {
+				System.out.println(propertyName);
+				System.out.println(componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class));
+				System.out.println(((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn());
+				System.out.println(((DatabasePropertyExtensionDescriptor) componentField.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class)).getColumn().getSqlName());
+			}
+		}
+		return null;
+	}
+
+	public List<ISortOrder> importFromSortKeys(List<SortKey> keyList, String[] columnNames) {
+		List<ISortOrder> orderList = new ArrayList<ISortOrder>();
+		for (SortKey key : keyList) {
+			ISortOrder so = ComponentFactory.getInstance().createInstance(ISortOrder.class);
+			so.setPropertyName(columnNames[key.getColumn()]);
+			so.setAscending((SortOrder.ASCENDING == key.getSortOrder()));
+			orderList.add(so);
+		}
+		return orderList;
+	}
+
 	/**
 	 * Builder for SortOrder
-	 * 
+	 *
 	 * @author Gaby
-	 * 
 	 */
 	public static final class Builder {
 

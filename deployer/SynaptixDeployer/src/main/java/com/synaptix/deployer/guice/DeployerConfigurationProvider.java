@@ -14,6 +14,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.synaptix.component.factory.ComponentFactory;
@@ -33,7 +34,6 @@ import com.synaptix.mybatis.handler.RawToIIdTypeHandler;
 import com.synaptix.mybatis.handler.RawToIdRawTypeHandler;
 import com.synaptix.mybatis.helper.ComponentColumnsCache;
 import com.synaptix.mybatis.helper.ComponentResultMapHelper;
-import com.synaptix.mybatis.helper.FindMappedStatement;
 import com.synaptix.mybatis.proxy.ComponentProxyFactory;
 
 public class DeployerConfigurationProvider implements Provider<Configuration> {
@@ -44,18 +44,14 @@ public class DeployerConfigurationProvider implements Provider<Configuration> {
 
 	private static IConfig config;
 
-	private FindMappedStatement findMappedStatement;
+	@Inject
+	private Injector injector;
 
 	@Inject
 	public DeployerConfigurationProvider(@Named("configFile") String configFile) {
 		super();
 
 		this.configFile = configFile;
-	}
-
-	@Inject
-	public void setFindMappedStatement(FindMappedStatement findMappedStatement) {
-		this.findMappedStatement = findMappedStatement;
 	}
 
 	public void setConfig(IConfig config2) {
@@ -98,7 +94,7 @@ public class DeployerConfigurationProvider implements Provider<Configuration> {
 	}
 
 	private void initConfig(SynaptixConfiguration configuration) {
-		configuration.setFindMappedStatement(findMappedStatement);
+//		configuration.setFindMappedStatement(injector.getInstance(FindMappedStatement.class)); // TODO repare... circular dependency
 		ComponentColumnsCache componentColumnsCache = new ComponentColumnsCache();
 		ComponentResultMapHelper componentResultMapHelper = new ComponentResultMapHelper();
 		configuration.setComponentResultMapHelper(componentResultMapHelper);

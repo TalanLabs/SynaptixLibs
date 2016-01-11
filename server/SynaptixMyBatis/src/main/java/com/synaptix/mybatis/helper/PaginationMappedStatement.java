@@ -139,10 +139,6 @@ public class PaginationMappedStatement {
 
 	/**
 	 * Build a count sql
-	 *
-	 * @param componentClass
-	 * @param valueFilterMap
-	 * @return
 	 */
 	private <E extends IComponent> BuildCountPaginationResult buildCountPagination(Class<E> componentClass, RootNode filterRootNode) {
 		ComponentDescriptor ed = ComponentFactory.getInstance().getDescriptor(componentClass);
@@ -194,12 +190,6 @@ public class PaginationMappedStatement {
 
 	/**
 	 * Build a select sql
-	 *
-	 * @param entityClass
-	 * @param valueFilterMap
-	 * @param sortOrders
-	 * @param columns
-	 * @return
 	 */
 	private <E extends IComponent> BuildSelectPaginationNestedResult buildSelectPagination(Class<E> componentClass, RootNode filterRootNode, List<ISortOrder> sortOrders, Set<String> columns) {
 		ComponentDescriptor ed = ComponentFactory.getInstance().getDescriptor(componentClass);
@@ -219,19 +209,27 @@ public class PaginationMappedStatement {
 			}
 		}
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
-		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(buildFirstSelect(componentClass, filterRootNode, sortOrders))
-				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
-		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
-		sqlBuilder.WHERE("(i.a_rowid = t.ROWID)");
-		sqlBuilder.ORDER_BY("i.rn");
+		String firstSelect = buildFirstSelect(componentClass, filterRootNode, sortOrders);
+
+		buildSelect(sqlTableName, firstSelect, joinMap, sqlBuilder);
 
 		String sql = sqlBuilder.toString();
-
 		if (LOG.isDebugEnabled()) {
 			LOG.debug(sql);
 		}
 
 		return new BuildSelectPaginationNestedResult(sql, componentSqlHelper.buildValueFilterMap(context, filterRootNode));
+	}
+
+	/**
+	 * With a sqlBuilder initialized with SELECTfields, builds the request with FROM, JOINS and pagination filters
+	 */
+	protected void buildSelect(String sqlTableName, String firstSelect, Map<String, Join> joinMap, SQL sqlBuilder) {
+		sqlBuilder.FROM(new StringBuilder("(SELECT t.* FROM (SELECT t.*, ROWNUM AS rn FROM (").append(firstSelect)
+				.append(") t WHERE #{to,javaType=int} >= ROWNUM) t WHERE rn >= #{from,javaType=int}) i, ").append(sqlTableName).append(" t").toString());
+		componentSqlHelper.includeOrderedJoinList(sqlBuilder, joinMap);
+		sqlBuilder.WHERE("(i.a_rowid = t." + synaptixConfiguration.getRowidName() + ")");
+		sqlBuilder.ORDER_BY("i.rn");
 	}
 
 	private <E extends IComponent> String buildFirstSelect(Class<E> componentClass, RootNode filterRootNode, List<ISortOrder> sortOrders) {
@@ -247,7 +245,7 @@ public class PaginationMappedStatement {
 
 		SQL sqlBuilder = new SQL();
 		String hint = componentSqlHelper.buildHint(ed, filterRootNode);
-		sqlBuilder.SELECT(hint + " t.ROWID AS a_rowid");
+		sqlBuilder.SELECT(hint + " t." + synaptixConfiguration.getRowidName() + " AS a_rowid");
 		String sqlTableName = componentSqlHelper.getSqlTableName(ed);
 		sqlBuilder.FROM(new StringBuilder(sqlTableName).append(" t").toString());
 

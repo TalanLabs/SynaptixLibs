@@ -16,6 +16,8 @@ import com.synaptix.pmgr.trigger.injector.IInjector;
 
 public abstract class AbstractSynaptixIntegratorServletModule extends AbstractModule {
 
+	private Multibinder<Class<? extends IInjector>> injectorDefinitionMultibinder;
+
 	private Multibinder<ISimpleProcessDefinition> simpleProcessDefinitionMultibinder;
 
 	private Multibinder<IHeartbeatProcessDefinition> heartbeatProcessDefinitionMultibinder;
@@ -25,6 +27,14 @@ public abstract class AbstractSynaptixIntegratorServletModule extends AbstractMo
 	private Multibinder<IExportProcessDefinition<?>> exportProcessDefinitionMultibinder;
 
 	private Multibinder<ICronProcessDefinition> cronProcessDefinitionMultibinder;
+
+	protected final Multibinder<Class<? extends IInjector>> getInjectorDefinitionMultibinder() {
+		if (injectorDefinitionMultibinder == null) {
+			injectorDefinitionMultibinder = Multibinder.newSetBinder(binder(), new TypeLiteral<Class<? extends IInjector>>() {
+			});
+		}
+		return injectorDefinitionMultibinder;
+	}
 
 	protected final Multibinder<ISimpleProcessDefinition> getSimpleProcessDefinitionMultibinder() {
 		if (simpleProcessDefinitionMultibinder == null) {
@@ -83,5 +93,6 @@ public abstract class AbstractSynaptixIntegratorServletModule extends AbstractMo
 
 	protected final <I extends IInjector> void bindInjector(final Class<I> injectorClass) {
 		bind(injectorClass).in(Singleton.class);
+		getInjectorDefinitionMultibinder().addBinding().toInstance(injectorClass);
 	}
 }

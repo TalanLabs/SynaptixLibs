@@ -255,6 +255,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	 */
 	@Override
 	public <T extends IEntity> int saveEntity(T entity) {
+		checkSqlSession();
 		if (entity == null) {
 			throw new IllegalArgumentException("entity is null");
 		}
@@ -290,6 +291,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	 */
 	@Override
 	public <T extends IEntity> int saveOrUpdateEntity(T entity) {
+		checkSqlSession();
 		if (entity == null) {
 			throw new IllegalArgumentException("entity is null");
 		}
@@ -325,6 +327,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	private <T extends IEntity> void saveNlsMessage(T entity, String language) {
+		checkSqlSession();
 		if (isSetUserInSession()) {
 			ComponentDescriptor cd = ComponentFactory.getInstance().getDescriptor(entity);
 			if (componentColumnsCache.isUseNls(cd.getComponentClass())) {
@@ -344,6 +347,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 
 	@Override
 	public <T extends IEntity> int deleteEntity(T entity) {
+		checkSqlSession();
 		if (entity == null) {
 			throw new IllegalArgumentException("entity is null");
 		}
@@ -356,6 +360,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	private <T extends IEntity> void deleteNlsMessages(T entity) {
+		checkSqlSession();
 		if (isSetUserInSession()) {
 			ComponentDescriptor cd = ComponentFactory.getInstance().getDescriptor(entity);
 			if (componentColumnsCache.isUseNls(cd.getComponentClass())) {
@@ -366,6 +371,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 
 	@Override
 	public <T extends IEntity & ICancellable> int cancelEntity(T entity) {
+		checkSqlSession();
 		if (entity == null) {
 			throw new IllegalArgumentException("entity is null");
 		}

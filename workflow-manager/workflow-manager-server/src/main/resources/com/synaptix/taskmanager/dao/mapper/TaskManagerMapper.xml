@@ -31,9 +31,9 @@
 				from t_task_backup
 				where nb_retry <![CDATA[<]]> #{maxRetry}
 				and nvl(updated_date, created_date) <![CDATA[<]]> #{date,javaType=java.util.Date} - 10 / 24 / 60
-				order by nvl(updated_date, created_date)
+				order by priority, nvl(updated_date, created_date)
 			)
-			where rownum <![CDATA[<]]> #{nbLines}
+			where rownum <![CDATA[<=]]> #{nbLines}
 		)
 	</update>
 	

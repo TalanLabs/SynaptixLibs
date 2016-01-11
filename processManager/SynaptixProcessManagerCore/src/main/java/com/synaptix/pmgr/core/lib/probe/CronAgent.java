@@ -31,6 +31,7 @@ public class CronAgent implements Agent {
 				}
 			} else if (scheduler == null) {
 				scheduler = new Scheduler();
+				scheduler.setDaemon(true);
 				scheduler.schedule(schedulingPattern, new Runnable() {
 					@Override
 					public void run() {
