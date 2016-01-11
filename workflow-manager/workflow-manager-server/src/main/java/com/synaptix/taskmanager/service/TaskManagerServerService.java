@@ -329,17 +329,18 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				saveErrors(task, executionResult.getErrors());
 			}
 		} catch (Throwable t) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("TM - " + task.getServiceCode() + " - Error");
-			}
 			if ((t instanceof VersionConflictDaoException) && (t.getCause() instanceof PersistenceException) && (t.getCause().getCause() instanceof SQLException)
 					&& (((SQLException) t.getCause().getCause()).getErrorCode() == 60)) {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.CONFLICT, "CONFLICTING_ERROR", null);
 			} else {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
 			}
+
 			LOG.error(t.getMessage() + " - TM - TaskCode = " + task.getServiceCode() + " - Id = " + task.getId(), t);
+
 			taskExecutionResult.errorMessage = ExceptionUtils.getRootCauseMessage(t);
+			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 4000));
+			updateTask(task);
 		}
 
 		return taskExecutionResult;
