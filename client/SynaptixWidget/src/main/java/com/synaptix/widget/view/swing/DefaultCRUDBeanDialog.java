@@ -270,6 +270,7 @@ public class DefaultCRUDBeanDialog<E extends IEntity> extends DefaultBeanDialog<
 
 	@Override
 	public void fixOriginal() {
+		E bean = ComponentHelper.clone(this.bean);
 		for (IBeanExtensionDialogView<E> b : beanExtensionDialogs) {
 			try {
 				b.commit(bean, valueMap);
