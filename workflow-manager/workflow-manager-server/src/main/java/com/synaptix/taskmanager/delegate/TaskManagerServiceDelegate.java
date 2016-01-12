@@ -1059,7 +1059,10 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	}
 
 	/**
-	 * Get shortest status path between two statuses, as a string. Example : "CUR EXE CLO" Returns an empty string if no path was found.
+	 * Get shortest status path between two statuses, as a string.
+	 * Example : "CUR EXE CLO" may be the shortest status path between CUR and CLO. Shortest path between CUR and CUR will be "CUR".
+	 * Returns an empty string if no path was found.
+	 * For more examples, see TaskManagerServiceDelegateTest unit test.
 	 */
 	public String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus) {
 		List<IStatusGraph> statusGraphs = statusGraphServiceDelegate.findStatusGraphsBy(taskObjectClass);
@@ -1069,7 +1072,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	public String getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus) {
 		List<String> statusesPath = getStatusesPaths(statusGraphs, currentStatus, nextStatus, "");
 		if (CollectionUtils.isEmpty(statusesPath)) {
-			return "";
+			return currentStatus.equals(nextStatus) ? nextStatus : "";
 		}
 
 		String result = statusesPath.get(0);
@@ -1079,7 +1082,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 			}
 		}
 
-		return result.trim();
+		return currentStatus + " " + result.trim();
 	}
 
 	private List<String> getStatusesPaths(List<IStatusGraph> statusGraphs, String currentStatus, String nextStatus, String path) {

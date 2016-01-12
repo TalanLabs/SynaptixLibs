@@ -24,24 +24,25 @@ public class TaskManagerServiceDelegateTest {
 
 		TaskManagerServiceDelegate taskManagerServiceDelegate = new TaskManagerServiceDelegate();
 		String result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "TIC", "FAI");
-		Assert.assertEquals("FAI",result);
-
-		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "TIC", "CLO");
-		Assert.assertEquals("CUR EXE CLO",result);
-
-		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "CLO");
-		Assert.assertEquals("TIC CUR EXE CLO",result);
-
-		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "FAI");
 		Assert.assertEquals("TIC FAI",result);
 
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "TIC", "CLO");
+		Assert.assertEquals("TIC CUR EXE CLO",result);
+
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "CLO");
+		Assert.assertEquals("VAL TIC CUR EXE CLO",result);
+
+		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "FAI");
+		Assert.assertEquals("VAL TIC FAI",result);
+
 		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "VAL", "EXE");
-		Assert.assertEquals("TIC CUR EXE",result);
+		Assert.assertEquals("VAL TIC CUR EXE",result);
 
 		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "CLO", "EXE");
 		Assert.assertEquals("",result);
 
 		result = taskManagerServiceDelegate.getStatusesPaths(statusGraphs, "FAI", "FAI");
-		Assert.assertEquals("",result);
+		Assert.assertEquals("FAI",result);
+
 	}
 }
