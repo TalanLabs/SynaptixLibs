@@ -16,6 +16,7 @@
 		SELECT ID_TASK_CHAIN_CRITERIA 
 		FROM T_ASSO_TASK_CHAIN_CRIT_CHAIN
 		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
+		and check_cancel = '0'
 	</select>
 	
 	<delete id="deleteAssoTaskChainTaskType">
@@ -25,7 +26,7 @@
 	
 	<delete id="deleteAssoTaskChainCriteriaTaskChain">
 		delete from t_asso_task_chain_type
-		where 1 = 2
+		where id_task_chain_criteria = #{idTaskChainCriteria,javaType=IId}
 	</delete>
 
 </mapper>
