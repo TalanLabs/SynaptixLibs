@@ -76,19 +76,6 @@
         <system>gitlab</system>
         <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs/issues</url>
     </issueManagement>
-	<modules>
-		<module>SynaptixParent</module>
-		<module>processManager</module>
-		<module>deployer</module>
-		<module>gwt</module>
-		<module>client</module>
-		<module>server</module>
-		<module>shared</module>
-		<module>test</module>
-		<module>dev</module>
-		<module>workflow-manager</module>
-		<!-- module>redpepper</module -->
-	</modules>
 	<build>
 		<finalName>${project.artifactId}-${project.version}
 		</finalName>
@@ -868,4 +855,43 @@
 			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>DEFAULT</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>SynaptixParent</module>
+				<module>processManager</module>
+				<module>deployer</module>
+				<module>gwt</module>
+				<module>client</module>
+				<module>server</module>
+				<module>shared</module>
+				<module>test</module>
+				<module>dev</module>
+				<module>workflow-manager</module>
+				<!-- module>redpepper</module -->
+			</modules>
+		</profile>
+		<profile>
+			<id>CI</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>SynaptixParent</module>
+				<module>processManager</module>
+				<module>deployer</module>
+				<module>gwt</module>
+				<module>client</module>
+				<module>server</module>
+				<module>shared</module>
+				<module>test</module>
+				<module>workflow-manager</module>
+				<!-- module>redpepper</module -->
+			</modules>
+		</profile>
+	</profiles>
 </project>
