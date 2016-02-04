@@ -131,11 +131,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		taskManagerServiceDelegate.addTaskObjectToTaskCluster(idTaskCluster, taskObject);
 	}
 
-	@Override
-	public boolean skipTask(IId idTask, String skipComments) {
-		return skipTask(idTask); // TODO refactor ? useless parameter skipComments...
-	}
-
 	@Transactional(commit = true)
 	public <E extends Enum<E>, F extends ITaskObject<E>> IId createTaskCluster(F taskObject) {
 		return taskManagerServiceDelegate.createTaskCluster(taskObject);
@@ -245,14 +240,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (IId idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
@@ -415,12 +410,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 	}
 
-	public <E extends Enum<E>, F extends ITaskObject<E>> void startEngine(List<F> taskObjects) {
-		for (ITaskObject<?> taskObject : taskObjects) {
-			startEngine(taskObject);
-		}
-	}
-
 	private class TaskExecutionResult {
 		public boolean done;
 		public String errorMessage;
@@ -447,17 +436,21 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	/**
 	 * Skip task
 	 */
-	public boolean skipTask(IId idTask) {
+	@Override
+	public boolean skipTask(IId idTask, String skipComments) {
 		if (idTask == null) {
 			return false;
 		}
-		ITask task = entityServiceDelegate.findEntityById(ITask.class, idTask);
-		if (task == null || !task.isCheckSkippable() || TaskStatus.CURRENT != task.getTaskStatus()) {
-			return false;
-		}
+		ITask task = null;
 
 		try {
 			getDaoSession().begin();
+			task = entityServiceDelegate.findEntityById(ITask.class, idTask);
+			if (task == null || !task.isCheckSkippable() || TaskStatus.CURRENT != task.getTaskStatus()) {
+				return false;
+			}
+			task.setResultDesc(task.getResultDesc() != null ? task.getResultDesc() + " " + skipComments : skipComments);
+			entityServiceDelegate.editEntity(task, false);
 			taskManagerServiceDelegate.nextTasks(task, true);
 			getDaoSession().commit();
 		} catch (Exception e) {
