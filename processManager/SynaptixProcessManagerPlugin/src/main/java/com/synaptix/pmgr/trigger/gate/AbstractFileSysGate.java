@@ -138,16 +138,24 @@ public abstract class AbstractFileSysGate implements Gate {
 				entranceFolder.mkdirs();
 			}
 		if (!acceptedFolder.exists()) {
-			acceptedFolder.mkdirs();
+			if (!acceptedFolder.mkdirs()) {
+				logWarning("Accepted Folder not created for " + name);
+			}
 		}
 		if (!rejectedFolder.exists()) {
-			rejectedFolder.mkdirs();
+			if (!rejectedFolder.mkdirs()) {
+				logWarning("Rejected Folder not created for " + name);
+			}
 		}
 		if (!archiveFolder.exists()) {
-			archiveFolder.mkdirs();
+			if (!archiveFolder.mkdirs()) {
+				logWarning("Archive Folder not created for " + name);
+			}
 		}
 		if (!retryFolder.exists()) {
-			retryFolder.mkdirs();
+			if (!retryFolder.mkdirs()) {
+				logWarning("Retry Folder not created for " + name);
+			}
 		}
 
 		// installe et demarre le trigger...
