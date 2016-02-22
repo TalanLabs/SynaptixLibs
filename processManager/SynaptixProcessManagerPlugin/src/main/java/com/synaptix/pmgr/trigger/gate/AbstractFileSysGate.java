@@ -27,7 +27,7 @@ import com.synaptix.tmgr.libs.tasks.filesys.FolderEventTriggerTask;
 
 /**
  * Projet GPSTrains
- * 
+ *
  * @author sps
  */
 public abstract class AbstractFileSysGate implements Gate {
@@ -43,7 +43,7 @@ public abstract class AbstractFileSysGate implements Gate {
 	private Log logger;
 
 	/**
-	 * 
+	 *
 	 */
 	public AbstractFileSysGate(String name, File entranceFolder, File acceptedFolder, File rejectedFolder, File retryFolder, File archiveFolder, long retryPeriod, MessageInjector injector) {
 		this.name = name;
@@ -80,24 +80,24 @@ public abstract class AbstractFileSysGate implements Gate {
 	@Override
 	public void log(String str, int level) {
 		switch (level) {
-		case 0:
-			if (logger != null)
-				logger.info(str);
-			else
-				System.out.println((new Date()) + "INFO : " + str);
-			break;
-		case 1:
-			if (logger != null)
-				logger.warn(str);
-			else
-				System.out.println((new Date()) + "WARNING : " + str);
-			break;
-		default:
-			if (logger != null)
-				logger.error(str);
-			else
-				System.out.println((new Date()) + "SEVERE : " + str);
-			break;
+			case 0:
+				if (logger != null)
+					logger.info(str);
+				else
+					System.out.println((new Date()) + "INFO : " + str);
+				break;
+			case 1:
+				if (logger != null)
+					logger.warn(str);
+				else
+					System.out.println((new Date()) + "WARNING : " + str);
+				break;
+			default:
+				if (logger != null)
+					logger.error(str);
+				else
+					System.out.println((new Date()) + "SEVERE : " + str);
+				break;
 		}
 	}
 
@@ -133,10 +133,11 @@ public abstract class AbstractFileSysGate implements Gate {
 
 	protected void init() {
 		// logFine("init de la GATE : " +entranceFolder.getAbsolutePath());
-		if (logger != null)
-			if (!entranceFolder.exists()) {
-				entranceFolder.mkdirs();
+		if (!entranceFolder.exists()) {
+			if (!entranceFolder.mkdirs()) {
+				logWarning("Entrance Folder not created for " + name);
 			}
+		}
 		if (!acceptedFolder.exists()) {
 			if (!acceptedFolder.mkdirs()) {
 				logWarning("Accepted Folder not created for " + name);
