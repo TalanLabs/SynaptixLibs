@@ -14,21 +14,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.synaptix.component.IComponent;
 import com.synaptix.component.factory.ComponentDescriptor;
 import com.synaptix.component.factory.ComponentDescriptor.PropertyDescriptor;
 import com.synaptix.component.factory.ComponentFactory;
 import com.synaptix.component.field.IField;
 
-public class ComponentHelper {
+public final class ComponentHelper {
 
 	/**
 	 * Set a null values for component
-	 * 
-	 * @param sourceEntity
-	 * @param fieldNames
 	 */
-	public static final <E extends IComponent> void setNullValues(E sourceEntity, String[] fieldNames) {
+	public static <E extends IComponent> void setNullValues(E sourceEntity, String[] fieldNames) {
 		if (sourceEntity != null && fieldNames != null) {
 			for (String propertyName : fieldNames) {
 				if (sourceEntity.straightGetPropertyNames().contains(propertyName)) {
@@ -42,13 +41,9 @@ public class ComponentHelper {
 
 	/**
 	 * Build a components map with list and propertyName
-	 * 
-	 * @param components
-	 * @param keyPropertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <F, E extends IComponent> Map<F, List<E>> buildComponentsMap(List<E> components, String keyPropertyName) {
+	public static <F, E extends IComponent> Map<F, List<E>> buildComponentsMap(List<E> components, String keyPropertyName) {
 		Map<F, List<E>> map = new HashMap<F, List<E>>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
@@ -68,13 +63,9 @@ public class ComponentHelper {
 
 	/**
 	 * Extract property name in components list
-	 * 
-	 * @param components
-	 * @param keyPropertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <F, E extends IComponent> List<F> extractValues(List<E> components, String propertyName) {
+	public static <F, E extends IComponent> List<F> extractValues(List<E> components, String propertyName) {
 		List<F> res = new ArrayList<F>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
@@ -87,20 +78,15 @@ public class ComponentHelper {
 
 	/**
 	 * Find a component by propertyName and value
-	 * 
-	 * @param components
-	 * @param propertyName
-	 * @param value
-	 * @return
 	 */
-	public static final <E extends IComponent> E findComponentBy(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> E findComponentBy(List<E> components, String propertyName, Object value) {
 		E res = null;
-		if (value != null && components != null && !components.isEmpty()) {
+		if (components != null && !components.isEmpty()) {
 			Iterator<E> it = components.iterator();
 			while (it.hasNext() && res == null) {
 				E component = it.next();
-				Object key = component.straightGetProperty(propertyName);
-				if (key != null && key.equals(value)) {
+				Object val = component.straightGetProperty(propertyName);
+				if (ObjectUtils.equals(val, value)) {
 					res = component;
 				}
 			}
@@ -110,21 +96,16 @@ public class ComponentHelper {
 
 	/**
 	 * Get index for component list
-	 * 
-	 * @param components
-	 * @param propertyName
-	 * @param value
-	 * @return
 	 */
-	public static final <E extends IComponent> int indexComponentOf(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> int indexComponentOf(List<E> components, String propertyName, Object value) {
 		int res = -1;
 		if (value != null && components != null && !components.isEmpty()) {
 			int i = 0;
 			Iterator<E> it = components.iterator();
 			while (it.hasNext() && res == -1) {
 				E component = it.next();
-				Object key = component.straightGetProperty(propertyName);
-				if (key != null && key.equals(value)) {
+				Object val = component.straightGetProperty(propertyName);
+				if (ObjectUtils.equals(val, value)) {
 					res = i;
 				}
 				i++;
@@ -135,18 +116,13 @@ public class ComponentHelper {
 
 	/**
 	 * Find all components by propertyName and value
-	 * 
-	 * @param components
-	 * @param propertyName
-	 * @param value
-	 * @return
 	 */
-	public static final <E extends IComponent> List<E> findComponentsBy(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> List<E> findComponentsBy(List<E> components, String propertyName, Object value) {
 		List<E> res = new ArrayList<E>();
-		if (value != null && components != null && !components.isEmpty()) {
+		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
-				Object key = component.straightGetProperty(propertyName);
-				if (key != null && key.equals(value)) {
+				Object val = component.straightGetProperty(propertyName);
+				if (ObjectUtils.equals(val, value)) {
 					res.add(component);
 				}
 			}
@@ -156,13 +132,9 @@ public class ComponentHelper {
 
 	/**
 	 * Get value for component, toto.tata
-	 * 
-	 * @param component
-	 * @param columnId
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <F> F getValue(IComponent component, String propertyName) {
+	public static <F> F getValue(IComponent component, String propertyName) {
 		if (component == null) {
 			return null;
 		}
@@ -181,13 +153,9 @@ public class ComponentHelper {
 
 	/**
 	 * Get component class for property, toto.tata
-	 * 
-	 * @param componentClass
-	 * @param propertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final Class<? extends IComponent> getComponentClass(Class<? extends IComponent> componentClass, String propertyName) {
+	public static Class<? extends IComponent> getComponentClass(Class<? extends IComponent> componentClass, String propertyName) {
 		if (componentClass == null) {
 			return null;
 		}
@@ -207,13 +175,9 @@ public class ComponentHelper {
 
 	/**
 	 * Get final class for property, toto.tata.date
-	 * 
-	 * @param componentClass
-	 * @param propertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final Class<?> getFinalClass(Class<? extends IComponent> componentClass, String propertyName) {
+	public static Class<?> getFinalClass(Class<? extends IComponent> componentClass, String propertyName) {
 		if (componentClass == null) {
 			return null;
 		}
@@ -233,13 +197,9 @@ public class ComponentHelper {
 
 	/**
 	 * Get component descriptor for property, toto.tata.date
-	 * 
-	 * @param componentClass
-	 * @param propertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final PropertyDescriptor getFinalPropertyDescriptor(Class<? extends IComponent> componentClass, String propertyName) {
+	public static PropertyDescriptor getFinalPropertyDescriptor(Class<? extends IComponent> componentClass, String propertyName) {
 		if (componentClass == null) {
 			return null;
 		}
@@ -259,13 +219,9 @@ public class ComponentHelper {
 
 	/**
 	 * Get a property name for property, toto.tata
-	 * 
-	 * @param componentClass
-	 * @param propertyName
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final String getPropertyName(Class<? extends IComponent> componentClass, String propertyName) {
+	public static String getPropertyName(Class<? extends IComponent> componentClass, String propertyName) {
 		if (propertyName == null) {
 			return null;
 		}
@@ -285,12 +241,9 @@ public class ComponentHelper {
 
 	/**
 	 * Clone component and all childrens
-	 * 
-	 * @param component
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <E extends IComponent> E clone(E component) {
+	public static <E extends IComponent> E clone(E component) {
 		E res = null;
 		if (component != null) {
 			byte[] bs = null;
@@ -347,11 +300,8 @@ public class ComponentHelper {
 
 	/**
 	 * Convert a list of component extended to list of component
-	 * 
-	 * @param componentExtendeds
-	 * @return
 	 */
-	public static final <E extends IComponent, G extends E> List<E> convertComponentExtendedToComponent(Class<E> componentClass, List<G> componentExtendeds) {
+	public static <E extends IComponent, G extends E> List<E> convertComponentExtendedToComponent(Class<E> componentClass, List<G> componentExtendeds) {
 		if (componentExtendeds == null) {
 			return null;
 		}
@@ -366,11 +316,8 @@ public class ComponentHelper {
 
 	/**
 	 * Serialize a component into a map (recursively)
-	 * 
-	 * @param component
-	 * @return
 	 */
-	public static final <E extends IComponent> Map<String, Serializable> serializeComponent(E component) {
+	public static <E extends IComponent> Map<String, Serializable> serializeComponent(E component) {
 		Map<String, Serializable> map = null;
 		if (component != null) {
 			map = new HashMap<String, Serializable>();
@@ -393,13 +340,9 @@ public class ComponentHelper {
 
 	/**
 	 * Deserialize a map into a component of given class
-	 * 
-	 * @param componentClass
-	 * @param map
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <E extends IComponent> E deserializeComponent(Class<E> componentClass, Map<String, Serializable> map) {
+	public static <E extends IComponent> E deserializeComponent(Class<E> componentClass, Map<String, Serializable> map) {
 		E component = null;
 		ComponentDescriptor cd = ComponentFactory.getInstance().getDescriptor(componentClass);
 		if (map != null) {
@@ -420,13 +363,10 @@ public class ComponentHelper {
 
 	/**
 	 * Copy properties from srcComponent to dstComponent
-	 * 
-	 * @param srcComponent
-	 * @param dstComponent
 	 * @param propertyNames
 	 *            toto.tata, id, version
 	 */
-	public static final <E extends IComponent> void copy(E srcComponent, E dstComponent, Set<String> propertyNames) {
+	public static <E extends IComponent> void copy(E srcComponent, E dstComponent, Set<String> propertyNames) {
 		Class<E> componentClass = ComponentFactory.getInstance().getComponentClass(srcComponent);
 
 		ComponentDescriptor componentDescriptor = ComponentFactory.getInstance().getDescriptor(componentClass);
@@ -486,9 +426,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add array enum
-		 * 
-		 * @param propertyNames
-		 * @return
 		 */
 		public PropertyDotBuilder addPropertyNames(IField... propertyNames) {
 			for (IField propertyName : propertyNames) {
@@ -499,9 +436,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a enum
-		 * 
-		 * @param propertyName
-		 * @return
 		 */
 		private PropertyDotBuilder addPropertyName(IField propertyName) {
 			assert propertyName != null;
@@ -511,9 +445,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a array string
-		 * 
-		 * @param propertyNames
-		 * @return
 		 */
 		public PropertyDotBuilder addPropertyNames(String... propertyNames) {
 			for (String propertyName : propertyNames) {
@@ -524,9 +455,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a string
-		 * 
-		 * @param propertyName
-		 * @return
 		 */
 		private PropertyDotBuilder addPropertyName(String propertyName) {
 			assert propertyName != null;
@@ -536,8 +464,6 @@ public class ComponentHelper {
 
 		/**
 		 * build
-		 * 
-		 * @return
 		 */
 		public String build() {
 			return build(propertyNames.toArray(new String[propertyNames.size()]));
@@ -603,9 +529,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add array enum
-		 * 
-		 * @param propertyNames
-		 * @return
 		 */
 		public PropertyArrayBuilder addPropertyNames(IField... propertyNames) {
 			for (IField propertyName : propertyNames) {
@@ -619,7 +542,6 @@ public class ComponentHelper {
 		 * 
 		 * @param propertyNames
 		 *            Enum.toto, Enum.tata, Enum.id -> toto.tata.id
-		 * @return
 		 */
 		public PropertyArrayBuilder addDotPropertyName(IField... propertyNames) {
 			addPropertyName(PropertyDotBuilder.build(propertyNames));
@@ -628,9 +550,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a property name
-		 * 
-		 * @param propertyName
-		 * @return
 		 */
 		private PropertyArrayBuilder addPropertyName(IField propertyName) {
 			assert propertyName != null;
@@ -640,9 +559,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a property name
-		 * 
-		 * @param propertyNames
-		 * @return
 		 */
 		public PropertyArrayBuilder addPropertyNames(String... propertyNames) {
 			for (String propertyName : propertyNames) {
@@ -656,7 +572,6 @@ public class ComponentHelper {
 		 * 
 		 * @param propertyNames
 		 *            toto, tata, id -> toto.tata.id
-		 * @return
 		 */
 		public PropertyArrayBuilder addDotPropertyName(String... propertyNames) {
 			addPropertyName(PropertyDotBuilder.build(propertyNames));
@@ -665,9 +580,6 @@ public class ComponentHelper {
 
 		/**
 		 * Add a property name
-		 * 
-		 * @param propertyName
-		 * @return
 		 */
 		private PropertyArrayBuilder addPropertyName(String propertyName) {
 			assert propertyName != null;
@@ -681,9 +593,6 @@ public class ComponentHelper {
 
 		/**
 		 * Build a array with enum
-		 * 
-		 * @param es
-		 * @return
 		 */
 		public static String[] build(IField... es) {
 			String[] res = new String[es.length];
@@ -697,9 +606,6 @@ public class ComponentHelper {
 
 		/**
 		 * Build a array
-		 * 
-		 * @param ss
-		 * @return
 		 */
 		public static String[] build(String... ss) {
 			return ss;
