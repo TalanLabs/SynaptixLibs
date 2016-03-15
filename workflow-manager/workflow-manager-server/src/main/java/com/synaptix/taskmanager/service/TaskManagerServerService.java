@@ -44,6 +44,8 @@ import com.synaptix.taskmanager.service.error.TaskManagerErrorEnum;
 
 public class TaskManagerServerService extends AbstractSimpleService implements ITaskManagerService {
 
+	private static final Log LOG = LogFactory.getLog(TaskManagerServerService.class);
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 	@Inject
@@ -57,8 +59,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Inject
 	private TaskServiceDiscovery taskServiceDiscovery;
-
-	private static final Log LOG = LogFactory.getLog(TaskManagerServerService.class);
 
 	private TaskMapper getTaskMapper() {
 		return getDaoSession().getMapper(TaskMapper.class);
@@ -410,10 +410,10 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 	}
 
-	private class TaskExecutionResult {
-		public boolean done;
-		public String errorMessage;
-		public boolean stopAndRestart;
+	public <E extends Enum<E>, F extends ITaskObject<E>> void startEngine(List<F> taskObjects) {
+		for (ITaskObject<?> taskObject : taskObjects) {
+			startEngine(taskObject);
+		}
 	}
 
 	private void updateTask(ITask task) {
@@ -512,5 +512,11 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		} finally {
 			getDaoSession().end();
 		}
+	}
+
+	private class TaskExecutionResult {
+		public boolean done;
+		public String errorMessage;
+		public boolean stopAndRestart;
 	}
 }
