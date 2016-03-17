@@ -6,16 +6,17 @@
 
 	<cache-ref namespace="com.synaptix.taskmanager.model.ITaskChain" />
 
-	<select id="findTaskChainsByTaskType" resultType="java.io.Serializable">
+	<select id="findTaskChainsByTaskType" resultType="IId">
 		SELECT ID_TASK_CHAIN 
 		FROM T_ASSO_TASK_CHAIN_TYPE  
 		WHERE ID_TASK_TYPE = #{idTaskType,javaType=IId}
 	</select>
 	
-	<select id="findTaskChainCriteriaByTaskChain" resultType="java.io.Serializable">
+	<select id="findTaskChainCriteriaByTaskChain" resultType="IId">
 		SELECT ID_TASK_CHAIN_CRITERIA 
 		FROM T_ASSO_TASK_CHAIN_CRIT_CHAIN
 		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
+		AND CHECK_CANCEL = '0'
 	</select>
 	
 	<delete id="deleteAssoTaskChainTaskType">
