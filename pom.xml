@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<organization>
 		<name>Synaptix-Labs</name>
-		<url>http://www.synaptix-labs.com</url>
+		<url>http://www.talanlabs.com</url>
 	</organization>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
@@ -65,16 +65,16 @@
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 	</properties>
 	<scm>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
-		<connection>scm:git:https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs.git</connection>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLib</url>
+		<connection>scm:git:https://gitlab.talanlabs.com/synaptix/SynaptixLibs.git</connection>
 	</scm>
     <ciManagement>
         <system>gitlab-ci</system>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLib</url>
     </ciManagement>
     <issueManagement>
         <system>gitlab</system>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs/issues</url>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLibs/issues</url>
     </issueManagement>
 	<build>
 		<finalName>${project.artifactId}-${project.version}
