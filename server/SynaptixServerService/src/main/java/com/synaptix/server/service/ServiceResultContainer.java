@@ -95,7 +95,7 @@ public class ServiceResultContainer {
 	}
 
 	/**
-	 * Construct a new IServiceResult with given object.<br>
+	 * Construct a new IServiceResult with given object.<br/>
 	 * This object contains the error list (hidden)
 	 */
 	public final <O> IServiceResult<O> compileResult(O object) {
@@ -103,7 +103,7 @@ public class ServiceResultContainer {
 	}
 
 	/**
-	 * Construct a new IServiceResult with given object and result information.<br>
+	 * Construct a new IServiceResult with given object and result information.<br/>
 	 * This object contains the error list (hidden)
 	 */
 	public final <O> IServiceResult<O> compileResult(O object, String resultCode) {
@@ -157,8 +157,8 @@ public class ServiceResultContainer {
 	}
 
 	/**
-	 * Ingest service result:<br>
-	 * - Add errors to its own errors<br>
+	 * Ingest service result:<br/>
+	 * - Add errors to its own errors<br/>
 	 * - Return object
 	 */
 	public final <O> O ingest(IServiceResult<O> serviceResult) {
