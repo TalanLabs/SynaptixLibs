@@ -23,7 +23,7 @@ public class RibbonData {
 
 	/**
 	 * Medium priority view
-	 * 
+	 *
 	 * @param title
 	 *            Title of the view
 	 * @param ribbonTaskTitle
@@ -45,7 +45,7 @@ public class RibbonData {
 
 	/**
 	 * Top priority view with icon
-	 * 
+	 *
 	 * @param title
 	 *            Title of the view
 	 * @param ribbonTaskTitle
@@ -66,7 +66,7 @@ public class RibbonData {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param title
 	 *            Title of the view
 	 * @param ribbonTaskTitle
@@ -85,6 +85,7 @@ public class RibbonData {
 	 *            Priority
 	 */
 	public RibbonData(String title, String ribbonTaskTitle, int ribbonTaskPriority, String ribbonBandTitle, int ribbonBandPriority, String category, ResizableIcon icon, RibbonElementPriority priority) {
+		super();
 		this.title = title;
 		this.ribbonTaskTitle = ribbonTaskTitle;
 		this.ribbonTaskPriority = ribbonTaskPriority;
@@ -95,35 +96,42 @@ public class RibbonData {
 		this.priority = priority;
 	}
 
-	public String getTitle() {
+	public final String getTitle() {
 		return title;
 	}
 
-	public String getRibbonTaskTitle() {
+	public final String getRibbonTaskTitle() {
 		return ribbonTaskTitle;
 	}
 
-	public int getRibbonTaskPriority() {
+	public final int getRibbonTaskPriority() {
 		return ribbonTaskPriority;
 	}
 
-	public String getRibbonBandTitle() {
+	public final String getRibbonBandTitle() {
 		return ribbonBandTitle;
 	}
 
-	public int getRibbonBandPriority() {
+	public final int getRibbonBandPriority() {
 		return ribbonBandPriority;
 	}
 
-	public String getCategory() {
+	public final String getCategory() {
 		return category;
 	}
 
-	public ResizableIcon getIcon() {
+	public final ResizableIcon getIcon() {
 		return icon;
 	}
 
-	public RibbonElementPriority getPriority() {
+	public final RibbonElementPriority getPriority() {
 		return priority;
+	}
+
+	/**
+	 * Should the ribbon data be registered in the ribbon?
+	 */
+	public boolean shouldRegisterInRibbon() {
+		return true;
 	}
 }

@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.synaptix</groupId>
 	<artifactId>SynaptixLibs</artifactId>
-	<version>4.2.14-SNAPSHOT</version>
+	<version>4.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<organization>
 		<name>Synaptix-Labs</name>
-		<url>http://www.synaptix-labs.com</url>
+		<url>http://www.talanlabs.com</url>
 	</organization>
 	<properties>
 		<root-directory>${project.basedir}</root-directory>
@@ -65,16 +65,16 @@
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 	</properties>
 	<scm>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
-		<connection>scm:git:https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs.git</connection>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLib</url>
+		<connection>scm:git:https://gitlab.talanlabs.com/synaptix/SynaptixLibs.git</connection>
 	</scm>
     <ciManagement>
         <system>gitlab-ci</system>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLib</url>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLib</url>
     </ciManagement>
     <issueManagement>
         <system>gitlab</system>
-        <url>https://gitlab.synaptix-labs.com/synaptix/SynaptixLibs/issues</url>
+        <url>https://gitlab.talanlabs.com/synaptix/SynaptixLibs/issues</url>
     </issueManagement>
 	<build>
 		<finalName>${project.artifactId}-${project.version}
@@ -336,7 +336,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-			<url>http://nexus.synaptix-labs.com/content/groups/public_release</url>
+			<url>http://nexus.talanlabs.com/content/groups/public_release</url>
 		</repository>
 		<repository>
 			<id>synaptix-snapshots-repository</id>
@@ -346,7 +346,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<url>http://nexus.synaptix-labs.com/content/groups/public_snapshots</url>
+			<url>http://nexus.talanlabs.com/content/groups/public_snapshots</url>
 		</repository>
 		<repository>
 			<id>java.net-Public</id>
@@ -848,11 +848,11 @@
 	<distributionManagement>
 		<repository>
 			<id>synaptix-releases-repository</id>
-			<url>http://nexus.synaptix-labs.com/content/repositories/releases/</url>
+			<url>http://nexus.talanlabs.com/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>synaptix-snapshots-repository</id>
-			<url>http://nexus.synaptix-labs.com/content/repositories/snapshots/</url>
+			<url>http://nexus.talanlabs.com/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<profiles>

@@ -43,6 +43,7 @@ deploy_job:
   stage: deploy
   only:
     - master
+    - 4.3.0-SNAPSHOT
   script:
     - mvn --batch-mode deploy -Dmaven.test.skip=true -Djacoco.skip=true -PCI
   tags:

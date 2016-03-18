@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.exceptions.ExceptionFactory;
@@ -45,42 +46,28 @@ import com.synaptix.mybatis.helper.ComponentSqlHelper;
 public class DefaultDaoSession implements IDaoSessionExt {
 
 	private static final Log LOG = LogFactory.getLog(DefaultDaoSession.class);
-
+	protected final Locale defaultMeaningLocale;
+	protected final String defaultMeaningLanguage;
 	private final Map<Class<? extends IEntity>, List<IEntitySaveOrUpdateListener<? extends IEntity>>> entitySaveOrUpdateListenerMap;
-
+	private final ThreadLocal<SessionInfo> sessionInfoThreadLocal = new ThreadLocal<SessionInfo>();
 	@Inject
 	protected Injector injector;
-
 	@Inject
 	protected SqlSessionManager sqlSessionManager;
-
 	@Inject
 	protected IGUIDGenerator guidGenerator;
-
 	@Inject
 	protected IDaoUserContext userContext;
-
 	@Inject
 	protected MapperCacheLocal mapperCacheLocal;
-
 	@Inject
 	protected EntitySql entitySql;
-
 	@Inject
 	protected ComponentSqlHelper componentSqlHelper;
-
 	@Inject
 	protected ComponentColumnsCache componentColumnsCache;
-
-	protected final Locale defaultMeaningLocale;
-
-	protected final String defaultMeaningLanguage;
-
 	protected boolean setUserInSession;
-
 	private boolean checkDefaultVersionConflictDaoExceptionInSession;
-
-	private final ThreadLocal<SessionInfo> sessionInfoThreadLocal = new ThreadLocal<SessionInfo>();
 
 	@Inject
 	public DefaultDaoSession(@Named("defaultMeaningLocale") Locale defaultMeaningLocale) {
@@ -103,20 +90,20 @@ public class DefaultDaoSession implements IDaoSessionExt {
 		this.entitySaveOrUpdateListenerMap = new HashMap<Class<? extends IEntity>, List<IEntitySaveOrUpdateListener<?>>>();
 	}
 
-	public void setSetUserInSession(boolean setUserInSession) {
-		this.setUserInSession = setUserInSession;
-	}
-
 	public boolean isSetUserInSession() {
 		return setUserInSession;
 	}
 
-	public void setCheckDefaultVersionConflictDaoExceptionInSession(boolean checkDefaultVersionConflictDaoExceptionInSession) {
-		this.checkDefaultVersionConflictDaoExceptionInSession = checkDefaultVersionConflictDaoExceptionInSession;
+	public void setSetUserInSession(boolean setUserInSession) {
+		this.setUserInSession = setUserInSession;
 	}
 
 	public boolean isCheckDefaultVersionConflictDaoExceptionInSession() {
 		return checkDefaultVersionConflictDaoExceptionInSession;
+	}
+
+	public void setCheckDefaultVersionConflictDaoExceptionInSession(boolean checkDefaultVersionConflictDaoExceptionInSession) {
+		this.checkDefaultVersionConflictDaoExceptionInSession = checkDefaultVersionConflictDaoExceptionInSession;
 	}
 
 	// doesn't seem to be used
@@ -337,8 +324,11 @@ public class DefaultDaoSession implements IDaoSessionExt {
 					if (dp != null && dp.getNlsColumn() != null) {
 						DatabasePropertyExtensionDescriptor.NlsColumn nlsMeaning = dp.getNlsColumn();
 
-						getNlsServerMessageMapper().mergeNlsServerMessage(componentSqlHelper.getSqlTableName(cd), entity.getId(), language, nlsMeaning.getSqlName(),
-								(String) entity.straightGetProperty(pd.getPropertyName()));
+						String meaning = (String) entity.straightGetProperty(pd.getPropertyName());
+						if (StringUtils.isNotBlank(meaning)) {
+							getNlsServerMessageMapper().mergeNlsServerMessage(componentSqlHelper.getSqlTableName(cd), entity.getId(), language, nlsMeaning.getSqlName(),
+									meaning);
+						}
 					}
 				}
 			}
@@ -392,17 +382,17 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	@Override
+	public boolean isCheckSuperTransactionInSession() {
+		return getSessionInfo().checkSuperTransaction;
+	}
+
+	@Override
 	public void setCheckSuperTransactionInSession(boolean checkSuperTransaction) {
 		if (!sqlSessionManager.isManagedSessionStarted()) {
 			getSessionInfo().checkSuperTransaction = checkSuperTransaction;
 		} else {
 			throw new BeginAlreadyStartedDaoException();
 		}
-	}
-
-	@Override
-	public boolean isCheckSuperTransactionInSession() {
-		return getSessionInfo().checkSuperTransaction;
 	}
 
 	@Override
@@ -430,7 +420,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	@SuppressWarnings("unchecked")
-	private final <T extends IEntity> void fireBeforeSaveEntity(T entity) {
+	private <T extends IEntity> void fireBeforeSaveEntity(T entity) {
 		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
 		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
 		if (entityListenerList != null) {
@@ -441,7 +431,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	@SuppressWarnings("unchecked")
-	private final <T extends IEntity> void fireBeforeUpdateEntity(T entity) {
+	private <T extends IEntity> void fireBeforeUpdateEntity(T entity) {
 		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
 		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
 		if (entityListenerList != null) {
@@ -452,7 +442,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	@SuppressWarnings("unchecked")
-	private final <T extends IEntity> void fireAfterSaveEntity(T entity) {
+	private <T extends IEntity> void fireAfterSaveEntity(T entity) {
 		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
 		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
 		if (entityListenerList != null) {
@@ -463,7 +453,7 @@ public class DefaultDaoSession implements IDaoSessionExt {
 	}
 
 	@SuppressWarnings("unchecked")
-	private final <T extends IEntity> void fireAfterUpdateEntity(T entity) {
+	private <T extends IEntity> void fireAfterUpdateEntity(T entity) {
 		Class<T> entityClass = ComponentFactory.getInstance().getComponentClass(entity);
 		List<IEntitySaveOrUpdateListener<? extends IEntity>> entityListenerList = entitySaveOrUpdateListenerMap.get(entityClass);
 		if (entityListenerList != null) {

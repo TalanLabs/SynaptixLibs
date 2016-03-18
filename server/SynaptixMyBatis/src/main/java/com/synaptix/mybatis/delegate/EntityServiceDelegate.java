@@ -53,10 +53,6 @@ public class EntityServiceDelegate {
 
 	/**
 	 * Check unicit constraint
-	 * 
-	 * @param entity
-	 * @param checkUnicityConstraint
-	 * @throws ServiceException
 	 */
 	public <E extends IEntity> void checkUnicityConstraint(E entity) throws ServiceException {
 		if (!isExistBusinessKey(entity)) {
@@ -80,10 +76,6 @@ public class EntityServiceDelegate {
 
 	/**
 	 * Add entity and check unicity
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws ServiceException
 	 */
 	public <E extends IEntity> int addEntity(E entity, boolean checkUnicityConstraint) throws ServiceException {
 		if (checkUnicityConstraint) {
@@ -94,11 +86,6 @@ public class EntityServiceDelegate {
 
 	/**
 	 * Edit entity and check unicity
-	 * 
-	 * @param entity
-	 * @param checkUnicityConstraint
-	 * @return
-	 * @throws ServiceException
 	 */
 	public <E extends IEntity> int editEntity(E entity, boolean checkUnicityConstraint) throws ServiceException {
 		if (checkUnicityConstraint) {
@@ -109,10 +96,6 @@ public class EntityServiceDelegate {
 
 	/**
 	 * Remove entity, delete or cancel
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws ServiceException
 	 */
 	public <E extends IEntity> int removeEntity(E entity) throws ServiceException {
 		int ret;
@@ -130,11 +113,6 @@ public class EntityServiceDelegate {
 
 	/**
 	 * Find a entity by id
-	 * 
-	 * @param entityClass
-	 * @param id
-	 * @return
-	 * @throws ServiceException
 	 */
 	public <E extends IEntity> E findEntityById(Class<E> entityClass, IId id) throws ServiceException {
 		return componentServiceDelegate.findComponentByPropertyName(entityClass, EntityFields.id().name(), id);
