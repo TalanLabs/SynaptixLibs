@@ -49,8 +49,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Create a new service result container initialized with a list of errors
-	 *
-	 * @param errorSet
 	 */
 	public ServiceResultContainer(Set<IError> errorSet) {
 		this(errorSet, null);
@@ -66,15 +64,19 @@ public class ServiceResultContainer {
 		this.stackResult.setClassName(name);
 	}
 
-	public static final <O> IServiceResult<O> compile(O object) {
-		return compile(object, null, null);
+	public static <O> IServiceResult<O> compile(O object) {
+		return compile(object, null, null, null);
 	}
 
-	public static final <O> IServiceResult<O> compile(O object, String resultCode, String resultText) {
-		return new ServiceResultContainer().compileResult(object, resultCode, resultText);
+	public static <O> IServiceResult<O> compile(O object, String resultCode, String resultText) {
+		return compile(object, null, null, null);
 	}
 
-	public static final <O> ServiceResultContainer build(IServiceResult<O> serviceResult) {
+	public static <O> IServiceResult<O> compile(O object, String name, String resultCode, String resultText) {
+		return new ServiceResultContainer(name).compileResult(object, resultCode, resultText);
+	}
+
+	public static <O> ServiceResultContainer build(IServiceResult<O> serviceResult) {
 		ServiceResultContainer serviceResultContainer = new ServiceResultContainer();
 		serviceResultContainer.ingest(serviceResult);
 		return serviceResultContainer;
@@ -87,8 +89,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Get the unmodifiable set of errors
-	 *
-	 * @return
 	 */
 	public final Set<IError> getErrorSet() {
 		return Collections.unmodifiableSet(errorSet);
@@ -131,8 +131,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Returns true if container has at least one error
-	 *
-	 * @return
 	 */
 	public boolean hasError() {
 		return !errorSet.isEmpty();
@@ -140,9 +138,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Returns true if current process has the specified error
-	 *
-	 * @param errorEnum
-	 * @return
 	 */
 	public boolean hasError(ErrorEnum errorEnum) {
 		boolean containsError = false;
@@ -156,8 +151,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Returns the number of errors
-	 *
-	 * @return
 	 */
 	public int getNbError() {
 		return errorSet.size();
@@ -167,9 +160,6 @@ public class ServiceResultContainer {
 	 * Ingest service result:<br>
 	 * - Add errors to its own errors<br>
 	 * - Return object
-	 *
-	 * @param serviceResult
-	 * @return
 	 */
 	public final <O> O ingest(IServiceResult<O> serviceResult) {
 		if (serviceResult != null) {
@@ -209,8 +199,6 @@ public class ServiceResultContainer {
 
 	/**
 	 * Return current error code set (unmodifiable set)
-	 *
-	 * @return
 	 */
 	public Set<ErrorEnum> getErrorCodeSet() {
 		Set<ErrorEnum> set = new HashSet<ErrorEnum>();
