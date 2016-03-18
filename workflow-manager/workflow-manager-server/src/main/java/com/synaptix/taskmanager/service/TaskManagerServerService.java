@@ -132,7 +132,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Transactional(commit = true)
-	public <E extends Enum<E>, F extends ITaskObject<E>> IId createTaskCluster(F taskObject) {
+	private <E extends Enum<E>, F extends ITaskObject<E>> IId createTaskCluster(F taskObject) {
 		return taskManagerServiceDelegate.createTaskCluster(taskObject);
 	}
 
@@ -166,7 +166,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Transactional(commit = true)
-	public void createTaskGraphs(ITaskCluster taskCluster) {
+	private void createTaskGraphs(ITaskCluster taskCluster) {
 		taskManagerServiceDelegate.createTaskGraphs(taskCluster);
 	}
 
@@ -362,6 +362,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		if ((stackResult.getClassName() != null) && (stackResult.getResultText() != null)) { // if resultText is null, we ignore that level
 			if (sb.length() > 0) {
 				sb.append("\n");
+				sb.append(StringUtils.repeat("    ", currentResultDepth));
 			}
 			sb.append(stackResult.getClassName());
 			if (stackResult.getResultCode() != null) {
@@ -411,9 +412,9 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	private class TaskExecutionResult {
-		public boolean done;
-		public String errorMessage;
-		public boolean stopAndRestart;
+		boolean done;
+		String errorMessage;
+		boolean stopAndRestart;
 	}
 
 	private void updateTask(ITask task) {
