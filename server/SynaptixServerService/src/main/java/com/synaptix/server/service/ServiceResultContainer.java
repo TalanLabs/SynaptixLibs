@@ -69,7 +69,7 @@ public class ServiceResultContainer {
 	}
 
 	public static <O> IServiceResult<O> compile(O object, String resultCode, String resultText) {
-		return compile(object, null, null, null);
+		return compile(object, null, resultCode, resultText);
 	}
 
 	public static <O> IServiceResult<O> compile(O object, String name, String resultCode, String resultText) {
