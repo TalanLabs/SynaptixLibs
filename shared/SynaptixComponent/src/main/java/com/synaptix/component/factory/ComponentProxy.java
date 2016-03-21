@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,22 +33,6 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	private static Log LOG = LogFactory.getLog(ComponentProxy.class);
 
 	private static final long serialVersionUID = -1210441501657033411L;
-
-	private static final Constructor<MethodHandles.Lookup> constructor;
-
-	static {
-		Constructor<MethodHandles.Lookup> c;
-		try {
-			c = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
-			if (!c.isAccessible()) {
-				c.setAccessible(true);
-			}
-		} catch (NoSuchMethodException e) {
-			LOG.error("Not found constructor in MethodHandles.Lookup.class with [Class.class, int.class]", e);
-			c = null;
-		}
-		constructor = c;
-	}
 
 	protected Class<? extends IComponent> componentClass;
 
@@ -201,10 +183,6 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			straightSetProperty(proxy, (String) args[0], args[1]);
 			break;
 		case CALL:
-			if (method.isDefault()) {
-				Class<?> declaringClass = method.getDeclaringClass();
-				return constructor.newInstance(declaringClass, MethodHandles.Lookup.PRIVATE).unreflectSpecial(method, declaringClass).bindTo(proxy).invokeWithArguments(args);
-			}
 			if (method.getDeclaringClass() == Object.class) {
 				res = method.invoke(this, args);
 			}

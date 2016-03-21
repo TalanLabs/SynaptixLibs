@@ -362,9 +362,6 @@ public enum ComponentBeanMethod {
 	 * Determine which Action a method maps to.
 	 */
 	public static ComponentBeanMethod which(Method method) {
-		if (method.isDefault()) {
-			return CALL;
-		}
 		for (ComponentBeanMethod action : ComponentBeanMethod.values()) {
 			if (action.matches(method)) {
 				return action;
