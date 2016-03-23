@@ -29,20 +29,26 @@ import com.synaptix.pmgr.trigger.gate.GateFactory;
 import com.synaptix.pmgr.trigger.injector.IInjector;
 import com.synaptix.pmgr.trigger.injector.MessageInjector;
 
-public class GuicePluginManager {
+public final class GuicePluginManager {
 
-	private static final List<String> probeChannelList = new ArrayList<String>();
+	private final List<String> probeChannelList = new ArrayList<String>();
 
 	@Inject
-	private static IIntegratorFactory integratorFactory;
+	private IIntegratorFactory integratorFactory;
 
-	public static void initPlugins(Log logger, String pmgrName) {
+	private GateFactory gateFactory;
+
+	@Inject
+	public GuicePluginManager() {
+	}
+
+	public void initPlugins(Log logger, String pmgrName) {
 		initProcessManager(logger, pmgrName, null);
 		initGates(logger);
 		initHeartbeats();
 	}
 
-	public static void initProcessManager(Log logger, String pmgrName, Properties properties) {
+	public void initProcessManager(Log logger, String pmgrName, Properties properties) {
 		Engine engine = ProcessEngine.getInstance(pmgrName, properties);
 		if (engine.getLogger() == null) {
 			engine.setLogger(logger);
@@ -172,8 +178,8 @@ public class GuicePluginManager {
 		// engine.handleMessageOnStratUp();
 	}
 
-	public static void initGates(Log logger) {
-		GateFactory gateFactory = new GateFactory(GuicePluginManager.class.getClassLoader(), logger);
+	public void initGates(Log logger) {
+		GateFactory gateFactory = getGateFactory(logger);
 		for (Class<? extends IInjector> injectorClass : integratorFactory.getInjectorList()) {
 			IInjector injectorImpl = integratorFactory.getInjector(injectorClass);
 			gateFactory.buildGate(injectorImpl.getName(), injectorImpl.getDelay(), (MessageInjector) injectorImpl);
@@ -190,13 +196,13 @@ public class GuicePluginManager {
 		}
 	}
 
-	public static void initHeartbeats() {
+	public void initHeartbeats() {
 		for (String heartbeatChannel : probeChannelList) {
 			ProcessEngine.handle(heartbeatChannel, null);
 		}
 	}
 
-	private static List<PluggableChannel> buildChannelGroup(String id, int maxWorking, int maxWaiting, Agent agent, Engine engine) {
+	private List<PluggableChannel> buildChannelGroup(String id, int maxWorking, int maxWaiting, Agent agent, Engine engine) {
 		int max_working = 1;
 		List<PluggableChannel> channels = new ArrayList<PluggableChannel>();
 		for (int i = 0; i < maxWorking; i++) {
@@ -216,5 +222,18 @@ public class GuicePluginManager {
 			e.printStackTrace();
 		}
 		return channels;
+	}
+
+	public void shutdown() {
+		gateFactory.closeGates();
+
+		ProcessEngine.shutdown();
+	}
+
+	private GateFactory getGateFactory(Log logger) {
+		if (gateFactory == null) {
+			gateFactory = new GateFactory(GuicePluginManager.class.getClassLoader(), logger);
+		}
+		return gateFactory;
 	}
 }

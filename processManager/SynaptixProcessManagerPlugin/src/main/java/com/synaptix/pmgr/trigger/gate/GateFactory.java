@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +23,14 @@ public class GateFactory {
 
 	protected static Map<String, InjectorDefinition> injectorDefs = new HashMap<String, InjectorDefinition>();
 	protected static ClassLoader classLoader;
+	private final List<Gate> gateList;
 	protected Log logger;
 
 	public GateFactory(ClassLoader clloader, Log log) {
+		super();
+
+		this.gateList = new ArrayList<Gate>();
+
 		classLoader = clloader;
 		logger = log;
 	}
@@ -45,7 +51,7 @@ public class GateFactory {
 
 	@SuppressWarnings("unchecked")
 	private void parseConf(XMLElement conf) {
-		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements();) {
+		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements(); ) {
 			XMLElement elem = (XMLElement) e.nextElement();
 			if (elem.getName().equals("triggers")) {
 				parseInjectorDef(elem);
@@ -58,14 +64,14 @@ public class GateFactory {
 
 	@SuppressWarnings("unchecked")
 	private void parseInjectorDef(XMLElement conf) {
-		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements();) {
+		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements(); ) {
 			XMLElement elem = (XMLElement) e.nextElement();
 			if (elem.getName().equals("trigger")) {
 				String id = elem.getStringAttribute("id");
 				String cls = elem.getStringAttribute("class");
 				String desc = elem.getStringAttribute("desc", "-");
 				List parameters = new ArrayList();
-				for (Enumeration ep = elem.enumerateChildren(); ep.hasMoreElements();) {
+				for (Enumeration ep = elem.enumerateChildren(); ep.hasMoreElements(); ) {
 					XMLElement p = (XMLElement) ep.nextElement();
 					if (p.getName().equals("arg")) {
 						parameters.add(p.getContent());
@@ -90,7 +96,7 @@ public class GateFactory {
 
 	@SuppressWarnings("unchecked")
 	private void parseGateConf(XMLElement conf) {
-		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements();) {
+		for (Enumeration e = conf.enumerateChildren(); e.hasMoreElements(); ) {
 			XMLElement elem = (XMLElement) e.nextElement();
 			if (elem.getName().equals("gate")) {
 				String id = elem.getStringAttribute("id");
@@ -103,7 +109,7 @@ public class GateFactory {
 	@SuppressWarnings("unchecked")
 	private Map<String, String> parseParameters(XMLElement conf) {
 		Map<String, String> m = new HashMap<String, String>();
-		for (Enumeration<XMLElement> e = conf.enumerateChildren(); e.hasMoreElements();) {
+		for (Enumeration<XMLElement> e = conf.enumerateChildren(); e.hasMoreElements(); ) {
 			XMLElement elem = e.nextElement();
 			if (elem.getName().equals("param")) {
 				String name = elem.getStringAttribute("name");
@@ -147,8 +153,19 @@ public class GateFactory {
 	public Gate buildGate(String id, long delay, MessageInjector messageInjector) {
 		Gate gate = new DefaultFileSysGate(id, messageInjector.getWorkDir(), new File(messageInjector.getWorkDir().getPath() + "/accepted"), new File(messageInjector.getWorkDir().getPath()
 				+ "/rejected"), new File(messageInjector.getWorkDir().getPath() + "/retry"), new File(messageInjector.getWorkDir().getPath() + "/archive"), delay, messageInjector, logger);
-
+		gateList.add(gate);
 		logger.info("INSTALLATION DE LA GATE " + gate.getName() + " REUSSIE [" + id + "(" + messageInjector.getClass().getSimpleName() + ")][" + messageInjector.getWorkDir().getPath() + "]");
 		return gate;
+	}
+
+	public void closeGates() {
+		Iterator<Gate> iterator = gateList.iterator();
+		while (iterator.hasNext()) {
+			Gate gate = iterator.next();
+			if (gate.isOpened()) {
+				gate.close();
+			}
+			iterator.remove();
+		}
 	}
 }

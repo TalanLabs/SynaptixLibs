@@ -16,7 +16,5 @@ public class ProcessManagerModule extends AbstractSynaptixIntegratorServletModul
 		bind(IIntegratorFactory.class).to(GuiceIntegratorFactory.class).in(Singleton.class);
 
 		bindAgent(RetryAgent.class, 40, 40);
-
-		requestStaticInjection(GuicePluginManager.class);
 	}
 }

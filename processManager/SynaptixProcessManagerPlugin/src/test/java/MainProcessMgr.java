@@ -14,6 +14,7 @@ public class MainProcessMgr {
 		Log logger = LogFactoryImpl.getLog(MainProcessMgr.class);
 
 		// GuicePluginManager.initPlugins(logger,"TRMT_LOCAL");
-		GuicePluginManager.initPlugins(logger, "TRT");
+		GuicePluginManager guicePluginManager = new GuicePluginManager();
+		guicePluginManager.initPlugins(logger, "TRT");
 	}
 }
