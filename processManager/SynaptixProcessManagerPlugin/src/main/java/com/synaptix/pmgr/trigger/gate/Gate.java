@@ -18,22 +18,22 @@ import org.apache.commons.logging.Log;
  */
 public interface Gate {
 
-	public String getName();	
-	public void createNewFile(String msgID, String data);
+	String getName();
+	void createNewFile(String msgID, String data);
 
-	public void reinject(String msgID);
-	public void accept(String msgID);
-	public void reject(String msgID);
-	public void retry(String msgID);
-	public void trash(String msgID);
-	public void archive(String msgID);
-	public void setLogger(Log logger);
-	public void logFine(String str);
-	public void logWarning(String str);
-	public void logSevere(String str);
-	public void log(String str,int level);
+	void reinject(String msgID);
+	void accept(String msgID);
+	void reject(String msgID);
+	void retry(String msgID);
+	void trash(String msgID);
+	void archive(String msgID);
+	void setLogger(Log logger);
+	void logFine(String str);
+	void logWarning(String str);
+	void logSevere(String str);
+	void log(String str, int level);
 
-	public void close();
-	public void open();
-	public boolean isOpened();
+	void close();
+	void open();
+	boolean isOpened();
 }

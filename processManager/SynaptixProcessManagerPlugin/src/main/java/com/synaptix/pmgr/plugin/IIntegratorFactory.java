@@ -17,15 +17,11 @@ public interface IIntegratorFactory {
 
 	/**
 	 * Get the list of available agents
-	 * 
-	 * @return
 	 */
 	public List<Class<? extends Agent>> getAgentList();
 
 	/**
 	 * Get the list of available injectors
-	 * 
-	 * @return
 	 */
 	public List<Class<? extends IInjector>> getInjectorList();
 
@@ -33,24 +29,17 @@ public interface IIntegratorFactory {
 
 	/**
 	 * Get an injector
-	 * 
-	 * @param type
-	 * @return
 	 * @throws NotFoundInjectorException
 	 */
 	public <I extends IInjector> I getInjector(Class<I> type) throws NotFoundInjectorException;
 
 	/**
 	 * Get the import process definition set defined using guice injection
-	 * 
-	 * @return
 	 */
 	public Set<IImportProcessDefinition<?>> getImportProcessDefinitionSet();
 
 	/**
 	 * Get the export process definition set defined using guice injection
-	 * 
-	 * @return
 	 */
 	public Set<IExportProcessDefinition<?>> getExportProcessDefinitionSet();
 
@@ -63,15 +52,11 @@ public interface IIntegratorFactory {
 
 	/**
 	 * Get the cron process definition set defined using guice injection
-	 * 
-	 * @return
 	 */
 	public Set<ICronProcessDefinition> getCronProcessDefinitionSet();
 
 	/**
 	 * Get the simple process definition set defined using guice injection
-	 * 
-	 * @return
 	 */
 	public Set<ISimpleProcessDefinition> getSimpleProcessDefinitionSet();
 

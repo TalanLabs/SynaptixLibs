@@ -31,16 +31,18 @@ import com.synaptix.tmgr.libs.tasks.filesys.FolderEventTriggerTask;
  * @author sps
  */
 public abstract class AbstractFileSysGate implements Gate {
-	private String name;
 
+	public long retryPeriod = -1;
+	private String name;
 	private File entranceFolder;
 	private File acceptedFolder;
 	private File rejectedFolder;
 	private File retryFolder;
 	private File archiveFolder;
-	public long retryPeriod = -1;
 	private MessageInjector messageInjector;
 	private Log logger;
+
+	private boolean opened;
 
 	/**
 	 *
@@ -81,22 +83,25 @@ public abstract class AbstractFileSysGate implements Gate {
 	public void log(String str, int level) {
 		switch (level) {
 			case 0:
-				if (logger != null)
+				if (logger != null) {
 					logger.info(str);
-				else
+				} else {
 					System.out.println((new Date()) + "INFO : " + str);
+				}
 				break;
 			case 1:
-				if (logger != null)
+				if (logger != null) {
 					logger.warn(str);
-				else
+				} else {
 					System.out.println((new Date()) + "WARNING : " + str);
+				}
 				break;
 			default:
-				if (logger != null)
+				if (logger != null) {
 					logger.error(str);
-				else
+				} else {
 					System.out.println((new Date()) + "SEVERE : " + str);
+				}
 				break;
 		}
 	}
@@ -159,30 +164,7 @@ public abstract class AbstractFileSysGate implements Gate {
 			}
 		}
 
-		// installe et demarre le trigger...
-		TriggerEngine te = TriggerEngine.getInstance();
-
-		// TriggerEventListener tel = new SimpleTriggerEventListener();
-		TriggerEventListener tel = new TriggerEventListener() {
-			@Override
-			public void notifyEvent(TriggerEvent arg0) {
-				messageInjector.inject((FolderEventTriggerTask.FileTriggerEvent) arg0);
-			}
-		};
-
-		// Correction BUG: Pas de possibilite d'ajouter un Trigger
-		// supplementaire sur un meme serveur
-		logFine("AJOUT DU LISTENER AU TRIGGER ENGINE SUR : " + entranceFolder.getAbsolutePath());
-		te.addListener(tel);
-		// Correction BUG: Pas de possibilite d'ajouter un Trigger
-		// supplementaire sur un meme serveur
-
-		// logFine("Starting file Trigger on : " +
-		// entranceFolder.getAbsolutePath());
-
-		Trigger t = new ThreadedTrigger(name, new FolderEventTriggerTask(entranceFolder, ".lck"), 200);
-
-		te.installTrigger(t, true);
+		open();
 
 		if (retryPeriod > 0) {
 			// installer la thread sur retry.
@@ -277,10 +259,11 @@ public abstract class AbstractFileSysGate implements Gate {
 		File f = resolveEntranceFile(msgID);
 		if (f.exists()) {
 			boolean remove = f.renameTo(new File(rejectedFolder, msgID));
-			if (remove)
+			if (remove) {
 				logFine("REJET DU MESSAGE " + msgID + " (" + f.getAbsolutePath() + ")");
-			else
+			} else {
 				logSevere("IMPOSSIBLE DE DEPLACER LE MESSAGE " + msgID + " DANS " + f.getAbsolutePath());
+			}
 		} else {
 			logWarning("LE MESSAGE " + msgID + " N'EXISTE PAS DANS " + f.getAbsolutePath());
 		}
@@ -297,10 +280,11 @@ public abstract class AbstractFileSysGate implements Gate {
 		logFine("REESSAI DU MESSAGE " + msgID + " (" + f.getAbsolutePath() + ")");
 		if (f.exists()) {
 			boolean remove = f.renameTo(new File(retryFolder, msgID));
-			if (remove)
+			if (remove) {
 				logFine("REESSAI DU MESSAGE " + msgID + " (" + f.getAbsolutePath() + ")");
-			else
+			} else {
 				logSevere("IMPOSSIBLE DE DEPLACER LE MESSAGE " + msgID + " DANS " + f.getAbsolutePath());
+			}
 		} else {
 			logWarning("LE MESSAGE " + msgID + " N'EXISTE PAS DANS " + f.getAbsolutePath());
 		}
@@ -340,6 +324,7 @@ public abstract class AbstractFileSysGate implements Gate {
 	@Override
 	public void close() {
 		TriggerEngine.getInstance().uninstallTrigger(name);
+		opened = false;
 	}
 
 	/*
@@ -349,8 +334,7 @@ public abstract class AbstractFileSysGate implements Gate {
 	 */
 	@Override
 	public boolean isOpened() {
-		// TODO Auto-generated method stub
-		return false;
+		return opened;
 	}
 
 	/*
@@ -360,8 +344,30 @@ public abstract class AbstractFileSysGate implements Gate {
 	 */
 	@Override
 	public void open() {
-		// TODO Auto-generated method stub
+		// installe et demarre le trigger...
+		TriggerEngine te = TriggerEngine.getInstance();
 
+		// TriggerEventListener tel = new SimpleTriggerEventListener();
+		TriggerEventListener tel = new TriggerEventListener() {
+			@Override
+			public void notifyEvent(TriggerEvent arg0) {
+				messageInjector.inject((FolderEventTriggerTask.FileTriggerEvent) arg0);
+			}
+		};
+
+		// Correction BUG: Pas de possibilite d'ajouter un Trigger
+		// supplementaire sur un meme serveur
+		logFine("AJOUT DU LISTENER AU TRIGGER ENGINE SUR : " + entranceFolder.getAbsolutePath());
+		te.addListener(tel);
+		// Correction BUG: Pas de possibilite d'ajouter un Trigger
+		// supplementaire sur un meme serveur
+
+		// logFine("Starting file Trigger on : " + entranceFolder.getAbsolutePath());
+
+		Trigger t = new ThreadedTrigger(name, new FolderEventTriggerTask(entranceFolder, ".lck"), 200);
+		te.installTrigger(t, true);
+
+		opened = true;
 	}
 
 	public static class RetryThread extends Thread {

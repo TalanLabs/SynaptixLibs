@@ -17,7 +17,6 @@ import com.synaptix.tmgr.libs.tasks.filesys.FolderEventTriggerTask.FileTriggerEv
  * Use annotation ImportFlux to define a root work directory
  *
  * @author Nicolas P
- *
  */
 public abstract class AbstractInjector<M extends AbstractImportFlux> extends AbstractMsgInjector implements IInjector {
 
@@ -128,4 +127,15 @@ public abstract class AbstractInjector<M extends AbstractImportFlux> extends Abs
 
 	public abstract M createFlux();
 
+	public final void openGate() {
+		if (!getGate().isOpened()) {
+			getGate().open();
+		}
+	}
+
+	public final void closeGate() {
+		if (getGate().isOpened()) {
+			getGate().close();
+		}
+	}
 }
