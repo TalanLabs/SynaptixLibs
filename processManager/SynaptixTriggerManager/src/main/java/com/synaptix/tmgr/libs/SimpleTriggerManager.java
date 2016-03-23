@@ -16,9 +16,9 @@ public class SimpleTriggerManager implements TriggerManager {
 
 	private Map<String, Trigger> triggers;
 	private TriggerEventListener teListener;
-	private TriggerManagerEventListener tmeListener;	
+	private TriggerManagerEventListener tmeListener;
 
-	public SimpleTriggerManager(TriggerManagerEventListener tmeListener,TriggerEventListener lstnr){
+	public SimpleTriggerManager(TriggerManagerEventListener tmeListener, TriggerEventListener lstnr) {
 		this.tmeListener = tmeListener;
 		this.teListener = lstnr;
 		this.triggers = new HashMap<String, Trigger>();
@@ -28,10 +28,11 @@ public class SimpleTriggerManager implements TriggerManager {
 	 * @see com.synaptix.tmgr.apis.TriggerManager#installTrigger(com.synaptix.tmgr.apis.Trigger, boolean)
 	 */
 	public void installTrigger(Trigger trigger, boolean auto_activate) {
-		triggers.put(trigger.getID(),trigger);
-		if (auto_activate)
+		triggers.put(trigger.getID(), trigger);
+		if (auto_activate) {
 			trigger.activate(this);
-		tmeListener.notifyEvent(new TriggerInstallEvent(this,trigger,true));
+		}
+		tmeListener.notifyEvent(new TriggerInstallEvent(this, trigger, true));
 	}
 
 	/* (non-Javadoc)
@@ -39,10 +40,10 @@ public class SimpleTriggerManager implements TriggerManager {
 	 */
 	public void uninstallTrigger(String id) {
 		Trigger trigger = getTrigger(id);
-		if (trigger!=null){
+		if (trigger != null) {
 			trigger.deactivate();
 			triggers.remove(id);
-			tmeListener.notifyEvent(new TriggerInstallEvent(this,trigger,false));
+			tmeListener.notifyEvent(new TriggerInstallEvent(this, trigger, false));
 		}
 	}
 
@@ -51,7 +52,7 @@ public class SimpleTriggerManager implements TriggerManager {
 	 */
 	public void activateTrigger(String id) {
 		Trigger trigger = getTrigger(id);
-		if (trigger!=null){
+		if (trigger != null) {
 			trigger.activate(this);
 		}
 	}
@@ -61,7 +62,7 @@ public class SimpleTriggerManager implements TriggerManager {
 	 */
 	public void deactivateTrigger(String id) {
 		Trigger trigger = getTrigger(id);
-		if (trigger!=null){
+		if (trigger != null) {
 			trigger.deactivate();
 		}
 	}
@@ -79,10 +80,11 @@ public class SimpleTriggerManager implements TriggerManager {
 	public List<Trigger> getActiveTriggers() {
 		List<Trigger> lst = new ArrayList<Trigger>();
 		Iterator<Trigger> it = triggers.values().iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			Trigger t = it.next();
-			if (t.isActive())
+			if (t.isActive()) {
 				lst.add(t);
+			}
 		}
 		return lst;
 	}
@@ -93,17 +95,19 @@ public class SimpleTriggerManager implements TriggerManager {
 	public List<Trigger> getInactiveTriggers() {
 		List<Trigger> lst = new ArrayList<Trigger>();
 		Iterator<Trigger> it = triggers.values().iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			Trigger t = it.next();
-			if (!t.isActive())
+			if (!t.isActive()) {
 				lst.add(t);
+			}
 		}
 		return lst;
 	}
 
-	public void setTriggerEventListener(TriggerEventListener lst){
+	public void setTriggerEventListener(TriggerEventListener lst) {
 		teListener = lst;
 	}
+
 	/* (non-Javadoc)
 	 * @see com.synaptix.tmgr.apis.TriggerEventListener#notifyEvent(com.synaptix.tmgr.apis.TriggerEvent)
 	 */
@@ -122,13 +126,12 @@ public class SimpleTriggerManager implements TriggerManager {
 	 * @see com.synaptix.tmgr.apis.TriggerManager#shutdown()
 	 */
 	public void shutdown() {
-		synchronized(triggers){
+		synchronized (triggers) {
 			Iterator<Trigger> it = triggers.values().iterator();
-			while(it.hasNext()){
+			while (it.hasNext()) {
 				Trigger t = it.next();
 				t.deactivate();
 			}
 		}
 	}
-
 }

@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.google.inject.Inject;
 import com.synaptix.pmgr.core.apis.Engine;
@@ -31,6 +32,8 @@ import com.synaptix.pmgr.trigger.injector.MessageInjector;
 import com.synaptix.tmgr.TriggerEngine;
 
 public final class GuicePluginManager {
+
+	private static final Log LOG = LogFactory.getLog(GuicePluginManager.class);
 
 	private final List<String> probeChannelList = new ArrayList<String>();
 
@@ -226,10 +229,11 @@ public final class GuicePluginManager {
 	}
 
 	public void shutdown() {
+		TriggerEngine.getInstance().shutdown();
 		if (gateFactory != null) {
+			LOG.info("Closing gates");
 			gateFactory.closeGates();
 		}
-		TriggerEngine.getInstance().shutdown();
 		ProcessEngine.shutdown();
 	}
 

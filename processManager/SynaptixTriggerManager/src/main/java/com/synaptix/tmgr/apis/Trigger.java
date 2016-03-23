@@ -1,8 +1,8 @@
 package com.synaptix.tmgr.apis;
 
 public interface Trigger {
-	public String getID();
-	public boolean isActive();
-	public void activate(TriggerEventListener telistener);
-	public void deactivate();
+	String getID();
+	boolean isActive();
+	void activate(TriggerEventListener telistener);
+	void deactivate();
 }

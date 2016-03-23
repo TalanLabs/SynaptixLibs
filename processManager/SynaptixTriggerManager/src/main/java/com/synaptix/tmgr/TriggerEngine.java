@@ -145,5 +145,4 @@ public class TriggerEngine implements TriggerManager{
 	public void shutdown() {
 		manager.shutdown();
 	}
-
 }
