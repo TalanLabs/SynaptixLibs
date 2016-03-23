@@ -225,8 +225,9 @@ public final class GuicePluginManager {
 	}
 
 	public void shutdown() {
-		gateFactory.closeGates();
-
+		if (gateFactory != null) {
+			gateFactory.closeGates();
+		}
 		ProcessEngine.shutdown();
 	}
 
