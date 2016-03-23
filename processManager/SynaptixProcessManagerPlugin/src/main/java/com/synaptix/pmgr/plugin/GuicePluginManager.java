@@ -28,6 +28,7 @@ import com.synaptix.pmgr.model.ProcessType;
 import com.synaptix.pmgr.trigger.gate.GateFactory;
 import com.synaptix.pmgr.trigger.injector.IInjector;
 import com.synaptix.pmgr.trigger.injector.MessageInjector;
+import com.synaptix.tmgr.TriggerEngine;
 
 public final class GuicePluginManager {
 
@@ -228,6 +229,7 @@ public final class GuicePluginManager {
 		if (gateFactory != null) {
 			gateFactory.closeGates();
 		}
+		TriggerEngine.getInstance().shutdown();
 		ProcessEngine.shutdown();
 	}
 
