@@ -438,7 +438,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Skip task
 	 */
 	@Override
-	@Transactional(commit = true)
 	public boolean skipTask(IId idTask, String skipComments) {
 		if (idTask == null) {
 			return false;
