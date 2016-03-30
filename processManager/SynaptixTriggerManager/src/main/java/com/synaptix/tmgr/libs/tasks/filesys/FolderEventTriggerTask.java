@@ -13,15 +13,19 @@ import com.synaptix.tmgr.libs.BaseTriggerEvent;
 import com.synaptix.tmgr.libs.tasks.AbstractTriggerTask;
 
 public class FolderEventTriggerTask extends AbstractTriggerTask {
-	private File folder;
-	Map<String, Long> lmdates;
-	private String lockExtension;
-	public static String STOP_FILE = "trigger.stop";
+
+	public static final String STOP_FILE = "trigger.stop"; //$NON-NLS-1$
+
+	final Map<String, Long> lmdates;
+	private final File folder;
+	private final String lockExtension;
+	private final File stopFile;
 
 	public FolderEventTriggerTask(File folder, String lockExtension) {
 		this.folder = folder;
-		lmdates = new HashMap<String, Long>();
+		this.lmdates = new HashMap<String, Long>();
 		this.lockExtension = lockExtension;
+		this.stopFile = new File(folder, STOP_FILE);
 	}
 
 	/*
@@ -31,8 +35,6 @@ public class FolderEventTriggerTask extends AbstractTriggerTask {
 	 */
 	@Override
 	public void execute(TriggerEventListener lstnr) {
-		File stopFile = new File(folder, STOP_FILE);
-
 		if (stopFile.exists()) {
 			return;
 		}
@@ -98,13 +100,13 @@ public class FolderEventTriggerTask extends AbstractTriggerTask {
 		long lmd = f.lastModified();
 		Object obj = lmdates.get(f.getName());
 		if (obj == null) {
-			lmdates.put(f.getName(), new Long(lmd));
+			lmdates.put(f.getName(), lmd);
 			return -1;
 		} else {
-			long delta = lmd - ((Long) obj).longValue();
+			long delta = lmd - (Long) obj;
 
 			if (delta > 0) {
-				lmdates.put(f.getName(), new Long(lmd));
+				lmdates.put(f.getName(), lmd);
 			}
 			return delta;
 		}
