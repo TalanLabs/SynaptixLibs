@@ -20,12 +20,12 @@
 	</select>
 	
 	<delete id="deleteAssoTaskChainTaskType">
-		DELETE FROM T_ASSO_TASK_CHAIN_TYPE
-		WHERE ID_TASK_CHAIN = #{idTaskChain,javaType=IId}
-	</delete>
-	
-	<delete id="deleteAssoTaskChainCriteriaTaskChain">
 		delete from t_asso_task_chain_type
+		where id_task_chain = #{idTaskChain,javaType=IId}
+	</delete>
+
+	<delete id="deleteAssoTaskChainCriteriaTaskChain">
+		delete from t_asso_task_chain_crit_chain
 		where id_task_chain_criteria = #{idTaskChainCriteria,javaType=IId}
 	</delete>
 
