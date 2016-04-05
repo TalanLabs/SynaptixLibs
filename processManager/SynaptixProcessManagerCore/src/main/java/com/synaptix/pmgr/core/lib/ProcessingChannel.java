@@ -72,6 +72,9 @@ public class ProcessingChannel extends AbstractChannel implements PluggableChann
 	public HandleReport acceptMessage(Object message, ChannelSlot slot) {
 
 		AgentRunnable agt = new AgentRunnable(agent, message, processPool);
+		if (processPool == null) {
+			throw new NullPointerException("process pool is null for " + agent);
+		}
 		// AgentThread agt = new AgentThread(agent,message,processPool);
 		processPool.newProcess(agt);
 		return new BaseLocalHandleReport("0000", slot, agt);
