@@ -477,6 +477,14 @@ public class JDialogModel {
 		return buttonMap.get(action);
 	}
 
+	public final Dimension getPreferredDialogSize() {
+		return dialog.getPreferredSize();
+	}
+
+	public final Dimension getDialogSize() {
+		return dialog.getSize();
+	}
+
 	private final class DialogWindowListener extends WindowAdapter {
 		@Override
 		public void windowOpened(WindowEvent e) {

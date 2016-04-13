@@ -51,58 +51,34 @@ import com.synaptix.widget.view.swing.dialog.DefaultBeanExtensionDialogCellRende
 
 public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements IBeanDialogView<E> {
 
-	private static final long serialVersionUID = 2124940929569388267L;
-
 	public static final String KEEP_OPENED = "keepOpened";
-
+	private static final long serialVersionUID = 2124940929569388267L;
 	private final Map<IBeanExtensionDialogView<E>, ValidationResult> validatorMap;
 
 	protected E bean;
 
 	protected Map<String, Object> valueMap;
-
-	private JDialogModel dialog;
-
-	private Action acceptAction;
-
-	private Action cancelAction;
-
-	private Action closeAction;
-
 	protected int returnValue;
-
-	private boolean hideListIfAlone;
-
 	protected List<IBeanExtensionDialogView<E>> beanExtensionDialogs;
-
-	private DefaultListModel beanExtensionDialogListModel;
-
 	protected JList list;
-
 	protected JScrollablePanel<JList> listScrollPane;
-
 	protected CardLayout cardLayout;
-
 	protected JPanel cardPanel;
-
 	protected JPanel allPanel;
-
-	private ValidationResultModel validationResultModel;
-
-	private boolean useCardLayout;
-
-	private BeanExtensionDialogCellRenderer<E> beanExtensionDialogCellRenderer = new DefaultBeanExtensionDialogCellRenderer<E>();
-
 	protected boolean readOnly;
-
-	private String id;
-
 	protected String acceptActionLabel;
-
 	protected String cancelActionLabel;
-
 	protected String closeActionLabel;
-
+	private JDialogModel dialog;
+	private Action acceptAction;
+	private Action cancelAction;
+	private Action closeAction;
+	private boolean hideListIfAlone;
+	private DefaultListModel beanExtensionDialogListModel;
+	private ValidationResultModel validationResultModel;
+	private boolean useCardLayout;
+	private BeanExtensionDialogCellRenderer<E> beanExtensionDialogCellRenderer = new DefaultBeanExtensionDialogCellRenderer<E>();
+	private String id;
 	private boolean acceptActionEnabled = false;
 
 	private boolean creation;
@@ -116,7 +92,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 	}
 
 	public DefaultBeanDialog(boolean hideListIfAlone, boolean acceptActionEnabled, String acceptActionLabel, String cancelActionLabel, String closeActionLabel,
-			IBeanExtensionDialogView<E>... beanExtensionDialogs) {
+							 IBeanExtensionDialogView<E>... beanExtensionDialogs) {
 		super();
 
 		this.acceptActionLabel = acceptActionLabel;
@@ -280,7 +256,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 			dialog = new JDialogModel(getComponent(parent), title, subtitle, this, actionTab, new OpenActionListener(), cancelAction);
 		} else {
-			dialog = new JDialogModel(getComponent(parent), title, subtitle, this, new Action[] { closeAction }, new OpenActionListener(), closeAction);
+			dialog = new JDialogModel(getComponent(parent), title, subtitle, this, new Action[]{closeAction}, new OpenActionListener(), closeAction);
 		}
 
 		dialog.setId(id);
@@ -302,7 +278,7 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 	}
 
 	protected Action[] getOthersActions() {
-		return new Action[] {};
+		return new Action[]{};
 	}
 
 	protected boolean showCloseOnly() {
@@ -384,6 +360,41 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 	}
 
+	/**
+	 * Called upon dialog opening
+	 */
+	protected void openDialog() {
+	}
+
+	protected void fillListModel() {
+		beanExtensionDialogListModel.clear();
+		for (IBeanExtensionDialogView<E> ex : beanExtensionDialogs) {
+			beanExtensionDialogListModel.addElement(ex);
+		}
+	}
+
+	/**
+	 * The user clicked on the accept button. Here is the implementation of the save part, if not done elsewhere<br/>
+	 * By default, does nothing, let the caller of the dialog decide what to do
+	 *
+	 * @param close - The user asked the dialog to be closed
+	 */
+	protected void doSave(boolean close) {
+	}
+
+	/**
+	 * When saving, should the dialog be closed?
+	 */
+	protected boolean closeOnAccept() {
+		return true;
+	}
+
+	public interface BeanExtensionDialogCellRenderer<T> {
+
+		public Component getCellRendererComponent(DefaultBeanDialog<T> beanDialog, IBeanExtensionDialogView<T> led, ValidationResult result, boolean isSelected);
+
+	}
+
 	private final class OpenActionListener implements ActionListener {
 
 		@Override
@@ -418,19 +429,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 	}
 
-	/**
-	 * Called upon dialog opening
-	 */
-	protected void openDialog() {
-	}
-
-	protected void fillListModel() {
-		beanExtensionDialogListModel.clear();
-		for (IBeanExtensionDialogView<E> ex : beanExtensionDialogs) {
-			beanExtensionDialogListModel.addElement(ex);
-		}
-	}
-
 	private final class AcceptAction extends AbstractAcceptAction {
 
 		private static final long serialVersionUID = -8520108575061780844L;
@@ -458,16 +456,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 
 			doSave(close);
 		}
-	}
-
-	/**
-	 * The user clicked on the accept button. Here is the implementation of the save part, if not done elsewhere<br/>
-	 * By default, does nothing, let the caller of the dialog decide what to do
-	 *
-	 * @param close
-	 *            - The user asked the dialog to be closed
-	 */
-	protected void doSave(boolean close) {
 	}
 
 	private final class CancelAction extends AbstractCancelAction {
@@ -528,12 +516,6 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 		}
 	}
 
-	public interface BeanExtensionDialogCellRenderer<T> {
-
-		public Component getCellRendererComponent(DefaultBeanDialog<T> beanDialog, IBeanExtensionDialogView<T> led, ValidationResult result, boolean isSelected);
-
-	}
-
 	protected final class BeanExtensionDialogListCellRenderer implements ListCellRenderer {
 
 		@Override
@@ -562,6 +544,12 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 				cardPanel.repaint();
 				cardLayout.show(cardPanel, "toto"); //$NON-NLS-1$
 
+				Dimension prefSize = dialog.getPreferredDialogSize();
+				Dimension size = dialog.getDialogSize();
+				if (prefSize.getWidth() > size.getWidth() || prefSize.getHeight() > size.getHeight()) {
+					dialog.pack();
+				}
+
 				// cardLayout.show(cardPanel, b.getId());
 			}
 		}
@@ -577,12 +565,5 @@ public class DefaultBeanDialog<E> extends WaitComponentFeedbackPanel implements 
 			int index = beanExtensionDialogListModel.indexOf(source);
 			beanExtensionDialogListModel.set(index, source);
 		}
-	}
-
-	/**
-	 * When saving, should the dialog be closed?
-	 */
-	protected boolean closeOnAccept() {
-		return true;
 	}
 }
