@@ -185,19 +185,28 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 								ServiceException err = (ServiceException) t.getCause();
 								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
-
 									_cloneEntity(entity);
 								} else {
 									getViewFactory().showErrorMessageDialog(view, t);
+									if (reopenIfException()) {
+										_cloneEntity(entity);
+									}
 								}
 							} else {
 								getViewFactory().showErrorMessageDialog(view, t);
+								if (reopenIfException()) {
+									_cloneEntity(entity);
+								}
 							}
 						}
 					});
 				}
 			}
 		});
+	}
+
+	protected boolean reopenIfException() {
+		return false;
 	}
 
 	protected void addEntitySuccess(IId idEntity) {
@@ -283,9 +292,15 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 									_editEntity(entity);
 								} else {
 									getViewFactory().showErrorMessageDialog(view, t);
+									if (reopenIfException()) {
+										_editEntity(entity);
+									}
 								}
 							} else {
 								getViewFactory().showErrorMessageDialog(view, t);
+								if (reopenIfException()) {
+									_editEntity(entity);
+								}
 							}
 						}
 					});
@@ -400,9 +415,15 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 									_cloneEntity(entity);
 								} else {
 									getViewFactory().showErrorMessageDialog(getView(), t);
+									if (reopenIfException()) {
+										_cloneEntity(entity);
+									}
 								}
 							} else {
 								getViewFactory().showErrorMessageDialog(getView(), t);
+								if (reopenIfException()) {
+									_cloneEntity(entity);
+								}
 							}
 						}
 					});
