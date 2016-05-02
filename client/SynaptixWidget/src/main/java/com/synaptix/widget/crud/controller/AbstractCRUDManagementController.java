@@ -505,7 +505,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	@Override
 	public void saveBean(final E entity, final IView parent, final AbstractCRUDDialogController.CloseAction closeAction) {
-		AbstractSavingViewWorker<E> viewWorker = new AbstractSavingViewWorker<E>() {
+		getViewFactory().waitFullComponentViewWorker(parent != null ? parent : getView(), new AbstractSavingViewWorker<E>() {
 			@Override
 			protected E doSaving() throws Exception {
 				IId id = editCRUDEntity(entity);
@@ -557,7 +557,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 					displayException(parent, t);
 				}
 			}
-		};
+		});
 	}
 
 	@Override
