@@ -32,26 +32,15 @@ import com.synaptix.widget.viewworker.view.AbstractSavingViewWorker;
 /**
  * A CRUD Controller, create a table and filter and action CRUD
  *
- * @param <V>
- *            View factory
- * @param <E>
- *            CRUD Entity
- * @param <G>
- *            Pagination entity which
+ * @param <V> View factory
+ * @param <E> CRUD Entity
+ * @param <G> Pagination entity which
  */
 public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFactory, E extends IEntity, G extends IEntity> extends AbstractComponentsManagementController<V, G> implements
 		ICRUDManagementController<G>, ICRUDContext<E> {
 
-	public enum DialogAction {
-
-		NEW, EDIT, SHOW, CLONE
-
-	}
-
 	protected final Class<E> crudComponentClass;
-
 	private final Class<? extends ICRUDEntityService<E>> crudEntityServiceClass;
-
 	private int selectedTabIndex;
 
 	public AbstractCRUDManagementController(V viewFactory, Class<E> crudComponentClass, Class<G> paginationComponentClass) {
@@ -59,7 +48,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	public AbstractCRUDManagementController(V viewFactory, Class<E> crudComponentClass, Class<G> paginationComponentClass, Class<? extends ICRUDEntityService<E>> crudEntityServiceClass,
-			Class<? extends IPaginationService<G>> paginationServiceClass) {
+											Class<? extends IPaginationService<G>> paginationServiceClass) {
 		super(viewFactory, paginationComponentClass, paginationServiceClass);
 
 		this.crudComponentClass = crudComponentClass;
@@ -68,15 +57,11 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Create a CRUD management view descriptor. NOT CALL use getCRUDManagementViewDescriptor()
-	 *
-	 * @return
 	 */
 	protected abstract ICRUDManagementViewDescriptor<G> createCRUDManagementViewDescriptor();
 
 	/**
 	 * Get a CRUD manamgement view descriptor
-	 *
-	 * @return
 	 */
 	protected final ICRUDManagementViewDescriptor<G> getCRUDManagementViewDescriptor() {
 		return (ICRUDManagementViewDescriptor<G>) getComponentsManagementViewDescriptor();
@@ -89,17 +74,11 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Create a CRUD dialog controller
-	 *
-	 * @param dialogAction
-	 * @param entity
-	 * @return
 	 */
 	protected abstract ICRUDDialogController<E> newCRUDDialogController(DialogAction dialogAction, E entity);
 
 	/**
 	 * Get a CRUD Entity service
-	 *
-	 * @return
 	 */
 	protected final ICRUDEntityService<E> getCRUDEntityService() {
 		return getServiceFactory().getService(crudEntityServiceClass);
@@ -107,8 +86,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Get a entity service
-	 *
-	 * @return
 	 */
 	protected final IEntityService getEntityService() {
 		return getServiceFactory().getService(IEntityService.class);
@@ -116,9 +93,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Get a unicity error
-	 *
-	 * @param description
-	 * @return
 	 */
 	protected String getUnicityError(String description) {
 		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().unicityConstraintException();
@@ -187,13 +161,13 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_cloneEntity(entity);
 								} else {
-									getViewFactory().showErrorMessageDialog(view, t);
+									displayException(view, t);
 									if (reopenIfException()) {
 										_cloneEntity(entity);
 									}
 								}
 							} else {
-								getViewFactory().showErrorMessageDialog(view, t);
+								displayException(view, t);
 								if (reopenIfException()) {
 									_cloneEntity(entity);
 								}
@@ -203,6 +177,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 				}
 			}
 		});
+	}
+
+	protected void displayException(IView view, Throwable t) {
+		getViewFactory().showErrorMessageDialog(view, t);
 	}
 
 	protected boolean reopenIfException() {
@@ -241,8 +219,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Show a dialog for edit entity
-	 *
-	 * @param paginationEntity
 	 */
 	@Override
 	@Deprecated
@@ -291,13 +267,13 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_editEntity(entity);
 								} else {
-									getViewFactory().showErrorMessageDialog(view, t);
+									displayException(view, t);
 									if (reopenIfException()) {
 										_editEntity(entity);
 									}
 								}
 							} else {
-								getViewFactory().showErrorMessageDialog(view, t);
+								displayException(view, t);
 								if (reopenIfException()) {
 									_editEntity(entity);
 								}
@@ -316,8 +292,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Show a dialog for confirmation delete entity
-	 *
-	 * @param paginationEntity
 	 */
 	@Override
 	public void deleteEntity(final G paginationEntity) {
@@ -357,7 +331,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 			@Override
 			public void fail(Throwable t) {
-				getViewFactory().showErrorMessageDialog(view, t);
+				displayException(view, t);
 			}
 		});
 	}
@@ -368,8 +342,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Show a dialog for clone entity
-	 *
-	 * @param paginationEntity
 	 */
 	@Override
 	public void cloneEntity(final G paginationEntity) {
@@ -414,13 +386,13 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_cloneEntity(entity);
 								} else {
-									getViewFactory().showErrorMessageDialog(getView(), t);
+									displayException(view, t);
 									if (reopenIfException()) {
 										_cloneEntity(entity);
 									}
 								}
 							} else {
-								getViewFactory().showErrorMessageDialog(getView(), t);
+								displayException(view, t);
 								if (reopenIfException()) {
 									_cloneEntity(entity);
 								}
@@ -438,10 +410,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Method called for loading a entity with pagination entity
-	 *
-	 * @param id
-	 * @param resultCallback
-	 * @return
 	 */
 	protected final IWaitWorker loadEntity(final IId id, final IResultCallback<E> resultCallback) {
 		if (id == null) {
@@ -462,7 +430,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 				@Override
 				public void fail(Throwable t) {
-					getViewFactory().showErrorMessageDialog(getSearchComponentsView(), t);
+					displayException(getSearchComponentsView(), t);
 					resultCallback.setResult(null);
 				}
 			});
@@ -471,10 +439,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Load a full entity from database. This method is called within a view worker
-	 *
-	 * @param crudComponentClass
-	 * @param id
-	 * @return entity
 	 */
 	protected E loadFullEntity(Class<E> crudComponentClass, IId id) {
 		return getEntityService().findEntityById(crudComponentClass, id);
@@ -482,9 +446,6 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 	/**
 	 * Edit a entity, with other view
-	 *
-	 * @param view
-	 * @param id
 	 */
 	public void editEntity(final IView view, IId id) {
 		loadEntity(id, new IResultCallback<E>() {
@@ -543,8 +504,8 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
-	public void saveBean(final E entity, IView parent, final AbstractCRUDDialogController.CloseAction closeAction) {
-		getViewFactory().waitFullComponentViewWorker(parent != null ? parent : getView(), new AbstractSavingViewWorker<E>() {
+	public void saveBean(final E entity, final IView parent, final AbstractCRUDDialogController.CloseAction closeAction) {
+		AbstractSavingViewWorker<E> viewWorker = new AbstractSavingViewWorker<E>() {
 			@Override
 			protected E doSaving() throws Exception {
 				IId id = editCRUDEntity(entity);
@@ -564,14 +525,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						@Override
 						public boolean searchPerformed(Map<String, Object> valueFilterMap) {
 							switch (closeAction) {
-							case SHOW_PREVIOUS:
-								showPrevious(entity.getId());
-								break;
-							case SHOW_NEXT:
-								showNext(entity.getId());
-								break;
-							default:
-								break;
+								case SHOW_PREVIOUS:
+									showPrevious(entity.getId());
+									break;
+								case SHOW_NEXT:
+									showNext(entity.getId());
+									break;
+								default:
+									break;
 							}
 
 							return true;
@@ -590,18 +551,13 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 						// _editEntity(entity); // we are in browse mode
 					} else {
-						getViewFactory().showErrorMessageDialog(getView(), t);
+						displayException(parent, t);
 					}
 				} else {
-					getViewFactory().showErrorMessageDialog(getView(), t);
+					displayException(parent, t);
 				}
 			}
-		});
-	}
-
-	@Override
-	public void setSelectedTabIndex(int selectedTabIndex) {
-		this.selectedTabIndex = selectedTabIndex;
+		};
 	}
 
 	@Override
@@ -610,8 +566,19 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	@Override
+	public void setSelectedTabIndex(int selectedTabIndex) {
+		this.selectedTabIndex = selectedTabIndex;
+	}
+
+	@Override
 	public boolean askSaveChanges(IView parent) {
 		return getViewFactory().showQuestionMessageDialog(parent, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().confirmation(),
 				StaticWidgetHelper.getSynaptixWidgetConstantsBundle().thereAreChangesSaveThem());
+	}
+
+	public enum DialogAction {
+
+		NEW, EDIT, SHOW, CLONE
+
 	}
 }
