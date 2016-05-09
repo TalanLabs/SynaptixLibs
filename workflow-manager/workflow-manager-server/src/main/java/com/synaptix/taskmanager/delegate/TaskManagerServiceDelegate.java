@@ -90,7 +90,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Clusters that should be restarted in task manager
 	 */
-	private ThreadLocal<Set<IId>> clusterIdsQueue = new ThreadLocal<Set<IId>>();
+	private ThreadLocal<Set<IId>> clusterIdsQueue = new InheritableThreadLocal<Set<IId>>();
 
 	@Inject
 	public TaskManagerServiceDelegate() {

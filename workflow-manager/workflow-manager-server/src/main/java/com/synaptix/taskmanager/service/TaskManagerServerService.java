@@ -27,6 +27,7 @@ import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.mybatis.service.EntityServerService;
 import com.synaptix.mybatis.service.Transactional;
 import com.synaptix.server.service.ServiceResultBuilder;
+import com.synaptix.server.service.ServiceResultContainer;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.dao.mapper.TaskMapper;
 import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;
@@ -186,13 +187,13 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	public IServiceResult<Void> startEngine(IId idTaskCluster) {
-		ServiceResultBuilder<TaskManagerErrorEnum> serviceResultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
+		ServiceResultContainer serviceResultContainer = new ServiceResultContainer();
 
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("TM - StartEngine");
 		}
 		if (idTaskCluster == null) {
-			return serviceResultBuilder.compileResult(null);
+			return serviceResultContainer.compileResult(null);
 		}
 
 		boolean restart = false;
@@ -222,7 +223,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					if (taskService == null) {
 						errorMessage = "Service code does not exist";
 					} else {
-						TaskExecutionResult taskExecutionResult = executeTask(taskService, task, serviceResultBuilder);
+						TaskExecutionResult taskExecutionResult = serviceResultContainer.ingest(executeTask(taskService, task));
 						if (taskExecutionResult.stopAndRestart) {
 							task = entityServerService.findEntityById(ITask.class, task.getId());
 							restart = true;
@@ -276,8 +277,8 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			}
 		}
 
-		serviceResultBuilder.ingest(restart());
-		return serviceResultBuilder.compileResult(null);
+		serviceResultContainer.ingest(restart());
+		return serviceResultContainer.compileResult(null);
 	}
 
 	private void setTaskNothing(ITask task, String errorMessage) {
@@ -292,7 +293,8 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 	}
 
-	private TaskExecutionResult executeTask(ITaskService taskService, ITask task, ServiceResultBuilder<TaskManagerErrorEnum> serviceResultBuilder) {
+	private IServiceResult<TaskExecutionResult> executeTask(ITaskService taskService, ITask task) {
+		ServiceResultBuilder<TaskManagerErrorEnum> serviceResultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
 		TaskExecutionResult taskExecutionResult = new TaskExecutionResult();
 
 		try {
@@ -337,7 +339,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			updateTask(task);
 		}
 
-		return taskExecutionResult;
+		return serviceResultBuilder.compileResult(taskExecutionResult);
 	}
 
 	private void updateTaskWithResult(ITask task, ITaskService.IExecutionResult executionResult) {
