@@ -280,7 +280,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			}
 		}
 
-		serviceResultContainer.ingest(restart());
+		errorSet.addAll(serviceResultContainer.ingest(restart()));
 		return serviceResultContainer.compileResult(errorSet);
 	}
 
@@ -474,13 +474,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
-	public IServiceResult<Void> restart() {
+	public IServiceResult<Set<IError>> restart() {
+		Set<IError> errorSet = new HashSet<IError>();
 		ServiceResultBuilder<TaskManagerErrorEnum> resultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
 		IId nextFromQueue = taskManagerServiceDelegate.getNextFromQueue();
 		if (nextFromQueue != null) {
-			resultBuilder.ingest(startEngine(nextFromQueue));
+			errorSet.addAll(resultBuilder.ingest(startEngine(nextFromQueue)));
 		}
-		return resultBuilder.compileResult(null);
+		return resultBuilder.compileResult(errorSet);
 	}
 
 	@Override

@@ -71,7 +71,10 @@ public interface ITaskManagerService {
 
 	<E extends Enum<E>, F extends ITaskObject<E>> void cancelTaskObject(F object);
 
-	IServiceResult<Void> restart();
+	/**
+	 * Raised errors in the set comes from the business part. The service result contains technical errors.
+	 */
+	IServiceResult<Set<IError>> restart();
 
 	<E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(F taskObject);
 
