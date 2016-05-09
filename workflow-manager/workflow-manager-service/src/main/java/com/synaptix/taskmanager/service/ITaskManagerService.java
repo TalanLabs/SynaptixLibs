@@ -13,24 +13,29 @@ import com.synaptix.taskmanager.model.ITodo;
 public interface ITaskManagerService {
 
 	/**
-	 * Starts task manager engine on task object in parameter. If the object is not already linked to a cluster, creates the task cluster.
+	 * Starts task manager engine on task object in parameter. If the object is not already linked to a cluster, creates the task cluster.<br/>
+	 * Raised errors in the set comes from the business part. The service result contains technical errors.
 	 */
-	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(F taskObject);
+	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(F taskObject);
 
 	/**
-	 * Starts the task manager engine. Links the object to a new cluster if the object doesn't already have one.
-	 * 
-	 * @param idTaskObject
-	 *            ID of the task object.
+	 * Starts the task manager engine. Links the object to a new cluster if the object doesn't already have one.<br/>
+	 * Raised errors in the set comes from the business part. The service result contains technical errors.
+	 *
+	 * @param idTaskObject ID of the task object.
 	 */
-	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(IId idTaskObject, Class<F> objectClass);
+	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(IId idTaskObject, Class<F> objectClass);
 
 	/**
-	 * Start engine with cluster
+	 * Start engine with cluster<br/>
+	 * Raised errors in the set comes from the business part. The service result contains technical errors.
 	 */
-	IServiceResult<Void> startEngine(IId idTaskCluster);
+	IServiceResult<Set<IError>> startEngine(IId idTaskCluster);
 
-	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<IId> idTaskObjects, Class<F> objectClass);
+	/**
+	 * Raised errors in the set comes from the business part. The service result contains technical errors.
+	 */
+	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(List<IId> idTaskObjects, Class<F> objectClass);
 
 	/**
 	 * Add task object to task cluster same taskObjectWithCluster, no start engine
@@ -44,6 +49,7 @@ public interface ITaskManagerService {
 
 	/**
 	 * Skip a task if skippable
+	 *
 	 * @return true if skipped
 	 */
 	boolean skipTask(IId idTask, String skipComments);
@@ -77,7 +83,7 @@ public interface ITaskManagerService {
 	 * Returns the shortest path between two statuses.
 	 *
 	 * @param currentStatus start status
-	 * @param nextStatus target status
+	 * @param nextStatus    target status
 	 * @return Empty String if no path was found
 	 */
 	String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus);

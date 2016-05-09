@@ -3,6 +3,7 @@ package com.synaptix.taskmanager.service;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Starts engine, creates cluster if cluster does not exist
 	 */
 	@Override
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(F taskObject) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(F taskObject) {
 		if (taskObject == null) {
 			return new ServiceResultBuilder<TaskManagerErrorEnum>().compileResult(null);
 		}
@@ -80,7 +81,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Start engine, create cluster if cluster not exist
 	 */
 	@Override
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(IId idTaskObject, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(IId idTaskObject, Class<F> objectClass) {
 		if (idTaskObject == null) {
 			return new ServiceResultBuilder<TaskManagerErrorEnum>().compileResult(null);
 		}
@@ -111,7 +112,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	 * Starts engine, creates cluster if cluster does not exist
 	 */
 	@Override
-	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Void> startEngine(List<IId> idTaskObjects, Class<F> objectClass) {
+	public <E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(List<IId> idTaskObjects, Class<F> objectClass) {
 		ServiceResultBuilder<TaskManagerErrorEnum> resultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
 		for (IId idTaskObject : idTaskObjects) {
 			resultBuilder.ingest(startEngine(idTaskObject, objectClass));
@@ -186,7 +187,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
-	public IServiceResult<Void> startEngine(IId idTaskCluster) {
+	public IServiceResult<Set<IError>> startEngine(IId idTaskCluster) {
 		ServiceResultContainer serviceResultContainer = new ServiceResultContainer();
 
 		if (LOG.isDebugEnabled()) {
@@ -197,6 +198,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 
 		boolean restart = false;
+		Set<IError> errorSet = new HashSet<IError>();
 
 		// Find all current task for cluster
 		List<ITask> tasks = selectCurrentTasksForCluster(idTaskCluster);
@@ -230,6 +232,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 						}
 						done = taskExecutionResult.done;
 						errorMessage = taskExecutionResult.errorMessage;
+						errorSet.addAll(taskExecutionResult.errorSet);
 					}
 				}
 
@@ -278,7 +281,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 
 		serviceResultContainer.ingest(restart());
-		return serviceResultContainer.compileResult(null);
+		return serviceResultContainer.compileResult(errorSet);
 	}
 
 	private void setTaskNothing(ITask task, String errorMessage) {
@@ -323,6 +326,9 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					taskExecutionResult.errorMessage = null;
 				}
 				saveErrors(task, executionResult.getErrors());
+				if (executionResult.getErrors() != null) {
+					taskExecutionResult.errorSet.addAll(executionResult.getErrors());
+				}
 			}
 		} catch (Throwable t) {
 			if ((t instanceof VersionConflictDaoException) && (t.getCause() instanceof PersistenceException) && (t.getCause().getCause() instanceof SQLException)
@@ -518,6 +524,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	private class TaskExecutionResult {
+		public final Set<IError> errorSet = new HashSet<IError>();
 		public boolean done;
 		public String errorMessage;
 		public boolean stopAndRestart;
