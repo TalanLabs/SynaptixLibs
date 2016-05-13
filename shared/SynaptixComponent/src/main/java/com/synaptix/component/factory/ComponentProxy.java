@@ -1,30 +1,20 @@
 package com.synaptix.component.factory;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamField;
-import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.synaptix.component.IComponent;
+import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescriptor;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.synaptix.component.IComponent;
-import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescriptor;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.Map.Entry;
 
 class ComponentProxy implements InvocationHandler, Serializable {
 
@@ -420,17 +410,36 @@ class ComponentProxy implements InvocationHandler, Serializable {
 
 	protected String buildToString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getDescriptor().getName()).append("@").append(this.hashCode()).append("[");
+		sb.append(getDescriptor().getName()).append("@").append(this.hashCode()).append(" {").append("\n");
 		boolean first = true;
 		for (Entry<String, Object> entry : propertyValueMap.entrySet()) {
 			if (!first) {
-				sb.append(", ");
+				sb.append(",\n");
 			} else {
 				first = false;
 			}
-			sb.append(entry.getKey()).append("=").append(entry.getValue());
+			String text = null;
+			if (entry.getValue() != null) {
+				Object value = entry.getValue();
+				if (value.getClass().isArray()) {
+					Object[] objectArray = { value };
+					String arrayString = Arrays.deepToString(objectArray);
+					text = arrayString.substring(1, arrayString.length() - 1);
+				} else {
+					if (entry.getValue() instanceof String) {
+						text = "\"" + entry.getValue().toString() + "\"";
+					} else {
+						text = value.toString();
+					}
+				}
+				if (text != null) {
+					text = text.replaceAll("\n", "\n\t");
+				}
+			}
+
+			sb.append("\t\"").append(entry.getKey()).append("\" : ").append(text);
 		}
-		sb.append("]");
+		sb.append("\n}");
 		return sb.toString();
 	}
 
