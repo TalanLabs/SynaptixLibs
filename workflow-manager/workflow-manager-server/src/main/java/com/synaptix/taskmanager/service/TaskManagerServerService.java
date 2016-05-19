@@ -188,15 +188,15 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	public IServiceResult<Set<IError>> startEngine(IId idTaskCluster) {
-		ServiceResultContainer serviceResultContainer = new ServiceResultContainer();
 
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("TM - StartEngine");
 		}
 		if (idTaskCluster == null) {
-			return serviceResultContainer.compileResult(null);
+			return restart();
 		}
 
+		ServiceResultContainer serviceResultContainer = new ServiceResultContainer();
 		boolean restart = false;
 		Set<IError> errorSet = new HashSet<IError>();
 
@@ -238,7 +238,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 				if (done) {
 					TasksLists tasksLists = setTaskDone(task);
-					// Add new tasks to top of deque
+					// Add new tasks to top of the queue
 					for (ITask iTask : tasksLists.getNewTasksToDo()) {
 						tasksQueue.addFirst(iTask);
 					}
@@ -476,12 +476,12 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	@Override
 	public IServiceResult<Set<IError>> restart() {
 		Set<IError> errorSet = new HashSet<IError>();
-		ServiceResultBuilder<TaskManagerErrorEnum> resultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
+		ServiceResultBuilder<TaskManagerErrorEnum> serviceResultBuilder = new ServiceResultBuilder<TaskManagerErrorEnum>();
 		IId nextFromQueue = taskManagerServiceDelegate.getNextFromQueue();
 		if (nextFromQueue != null) {
-			errorSet.addAll(resultBuilder.ingest(startEngine(nextFromQueue)));
+			errorSet.addAll(serviceResultBuilder.ingest(startEngine(nextFromQueue)));
 		}
-		return resultBuilder.compileResult(errorSet);
+		return serviceResultBuilder.compileResult(errorSet);
 	}
 
 	@Override
