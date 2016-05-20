@@ -66,7 +66,7 @@ public final class ComponentHelper {
 	 * Extract property name in components list
 	 */
 	@SuppressWarnings("unchecked")
-	public static <F, E extends IComponent> Collection<F> extractValues(Collection<E> components, String propertyName) {
+	public static <F, E extends IComponent> List<F> extractValues(Collection<E> components, String propertyName) {
 		List<F> res = new ArrayList<F>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
