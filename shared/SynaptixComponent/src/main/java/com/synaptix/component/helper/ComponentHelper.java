@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ public final class ComponentHelper {
 	 * Build a components map with list and propertyName
 	 */
 	@SuppressWarnings("unchecked")
-	public static <F, E extends IComponent> Map<F, List<E>> buildComponentsMap(List<E> components, String keyPropertyName) {
+	public static <F, E extends IComponent> Map<F, List<E>> buildComponentsMap(Collection<E> components, String keyPropertyName) {
 		Map<F, List<E>> map = new HashMap<F, List<E>>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
@@ -65,7 +66,7 @@ public final class ComponentHelper {
 	 * Extract property name in components list
 	 */
 	@SuppressWarnings("unchecked")
-	public static <F, E extends IComponent> List<F> extractValues(List<E> components, String propertyName) {
+	public static <F, E extends IComponent> Collection<F> extractValues(Collection<E> components, String propertyName) {
 		List<F> res = new ArrayList<F>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
@@ -79,7 +80,7 @@ public final class ComponentHelper {
 	/**
 	 * Find a component by propertyName and value
 	 */
-	public static <E extends IComponent> E findComponentBy(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> E findComponentBy(Collection<E> components, String propertyName, Object value) {
 		E res = null;
 		if (components != null && !components.isEmpty()) {
 			Iterator<E> it = components.iterator();
@@ -97,7 +98,7 @@ public final class ComponentHelper {
 	/**
 	 * Get index for component list
 	 */
-	public static <E extends IComponent> int indexComponentOf(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> int indexComponentOf(Collection<E> components, String propertyName, Object value) {
 		int res = -1;
 		if (value != null && components != null && !components.isEmpty()) {
 			int i = 0;
@@ -117,7 +118,7 @@ public final class ComponentHelper {
 	/**
 	 * Find all components by propertyName and value
 	 */
-	public static <E extends IComponent> List<E> findComponentsBy(List<E> components, String propertyName, Object value) {
+	public static <E extends IComponent> List<E> findComponentsBy(Collection<E> components, String propertyName, Object value) {
 		List<E> res = new ArrayList<E>();
 		if (components != null && !components.isEmpty()) {
 			for (E component : components) {
@@ -301,7 +302,7 @@ public final class ComponentHelper {
 	/**
 	 * Convert a list of component extended to list of component
 	 */
-	public static <E extends IComponent, G extends E> List<E> convertComponentExtendedToComponent(Class<E> componentClass, List<G> componentExtendeds) {
+	public static <E extends IComponent, G extends E> List<E> convertComponentExtendedToComponent(Class<E> componentClass, Collection<G> componentExtendeds) {
 		if (componentExtendeds == null) {
 			return null;
 		}
