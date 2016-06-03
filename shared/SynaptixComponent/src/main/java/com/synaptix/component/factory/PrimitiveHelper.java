@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class PrimitiveHelper {
 
-	public static final Object determineValue(Class<?> type) {
+	public static Object determineValue(Class<?> type) {
 		if (byte.class.equals(type)) {
 			return new Byte((byte) 0);
 		} else if (short.class.equals(type)) {
@@ -26,7 +26,7 @@ public class PrimitiveHelper {
 		}
 	}
 
-	public static final Class<?> determineClass(Class<?> type) {
+	public static Class<?> determineClass(Class<?> type) {
 		if (byte.class.equals(type)) {
 			return Byte.class;
 		} else if (short.class.equals(type)) {
@@ -50,7 +50,7 @@ public class PrimitiveHelper {
 		}
 	}
 
-	public static final int arrayHashCode(Class<?> type, Object value) {
+	public static int arrayHashCode(Class<?> type, Object value) {
 		Class<?> clazz = type.getComponentType();
 		if (clazz.isPrimitive()) {
 			if (clazz == int.class) {
@@ -77,7 +77,7 @@ public class PrimitiveHelper {
 		}
 	}
 
-	public static final boolean arrayEquals(Class<?> type, Object value1, Object value2) {
+	public static boolean arrayEquals(Class<?> type, Object value1, Object value2) {
 		Class<?> clazz = type.getComponentType();
 		if (clazz.isPrimitive()) {
 			if (clazz == int.class) {

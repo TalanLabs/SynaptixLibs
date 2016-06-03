@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -28,25 +29,17 @@ import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescript
 
 class ComponentProxy implements InvocationHandler, Serializable {
 
-	private static final ObjectStreamField[] serialPersistentFields = { new ObjectStreamField("componentClassName", String.class), new ObjectStreamField("propertyValueMap", Map.class) };
-
-	private static Log LOG = LogFactory.getLog(ComponentProxy.class);
-
+	private static final ObjectStreamField[] serialPersistentFields = {new ObjectStreamField("componentClassName", String.class), new ObjectStreamField("propertyValueMap", Map.class)};
 	private static final long serialVersionUID = -1210441501657033411L;
-
+	private static Log LOG = LogFactory.getLog(ComponentProxy.class);
 	protected Class<? extends IComponent> componentClass;
 
 	protected String componentClassName;
-
-	private transient ComponentDescriptor componentDescriptor;
-
-	private transient List<PropertyChangeListener> listeners;
-
-	private transient Map<String, List<PropertyChangeListener>> listenerMap;
-
-	private transient Map<Class<?>, Object> computeInstanceMap;
-
 	protected Map<String, Object> propertyValueMap;
+	private transient ComponentDescriptor componentDescriptor;
+	private transient List<PropertyChangeListener> listeners;
+	private transient Map<String, List<PropertyChangeListener>> listenerMap;
+	private transient Map<Class<?>, Object> computeInstanceMap;
 
 	@SuppressWarnings("unchecked")
 	ComponentProxy(String componentClassName) throws ClassNotFoundException {
@@ -131,64 +124,64 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	protected Object invoke(ComponentBeanMethod bm, Object proxy, Method method, Object[] args) throws Throwable {
 		Object res = null;
 		switch (bm) {
-		case COMPUTED_GET:
-			res = computed(proxy, bm.inferName(method) + bm.name(), args);
-			break;
-		case COMPUTED_SET:
-			res = computed(proxy, bm.inferName(method) + bm.name(), args);
-			break;
-		case GET:
-			res = getter(proxy, bm.inferName(method));
-			break;
-		case SET:
-			setter(proxy, bm.inferName(method), args[0]);
-			break;
-		case TO_STRING:
-			res = buildToString();
-			break;
-		case EQUALS:
-			res = isEquals(proxy, args[0]);
-			break;
-		case HASHCODE:
-			res = getHashCode(proxy);
-			break;
-		case ADD_PROPERTY_CHANGE_LISTENER:
-			addPropertyChangeListener((PropertyChangeListener) args[0]);
-			break;
-		case ADD_PROPERTY_CHANGE_LISTENER_WITH_PROPERTY_NAME:
-			addPropertyChangeListener((String) args[0], (PropertyChangeListener) args[1]);
-			break;
-		case REMOVE_PROPERTY_CHANGE_LISTENER:
-			removePropertyChangeListener((PropertyChangeListener) args[0]);
-			break;
-		case REMOVE_PROPERTY_CHANGE_LISTENER_WITH_PROPERTY_NAME:
-			removePropertyChangeListener((String) args[0], (PropertyChangeListener) args[1]);
-			break;
-		case STRAIGHT_GET_PROPERTIES:
-			res = straightGetProperties(proxy);
-			break;
-		case STRAIGHT_GET_PROPERTY:
-			res = straightGetProperty(proxy, (String) args[0]);
-			break;
-		case STRAIGHT_GET_PROPERTY_NAMES:
-			res = straightGetPropertyNames(proxy);
-			break;
-		case STRAIGHT_GET_PROPERTY_CLASS:
-			res = straightGetPropertyClass(proxy, (String) args[0]);
-			break;
-		case STRAIGHT_SET_PROPERTIES:
-			straightSetProperties(proxy, (Map<String, Object>) args[0]);
-			break;
-		case STRAIGHT_SET_PROPERTY:
-			straightSetProperty(proxy, (String) args[0], args[1]);
-			break;
-		case CALL:
-			if (method.getDeclaringClass() == Object.class) {
-				res = method.invoke(this, args);
-			}
-			break;
-		default:
-			break;
+			case COMPUTED_GET:
+				res = computed(proxy, bm.inferName(method) + bm.name(), args);
+				break;
+			case COMPUTED_SET:
+				res = computed(proxy, bm.inferName(method) + bm.name(), args);
+				break;
+			case GET:
+				res = getter(proxy, bm.inferName(method));
+				break;
+			case SET:
+				setter(proxy, bm.inferName(method), args[0]);
+				break;
+			case TO_STRING:
+				res = buildToString();
+				break;
+			case EQUALS:
+				res = isEquals(proxy, args[0]);
+				break;
+			case HASHCODE:
+				res = getHashCode(proxy);
+				break;
+			case ADD_PROPERTY_CHANGE_LISTENER:
+				addPropertyChangeListener((PropertyChangeListener) args[0]);
+				break;
+			case ADD_PROPERTY_CHANGE_LISTENER_WITH_PROPERTY_NAME:
+				addPropertyChangeListener((String) args[0], (PropertyChangeListener) args[1]);
+				break;
+			case REMOVE_PROPERTY_CHANGE_LISTENER:
+				removePropertyChangeListener((PropertyChangeListener) args[0]);
+				break;
+			case REMOVE_PROPERTY_CHANGE_LISTENER_WITH_PROPERTY_NAME:
+				removePropertyChangeListener((String) args[0], (PropertyChangeListener) args[1]);
+				break;
+			case STRAIGHT_GET_PROPERTIES:
+				res = straightGetProperties(proxy);
+				break;
+			case STRAIGHT_GET_PROPERTY:
+				res = straightGetProperty(proxy, (String) args[0]);
+				break;
+			case STRAIGHT_GET_PROPERTY_NAMES:
+				res = straightGetPropertyNames(proxy);
+				break;
+			case STRAIGHT_GET_PROPERTY_CLASS:
+				res = straightGetPropertyClass(proxy, (String) args[0]);
+				break;
+			case STRAIGHT_SET_PROPERTIES:
+				straightSetProperties(proxy, (Map<String, Object>) args[0]);
+				break;
+			case STRAIGHT_SET_PROPERTY:
+				straightSetProperty(proxy, (String) args[0], args[1]);
+				break;
+			case CALL:
+				if (method.getDeclaringClass() == Object.class) {
+					res = method.invoke(this, args);
+				}
+				break;
+			default:
+				break;
 		}
 		if (res == null && method.getReturnType().isPrimitive() && !method.getReturnType().equals(void.class)) {
 			throw new IllegalArgumentException("Method " + method + " return a primitive, result is null");
@@ -236,7 +229,7 @@ class ComponentProxy implements InvocationHandler, Serializable {
 	protected void straightSetProperty(Object proxy, String propertyName, Object value) {
 		try {
 			if (getDescriptor().getComputedMethodDescriptor(propertyName + ComponentBeanMethod.COMPUTED_SET.name()) != null) {
-				computed(proxy, propertyName + ComponentBeanMethod.COMPUTED_SET.name(), new Object[] { value });
+				computed(proxy, propertyName + ComponentBeanMethod.COMPUTED_SET.name(), new Object[]{value});
 				return;
 			}
 		} catch (Exception e) {
@@ -403,15 +396,10 @@ class ComponentProxy implements InvocationHandler, Serializable {
 				Class<?> type = cd.getPropertyClass(propertyName);
 				Object value1 = propertyValueMap.get(propertyName);
 				Object value2 = other.straightGetProperty(propertyName);
-				if (value1 == null || value2 == null) {
-					return false;
-				} else if (type.isArray()) {
-					if (!PrimitiveHelper.arrayEquals(type, value1, value2)) {
+				if (type != null && type.isArray() && !PrimitiveHelper.arrayEquals(type, value1, value2)) {
 						return false;
-					}
-				} else if (!value1.equals(value2)) {
-					return false;
 				}
+				return Objects.equals(value1, value2);
 			}
 			return true;
 		} else {
@@ -433,7 +421,7 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			if (entry.getValue() != null) {
 				Object value = entry.getValue();
 				if (value.getClass().isArray()) {
-					Object[] objectArray = { value };
+					Object[] objectArray = {value};
 					String arrayString = Arrays.deepToString(objectArray);
 					text = arrayString.substring(1, arrayString.length() - 1);
 				} else {
