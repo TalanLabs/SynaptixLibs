@@ -396,10 +396,9 @@ class ComponentProxy implements InvocationHandler, Serializable {
 				Class<?> type = cd.getPropertyClass(propertyName);
 				Object value1 = propertyValueMap.get(propertyName);
 				Object value2 = other.straightGetProperty(propertyName);
-				if (type != null && type.isArray() && !PrimitiveHelper.arrayEquals(type, value1, value2)) {
-						return false;
+				if (!Objects.deepEquals(value1, value2)) {
+					return false;
 				}
-				return Objects.equals(value1, value2);
 			}
 			return true;
 		} else {
