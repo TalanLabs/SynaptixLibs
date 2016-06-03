@@ -1,20 +1,30 @@
 package com.synaptix.component.factory;
 
-import com.synaptix.component.IComponent;
-import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescriptor;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.*;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.Map.Entry;
+import com.synaptix.component.IComponent;
+import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescriptor;
 
 class ComponentProxy implements InvocationHandler, Serializable {
 
@@ -380,10 +390,14 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			if (o == null) {
 				return false;
 			}
-			if (!componentClass.isAssignableFrom(o.getClass())) {
+
+			Class<?> clazz = o.getClass();
+			if (o instanceof IComponent) {
+				clazz = ComponentFactory.getInstance().getComponentClass((IComponent) o);
+			}
+			if (!componentClass.isAssignableFrom(clazz)) {
 				return false;
 			}
-			Class<? extends IComponent> clazz = ComponentFactory.getInstance().getComponentClass((IComponent) o);
 			if (!componentClass.equals(clazz)) {
 				return false;
 			}
