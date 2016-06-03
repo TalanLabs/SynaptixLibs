@@ -393,7 +393,6 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			}
 			IComponent other = (IComponent) o;
 			for (String propertyName : cd.getEqualsKeyPropertyNames()) {
-				Class<?> type = cd.getPropertyClass(propertyName);
 				Object value1 = propertyValueMap.get(propertyName);
 				Object value2 = other.straightGetProperty(propertyName);
 				if (!Objects.deepEquals(value1, value2)) {
