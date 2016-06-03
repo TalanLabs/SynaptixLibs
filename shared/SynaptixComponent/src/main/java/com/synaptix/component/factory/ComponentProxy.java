@@ -391,13 +391,10 @@ class ComponentProxy implements InvocationHandler, Serializable {
 				return false;
 			}
 
-			Class<?> clazz = o.getClass();
-			if (o instanceof IComponent) {
-				clazz = ComponentFactory.getInstance().getComponentClass((IComponent) o);
-			}
-			if (!componentClass.isAssignableFrom(clazz)) {
+			if (!(o instanceof IComponent)) {
 				return false;
 			}
+			Class<? extends IComponent> clazz = ComponentFactory.getInstance().getComponentClass((IComponent) o);
 			if (!componentClass.equals(clazz)) {
 				return false;
 			}
