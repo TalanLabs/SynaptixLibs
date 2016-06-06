@@ -1,5 +1,6 @@
 package com.synaptix.entity;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,28 +13,45 @@ import com.synaptix.entity.extension.JdbcTypesEnum;
 @SynaptixComponent
 public interface ITracable extends IComponent, IDatabaseComponentExtension {
 
+	Comparator<ITracable> CREATED_DATE_COMPARATOR = new Comparator<ITracable>() {
+
+		@Override
+		public int compare(ITracable o1, ITracable o2) {
+			if (o1 == o2) {
+				return 0;
+			}
+			if (o1 == null) {
+				return -1;
+			}
+			if (o2 == null) {
+				return 1;
+			}
+			return o1.getCreatedDate().compareTo(o2.getCreatedDate());
+		}
+	};
+
 	@Column(name = "CREATED_DATE")
 	@JdbcType(JdbcTypesEnum.TIMESTAMP)
-	public Date getCreatedDate();
+	Date getCreatedDate();
 
-	public void setCreatedDate(Date createdDate);
+	void setCreatedDate(Date createdDate);
 
 	@Column(name = "CREATED_BY", length = 240)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public String getCreatedBy();
+	String getCreatedBy();
 
-	public void setCreatedBy(String createdBy);
+	void setCreatedBy(String createdBy);
 
 	@Column(name = "UPDATED_DATE")
 	@JdbcType(JdbcTypesEnum.TIMESTAMP)
-	public Date getUpdatedDate();
+	Date getUpdatedDate();
 
-	public void setUpdatedDate(Date updatedDate);
+	void setUpdatedDate(Date updatedDate);
 
 	@Column(name = "UPDATED_BY", length = 240)
 	@JdbcType(JdbcTypesEnum.VARCHAR)
-	public String getUpdatedBy();
+	String getUpdatedBy();
 
-	public void setUpdatedBy(String updatedBy);
+	void setUpdatedBy(String updatedBy);
 
 }
