@@ -30,6 +30,9 @@ import com.synaptix.component.factory.ComponentDescriptor.ComputedMethodDescript
 class ComponentProxy implements InvocationHandler, Serializable {
 
 	private static final ObjectStreamField[] serialPersistentFields = {new ObjectStreamField("componentClassName", String.class), new ObjectStreamField("propertyValueMap", Map.class)};
+
+//	private static final ObjectStreamField[] serialPersistentFields = {new ObjectStreamField("componentTypeToken", TypeToken.class), new ObjectStreamField("propertyValueMap", Map.class)};
+
 	private static final long serialVersionUID = -1210441501657033411L;
 	private static Log LOG = LogFactory.getLog(ComponentProxy.class);
 	protected Class<? extends IComponent> componentClass;
@@ -395,6 +398,11 @@ class ComponentProxy implements InvocationHandler, Serializable {
 			for (String propertyName : cd.getEqualsKeyPropertyNames()) {
 				Object value1 = propertyValueMap.get(propertyName);
 				Object value2 = other.straightGetProperty(propertyName);
+				if (!cd.isNullEqualsKeyPropertyName(propertyName)) {
+					if (value1 == null || value2 == null) {
+						return false;
+					}
+				}
 				if (!Objects.deepEquals(value1, value2)) {
 					return false;
 				}

@@ -13,7 +13,7 @@ import com.synaptix.entity.extension.IDatabaseComponentExtension;
 @SynaptixComponent
 public interface IEntity extends IComponent, IDatabaseComponentExtension, IBusinessComponentExtension, ICacheComponentExtension {
 
-	@EqualsKey
+	@EqualsKey(nullEquals = false)
 	@Id
 	@Column(name = "ID", nullable = false)
 	public IId getId();

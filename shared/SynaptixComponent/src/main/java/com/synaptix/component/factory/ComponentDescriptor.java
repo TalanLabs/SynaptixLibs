@@ -24,9 +24,8 @@ import com.synaptix.component.extension.IPropertyExtensionDescriptor;
 
 /**
  * ComponentDescriptor, describe a component class <link>IComponent</link>
- * 
+ *
  * @author Gaby
- * 
  */
 public class ComponentDescriptor implements Serializable {
 
@@ -45,6 +44,8 @@ public class ComponentDescriptor implements Serializable {
 	protected Map<String, ComputedMethodDescriptor> computedMethodDescriptorMap;
 
 	protected Set<String> equalsKeyPropertyNames;
+
+	protected Map<String, Boolean> nullEqualsKeyMap;
 
 	protected Map<Class<?>, IClassExtensionDescriptor> classExtensionDescriptorMap;
 
@@ -68,6 +69,7 @@ public class ComponentDescriptor implements Serializable {
 		methodMap = new HashMap<String, ComponentBeanMethod>();
 		classExtensionDescriptorMap = new HashMap<Class<?>, IClassExtensionDescriptor>();
 		computedMethodDescriptorMap = new HashMap<String, ComputedMethodDescriptor>();
+		nullEqualsKeyMap = new HashMap<String, Boolean>();
 
 		Set<Class<?>> extensionClasss = ComponentFactory.getInstance().getExtensionClasss();
 		if (extensionClasss != null && !extensionClasss.isEmpty()) {
@@ -149,7 +151,8 @@ public class ComponentDescriptor implements Serializable {
 	}
 
 	protected void addPropertyName(Method method, ComponentBeanMethod bm, String propertyName) {
-		boolean equalsKey = method.getAnnotation(IComponent.EqualsKey.class) != null;
+		IComponent.EqualsKey a = method.getAnnotation(IComponent.EqualsKey.class);
+		boolean equalsKey = a != null;
 
 		Map<Class<?>, IPropertyExtensionDescriptor> propertyExtensionDescriptorMap = new HashMap<Class<?>, IPropertyExtensionDescriptor>();
 		Set<Class<?>> extensionClasss = ComponentFactory.getInstance().getExtensionClasss();
@@ -186,12 +189,22 @@ public class ComponentDescriptor implements Serializable {
 		}
 		if (equalsKey) {
 			equalsKeyPropertyNames.add(propertyName);
+			nullEqualsKeyMap.put(propertyName, a.nullEquals());
 		}
 	}
 
 	/**
+	 * @param propertyName equals key property name
+	 * @return true if nullEquals
+	 */
+	public final boolean isNullEqualsKeyPropertyName(String propertyName) {
+		Boolean b = nullEqualsKeyMap.get(propertyName);
+		return b != null && b;
+	}
+
+	/**
 	 * Get a simple name from component class
-	 * 
+	 *
 	 * @return
 	 */
 	public final String getName() {
@@ -200,7 +213,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get the component class
-	 * 
+	 *
 	 * @return
 	 */
 	public final Class<? extends IComponent> getComponentClass() {
@@ -209,7 +222,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Test if o is instance of component class
-	 * 
+	 *
 	 * @param o
 	 * @return
 	 */
@@ -219,7 +232,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get a list of properties names
-	 * 
+	 *
 	 * @return
 	 */
 	public final Set<String> getPropertyNames() {
@@ -228,7 +241,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get a <code>ComponentBeanMethod</code>
-	 * 
+	 *
 	 * @param keyMethod
 	 * @return
 	 */
@@ -241,9 +254,8 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get a compute method descriptor
-	 * 
-	 * @param key
-	 *            (can be propertyName if getter, or GenericString)
+	 *
+	 * @param key (can be propertyName if getter, or GenericString)
 	 * @return
 	 */
 	public final ComputedMethodDescriptor getComputedMethodDescriptor(String key) {
@@ -255,7 +267,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get a type of property name
-	 * 
+	 *
 	 * @param propertyName
 	 * @return a type of property
 	 */
@@ -268,7 +280,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get class extension descriptor
-	 * 
+	 *
 	 * @param componentExtensionClass
 	 * @return
 	 */
@@ -281,7 +293,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get a component field by property name
-	 * 
+	 *
 	 * @param propertyName
 	 * @return
 	 */
@@ -291,7 +303,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get property descriptors
-	 * 
+	 *
 	 * @return
 	 */
 	public final Set<PropertyDescriptor> getPropertyDescriptors() {
@@ -300,7 +312,7 @@ public class ComponentDescriptor implements Serializable {
 
 	/**
 	 * Get properties use for equals and hashcode
-	 * 
+	 *
 	 * @return
 	 */
 	public final Set<String> getEqualsKeyPropertyNames() {

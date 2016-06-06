@@ -27,6 +27,7 @@ public interface IComponent extends IPropertyChangeCapable, Serializable {
 	@Target({ ElementType.METHOD })
 	@Retention(RetentionPolicy.RUNTIME)
 	@interface EqualsKey {
+		boolean nullEquals() default true;
 	}
 
 	/**
