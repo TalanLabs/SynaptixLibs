@@ -2,8 +2,10 @@ package com.synaptix.widget.component.controller.dialog;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.ObjectUtils;
 
@@ -82,8 +84,6 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 
 	/**
 	 * Clean entity for clone
-	 *
-	 * @param entity
 	 */
 	protected void cleanEntityForClone(E entity) {
 		cleanEntity(entity);
@@ -159,10 +159,7 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 
 	@Override
 	public boolean hasAuthWrite() {
-		if (crudContext != null) {
-			return crudContext.hasAuthWrite();
-		}
-		return false;
+		return crudContext != null && crudContext.hasAuthWrite();
 	}
 
 	@Override
@@ -191,28 +188,31 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 	public boolean hasChanged(E e1, E e2) {
 		cleanEntity(e1);
 		cleanEntity(e2);
-		return !equalComponent(e1, e2);
+		return !equalComponent(e1, e2, new HashSet<Integer>());
 	}
 
-	private boolean equalComponent(IComponent c1, IComponent c2) {
-		return equalMaps(c1.straightGetProperties(), c2.straightGetProperties());
+	private boolean equalComponent(IComponent c1, IComponent c2, Set<Integer> hashCodes) {
+		if (hashCodes.add(c1.hashCode()) || hashCodes.add(c2.hashCode())) {
+			return equalMaps(c1.straightGetProperties(), c2.straightGetProperties(), hashCodes);
+		}
+		return false;
 	}
 
-	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2) {
+	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2, Set<Integer> hashCodes) {
 		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
 			return false;
 		}
 		for (Object key : m1.keySet()) {
 			Object v1 = m1.get(key);
 			Object v2 = m2.get(key);
-			if (!equal(v1, v2)) {
+			if (!equal(v1, v2, hashCodes)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean equalCollection(Collection<?> m1, Collection<?> m2) {
+	private boolean equalCollection(Collection<?> m1, Collection<?> m2, Set<Integer> hashCodes) {
 		if (CollectionHelper.size(m1) != CollectionHelper.size(m2)) {
 			return false;
 		}
@@ -221,28 +221,28 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 		while (ite1.hasNext()) {
 			Object v1 = ite1.next();
 			Object v2 = ite2.next();
-			if (!equal(v1, v2)) {
+			if (!equal(v1, v2, hashCodes)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean equal(Object o1, Object o2) {
+	private boolean equal(Object o1, Object o2, Set<Integer> hashCodes) {
 		if (o1 == o2) {
 			return true;
 		}
 		if ((o1 instanceof IComponent) && (o2 instanceof IComponent)) {
-			return equalComponent((IComponent) o1, (IComponent) o2);
+			return equalComponent((IComponent) o1, (IComponent) o2, hashCodes);
 		}
 		if ((o1 instanceof Map) && (o2 instanceof Map)) {
-			return equalMaps((Map<?, ?>) o1, (Map<?, ?>) o2);
+			return equalMaps((Map<?, ?>) o1, (Map<?, ?>) o2, hashCodes);
 		}
 		if ((o1 instanceof byte[]) && (o2 instanceof byte[])) {
 			return Arrays.equals((byte[]) o1, (byte[]) o2);
 		}
 		if ((o1 instanceof Collection) && (o2 instanceof Collection)) {
-			return equalCollection((Collection<?>) o1, (Collection<?>) o2);
+			return equalCollection((Collection<?>) o1, (Collection<?>) o2, hashCodes);
 		}
 		return ObjectUtils.equals(o1, o2);
 	}
