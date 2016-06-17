@@ -138,14 +138,10 @@ public class JSyTable extends JTable {
 	/**
 	 * Synaptix table
 	 *
-	 * @param tm
-	 *            tableModel
-	 * @param title
-	 *            title of the table
-	 * @param sortable
-	 *            is table sortable?
-	 * @param copyLine
-	 *            default: ctrl+C copies the selected cell. If true, copy the entire line (default behaviour)
+	 * @param tm       tableModel
+	 * @param title    title of the table
+	 * @param sortable is table sortable?
+	 * @param copyLine default: ctrl+C copies the selected cell. If true, copy the entire line (default behaviour)
 	 */
 	@SuppressWarnings("unchecked")
 	public JSyTable(SpecialTableModel tm, String title, boolean sortable, boolean copyLine) {
@@ -160,8 +156,14 @@ public class JSyTable extends JTable {
 		getTableHeader().addMouseListener(new TableHeaderMouseListener());
 
 		this.setAutoCreateRowSorter(sortable);
-		this.getRowSorter().addRowSorterListener(new TableRowSorterListener());
-		TableRowSorter<TableModel> trs = (TableRowSorter<TableModel>) this.getRowSorter();
+		if (sortable) {
+			this.getRowSorter().addRowSorterListener(new TableRowSorterListener());
+			TableRowSorter<TableModel> trs = (TableRowSorter<TableModel>) this.getRowSorter();
+			for (int i = 0; i < this.getYColumnModel().getColumnCount(true); i++) {
+				int columnIndex = this.getYColumnModel().getColumn(i, true).getModelIndex();
+				trs.setComparator(i, new RowSortComparator(columnIndex));
+			}
+		}
 
 		initializeFilterColumns();
 		initializeComparatorColumns();
@@ -169,11 +171,6 @@ public class JSyTable extends JTable {
 		initializeEditor();
 
 		mapExcelColumns = new HashMap<Class<?>, ExcelColumnRenderer>();
-
-		for (int i = 0; i < this.getYColumnModel().getColumnCount(true); i++) {
-			int columnIndex = this.getYColumnModel().getColumn(i, true).getModelIndex();
-			trs.setComparator(i, new RowSortComparator(columnIndex));
-		}
 
 		setPreferredScrollableViewportSize(new Dimension(10, 10));
 
@@ -332,12 +329,16 @@ public class JSyTable extends JTable {
 		getColumnControl().addDefaultPerspective(name, autoResizeMode, positions, visibles, sizes, searchs, sortKeys);
 	}
 
+	public boolean isShowToolTipsColumns() {
+		return ((JSyTableHeader) getTableHeader()).isShowToolTips();
+	}
+
 	public void setShowToolTipsColumns(boolean b) {
 		((JSyTableHeader) getTableHeader()).setShowToolTips(b);
 	}
 
-	public boolean isShowToolTipsColumns() {
-		return ((JSyTableHeader) getTableHeader()).isShowToolTips();
+	public boolean isDisplayAllRowCount() {
+		return displayAllRowCount;
 	}
 
 	public void setDisplayAllRowCount(boolean displayAllRowCount) {
@@ -347,10 +348,6 @@ public class JSyTable extends JTable {
 
 		SyPreferences prefs = SyPreferences.getPreferences();
 		prefs.putBoolean(title + "_displayAllRowCount", displayAllRowCount);
-	}
-
-	public boolean isDisplayAllRowCount() {
-		return displayAllRowCount;
 	}
 
 	@Override
@@ -682,6 +679,10 @@ public class JSyTable extends JTable {
 		return label;
 	}
 
+	public JSyTableFooter getTableFooter() {
+		return tableFooter;
+	}
+
 	public void setTableFooter(JSyTableFooter tableFooter) {
 		if (this.tableFooter != tableFooter) {
 			JSyTableFooter old = this.tableFooter;
@@ -695,10 +696,6 @@ public class JSyTable extends JTable {
 			}
 			firePropertyChange("tableFooter", old, tableFooter); //$NON-NLS-1$
 		}
-	}
-
-	public JSyTableFooter getTableFooter() {
-		return tableFooter;
 	}
 
 	public JSyTableLines getTableLines() {
@@ -1082,35 +1079,6 @@ public class JSyTable extends JTable {
 		}
 	}
 
-	private class TableHeaderMouseListener extends MouseAdapter {
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			if (e.isPopupTrigger()) {
-				showPopupMenu(e);
-			}
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			if (e.isPopupTrigger()) {
-				showPopupMenu(e);
-			}
-		}
-	}
-
-	private class TableRowSorterListener implements RowSorterListener {
-		@Override
-		public void sorterChanged(RowSorterEvent e) {
-
-			// List<SortKey> sortKeys = new ArrayList<SortKey>();
-			// for(SortKey sortKey : getRowSorter().getSortKeys()) {
-			// sortKeys.add(sortKey);
-			// }
-			// getRowSorter().setSortKeys(sortKeys);
-		}
-	}
-
 	public Object calculateSumValueAt(int columnIndex) {
 		SpecialTableModel model = (SpecialTableModel) this.getModel();
 		int col = this.convertColumnIndexToModel(columnIndex);
@@ -1163,6 +1131,58 @@ public class JSyTable extends JTable {
 		return c;
 	}
 
+	private void doCopy() {
+		int col = getSelectedColumn();
+		int row = getSelectedRow();
+		if (col != -1 && row != -1) {
+			TableCellRenderer cellRenderer = getCellRenderer(row, col);
+			Object value = getValueAt(row, col);
+			String data = null;
+			Component component = cellRenderer.getTableCellRendererComponent(this, value, true, true, row, col);
+			if ((component != null) && JLabel.class.isAssignableFrom(component.getClass())) {
+				data = ((JLabel) component).getText();
+			} else if (value == null) {
+				data = "";
+			} else {
+				data = value.toString();
+			}
+
+			final StringSelection selection = new StringSelection(data);
+
+			final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(selection, selection);
+		}
+	}
+
+	private class TableHeaderMouseListener extends MouseAdapter {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (e.isPopupTrigger()) {
+				showPopupMenu(e);
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (e.isPopupTrigger()) {
+				showPopupMenu(e);
+			}
+		}
+	}
+
+	private class TableRowSorterListener implements RowSorterListener {
+		@Override
+		public void sorterChanged(RowSorterEvent e) {
+
+			// List<SortKey> sortKeys = new ArrayList<SortKey>();
+			// for(SortKey sortKey : getRowSorter().getSortKeys()) {
+			// sortKeys.add(sortKey);
+			// }
+			// getRowSorter().setSortKeys(sortKeys);
+		}
+	}
+
 	private final class RowSortComparator implements Comparator<Object> {
 
 		private int columnIndex;
@@ -1197,29 +1217,6 @@ public class JSyTable extends JTable {
 				}
 			}
 			return res;
-		}
-	}
-
-	private void doCopy() {
-		int col = getSelectedColumn();
-		int row = getSelectedRow();
-		if (col != -1 && row != -1) {
-			TableCellRenderer cellRenderer = getCellRenderer(row, col);
-			Object value = getValueAt(row, col);
-			String data = null;
-			Component component = cellRenderer.getTableCellRendererComponent(this, value, true, true, row, col);
-			if ((component != null) && JLabel.class.isAssignableFrom(component.getClass())) {
-				data = ((JLabel) component).getText();
-			} else if (value == null) {
-				data = "";
-			} else {
-				data = value.toString();
-			}
-
-			final StringSelection selection = new StringSelection(data);
-
-			final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-			clipboard.setContents(selection, selection);
 		}
 	}
 }
