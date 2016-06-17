@@ -209,7 +209,10 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				createTaskGraphs(taskCluster);
 				taskManagerServiceDelegate.addToQueue(idTaskCluster);
 			} else {
-				archiveCluster(idTaskCluster);
+				tasks = selectCurrentTasksForCluster(idTaskCluster); // double verification for multithreading issues
+				if (tasks == null || tasks.isEmpty()) {
+					archiveCluster(idTaskCluster);
+				} // no need for an else, in this case there is a second thread which is already running the tasks
 			}
 		} else {
 			LinkedList<ITask> tasksQueue = new LinkedList<ITask>(tasks);
