@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>client</artifactId>
 		<groupId>com.synaptix</groupId>
-		<version>4.2.15-SNAPSHOT</version>
+		<version>4.2.16-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>SynaptixMapViewer</artifactId>
