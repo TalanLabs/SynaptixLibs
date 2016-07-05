@@ -344,7 +344,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			LOG.error(t.getMessage() + " - TM - TaskCode = " + task.getServiceCode() + " - Id = " + task.getId(), t);
 
 			taskExecutionResult.errorMessage = ExceptionUtils.getRootCauseMessage(t);
-			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 4000));
+			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 2000));
 			updateTask(task);
 		}
 
@@ -355,15 +355,15 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		task.setResultStatus(executionResult.getResultStatus());
 
 		IStackResult stackResult = executionResult.getStackResult();
-		task.setResultDesc(executionResult.getResultDesc());
+		task.setResultDesc(StringUtils.left(executionResult.getResultDesc(), 1024));
 		if (stackResult != null) {
 			if (StringUtils.isBlank(task.getResultDesc())) { // if result desc is null, we use the one from the first stack
-				task.setResultDesc(stackResult.getResultText());
+				task.setResultDesc(StringUtils.left(stackResult.getResultText(), 1024));
 			}
 			if ((task.getTaskType().getResultDepth() > 0) || (task.getTaskType().getResultDepth() == -1)) {
 				StringBuilder sb = new StringBuilder();
 				buildStack(stackResult, 0, task.getTaskType().getResultDepth(), sb);
-				task.setResultDetail(StringUtils.left(sb.toString(), 4000));
+				task.setResultDetail(StringUtils.left(sb.toString(), 2000));
 			}
 		}
 		updateTask(task);
@@ -461,7 +461,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			if (task == null || !task.isCheckSkippable() || TaskStatus.CURRENT != task.getTaskStatus()) {
 				return false;
 			}
-			task.setResultDesc(task.getResultDesc() != null ? task.getResultDesc() + " " + skipComments : skipComments);
+			task.setResultDesc(StringUtils.left(task.getResultDesc() != null ? task.getResultDesc() + " " + skipComments : skipComments, 1024));
 			entityServiceDelegate.editEntity(task, false);
 			taskManagerServiceDelegate.nextTasks(task, true);
 			getDaoSession().commit();
