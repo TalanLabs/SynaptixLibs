@@ -190,7 +190,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	public IServiceResult<Set<IError>> startEngine(IId idTaskCluster) {
 
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("TM - StartEngine");
+			LOG.debug("TM - StartEngine for cluster " + idTaskCluster);
 		}
 		if (idTaskCluster == null) {
 			return restart();
@@ -318,7 +318,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		try {
 			ITaskService.IExecutionResult executionResult = taskService.execute(task);
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("TM - " + task.getServiceCode() + (executionResult != null && executionResult.isFinished() ? " - Success" : " - Failure"));
+				LOG.debug("TM " + task.getIdCluster() + " - " + task.getServiceCode() + (executionResult != null && executionResult.isFinished() ? " - Success" : " - Failure"));
 			}
 			if (executionResult == null) {
 				throw new Exception("Task execution result is null");
@@ -353,7 +353,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
 			}
 
-			LOG.error(t.getMessage() + " - TM - TaskCode = " + task.getServiceCode() + " - Id = " + task.getId(), t);
+			LOG.error(t.getMessage() + " - TM " + task.getIdCluster() + " - TaskCode = " + task.getServiceCode() + " - Id = " + task.getId(), t);
 
 			taskExecutionResult.errorMessage = ExceptionUtils.getRootCauseMessage(t);
 			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 2000));
