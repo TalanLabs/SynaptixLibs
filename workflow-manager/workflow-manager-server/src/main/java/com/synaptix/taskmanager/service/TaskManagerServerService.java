@@ -211,6 +211,15 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			} else {
 				tasks = selectCurrentTasksForCluster(idTaskCluster); // double verification for multithreading issues
 				if (tasks == null || tasks.isEmpty()) {
+					if (LOG.isDebugEnabled()) {
+						LOG.debug(String.format("Archiving cluster %s because there are no current tasks", idTaskCluster));
+						if (LOG.isTraceEnabled()) {
+							List<ITask> taskArchsByCluster = getTaskMapper().findTaskArchsByCluster(idTaskCluster);
+							if (taskArchsByCluster != null && !taskArchsByCluster.isEmpty()) {
+								LOG.trace(taskArchsByCluster);
+							}
+						}
+					}
 					archiveCluster(idTaskCluster);
 				} // no need for an else, in this case there is a second thread which is already running the tasks
 			}
@@ -279,6 +288,9 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				}
 			}
 			if (!restart && recycleList.isEmpty()) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug(String.format("Archiving cluster %s because if finished", idTaskCluster));
+				}
 				archiveCluster(idTaskCluster);
 			}
 		}
