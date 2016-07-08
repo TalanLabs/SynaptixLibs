@@ -4,7 +4,7 @@
 
 <mapper namespace="com.synaptix.taskmanager.dao.mapper.TaskMapper">
 
-	<cache-ref namespace="com.synaptix.taskmanager.model.ITask" />
+	<!-- cache-ref namespace="com.synaptix.taskmanager.model.ITask" / --> <!-- a cache? TO VALIDATE -->
 
 	<select id="selectCurrentTasksForCluster" resultMap="com.synaptix.taskmanager.model.ITask">
 	<![CDATA[

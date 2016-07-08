@@ -1024,6 +1024,10 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		return nextIdCluster;
 	}
 
+	public boolean hasNextInQueue() {
+		return clusterIdsQueue.get() != null && !clusterIdsQueue.get().isEmpty();
+	}
+
 	public <E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(IId idObject, Class<F> objectClass) {
 		F taskObject = entityServiceDelegate.findEntityById(objectClass, idObject);
 		addToQueue(taskObject);
