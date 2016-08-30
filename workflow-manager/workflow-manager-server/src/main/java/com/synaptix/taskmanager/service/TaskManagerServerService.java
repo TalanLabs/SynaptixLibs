@@ -105,7 +105,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			getDaoSession().end();
 		}
 
-		return startEngine(idCluster);
+		return _startEngine(idCluster);
 	}
 
 	/**
@@ -188,6 +188,10 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 
 	@Override
 	public IServiceResult<Set<IError>> startEngine(IId idTaskCluster) {
+		return _startEngine(idTaskCluster);
+	}
+
+	private IServiceResult<Set<IError>> _startEngine(IId idTaskCluster) {
 
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("TM - StartEngine for cluster " + idTaskCluster);
