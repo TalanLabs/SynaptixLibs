@@ -119,4 +119,5 @@ public interface TaskMapper {
 
 	ITask selectCurrentTaskByIdObject(@Param("idObject") IId idObject);
 
+	boolean hasCurrentTasks(@Param("idTaskCluster") IId idTaskCluster);
 }

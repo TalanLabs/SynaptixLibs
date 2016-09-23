@@ -128,14 +128,20 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	/**
 	 * Archive a cluster : move all tasks to archive table (T_TASK_ARCH).
 	 */
-	public void archiveCluster(IId idTaskCluster) {
+	public boolean archiveCluster(IId idTaskCluster) {
+		if (!getTaskMapper().hasCurrentTasks(idTaskCluster)) {
+				LOG.warn("Archive cluster id=" + idTaskCluster + " was asked, but unfinished tasks still exist.");
+			return false;
+		}
+
 		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
 		if (taskCluster != null && !taskCluster.isCheckArchive()) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("Archive cluster id=" + taskCluster.getId());
+				LOG.debug("Archive cluster with id = " + taskCluster.getId());
 			}
 			getTaskManagerMapper().archiveTaskCluster(idTaskCluster);
 		}
+		return true;
 	}
 
 	/**

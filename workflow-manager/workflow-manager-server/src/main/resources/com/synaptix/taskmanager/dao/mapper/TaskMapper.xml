@@ -200,4 +200,12 @@
            and t.next_status = 'VAL'
     </select>
 
+	<select id="hasCurrentTasks" resultType="java.lang.Boolean">
+		select count(1)
+		from t_tasks
+		where id_cluster = #{idTaskCluster,javaType=IId}
+		and status = 'TODO' or status ='CURRENT'
+		and rownum = 1
+	</select>
+
 </mapper>
