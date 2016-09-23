@@ -129,7 +129,7 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 * Archive a cluster : move all tasks to archive table (T_TASK_ARCH).
 	 */
 	public boolean archiveCluster(IId idTaskCluster) {
-		if (!getTaskMapper().hasCurrentTasks(idTaskCluster)) {
+		if (getTaskMapper().hasCurrentTasks(idTaskCluster)) {
 				LOG.warn("Archive cluster id=" + idTaskCluster + " was asked, but unfinished tasks still exist.");
 			return false;
 		}
