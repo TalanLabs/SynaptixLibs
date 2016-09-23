@@ -202,9 +202,9 @@
 
 	<select id="hasCurrentTasks" resultType="java.lang.Boolean">
 		select count(1)
-		from t_tasks
+		from t_task
 		where id_cluster = #{idTaskCluster,javaType=IId}
-		and status = 'TODO' or status ='CURRENT'
+		and (status = 'TODO' or status ='CURRENT')
 		and rownum = 1
 	</select>
 
