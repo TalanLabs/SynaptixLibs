@@ -10,6 +10,7 @@ import com.synaptix.mybatis.dao.IDaoSessionExt;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
+import com.synaptix.taskmanager.model.domains.EnumErrorMessages;
 import com.synaptix.taskmanager.model.domains.ServiceNature;
 import com.synaptix.taskmanager.service.AbstractDelegate;
 
@@ -158,7 +159,7 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 			}
 			daoSession.begin();
 			IExecutionResult executionResult = execute(task, object);
-			if (executionResult.isFinished()) {
+			if (executionResult.isFinished() && !executionResult.getErrorMessage().equals(EnumErrorMessages.ERROR_MESSAGE_WAITING.getMessage())) {
 				daoSession.commit();
 			}
 			return executionResult;
