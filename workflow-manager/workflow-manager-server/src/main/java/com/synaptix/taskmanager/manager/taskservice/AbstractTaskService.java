@@ -159,7 +159,7 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 			}
 			daoSession.begin();
 			IExecutionResult executionResult = execute(task, object);
-			if (executionResult.isFinished() && !executionResult.getErrorMessage().equals(EnumErrorMessages.ERROR_MESSAGE_WAITING.getMessage())) {
+			if (executionResult.isFinished() && !EnumErrorMessages.ERROR_MESSAGE_WAITING.getMessage().equals(executionResult.getErrorMessage())) {
 				daoSession.commit();
 			}
 			return executionResult;
