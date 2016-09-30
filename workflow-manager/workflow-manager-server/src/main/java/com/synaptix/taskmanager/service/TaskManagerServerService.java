@@ -346,13 +346,15 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		} catch (Throwable t) {
 			if ((t instanceof VersionConflictDaoException) && (t.getCause() instanceof PersistenceException) && (t.getCause().getCause() instanceof SQLException)
 					&& (((SQLException) t.getCause().getCause()).getErrorCode() == 60)) {
+				LOG.error(String.format("A conflicting error has been raised for task %s", task.getId()));
 				serviceResultBuilder.addError(TaskManagerErrorEnum.CONFLICT, "CONFLICTING_ERROR", null);
 			} else {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
 			}
 
-			LOG.error(t.getMessage() + " - TM " + task.getIdCluster() + " - TaskCode = " + task.getServiceCode() + " - Id = " + task.getId(), t);
+			LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
 
+			task = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
 			taskExecutionResult.errorMessage = ExceptionUtils.getRootCauseMessage(t);
 			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 2000));
 			updateTask(task);
