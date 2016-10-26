@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import com.synaptix.mybatis.dao.IDaoSession;
 import com.synaptix.mybatis.dao.IDaoSessionExt;
 import com.synaptix.service.ServiceException;
+import com.synaptix.taskmanager.manager.TaskServiceLockManagerProvider;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.taskmanager.model.domains.EnumErrorMessages;
@@ -15,7 +16,6 @@ import com.synaptix.taskmanager.model.domains.ServiceNature;
 import com.synaptix.taskmanager.service.AbstractDelegate;
 
 import de.jkeylockmanager.manager.KeyLockManager;
-import de.jkeylockmanager.manager.KeyLockManagers;
 import de.jkeylockmanager.manager.ReturnValueLockCallback;
 
 public abstract class AbstractTaskService<F> extends AbstractDelegate implements ITaskService {
@@ -28,9 +28,10 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 	@Inject
 	private SqlSessionManager sqlSessionManager;
 
-	private final String code;
+	@Inject
+	private TaskServiceLockManagerProvider taskServiceLockManagerProvider;
 
-	private KeyLockManager keyLockManager;
+	private final String code;
 
 	private final ServiceNature nature;
 
@@ -42,8 +43,6 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 		this.code = code;
 		this.nature = nature;
 		this.objectType = objectType;
-
-		keyLockManager = KeyLockManagers.newLock();
 	}
 
 	@Override
@@ -119,7 +118,7 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 
 	@Override
 	public IExecutionResult execute(final ITask task) {
-		final F object;
+		F object;
 		String lockKey;
 
 		try {
@@ -138,10 +137,11 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 
 		IExecutionResult executionResult;
 		if (lockKey != null) {
+			KeyLockManager keyLockManager = taskServiceLockManagerProvider.get();
 			executionResult = keyLockManager.executeLocked(lockKey, new ReturnValueLockCallback<IExecutionResult>() {
 				@Override
 				public IExecutionResult doInLock() throws Exception {
-					return executeInSession(task, object);
+					return executeInSession(task, null);
 				}
 			});
 		} else {
@@ -158,6 +158,9 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 				((IDaoSessionExt) this.daoSession).setCheckVersionConflictDaoExceptionInSession(true);
 			}
 			daoSession.begin();
+			if (object == null) {
+				object = getObject(task);
+			}
 			IExecutionResult executionResult = execute(task, object);
 			if (executionResult.isFinished() || EnumErrorMessages.ERROR_MESSAGE_WAITING.getMessage().equals(executionResult.getErrorMessage())) {
 				daoSession.commit();

@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.synaptix.server.service.guice.AbstractSynaptixServerServiceModule;
 import com.synaptix.taskmanager.delegate.TaskManagerServiceDelegate;
 import com.synaptix.taskmanager.manager.TaskServiceDiscovery;
+import com.synaptix.taskmanager.manager.TaskServiceLockManagerProvider;
 import com.synaptix.taskmanager.service.IStatusGraphService;
 import com.synaptix.taskmanager.service.ITaskChainCriteriaService;
 import com.synaptix.taskmanager.service.ITaskChainService;
@@ -23,6 +24,7 @@ public class ServerServiceTaskManagerModule extends AbstractSynaptixServerServic
 	@Override
 	protected void configure() {
 		bind(TaskServiceDiscovery.class).in(Singleton.class);
+		bind(TaskServiceLockManagerProvider.class).in(Singleton.class);
 
 		bindService(TaskManagerServerService.class).with(ITaskManagerService.class);
 		bindService(TaskServiceDescriptorServerService.class).with(ITaskServiceDescriptorService.class);
