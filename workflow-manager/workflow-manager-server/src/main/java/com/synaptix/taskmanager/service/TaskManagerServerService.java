@@ -186,6 +186,20 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		}
 	}
 
+	/**
+	 * Check if cluster has finished creating its tasks
+	 */
+	private boolean hasCreatedTasks(IId idTaskCluster) {
+		try {
+			getDaoSession().begin();
+			return getTaskMapper().findTasksByCluster(idTaskCluster).size() > 0;
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		} finally {
+			getDaoSession().end();
+		}
+	}
+
 	@Override
 	public IServiceResult<Set<IError>> startEngine(IId idTaskCluster) {
 		return _startEngine(idTaskCluster);
@@ -196,7 +210,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("TM - StartEngine for cluster " + idTaskCluster);
 		}
-		if (idTaskCluster == null) {
+		if (idTaskCluster == null || !hasCreatedTasks(idTaskCluster)) {
 			return restart();
 		}
 
@@ -254,14 +268,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (IId idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
