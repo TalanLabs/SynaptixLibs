@@ -86,13 +86,13 @@
 	]]>
 	</select>
 
-	<select id="findNextTasks" resultType="java.io.Serializable">
+	<select id="findNextTasks" resultType="IId">
 		SELECT ID_TASK
 		FROM T_ASSO_TASK_PREVIOUS_TASK
 		WHERE ID_PREVIOUS_TASK = #{idTask,javaType=IId}
 	</select>
 
-	<select id="findPreviousTasks" resultType="java.io.Serializable">
+	<select id="findPreviousTasks" resultType="IId">
 		SELECT ID_PREVIOUS_TASK
 		FROM T_ASSO_TASK_PREVIOUS_TASK
 		WHERE ID_TASK = #{idTask,javaType=IId}
@@ -111,19 +111,23 @@
 		</foreach>
 	</delete>
 	
-	<select id="findTasksToDelete" resultType="java.io.Serializable">
+	<select id="findTasksToDelete" resultType="IId">
 	<![CDATA[
-		SELECT t.id_task
-		FROM t_asso_task_previous_task t
-		START WITH t.ID_TASK in (
-			select id from t_task
-			where next_status <> #{nextStatus,jdbcType=VARCHAR}
-			and id in(
-				SELECT ID_TASK
-				FROM T_ASSO_TASK_PREVIOUS_TASK
-				WHERE ID_PREVIOUS_TASK = #{idPreviousUpdateTask,javaType=IId})
-		)
-		CONNECT BY PRIOR t.ID_TASK = t.ID_PREVIOUS_TASK
+		SELECT t2.id from (
+			SELECT t.*
+			FROM t_asso_task_previous_task t
+			START WITH t.ID_TASK in (
+				select id from t_task
+				where next_status <> #{nextStatus,jdbcType=VARCHAR}
+				and id in(
+					SELECT ID_TASK
+					FROM T_ASSO_TASK_PREVIOUS_TASK
+					WHERE ID_PREVIOUS_TASK = #{idPreviousUpdateTask,javaType=IId})
+			)
+			CONNECT BY PRIOR t.ID_TASK = t.ID_PREVIOUS_TASK
+		) t1
+		INNER JOIN T_TASK t2 on t1.id_task = t2.id  
+		WHERE t2.status <> 'DONE'
 	]]>
 	</select>
 	
