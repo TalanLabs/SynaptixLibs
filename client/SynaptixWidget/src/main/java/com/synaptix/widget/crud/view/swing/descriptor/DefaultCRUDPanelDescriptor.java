@@ -32,8 +32,8 @@ import com.synaptix.widget.view.descriptor.IRibbonViewDescriptor;
 import com.synaptix.widget.view.swing.helper.IPopupMenuActionsBuilder;
 import com.synaptix.widget.view.swing.helper.IToolBarActionsBuilder;
 
-public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultComponentsManagementPanelDescriptor<G> implements ICRUDManagementViewDescriptor<G>, IDockableViewDescriptor,
-		IRibbonViewDescriptor {
+public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultComponentsManagementPanelDescriptor<G>
+		implements ICRUDManagementViewDescriptor<G>, IDockableViewDescriptor, IRibbonViewDescriptor {
 
 	private final boolean displayEditOnly;
 
@@ -195,7 +195,7 @@ public class DefaultCRUDPanelDescriptor<G extends IEntity> extends DefaultCompon
 		} else {
 			cloneAction.setEnabled(false);
 			editAction.setEnabled(false);
-			deleteAction.setEnabled(isMultiCancel() && getCRUDManagementController().hasAuthWrite());
+			deleteAction.setEnabled(getDefaultSearchComponentsPanel().getTable().getSelectedRowCount() > 0 && isMultiCancel() && getCRUDManagementController().hasAuthWrite());
 		}
 	}
 
