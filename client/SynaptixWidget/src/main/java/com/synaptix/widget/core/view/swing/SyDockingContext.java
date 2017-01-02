@@ -111,6 +111,7 @@ public class SyDockingContext extends DockingContext implements DockableStateWil
 				for (DockableState s : this.getDockables()) {
 					if (!s.isClosed()) {
 						dockingDesktop.createTab(s.getDockable(), dockable, 999, true);
+						dockable.getComponent().requestFocus();
 						return;
 					}
 				}
@@ -122,8 +123,7 @@ public class SyDockingContext extends DockingContext implements DockableStateWil
 		if (c != null && c.getParent() != null && c.getParent().getParent() instanceof TabbedDockableContainer) {
 			TabbedDockableContainer tab = (TabbedDockableContainer) c.getParent().getParent();
 			tab.setSelectedDockable(dockable);
-		} else {
-			c.requestFocus();
+			dockable.getComponent().requestFocus();
 		}
 	}
 
