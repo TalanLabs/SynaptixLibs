@@ -674,8 +674,8 @@ public abstract class AbstractPerimetersPanel extends WaitComponentFeedbackPanel
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String libelleName = JOptionPane.showInputDialog(AbstractPerimetersPanel.this, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().name(), StaticWidgetHelper
-					.getSynaptixWidgetConstantsBundle().addFavorite(), JOptionPane.QUESTION_MESSAGE);
+			String libelleName = JOptionPane.showInputDialog(AbstractPerimetersPanel.this, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().name(),
+					StaticWidgetHelper.getSynaptixWidgetConstantsBundle().addFavorite(), JOptionPane.QUESTION_MESSAGE);
 			if (libelleName != null && !libelleName.trim().isEmpty()) {
 				MyFavorite f = findFavoriteByTitle(userFavoriteList, libelleName.trim());
 				if (f == null) {
@@ -708,8 +708,8 @@ public abstract class AbstractPerimetersPanel extends WaitComponentFeedbackPanel
 					nameList.add(f.title);
 				}
 
-				String name = (String) JOptionPane.showInputDialog(AbstractPerimetersPanel.this, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().name(), StaticWidgetHelper
-						.getSynaptixWidgetConstantsBundle().deleteFavorite(), JOptionPane.QUESTION_MESSAGE, null, nameList.toArray(), nameList.get(0));
+				String name = (String) JOptionPane.showInputDialog(AbstractPerimetersPanel.this, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().name(),
+						StaticWidgetHelper.getSynaptixWidgetConstantsBundle().deleteFavorite(), JOptionPane.QUESTION_MESSAGE, null, nameList.toArray(), nameList.get(0));
 				if (name != null) {
 					int i = nameList.indexOf(name);
 					userFavoriteList.remove(i);
@@ -717,7 +717,7 @@ public abstract class AbstractPerimetersPanel extends WaitComponentFeedbackPanel
 					saveUserFavorites();
 					updateButtons();
 				}
-				fireRefreshAction();
+				// fireRefreshAction();
 			}
 		}
 	}
@@ -791,7 +791,7 @@ public abstract class AbstractPerimetersPanel extends WaitComponentFeedbackPanel
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setFiltersMap(favorite.filtersMap);
-			fireRefreshAction();
+			// fireRefreshAction();
 		}
 
 	}
