@@ -195,7 +195,7 @@ public abstract class AbstractCRUDDialogController<E extends IEntity> implements
 		if (hashCodes.add(c1.hashCode()) || hashCodes.add(c2.hashCode())) {
 			return equalMaps(c1.straightGetProperties(), c2.straightGetProperties(), hashCodes);
 		}
-		return false;
+		return true;
 	}
 
 	private boolean equalMaps(Map<?, ?> m1, Map<?, ?> m2, Set<Integer> hashCodes) {
