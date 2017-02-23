@@ -164,6 +164,15 @@ public abstract class AbstractCRUDBeanExtensionDialog<E, F extends IComponent> e
 		updateValidation();
 	}
 
+	@Override
+	public void setReadOnly(boolean readOnly){
+		super.setReadOnly(readOnly);
+		addAction.setEnabled(!readOnly);
+		cloneAction.setEnabled(!readOnly);
+		editAction.setEnabled(!readOnly);
+		deleteAction.setEnabled(!readOnly);
+	}
+
 	protected abstract List<F> loadList();
 
 	@Override

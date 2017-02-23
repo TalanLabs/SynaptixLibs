@@ -176,4 +176,9 @@ public abstract class AbstractBeanExtensionDialog<E> extends WaitComponentFeedba
 	protected final IBeanDialogView0<E> getBeanDialog() {
 		return beanDialog;
 	}
+
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
 }
