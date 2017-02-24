@@ -24,4 +24,5 @@ public interface IBeanExtensionDialogView<E> extends IView {
 
 	public void setBeanDialog(IBeanDialogView0<E> beanDialog);
 
+	public void setReadOnly(boolean readOnly);
 }
