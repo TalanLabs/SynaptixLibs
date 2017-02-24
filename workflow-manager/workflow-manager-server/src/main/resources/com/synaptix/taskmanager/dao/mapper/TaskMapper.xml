@@ -205,11 +205,9 @@
     </select>
 
 	<select id="hasCurrentTasks" resultType="java.lang.Boolean">
-		select count(1)
-		from t_task
-		where id_cluster = #{idTaskCluster,javaType=IId}
-		and (status = 'TODO' or status ='CURRENT')
-		and rownum = 1
+		SELECT decode(count(1), 0, 1, 1, 0) 
+        FROM t_task 
+        WHERE id_cluster = #{idTaskCluster,javaType=IId} AND status = 'DONE' AND rownum = 1 
 	</select>
 
 </mapper>
