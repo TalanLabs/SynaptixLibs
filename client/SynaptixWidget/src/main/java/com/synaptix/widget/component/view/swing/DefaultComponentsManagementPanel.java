@@ -3,6 +3,11 @@ package com.synaptix.widget.component.view.swing;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
 
 import org.pushingpixels.flamingo.api.common.JCommandButton;
 
@@ -22,8 +27,8 @@ import com.vlsolutions.swing.docking.DockKey;
 import com.vlsolutions.swing.docking.event.DockableStateChangeEvent;
 import com.vlsolutions.swing.docking.event.DockableStateChangeListener;
 
-public class DefaultComponentsManagementPanel<E extends IComponent> extends DefaultSearchTablePageComponentsPanel<E> implements IComponentsManagementView<E>, IDockingContextView, IDockable,
-		IRibbonContextView {
+public class DefaultComponentsManagementPanel<E extends IComponent> extends DefaultSearchTablePageComponentsPanel<E>
+		implements IComponentsManagementView<E>, IDockingContextView, IDockable, IRibbonContextView {
 
 	private static final long serialVersionUID = 222892752441088360L;
 
@@ -84,6 +89,18 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 					}
 				}
 			});
+
+			dockingContext.getPerspectivesManager().addDefaultKeyStroke("searchHeader", KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK), new AbstractAction() {
+
+				private static final long serialVersionUID = 3407710548035466524L;
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (((getSearchHeader() == null) || (getSearchHeader().isEnabledSearchAction()))) {
+						getComponentsManagementController().searchComponents(getValueFilters());
+					}
+				}
+			});
 		}
 	}
 
@@ -104,8 +121,8 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 				if (ribbonData.shouldRegisterInRibbon()) {
 					String ribbonTaskTitle = ribbonData.getRibbonTaskTitle();
 					String ribbonBandTitle = ribbonData.getRibbonBandTitle();
-					ribbonContext.addRibbonTask(ribbonTaskTitle, ribbonData.getRibbonTaskPriority()).addRibbonBand(ribbonBandTitle, ribbonData.getRibbonBandPriority())
-							.addCommandeButton(cb, ribbonData.getPriority());
+					ribbonContext.addRibbonTask(ribbonTaskTitle, ribbonData.getRibbonTaskPriority()).addRibbonBand(ribbonBandTitle, ribbonData.getRibbonBandPriority()).addCommandeButton(cb,
+							ribbonData.getPriority());
 				}
 				category = ribbonData.getCategory();
 			}
