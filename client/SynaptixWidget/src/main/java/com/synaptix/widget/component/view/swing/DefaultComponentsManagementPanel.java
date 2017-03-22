@@ -24,6 +24,8 @@ import com.synaptix.widget.view.descriptor.IDockableViewDescriptor;
 import com.synaptix.widget.view.descriptor.IRibbonViewDescriptor;
 import com.synaptix.widget.view.swing.descriptor.AbstractSearchViewDescriptor;
 import com.vlsolutions.swing.docking.DockKey;
+import com.vlsolutions.swing.docking.event.DockableSelectionEvent;
+import com.vlsolutions.swing.docking.event.DockableSelectionListener;
 import com.vlsolutions.swing.docking.event.DockableStateChangeEvent;
 import com.vlsolutions.swing.docking.event.DockableStateChangeListener;
 
@@ -67,7 +69,7 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 	}
 
 	@Override
-	public void initializeDockingContext(SyDockingContext dockingContext) {
+	public void initializeDockingContext(final SyDockingContext dockingContext) {
 		if (hasDockableViewDescriptor()) {
 			IDockableViewDescriptor desc = (IDockableViewDescriptor) getViewDescriptor();
 
@@ -78,6 +80,26 @@ public class DefaultComponentsManagementPanel<E extends IComponent> extends Defa
 			dockKey.setAutoHideEnabled(false);
 
 			dockingContext.registerDockable(this);
+
+			dockingContext.addDockableSelectionListener(new DockableSelectionListener() {
+
+				@Override
+				public void selectionChanged(final DockableSelectionEvent e) {
+					dockingContext.getPerspectivesManager().addDefaultKeyStroke("searchHeader", KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK), new AbstractAction() {
+
+						private static final long serialVersionUID = 3407710548035466524L;
+
+						@Override
+						public void actionPerformed(ActionEvent ae) {
+							if (((getSearchHeader() == null) || (getSearchHeader().isEnabledSearchAction()))) {
+								DefaultComponentsManagementPanel defaultComponentsManagementPanel = (DefaultComponentsManagementPanel) e.getSelectedDockable().getComponent();
+								defaultComponentsManagementPanel.getComponentsManagementController().searchComponents(defaultComponentsManagementPanel.getValueFilters());
+							}
+						}
+					});
+				}
+
+			});
 
 			dockingContext.addDockableStateChangeListener(this, new DockableStateChangeListener() {
 				@Override
