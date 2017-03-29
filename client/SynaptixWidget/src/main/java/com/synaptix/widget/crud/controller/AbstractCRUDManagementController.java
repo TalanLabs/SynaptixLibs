@@ -32,12 +32,15 @@ import com.synaptix.widget.viewworker.view.AbstractSavingViewWorker;
 /**
  * A CRUD Controller, create a table and filter and action CRUD
  *
- * @param <V> View factory
- * @param <E> CRUD Entity
- * @param <G> Pagination entity which
+ * @param <V>
+ *            View factory
+ * @param <E>
+ *            CRUD Entity
+ * @param <G>
+ *            Pagination entity which
  */
-public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFactory, E extends IEntity, G extends IEntity> extends AbstractComponentsManagementController<V, G> implements
-		ICRUDManagementController<G>, ICRUDContext<E> {
+public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFactory, E extends IEntity, G extends IEntity> extends AbstractComponentsManagementController<V, G>
+		implements ICRUDManagementController<G>, ICRUDContext<E> {
 
 	protected final Class<E> crudComponentClass;
 	private final Class<? extends ICRUDEntityService<E>> crudEntityServiceClass;
@@ -48,7 +51,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 	}
 
 	public AbstractCRUDManagementController(V viewFactory, Class<E> crudComponentClass, Class<G> paginationComponentClass, Class<? extends ICRUDEntityService<E>> crudEntityServiceClass,
-											Class<? extends IPaginationService<G>> paginationServiceClass) {
+			Class<? extends IPaginationService<G>> paginationServiceClass) {
 		super(viewFactory, paginationComponentClass, paginationServiceClass);
 
 		this.crudComponentClass = crudComponentClass;
@@ -525,14 +528,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						@Override
 						public boolean searchPerformed(Map<String, Object> valueFilterMap) {
 							switch (closeAction) {
-								case SHOW_PREVIOUS:
-									showPrevious(entity.getId());
-									break;
-								case SHOW_NEXT:
-									showNext(entity.getId());
-									break;
-								default:
-									break;
+							case SHOW_PREVIOUS:
+								showPrevious(entity.getId());
+								break;
+							case SHOW_NEXT:
+								showNext(entity.getId());
+								break;
+							default:
+								break;
 							}
 
 							return true;
@@ -556,7 +559,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 				} else {
 					displayException(parent, t);
 				}
-				if (parent != null && reopenIfException()) { // if parent is null, it means the view has been closed
+				if (parent == null && reopenIfException()) { // if parent is null, it means the view has been closed
 					_cloneEntity(entity);
 				}
 			}
