@@ -560,7 +560,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 					displayException(parent, t);
 				}
 				if (parent == null && reopenIfException()) { // if parent is null, it means the view has been closed
-					_cloneEntity(entity);
+					_editEntity(entity);
 				}
 			}
 		});
