@@ -30,9 +30,23 @@ public abstract class AbstractFlux implements Serializable, IFlux {
 		this.retry = 0;
 	}
 
+	/**
+	 * Called by the RetryAgent
+	 * 
+	 * @return
+	 */
 	public boolean retry() {
 		retry++;
 		return retry < 6;
+	}
+
+	/**
+	 * Get the number of retries by the RetryAgent
+	 * 
+	 * @return
+	 */
+	public int getRetryNumber() {
+		return retry;
 	}
 
 	/**
@@ -64,6 +78,9 @@ public abstract class AbstractFlux implements Serializable, IFlux {
 
 	@Override
 	public void addMessageListener(int index, IMessageListener messageListener) {
+		if (retry > 0) {
+			return;
+		}
 		if (messageListenerList == null) {
 			messageListenerList = new ArrayList<IMessageListener>();
 		}
