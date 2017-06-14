@@ -49,4 +49,9 @@ public interface ITaskBackup extends IEntity, ITracable {
 
 	void setPriority(int priority);
 
+	@Column(name = "ID_PROCESS")
+	IId getIdProcess();
+
+	void setIdProcess(IId idProcess);
+
 }
