@@ -63,6 +63,8 @@
 		<generated.sources.dir>${project.build.directory}/generated-sources/apt</generated.sources.dir>
 
 		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+		<sonar.sources>src/main</sonar.sources>
+        <sonar.exclusions>target/**/*</sonar.exclusions>
 	</properties>
 	<scm>
         <url>https://gitlab.talanlabs.com/synaptix/SynaptixLib</url>
