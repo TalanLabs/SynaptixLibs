@@ -22,19 +22,35 @@
 	</select>
 	
 	<update id="flagTasksBackupToLaunch">
-		update t_task_backup
-		set id_process = #{idProcess,javaType=IId},
-		updated_date = #{date,javaType=java.util.Date}
-		where rowid in (
-			select rowid from (
-				select rowid
-				from t_task_backup
-				where nb_retry <![CDATA[<]]> #{maxRetry}
-				and nvl(updated_date, created_date) <![CDATA[<]]> #{date,javaType=java.util.Date} - 10 / 24 / 60
-				order by priority, nvl(updated_date, created_date)
-			)
-			where rownum <![CDATA[<=]]> #{nbLines}
-		)
+		update t_task_backup 
+			set id_process = #{idProcess,javaType=IId},
+			updated_date = #{date,javaType=java.util.Date},
+			version = version + 1
+		where id in (
+		    select id from (
+		      select * from (
+		        select * from (
+		          select t.*, ROW_NUMBER() OVER (PARTITION BY id_cluster ORDER BY priority, nvl(updated_date, created_date)) AS rnk
+		          from t_task_backup t
+		          where t.nb_retry <![CDATA[<]]> #{maxRetry}
+		          and t.id_cluster is not null
+		          and id_process is null
+		          and t.created_date <![CDATA[<]]> #{date,javaType=java.util.Date} - #{createdDateDelay} / 24 / 60
+		          and (t.updated_date <![CDATA[<]]> #{date,javaType=java.util.Date} - #{updatedDateDelay} / 24 / 60 or t.updated_date is null)
+		        ) where rnk = 1
+		        UNION ALL
+		        select t.*, 1 as rnk
+		        from t_task_backup t
+		        where t.nb_retry <![CDATA[<]]> #{maxRetry}
+		        and t.id_cluster is null
+		        and id_process is null
+		        and t.created_date <![CDATA[<]]> #{date,javaType=java.util.Date} - #{createdDateDelay} / 24 / 60
+		        and (t.updated_date <![CDATA[<]]> #{date,javaType=java.util.Date} - #{updatedDateDelay} / 24 / 60 or t.updated_date is null)    
+		      )
+		      order by priority, nvl(updated_date, created_date)
+		    ) 
+		    where rownum <![CDATA[<=]]> #{nbLines}
+		    )
 	</update>
 	
 	<select id="findTasksBackupToLaunch" resultMap="com.synaptix.taskmanager.model.ITaskBackup">
