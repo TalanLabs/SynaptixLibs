@@ -17,7 +17,8 @@ public interface TaskManagerMapper {
 
 	public <E extends Enum<E>, F extends ITaskObject<E>> ITaskBackup findBackupByIdObjectAndClass(@Param("idObject") IId idObject, @Param("objectType") Class<F> objectClass);
 
-	public void flagTasksBackupToLaunch(@Param("idProcess") IId idProcess, @Param("nbLines") int nbLines, @Param("maxRetry") int maxRetry, @Param("date") Date date);
+	public void flagTasksBackupToLaunch(@Param("idProcess") IId idProcess, @Param("nbLines") int nbLines, @Param("maxRetry") int maxRetry, @Param("date") Date date,
+			@Param("createdDateDelay") int createdDateDelay, @Param("updatedDateDelay") int updatedDateDelay);
 
 	public List<ITaskBackup> findTasksBackupToLaunch(@Param("idProcess") IId idProcess);
 
