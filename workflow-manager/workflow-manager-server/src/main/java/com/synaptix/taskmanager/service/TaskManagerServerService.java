@@ -237,7 +237,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					} else {
 						TaskExecutionResult taskExecutionResult = serviceResultContainer.ingest(executeTask(taskService, task));
 						if (taskExecutionResult.stopAndRestart) {
-							task = entityServerService.findEntityById(ITask.class, task.getId());
+						    task = entityServerService.findEntityById(ITask.class, task.getId());
 							restart = true;
 						}
 						done = taskExecutionResult.done;
@@ -278,6 +278,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 						recycleList.clear();
 					}
 				} else {
+				    task = entityServerService.findEntityById(ITask.class, task.getId());
 					setTaskNothing(task, errorMessage);
 					recycleList.add(task);
 				}
