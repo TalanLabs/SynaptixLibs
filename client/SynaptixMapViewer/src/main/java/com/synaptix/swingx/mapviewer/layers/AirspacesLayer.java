@@ -47,7 +47,7 @@ public class AirspacesLayer extends AbstractLayer {
 			}
 			return 0;
 		}
-	};
+	}
 
 	@Override
 	protected void doPick(DrawContext dc, Point point) {
