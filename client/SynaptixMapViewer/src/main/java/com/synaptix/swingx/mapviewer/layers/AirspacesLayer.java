@@ -2,8 +2,7 @@ package com.synaptix.swingx.mapviewer.layers;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.jdesktop.swingx.mapviewer.DrawContext;
 import org.jdesktop.swingx.mapviewer.layers.AbstractLayer;
@@ -37,9 +36,25 @@ public class AirspacesLayer extends AbstractLayer {
 		this.airspaces.clear();
 	}
 
+	public class AirspaceComparator implements Comparator<Airspace>{
+		public int compare(Airspace airspace1, Airspace airspace2) {
+			if(airspace1 instanceof Highlightable && airspace2 instanceof Highlightable){
+				if(!((Highlightable)(airspace1)).isHighlighted() && ((Highlightable)(airspace2)).isHighlighted()){
+					return -1;
+				} else if(((Highlightable)(airspace1)).isHighlighted() && !((Highlightable)(airspace2)).isHighlighted()){
+					return 1;
+				}
+			}
+			return 0;
+		}
+	};
+
 	@Override
 	protected void doPick(DrawContext dc, Point point) {
-		for (Airspace airspace : airspaces) {
+		List<Airspace> sortedAirspaces  = new ArrayList<Airspace>();
+		sortedAirspaces.addAll(airspaces);
+		Collections.sort(sortedAirspaces, new AirspaceComparator());
+		for (Airspace airspace : sortedAirspaces) {
 			if (airspace.isVisible()) {
 				airspace.pick(dc, point, this);
 			}
@@ -48,7 +63,10 @@ public class AirspacesLayer extends AbstractLayer {
 
 	@Override
 	protected void doPaint(Graphics2D g, DrawContext dc) {
-		for (Airspace airspace : airspaces) {
+		List<Airspace> sortedAirspaces  = new ArrayList<Airspace>();
+		sortedAirspaces.addAll(airspaces);
+		Collections.sort(sortedAirspaces, new AirspaceComparator());
+		for (Airspace airspace : sortedAirspaces) {
 			if (airspace.isVisible()) {
 				airspace.paint(g, dc, this);
 			}
