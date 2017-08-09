@@ -28,7 +28,7 @@ public class JSyTableHeader extends JTableHeader {
 	public JSyTableHeader(TableColumnModel cm) {
 		super(cm);
 
-		showToolTips = false;
+		showToolTips = true;
 	}
 
 	public boolean isShowToolTips() {
@@ -109,7 +109,7 @@ public class JSyTableHeader extends JTableHeader {
 
 				this.setText(sb.toString());
 
-				if (showToolTips) {
+				if (isShowToolTips()) {
 					this.setToolTipText(sb.toString());
 				}
 
