@@ -236,13 +236,20 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 						errorMessage = "Service code does not exist";
 					} else {
 						TaskExecutionResult taskExecutionResult = serviceResultContainer.ingest(executeTask(taskService, task));
-						if (taskExecutionResult.stopAndRestart) {
-						    task = entityServerService.findEntityById(ITask.class, task.getId());
-							restart = true;
+						errorMessage = taskExecutionResult.errorMessage;
+						if (EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage().equals(errorMessage)) {
+							task = entityServerService.findEntityById(ITask.class, task.getId());
+							if (task.getTaskStatus() == TaskStatus.DONE) { // In case the task is already executed by another thread
+								restart = true;
+								break;
+							}
 						}
 						done = taskExecutionResult.done;
-						errorMessage = taskExecutionResult.errorMessage;
 						errorSet.addAll(taskExecutionResult.errorSet);
+						if (taskExecutionResult.stopAndRestart) {
+							task = entityServerService.findEntityById(ITask.class, task.getId());
+							restart = true;
+						}
 					}
 				}
 
@@ -254,14 +261,14 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					}
 
 					for (IId idTask : tasksLists.getIdTasksToRemove()) {
-						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = recycleList.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
 								break;
 							}
 						}
-						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext(); ) {
+						for (Iterator<ITask> iterator = tasksQueue.iterator(); iterator.hasNext();) {
 							ITask iTask = iterator.next();
 							if (idTask.equals(iTask.getId())) {
 								iterator.remove();
@@ -278,7 +285,6 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 						recycleList.clear();
 					}
 				} else {
-				    task = entityServerService.findEntityById(ITask.class, task.getId());
 					setTaskNothing(task, errorMessage);
 					recycleList.add(task);
 				}
@@ -356,7 +362,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 			LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
 
 			task = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
-			taskExecutionResult.errorMessage = ExceptionUtils.getRootCauseMessage(t);
+			taskExecutionResult.errorMessage = EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 2000));
 			updateTask(task);
 		}
