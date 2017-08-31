@@ -32,6 +32,10 @@ public interface SynaptixDateConstantsBundle extends ConstantsWithLookingBundle 
 	@Description("Format date time ex : dd/MM/yyyy HH:mm => 25/01/2012 15:12")
 	public String displayDateTimeFormat();
 
+	@DefaultStringValue("dd/MM/yyyy HH:mm:ss")
+	@Description("Format date time ex : dd/MM/yyyy HH:mm => 25/01/2012 15:12")
+	public String displayDateTimeSecondFormat();
+
 	@DefaultStringValue("dd/MM HH:mm")
 	@Description("Format date time ex : dd/MM HH:mm => 25/01 15:12")
 	public String displayShortDateTimeFormat();
