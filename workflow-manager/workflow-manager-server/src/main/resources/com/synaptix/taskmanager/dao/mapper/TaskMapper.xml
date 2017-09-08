@@ -204,10 +204,4 @@
            and t.next_status = 'VAL'
     </select>
 
-	<select id="hasCurrentTasks" resultType="java.lang.Boolean">
-		SELECT decode(count(1), 0, 1, 1, 0) 
-        FROM t_task 
-        WHERE id_cluster = #{idTaskCluster,javaType=IId} AND status = 'DONE' AND rownum = 1 
-	</select>
-
 </mapper>

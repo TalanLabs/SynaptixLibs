@@ -25,6 +25,7 @@ import com.synaptix.entity.IErrorEntity;
 import com.synaptix.entity.IId;
 import com.synaptix.entity.IdRaw;
 import com.synaptix.mybatis.dao.IGUIDGenerator;
+import com.synaptix.mybatis.delegate.ComponentServiceDelegate;
 import com.synaptix.mybatis.delegate.EntityServiceDelegate;
 import com.synaptix.service.ServiceException;
 import com.synaptix.taskmanager.antlr.AbstractGraphNode;
@@ -56,6 +57,7 @@ import com.synaptix.taskmanager.model.ITaskObject;
 import com.synaptix.taskmanager.model.ITaskType;
 import com.synaptix.taskmanager.model.ITodo;
 import com.synaptix.taskmanager.model.TaskChainFields;
+import com.synaptix.taskmanager.model.TaskFields;
 import com.synaptix.taskmanager.model.TaskTypeFields;
 import com.synaptix.taskmanager.model.TasksLists;
 import com.synaptix.taskmanager.model.domains.EnumErrorMessages;
@@ -74,6 +76,9 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 
 	@Inject
 	private EntityServiceDelegate entityServiceDelegate;
+
+	@Inject
+	private ComponentServiceDelegate componentServiceDelegate;
 
 	@Inject
 	private Map<Class<? extends ITaskObject<?>>, IObjectTypeTaskFactory<?>> objectTypeTaskFactoryMap;
@@ -129,18 +134,33 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 	 * Archive a cluster : move all tasks to archive table (T_TASK_ARCH).
 	 */
 	public boolean archiveCluster(IId idTaskCluster) {
-		if (getTaskMapper().hasCurrentTasks(idTaskCluster)) {
-			LOG.warn("Archive cluster id=" + idTaskCluster + " was asked, but unfinished tasks still exist.");
+		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
+		if (taskCluster == null) {
+			LOG.error("Trying to archive cluster id=" + idTaskCluster + " that does not exist.");
+			return false;
+		}
+		if (taskCluster.isCheckArchive()) {
+			LOG.error("Trying to archive cluster id=" + idTaskCluster + " that is already archived.");
 			return false;
 		}
 
-		ITaskCluster taskCluster = entityServiceDelegate.findEntityById(ITaskCluster.class, idTaskCluster);
-		if (taskCluster != null && !taskCluster.isCheckArchive()) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Archive cluster with id = " + taskCluster.getId());
-			}
-			getTaskManagerMapper().archiveTaskCluster(idTaskCluster);
+		List<ITask> taskList = componentServiceDelegate.findComponentsByIdParent(ITask.class, TaskFields.idCluster().name(), idTaskCluster);
+		if (taskList.isEmpty()) {
+			LOG.error("Trying to archive cluster id=" + idTaskCluster + " but it has no tasks.");
+			return false;
 		}
+		for (ITask task : taskList) {
+			if (task.getTaskStatus() == null || task.getTaskStatus() == TaskStatus.TODO || task.getTaskStatus() == TaskStatus.CURRENT) {
+				LOG.error("Trying to archive cluster id=" + idTaskCluster + " but it still has current tasks.");
+				return false;
+			}
+		}
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Archive cluster with id = " + taskCluster.getId());
+		}
+		getTaskManagerMapper().archiveTaskCluster(idTaskCluster);
+
 		return true;
 	}
 
