@@ -10,7 +10,6 @@ import com.synaptix.taskmanager.model.IClusterTaskResult;
 import com.synaptix.taskmanager.model.ITask;
 import com.synaptix.taskmanager.model.ITaskObject;
 
-
 public interface TaskMapper {
 
 	/**
@@ -118,6 +117,4 @@ public interface TaskMapper {
 	void removeObjectFromCluster(@Param("idObject") IId idObject);
 
 	ITask selectCurrentTaskByIdObject(@Param("idObject") IId idObject);
-
-	boolean hasCurrentTasks(@Param("idTaskCluster") IId idTaskCluster);
 }
