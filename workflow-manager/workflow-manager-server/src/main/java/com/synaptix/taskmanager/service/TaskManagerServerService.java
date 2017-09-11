@@ -507,6 +507,11 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 	}
 
 	@Override
+	public void clear() {
+		taskManagerServiceDelegate.clearQueue();
+	}
+
+	@Override
 	@Transactional(commit = true)
 	public <E extends Enum<E>, F extends ITaskObject<E>> void cancelTaskObject(F object) {
 		taskManagerServiceDelegate.cancelTaskObject(object);
