@@ -1045,6 +1045,12 @@ public class TaskManagerServiceDelegate extends AbstractDelegate {
 		return clusterIdsQueue.get();
 	}
 
+	public void clearQueue() {
+		if (clusterIdsQueue.get() != null && !clusterIdsQueue.get().isEmpty()) {
+			clusterIdsQueue.get().clear();
+		}
+	}
+
 	public IId getNextFromQueue() {
 		if (clusterIdsQueue.get() == null || getQueue().isEmpty()) {
 			return null;

@@ -22,7 +22,8 @@ public interface ITaskManagerService {
 	 * Starts the task manager engine. Links the object to a new cluster if the object doesn't already have one.<br/>
 	 * Raised errors in the set comes from the business part. The service result contains technical errors.
 	 *
-	 * @param idTaskObject ID of the task object.
+	 * @param idTaskObject
+	 *            ID of the task object.
 	 */
 	<E extends Enum<E>, F extends ITaskObject<E>> IServiceResult<Set<IError>> startEngine(IId idTaskObject, Class<F> objectClass);
 
@@ -76,6 +77,11 @@ public interface ITaskManagerService {
 	 */
 	IServiceResult<Set<IError>> restart();
 
+	/**
+	 * Clears the task manager queue
+	 */
+	void clear();
+
 	<E extends Enum<E>, F extends ITaskObject<E>> void addToQueue(F taskObject);
 
 	void saveErrors(ITask task, Set<IError> errors);
@@ -85,8 +91,10 @@ public interface ITaskManagerService {
 	/**
 	 * Returns the shortest path between two statuses.
 	 *
-	 * @param currentStatus start status
-	 * @param nextStatus    target status
+	 * @param currentStatus
+	 *            start status
+	 * @param nextStatus
+	 *            target status
 	 * @return Empty String if no path was found
 	 */
 	String getStatusPath(Class<? extends ITaskObject<?>> taskObjectClass, String currentStatus, String nextStatus);
