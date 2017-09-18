@@ -61,4 +61,10 @@
 	<update id="deleteTaskCluster">
 		call p_task_manager.delete_task_cluster_arch(#{idCluster,javaType=IId})
 	</update>
+	
+	<insert id="insertIntoTaskBackup">
+		insert into t_task_backup (id, version, id_cluster, id_object, object_type, nb_retry, created_date, created_by)
+		values
+		(sys_guid(), 0, #{idCluster,javaType=IId}, #{idObject,javaType=IId}, #{objectType,javaType=java.lang.Class}, 0, #{createdDate,javaType=java.util.Date}, #{createdBy,javaType=java.lang.String})
+	</insert>
 </mapper>

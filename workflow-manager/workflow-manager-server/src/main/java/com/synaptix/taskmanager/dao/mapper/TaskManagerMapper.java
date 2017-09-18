@@ -24,4 +24,7 @@ public interface TaskManagerMapper {
 
 	public void deleteTaskCluster(@Param("idCluster") IId idCluster);
 
+	public void insertIntoTaskBackup(@Param("idCluster") IId idCluster, @Param("idObject") IId idObject, @Param("objectType") Class<?> objectClass, @Param("createdDate") Date createdDate,
+			@Param("createdBy") String createdBy);
+
 }
