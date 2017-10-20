@@ -96,6 +96,10 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().unicityConstraintException();
 	}
 
+	protected String getCancellationError(String description) {
+		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().checkCancelConstraintException(description);
+	}
+
 	protected abstract void loadEntities();
 
 	private Serializable addCRUDEntity(E entity) {
@@ -147,9 +151,11 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_cloneEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
-
 									_cloneEntity(entity);
 								} else {
 									getViewFactory().showErrorMessageDialog(getView(), t);
@@ -217,7 +223,10 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_editEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_editEntity(entity);
 								} else {
@@ -297,7 +306,10 @@ public abstract class AbstractCRUDController<V extends ISynaptixViewFactory, E e
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_cloneEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_cloneEntity(entity);
 								} else {

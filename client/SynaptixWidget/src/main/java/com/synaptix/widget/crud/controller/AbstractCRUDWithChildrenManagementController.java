@@ -184,10 +184,11 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 									public void fail(Throwable t) {
 										if (t.getCause() instanceof ServiceException) {
 											ServiceException err = (ServiceException) t.getCause();
-											if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
-												getViewFactory()
-														.showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
-
+											if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+												getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+												cloneChildEntity(paginationEntity, entity);
+											} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+												getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 												cloneChildEntity(paginationEntity, entity);
 											} else {
 												getViewFactory().showErrorMessageDialog(getView(), t);
@@ -242,7 +243,11 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 									public void fail(Throwable t) {
 										if (t.getCause() instanceof ServiceException) {
 											ServiceException err = (ServiceException) t.getCause();
-											if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+											if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+												getViewFactory()
+														.showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+												editChildEntity(paginationEntity, entity);
+											} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 												getViewFactory()
 														.showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 												editChildEntity(paginationEntity, entity);
@@ -325,7 +330,11 @@ public abstract class AbstractCRUDWithChildrenManagementController<V extends ISy
 									public void fail(Throwable t) {
 										if (t.getCause() instanceof ServiceException) {
 											ServiceException err = (ServiceException) t.getCause();
-											if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+											if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+												getViewFactory()
+														.showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+												cloneChildEntity(paginationEntity, entity);
+											} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 												getViewFactory()
 														.showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 												cloneChildEntity(paginationEntity, entity);

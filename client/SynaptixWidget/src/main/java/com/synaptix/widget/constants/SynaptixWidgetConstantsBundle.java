@@ -652,6 +652,9 @@ public interface SynaptixWidgetConstantsBundle extends ConstantsWithLookingBundl
 	@DefaultStringValue("Cet élément existe déjà dans la base de données")
 	public String unicityConstraintException();
 
+	@DefaultStringValue("Un objet référencé a été supprimé de la base de données  ({0})")
+	public String checkCancelConstraintException(String objectName);
+
 	@DefaultStringValue("Validation")
 	public String validation();
 
