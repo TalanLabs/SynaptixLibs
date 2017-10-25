@@ -9,6 +9,7 @@ import com.synaptix.entity.IId;
 public interface ICRUDEntityService<E extends IEntity> {
 
 	public static final String UNICITY_CONSTRAINT = "unicityConstraint";
+	public static final String CHECK_CANCEL_CONSTRAINT = "checkCancelConstraint";
 
 	/**
 	 * Insert an entity

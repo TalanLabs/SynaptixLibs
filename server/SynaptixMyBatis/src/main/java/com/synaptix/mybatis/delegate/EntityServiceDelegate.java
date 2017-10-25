@@ -1,5 +1,7 @@
 package com.synaptix.mybatis.delegate;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import com.google.inject.Inject;
@@ -23,6 +25,10 @@ public class EntityServiceDelegate {
 	private final IDaoSession daoSession;
 
 	private ComponentServiceDelegate componentServiceDelegate;
+
+
+	@Inject
+	private IParamsServiceDelegate paramsServiceDelegate;
 
 	@Inject
 	public EntityServiceDelegate(IDaoSession daoSession) {
@@ -74,10 +80,43 @@ public class EntityServiceDelegate {
 		}
 	}
 
+	private String validateAndGetCanceledReference(IEntity entity) throws InvocationTargetException, IllegalAccessException {
+		for(Method method:entity.getClass().getDeclaredMethods()){
+			if(ICancellable.class.isAssignableFrom(method.getReturnType()) ){
+				ICancellable cancelable = (ICancellable) method.invoke(entity);
+				if(cancelable != null && cancelable.getCheckCancel()) {
+					return method.getReturnType().getSimpleName();
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public <E extends IEntity> void checkCancelConstraint(E entity) throws ServiceException {
+		String ret = null;
+		try {
+			if (entity != null) {
+				ret = validateAndGetCanceledReference(entity);
+				if (ret != null) {
+					throw new ServiceException(IEntityService.CHECK_CANCEL_CONSTRAINT, ret, null);
+				}
+			}
+		} catch (ServiceException se) {
+			throw se;
+		} catch (Exception e) {
+			throw new ServiceException("", e.getMessage(), e);
+		}
+	}
+
 	/**
 	 * Add entity and check unicity
 	 */
 	public <E extends IEntity> int addEntity(E entity, boolean checkUnicityConstraint) throws ServiceException {
+		if(paramsServiceDelegate != null && paramsServiceDelegate.getBooleanParam("ALLOW_CHECK_CANCEL_VALIDATION", false)) {
+			checkCancelConstraint(entity);
+		}
+
 		if (checkUnicityConstraint) {
 			checkUnicityConstraint(entity);
 		}
@@ -88,6 +127,10 @@ public class EntityServiceDelegate {
 	 * Edit entity and check unicity
 	 */
 	public <E extends IEntity> int editEntity(E entity, boolean checkUnicityConstraint) throws ServiceException {
+		if(paramsServiceDelegate != null && paramsServiceDelegate.getBooleanParam("ALLOW_CHECK_CANCEL_VALIDATION", false)) {
+			checkCancelConstraint(entity);
+		}
+
 		if (checkUnicityConstraint) {
 			checkUnicityConstraint(entity);
 		}

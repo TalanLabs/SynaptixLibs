@@ -101,6 +101,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().unicityConstraintException();
 	}
 
+	protected String getCancellationError(String description) {
+		return StaticWidgetHelper.getSynaptixWidgetConstantsBundle().checkCancelConstraintException(description);
+	}
+
 	private IId addCRUDEntity(E entity) {
 		if (crudEntityServiceClass != null) {
 			return getCRUDEntityService().addCRUDEntity(entity);
@@ -160,7 +164,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_cloneEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_cloneEntity(entity);
 								} else {
@@ -266,7 +273,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_editEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(view, StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_editEntity(entity);
 								} else {
@@ -385,7 +395,10 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 						public void fail(Throwable t) {
 							if (t.getCause() instanceof ServiceException) {
 								ServiceException err = (ServiceException) t.getCause();
-								if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+								if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+									_cloneEntity(entity);
+								} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 									getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 									_cloneEntity(entity);
 								} else {
@@ -548,9 +561,14 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 
 			@Override
 			public void fail(Throwable t) {
+				boolean checkCancelConstraintException = false;
 				if (t.getCause() instanceof ServiceException) {
 					ServiceException err = (ServiceException) t.getCause();
-					if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
+					if (ICRUDEntityService.CHECK_CANCEL_CONSTRAINT.equals(err.getCode())) {
+						checkCancelConstraintException = true;
+						getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getCancellationError(err.getDescription()));
+						// _editEntity(entity); // we are in browse mode
+					} else if (ICRUDEntityService.UNICITY_CONSTRAINT.equals(err.getCode())) {
 						getViewFactory().showErrorMessageDialog(getView(), StaticWidgetHelper.getSynaptixWidgetConstantsBundle().error(), getUnicityError(err.getDescription()));
 						// _editEntity(entity); // we are in browse mode
 					} else {
@@ -559,7 +577,7 @@ public abstract class AbstractCRUDManagementController<V extends ISynaptixViewFa
 				} else {
 					displayException(parent, t);
 				}
-				if (parent == null && reopenIfException()) { // if parent is null, it means the view has been closed
+				if ((parent == null && reopenIfException()) || checkCancelConstraintException) { // if parent is null, it means the view has been closed
 					_editEntity(entity);
 				}
 			}
