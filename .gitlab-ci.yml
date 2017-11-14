@@ -36,7 +36,7 @@ test_sonar_job:
   only:
     - master
   script:
-    - mvn --batch-mode verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.0.1:sonar -Dsonar.host.url=http://stx-th2-dev03.vlan-admin.private:9000 -Dsonar.login=e84dbcbe350de817b4be51cbb821cba087acb04a -PCI
+    - mvn --batch-mode verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.0.1:sonar -Dsonar.host.url=https://sonar.talanlabs.com -Dsonar.login=e84dbcbe350de817b4be51cbb821cba087acb04a -PCI
   tags:
     - docker
 deploy_job:
