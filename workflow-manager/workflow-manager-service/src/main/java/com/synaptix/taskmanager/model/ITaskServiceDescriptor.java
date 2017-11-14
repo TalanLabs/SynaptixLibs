@@ -28,4 +28,7 @@ public interface ITaskServiceDescriptor extends IComponent {
 
 	public void setNature(ServiceNature nature);
 
+	public boolean isCheckGenericEvent();
+
+	public void setCheckGenericEvent(boolean checkGenericEvent);
 }

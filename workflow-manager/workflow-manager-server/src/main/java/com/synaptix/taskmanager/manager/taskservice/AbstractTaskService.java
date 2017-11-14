@@ -71,6 +71,11 @@ public abstract class AbstractTaskService<F> extends AbstractDelegate implements
 	}
 
 	@Override
+	public boolean isCheckGenericEvent() {
+		return false;
+	}
+
+	@Override
 	public void onTodo(ITask task) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("onTodo " + task);

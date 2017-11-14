@@ -52,6 +52,7 @@ public class TaskServiceDiscovery {
 					taskServiceDescriptor.setDescription(taskService.getDescription());
 					taskServiceDescriptor.setNature(taskService.getNature());
 					taskServiceDescriptor.setObjectType(taskService.getObjectKinds());
+					taskServiceDescriptor.setCheckGenericEvent(taskService.isCheckGenericEvent());
 
 					taskServiceDescriptors.add(taskServiceDescriptor);
 

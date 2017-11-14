@@ -92,4 +92,33 @@ public interface ITaskType extends ITracable, ICancellableEntity, INlsMessage {
 
 	public void setTodoFolder(ITodoFolder todoFolder);
 
+	@Column(name = "EVENT_TYPE", length = 3)
+	@JdbcType(JdbcTypesEnum.VARCHAR)
+	public String getEventType();
+
+	public void setEventType(String eventType);
+
+	@Column(name = "ID_EVENT_ACTION")
+	@JdbcType(JdbcTypesEnum.VARCHAR)
+	public IId getIdEventAction();
+
+	public void setIdEventAction(IId idEventAction);
+
+	@Column(name = "CHECK_IF_EVENT_EXISTS")
+	@DefaultValue("'0'")
+	public boolean isCheckIfEventExists();
+
+	public void setCheckIfEventExists(boolean checkIfEventExists);
+
+	@Column(name = "CHECK_EVENT_EXPORT_DATA")
+	@DefaultValue("'0'")
+	public boolean isCheckEventExportData();
+
+	public void setCheckEventExportData(boolean checkEventExportData);
+
+	@Column(name = "CHECK_STOP_TASK")
+	@DefaultValue("'0'")
+	public boolean isCheckStopTask();
+
+	public void setCheckStopTask(boolean checkStopTask);
 }
