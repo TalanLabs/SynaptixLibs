@@ -57,7 +57,7 @@ public class TaskServiceDiscovery {
 					taskServiceDescriptors.add(taskServiceDescriptor);
 
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("Add TaskServiceDefaultUpdateStatusSimpleTaskService " + taskService.getCode() + " " + taskService.getClass());
+						LOG.debug("Add TaskService " + taskService.getCode() + " " + taskService.getClass());
 					}
 				}
 

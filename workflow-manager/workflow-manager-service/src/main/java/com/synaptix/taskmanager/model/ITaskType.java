@@ -116,7 +116,7 @@ public interface ITaskType extends ITracable, ICancellableEntity, INlsMessage {
 
 	public void setCheckEventExportData(boolean checkEventExportData);
 
-	@Column(name = "CHECK_STOP_TASK ")
+	@Column(name = "CHECK_STOP_TASK")
 	@DefaultValue("'0'")
 	public boolean isCheckStopTask();
 
