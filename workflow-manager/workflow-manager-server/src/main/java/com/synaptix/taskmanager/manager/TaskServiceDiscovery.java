@@ -52,11 +52,12 @@ public class TaskServiceDiscovery {
 					taskServiceDescriptor.setDescription(taskService.getDescription());
 					taskServiceDescriptor.setNature(taskService.getNature());
 					taskServiceDescriptor.setObjectType(taskService.getObjectKinds());
+					taskServiceDescriptor.setCheckGenericEvent(taskService.isCheckGenericEvent());
 
 					taskServiceDescriptors.add(taskServiceDescriptor);
 
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("Add TaskService " + taskService.getCode() + " " + taskService.getClass());
+						LOG.debug("Add TaskServiceDefaultUpdateStatusSimpleTaskService " + taskService.getCode() + " " + taskService.getClass());
 					}
 				}
 

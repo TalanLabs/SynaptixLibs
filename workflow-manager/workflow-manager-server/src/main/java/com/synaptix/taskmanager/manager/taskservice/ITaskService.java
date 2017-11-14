@@ -24,6 +24,8 @@ public interface ITaskService {
 
 	String getDescription();
 
+	boolean isCheckGenericEvent();
+
 	void onTodo(ITask task);
 
 	void onCurrent(ITask task);
