@@ -62,7 +62,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Decorate formatted with LocalDate
-	 * 
+	 *
 	 * @param formattedTextField
 	 * @return
 	 */
@@ -73,9 +73,9 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Use with caution: you might want to use .with"field"(1) to make sure the date is right.<br/>
-	 * 
+	 *
 	 * Example: for MM/yyyy, use .withDayOfMonth(1)
-	 * 
+	 *
 	 * @param formattedTextField
 	 * @param pattern
 	 * @return
@@ -88,7 +88,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Decorate formatted with LocalDateTime
-	 * 
+	 *
 	 * @param formattedTextField
 	 * @return
 	 */
@@ -101,7 +101,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Decorate formatted with LocalTime
-	 * 
+	 *
 	 * @param formattedTextField
 	 * @return
 	 */
@@ -114,7 +114,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Set default renderer for table, LocalDate, LocalDateTime and LocalTime
-	 * 
+	 *
 	 * @param table
 	 */
 	public static JTable decorateTable(JTable table) {
@@ -127,7 +127,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Set default filter, comparator for table, LocalDate, LocalDateTime and LocalTime
-	 * 
+	 *
 	 * @param table
 	 * @return
 	 */
@@ -148,7 +148,7 @@ public final class JodaSwingUtils {
 
 	/**
 	 * Install focus & document listeners
-	 * 
+	 *
 	 * @param formattedTextField
 	 * @param pattern
 	 */
@@ -345,7 +345,7 @@ public final class JodaSwingUtils {
 
 		/**
 		 * true if default pattern displayed, false otherwise
-		 * 
+		 *
 		 * @return
 		 */
 		private boolean displayDefaultPattern() {
@@ -509,7 +509,11 @@ public final class JodaSwingUtils {
 			if (StringUtils.isBlank(source)) {
 				return null;
 			}
-			return super.parseObject(source);
+			LocalDate sourceDate = (LocalDate) super.parseObject(source);
+			if (sourceDate.getYear() < 1000){
+				sourceDate = sourceDate.plusYears(2000);
+			}
+			return sourceDate;
 		}
 	}
 
@@ -557,7 +561,11 @@ public final class JodaSwingUtils {
 			if (StringUtils.isBlank(source)) {
 				return null;
 			}
-			return super.parseObject(source);
+			LocalDateTime sourceDate = (LocalDateTime) super.parseObject(source);
+			if (sourceDate.getYear() < 1000){
+				sourceDate = sourceDate.plusYears(2000);
+			}
+			return sourceDate;
 		}
 	}
 
@@ -581,29 +589,29 @@ public final class JodaSwingUtils {
 				nb = -nb;
 			}
 			switch (unit) {
-			case 'd':
-				dateTime = dateTime.plusDays(nb);
-				break;
-			case 'M':
-				dateTime = dateTime.plusMonths(nb);
-				break;
-			case 'y':
-				dateTime = dateTime.plusYears(nb);
-				break;
-			case 'H':
-			case 'h':
-				dateTime = dateTime.plusHours(nb);
-				break;
-			case 'm':
-				dateTime = dateTime.plusMinutes(nb);
-				break;
-			case 's':
-				dateTime = dateTime.plusSeconds(nb);
-				break;
-			case 'w':
-				dateTime = dateTime.plusWeeks(nb);
-				break;
-			default:
+				case 'd':
+					dateTime = dateTime.plusDays(nb);
+					break;
+				case 'M':
+					dateTime = dateTime.plusMonths(nb);
+					break;
+				case 'y':
+					dateTime = dateTime.plusYears(nb);
+					break;
+				case 'H':
+				case 'h':
+					dateTime = dateTime.plusHours(nb);
+					break;
+				case 'm':
+					dateTime = dateTime.plusMinutes(nb);
+					break;
+				case 's':
+					dateTime = dateTime.plusSeconds(nb);
+					break;
+				case 'w':
+					dateTime = dateTime.plusWeeks(nb);
+					break;
+				default:
 			}
 		}
 		return dateTime;
