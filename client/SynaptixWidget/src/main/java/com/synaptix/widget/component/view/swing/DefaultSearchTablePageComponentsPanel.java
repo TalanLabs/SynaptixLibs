@@ -306,6 +306,7 @@ public class DefaultSearchTablePageComponentsPanel<E extends IComponent> extends
 			builder.setDefaultDialogBorder();
 			CellConstraints cc = new CellConstraints();
 			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tablePageComponentsPanel, detailComponent);
+			splitPane.setOneTouchExpandable(true);
 			splitPane.setResizeWeight(0.75);
 			builder.add(splitPane, cc.xy(1, 1));
 			return builder.getPanel();
@@ -328,6 +329,7 @@ public class DefaultSearchTablePageComponentsPanel<E extends IComponent> extends
 			CellConstraints cc = new CellConstraints();
 			builder.add(searchHeader, cc.xy(1, 1));
 			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tablePageComponentsPanel, detailComponent);
+			splitPane.setOneTouchExpandable(true);
 			splitPane.setResizeWeight(0.75);
 			builder.add(splitPane, cc.xy(1, 3));
 			return builder.getPanel();
@@ -350,6 +352,7 @@ public class DefaultSearchTablePageComponentsPanel<E extends IComponent> extends
 			CellConstraints cc = new CellConstraints();
 			builder.add(perimetersFilterPanel, cc.xy(1, 1)); // maybe the splitPane should include the perimeter in the upper part and let the detail full
 			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tablePageComponentsPanel, detailComponent);
+			splitPane.setOneTouchExpandable(true);
 			splitPane.setResizeWeight(0.75);
 			builder.add(splitPane, cc.xy(3, 1));
 			return builder.getPanel();
