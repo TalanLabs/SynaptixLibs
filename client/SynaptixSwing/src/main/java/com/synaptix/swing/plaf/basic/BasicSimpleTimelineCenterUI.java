@@ -318,7 +318,7 @@ public class BasicSimpleTimelineCenterUI extends SimpleTimelineCenterUI {
 
 				for (int j = i + 1; j < tasks.size(); j++) {
 					SimpleTask task2 = tasks.get(j);
-					if (task1.isShowIntersection()) {
+					if (task2.isShowIntersection()) {
 						int x3 = simpleTimeline.pointAtDate(task2.getDateMin());
 						int x4 = simpleTimeline.pointAtDate(task2.getDateMax());
 
