@@ -285,10 +285,10 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 	private JComponent buildContents() {
 		FormLayout layout;
 		if (withRemoveLabel) {
-			layout = new FormLayout("FILL:80DLU:grow,FILL:2DLU:NONE,FILL:20DLU:NONE,FILL:26DLU:NONE", //$NON-NLS-1$
+			layout = new FormLayout("FILL:50DLU:grow,FILL:2DLU:NONE,FILL:20DLU:NONE,FILL:26DLU:NONE", //$NON-NLS-1$
 					"CENTER:DEFAULT:NONE"); //$NON-NLS-1$
 		} else {
-			layout = new FormLayout("FILL:80DLU:grow,FILL:2DLU:NONE,FILL:20DLU:NONE", //$NON-NLS-1$
+			layout = new FormLayout("FILL:50DLU:grow,FILL:2DLU:NONE,FILL:20DLU:NONE", //$NON-NLS-1$
 					"CENTER:DEFAULT:NONE"); //$NON-NLS-1$
 		}
 		PanelBuilder builder = new PanelBuilder(layout);
@@ -366,7 +366,7 @@ public class DefaultSearchFieldWidget<E> extends WaitComponentFeedbackPanel impl
 	}
 
 	private void setEnabledNotEditable(boolean enabled) {
-		this.button.setEnabled(enabled);
+		this.button.setVisible(enabled);
 		this.removeAction.setEnabled(enabled);
 		this.searchAction.setEnabled(enabled);
 		this.searchButtonAction.setEnabled(enabled);
