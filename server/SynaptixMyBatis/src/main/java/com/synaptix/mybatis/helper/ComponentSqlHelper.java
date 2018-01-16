@@ -395,8 +395,8 @@ public class ComponentSqlHelper {
 		if (IRequestBuilder.class.isAssignableFrom(value.getClass())) {
 			IRequestBuilder requestBuilder = (IRequestBuilder) value;
 			res = requestBuilder.getSqlChunk(sqlName, prefix);
-		} else if ((dp.getCollection() != null) && (dp.getCollection().getSqlTableName() != null) && (!"ID".equals(dp.getCollection().getIdTarget()))
-				&& (IEntity.class.isAssignableFrom(entry.getValue().getClass()))) {
+		} else if ((dp.getCollection() != null) && (dp.getCollection().getSqlTableName() != null) && (!"ID".equals(dp.getCollection().getIdTarget())) && (IEntity.class.isAssignableFrom(
+				entry.getValue().getClass()))) {
 			// if there is an association, we use WHERE EXISTS(select 1 from
 			// t_asso_* a where a.id_target = #{id} and a.id_source =
 			// t?.id_source)
@@ -582,13 +582,13 @@ public class ComponentSqlHelper {
 			}
 
 			if (IEntity.class.isAssignableFrom(field.getPropertyClass())) { // if
-																			// field
-																			// is an
-																			// entity,
-																			// we
-																			// compare
-																			// the
-																			// ids
+				// field
+				// is an
+				// entity,
+				// we
+				// compare
+				// the
+				// ids
 				sb.append(".id");
 				javaType = IId.class;
 			}
@@ -621,8 +621,8 @@ public class ComponentSqlHelper {
 					String s = (String) value;
 					FinalObject fo = getFinalObject(componentClass, entry.getKey());
 					if (fo != null && fo.databasePropertyExtensionDescriptor != null) {
-						if ((fo.databasePropertyExtensionDescriptor.getColumn() != null && fo.databasePropertyExtensionDescriptor.getColumn().isUpperOnly())
-								|| (fo.databasePropertyExtensionDescriptor.getNlsColumn() != null && fo.databasePropertyExtensionDescriptor.getNlsColumn().isUpperOnly())) {
+						if ((fo.databasePropertyExtensionDescriptor.getColumn() != null && fo.databasePropertyExtensionDescriptor.getColumn().isUpperOnly()) || (
+								fo.databasePropertyExtensionDescriptor.getNlsColumn() != null && fo.databasePropertyExtensionDescriptor.getNlsColumn().isUpperOnly())) {
 							value = s.toUpperCase();
 						}
 					}
@@ -640,8 +640,8 @@ public class ComponentSqlHelper {
 		for (String propertyName : ed.getPropertyNames()) {
 			PropertyDescriptor propertyDescriptor = ed.getPropertyDescriptor(propertyName);
 			if (propertyDescriptor != null) {
-				DatabasePropertyExtensionDescriptor propertyExtensionDescriptor = (DatabasePropertyExtensionDescriptor) propertyDescriptor
-						.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class);
+				DatabasePropertyExtensionDescriptor propertyExtensionDescriptor = (DatabasePropertyExtensionDescriptor) propertyDescriptor.getPropertyExtensionDescriptor(
+						IDatabaseComponentExtension.class);
 				if (propertyExtensionDescriptor != null) {
 					Collection collection = propertyExtensionDescriptor.getCollection();
 					if (collection != null) {
@@ -679,8 +679,8 @@ public class ComponentSqlHelper {
 
 									boolean asso = false;
 									if (!sqlTableName.toString().equals(sqlTableName2.toString())) { // if asso needed
-										join = new Join(sqlTableName.toString(), alias, false, "t" + alias + "." + collection.getIdSource() + " = "
-												+ (oldAlias != null && !oldAlias.isEmpty() ? "t.t" + oldAlias : "t.") + "id");
+										join = new Join(sqlTableName.toString(), alias, false,
+												"t" + alias + "." + collection.getIdSource() + " = " + (oldAlias != null && !oldAlias.isEmpty() ? "t.t" + oldAlias : "t.") + "id");
 										join.setExternal(null);
 										join.setExternalDone(true);
 										join.setExternalToDo(true);
@@ -782,8 +782,7 @@ public class ComponentSqlHelper {
 						}
 
 						if (IEntity.class.isAssignableFrom(propertyClass)) {
-							@SuppressWarnings("unchecked")
-							ComponentDescriptor componentDescriptor = ComponentFactory.getInstance().getDescriptor((Class<IEntity>) propertyClass);
+							@SuppressWarnings("unchecked") ComponentDescriptor componentDescriptor = ComponentFactory.getInstance().getDescriptor((Class<IEntity>) propertyClass);
 							String sqlTableName = getSqlTableName(componentDescriptor);
 							if (sqlTableName != null) {
 								Join join = joinMap.get(name);
@@ -820,26 +819,40 @@ public class ComponentSqlHelper {
 
 	public void selectFields(SQL sqlBuilder, Map<String, Join> joinMap, ComponentDescriptor ed, String alias, String name, Set<String> columns, StringBuilder external) {
 		for (String propertyName : ed.getPropertyNames()) {
-			PropertyDescriptor propertyDescriptor = ed.getPropertyDescriptor(propertyName);
-			if (propertyDescriptor != null) {
-				DatabasePropertyExtensionDescriptor propertyExtensionDescriptor = (DatabasePropertyExtensionDescriptor) propertyDescriptor
-						.getPropertyExtensionDescriptor(IDatabaseComponentExtension.class);
-				if (propertyExtensionDescriptor != null) {
-					Collection collection = propertyExtensionDescriptor.getCollection();
-					Column column = propertyExtensionDescriptor.getColumn();
-					NlsColumn nlsMeaning = propertyExtensionDescriptor.getNlsColumn();
-					StringBuilder nsb = new StringBuilder();
-					if (name != null) {
-						nsb.append(name).append(".");
+			boolean find = true;
+			if (columns != null && !columns.isEmpty()) {
+				String newName = (name == null ? "" : (name + ".")) + propertyName;
+				Iterator<String> it = columns.iterator();
+				find = false;
+				while (it.hasNext() && !find) {
+					if (it.next().startsWith(newName)) {
+						find = true;
 					}
-					nsb.append(propertyName);
-					String n = nsb.toString();
-					if (collection != null) {
-						selectFieldsCollection(sqlBuilder, joinMap, alias, collection, n, columns, external);
-					} else if (column != null) {
-						selectFieldsColumn(sqlBuilder, joinMap, alias, name, column, n, columns, external);
-					} else if (nlsMeaning != null) {
-						selectFieldsNlsMeaning(sqlBuilder, joinMap, ed, alias, name, nlsMeaning, n, columns, external);
+				}
+			}
+
+			if (find) {
+				PropertyDescriptor propertyDescriptor = ed.getPropertyDescriptor(propertyName);
+				if (propertyDescriptor != null) {
+					DatabasePropertyExtensionDescriptor propertyExtensionDescriptor = (DatabasePropertyExtensionDescriptor) propertyDescriptor.getPropertyExtensionDescriptor(
+							IDatabaseComponentExtension.class);
+					if (propertyExtensionDescriptor != null) {
+						Collection collection = propertyExtensionDescriptor.getCollection();
+						Column column = propertyExtensionDescriptor.getColumn();
+						NlsColumn nlsMeaning = propertyExtensionDescriptor.getNlsColumn();
+						StringBuilder nsb = new StringBuilder();
+						if (name != null) {
+							nsb.append(name).append(".");
+						}
+						nsb.append(propertyName);
+						String n = nsb.toString();
+						if (collection != null) {
+							selectFieldsCollection(sqlBuilder, joinMap, alias, collection, n, columns, external);
+						} else if (column != null) {
+							selectFieldsColumn(sqlBuilder, joinMap, alias, name, column, n, columns, external);
+						} else if (nlsMeaning != null) {
+							selectFieldsNlsMeaning(sqlBuilder, joinMap, ed, alias, name, nlsMeaning, n, columns, external);
+						}
 					}
 				}
 			}
@@ -884,14 +897,14 @@ public class ComponentSqlHelper {
 						} else if (join.isExternalDone() == false) {
 							sqlBuilder.SELECT(s);
 							if (join.getExternal() != null) { // on
-																// vire
-																// les
-																// autres
-																// select
-																// identiques
-																// découlant
-																// des
-																// assos
+								// vire
+								// les
+								// autres
+								// select
+								// identiques
+								// découlant
+								// des
+								// assos
 								for (Entry<String, Join> joinL : joinMap.entrySet()) {
 									if (join.getExternal().equals(joinL.getValue().getExternal())) {
 										joinL.getValue().setExternalDone(true);
@@ -910,14 +923,14 @@ public class ComponentSqlHelper {
 						} else if (join.isExternalDone() == false) {
 							sqlBuilder.SELECT(s);
 							if (join.getExternal() != null) { // on
-																// vire
-																// les
-																// autres
-																// select
-																// identiques
-																// découlant
-																// des
-																// assos
+								// vire
+								// les
+								// autres
+								// select
+								// identiques
+								// découlant
+								// des
+								// assos
 								for (Entry<String, Join> joinL : joinMap.entrySet()) {
 									if (join.getExternal().equals(joinL.getValue().getExternal())) {
 										joinL.getValue().setExternalDone(true);
@@ -1145,14 +1158,14 @@ public class ComponentSqlHelper {
 			sb.append(propertyName.replaceAll("\\.", "_"));
 			sb.append(node.hashCode());
 			if (IEntity.class.isAssignableFrom(pd.getPropertyClass())) { // if
-																			// field
-																			// is
-																			// an
-																			// entity,
-																			// we
-																			// compare
-																			// the
-																			// ids
+				// field
+				// is
+				// an
+				// entity,
+				// we
+				// compare
+				// the
+				// ids
 				sb.append(".id");
 			}
 			return sb.toString();
