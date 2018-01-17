@@ -821,12 +821,14 @@ public class ComponentSqlHelper {
 		for (String propertyName : ed.getPropertyNames()) {
 			boolean find = true;
 			if (columns != null && !columns.isEmpty()) {
-				String newName = (name == null ? "" : (name + ".")) + propertyName;
-				Iterator<String> it = columns.iterator();
-				find = false;
-				while (it.hasNext() && !find) {
-					if (it.next().startsWith(newName)) {
-						find = true;
+				String newName = (name == null ? "" : name + ".") + propertyName;
+				if (!"id".equals(newName)) {
+					Iterator<String> it = columns.iterator();
+					find = false;
+					while (it.hasNext() && !find) {
+						if (it.next().startsWith(newName)) {
+							find = true;
+						}
 					}
 				}
 			}
