@@ -237,7 +237,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					} else {
 						TaskExecutionResult taskExecutionResult = serviceResultContainer.ingest(executeTask(taskService, task));
 						errorMessage = taskExecutionResult.errorMessage;
-						if (EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage().equals(errorMessage)) {
+						if (errorMessage != null && !errorMessage.isEmpty()) {
 							task = entityServerService.findEntityById(ITask.class, task.getId());
 							if (task.getTaskStatus() == TaskStatus.DONE) { // In case the task is already executed by another thread
 								restart = true;
@@ -355,15 +355,16 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 					&& (((SQLException) t.getCause().getCause()).getErrorCode() == 60)) {
 				LOG.error(String.format("A conflicting error has been raised for task %s", task.getId()));
 				serviceResultBuilder.addError(TaskManagerErrorEnum.CONFLICT, "CONFLICTING_ERROR", null);
+				taskExecutionResult.errorMessage = EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			} else {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
+				taskExecutionResult.errorMessage = t.getCause() != null ? t.getCause().getMessage() : EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			}
 
 			LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
 
 			task = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
-			taskExecutionResult.errorMessage = EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
-			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t), 2000));
+			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t.getCause()), 2000));
 			updateTask(task);
 		}
 
