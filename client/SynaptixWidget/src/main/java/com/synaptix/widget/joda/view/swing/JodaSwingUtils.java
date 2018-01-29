@@ -436,7 +436,7 @@ public final class JodaSwingUtils {
 					}
 				}
 			} else if (modifiers == 0) {
-				guessDate(timeField.getText(), start, end, false);
+				guessDate(timeField.getText(), start, end, true);
 				if (((start == 0) && (pattern.equals(text))) || (text == null) || (text.isEmpty()) || (end == text.length())) {
 					timeField.getFocusCycleRootAncestor().getFocusTraversalPolicy().getComponentAfter(timeField.getFocusCycleRootAncestor(), timeField).requestFocus();
 				} else {
