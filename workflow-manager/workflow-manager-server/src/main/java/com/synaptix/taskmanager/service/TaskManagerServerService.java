@@ -358,7 +358,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				taskExecutionResult.errorMessage = EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			} else {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
-				taskExecutionResult.errorMessage = t.getCause() != null ? t.getCause().getMessage() : EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
+				taskExecutionResult.errorMessage = t.getCause() != null ? StringUtils.left(t.getCause().toString(), 100) : EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			}
 
 			LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
