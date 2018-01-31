@@ -820,7 +820,7 @@ public class ComponentSqlHelper {
 	public void selectFields(SQL sqlBuilder, Map<String, Join> joinMap, ComponentDescriptor ed, String alias, String name, Set<String> columns, StringBuilder external) {
 		for (String propertyName : ed.getPropertyNames()) {
 			boolean find = true;
-			if (columns != null && !columns.isEmpty()) {
+			if (columns != null && !columns.isEmpty() && !columns.contains("*")) {
 				String newName = (name == null ? "" : name + ".") + propertyName;
 				if (!"id".equals(newName)) {
 					Iterator<String> it = columns.iterator();
