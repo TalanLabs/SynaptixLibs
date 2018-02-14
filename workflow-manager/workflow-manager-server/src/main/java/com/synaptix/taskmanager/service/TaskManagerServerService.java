@@ -351,21 +351,25 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 				}
 			}
 		} catch (Throwable t) {
-			if ((t instanceof VersionConflictDaoException) && (t.getCause() instanceof PersistenceException) && (t.getCause().getCause() instanceof SQLException)
-					&& (((SQLException) t.getCause().getCause()).getErrorCode() == 60)) {
-				LOG.error(String.format("A conflicting error has been raised for task %s", task.getId()));
+			ITask newTask = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
+			if (t instanceof VersionConflictDaoException || t.getCause() instanceof VersionConflictDaoException) {
+				if (newTask.getTaskStatus() == task.getTaskStatus()) {
+					LOG.error(String.format("A conflicting error has been raised for task %s", task.getId()), t);
+				} else {
+					LOG.info(String.format("A Task conflicting save error has been raised for task %s", task.getId()));
+				}
 				serviceResultBuilder.addError(TaskManagerErrorEnum.CONFLICT, "CONFLICTING_ERROR", null);
 				taskExecutionResult.errorMessage = EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
 			} else {
 				serviceResultBuilder.addError(TaskManagerErrorEnum.TASK, "SERVICE_CODE", task.getServiceCode());
 				taskExecutionResult.errorMessage = t.getCause() != null ? StringUtils.left(t.getCause().toString(), 100) : EnumErrorMessages.CONFLICTING_SAVE_ERROR.getMessage();
+				LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
 			}
 
-			LOG.error(String.format("%s (%s) - TM %s - TaskCode = %s - Id = %s", t.getMessage(), t.getClass(), task.getIdCluster(), task.getServiceCode(), task.getId()), t);
-
-			task = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
-			task.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t.getCause()), 2000));
-			updateTask(task);
+			if (newTask.getTaskStatus() != TaskStatus.DONE) {
+				newTask.setResultDetail(StringUtils.left(ExceptionUtils.getFullStackTrace(t.getCause()), 2000));
+				updateTask(newTask);
+			}
 		}
 
 		return serviceResultBuilder.compileResult(taskExecutionResult);
