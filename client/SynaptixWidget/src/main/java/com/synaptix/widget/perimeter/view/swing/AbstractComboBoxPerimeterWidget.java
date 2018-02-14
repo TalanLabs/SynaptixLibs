@@ -13,14 +13,12 @@ public abstract class AbstractComboBoxPerimeterWidget extends AbstractPerimeterW
 
 	private static final long serialVersionUID = -3060347771746600611L;
 
-	public final String NONE;
+	public final String NONE = "";
 
 	protected final JComboBox comboBox;
 
 	public AbstractComboBoxPerimeterWidget(List<String> choiceList) {
 		super();
-
-		NONE = StaticWidgetHelper.getSynaptixWidgetConstantsBundle().none();
 
 		List<String> newChoiceList = new ArrayList<String>(choiceList.size() + 1);
 		newChoiceList.addAll(choiceList);
