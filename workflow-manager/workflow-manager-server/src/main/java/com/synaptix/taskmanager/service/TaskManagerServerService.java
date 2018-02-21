@@ -353,7 +353,7 @@ public class TaskManagerServerService extends AbstractSimpleService implements I
 		} catch (Throwable t) {
 			ITask newTask = entityServerService.findEntityById(ITask.class, task.getId()); // reload task in case of a conflict error
 			if (t instanceof VersionConflictDaoException || t.getCause() instanceof VersionConflictDaoException) {
-				if (newTask.getTaskStatus() == task.getTaskStatus()) {
+				if (newTask.getTaskStatus() != task.getTaskStatus()) {
 					LOG.error(String.format("A conflicting error has been raised for task %s", task.getId()), t);
 				} else {
 					LOG.info(String.format("A Task conflicting save error has been raised for task %s", task.getId()));
