@@ -10,7 +10,7 @@ public abstract class AbstractPropertyValueProcess<E extends AbstractPropertyVal
 	@Override
 	public Map<String, Object> buildValueFilterMap(IFilterContext context, E node) {
 		Map<String, Object> res = new HashMap<String, Object>();
-		res.put(context.getParameterFieldName(node, node.getPropertyName()), node.getValue());
+		res.put(context.getParameterFieldName(node, node.getPropertyName()).replaceAll(".id", ""), node.getValue());
 		return res;
 	}
 }
