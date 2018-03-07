@@ -56,7 +56,9 @@ public abstract class AbstractSimpleDialog extends WaitComponentFeedbackPanel im
 
 		validationResultModel = new DefaultValidationResultModel();
 		keyTypedResultView = ValidationResultViewFactory.createReportIconAndTextLabel(validationResultModel);
-		toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		if(hasValidationOnFocus()) {
+			toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		}
 
 		initialize();
 
@@ -207,5 +209,9 @@ public abstract class AbstractSimpleDialog extends WaitComponentFeedbackPanel im
 
 			dialog.closeDialog();
 		}
+	}
+
+	public boolean hasValidationOnFocus() {
+		return true;
 	}
 }

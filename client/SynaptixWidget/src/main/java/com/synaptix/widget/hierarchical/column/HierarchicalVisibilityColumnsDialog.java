@@ -72,6 +72,8 @@ public class HierarchicalVisibilityColumnsDialog<E extends IComponent, F extends
 
 	private ValidationListener validationListener;
 
+	protected ToolTipFeedbackComponentValidationResultFocusListener toolTipFeedbackComponentValidationResultFocusListener;
+
 	public HierarchicalVisibilityColumnsDialog(JSyHierarchicalPanel<E, F, L> syHierarchicalPanel, ConfigurationContext<E, F, L> configurationContext) {
 		super(new BorderLayout());
 
@@ -81,7 +83,9 @@ public class HierarchicalVisibilityColumnsDialog<E extends IComponent, F extends
 		this.validationResultModel = new DefaultValidationResultModel();
 
 		this.keyTypedResultView = ValidationResultViewFactory.createReportIconAndTextLabel(validationResultModel);
-		new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		if(hasValidationOnFocus()) {
+			toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		}
 
 		initActions();
 		initComponents();
@@ -328,5 +332,9 @@ public class HierarchicalVisibilityColumnsDialog<E extends IComponent, F extends
 				}
 			};
 		}
+	}
+
+	public boolean hasValidationOnFocus() {
+		return true;
 	}
 }
