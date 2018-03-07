@@ -58,7 +58,9 @@ public abstract class AbstractWizardPage<E> extends WaitComponentFeedbackPanel i
 	protected final void initialize() {
 		validationResultModel = new DefaultValidationResultModel();
 		keyTypedResultView = ValidationResultViewFactory.createReportIconAndTextLabel(validationResultModel);
-		toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		if(hasValidationOnFocus()) {
+			toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		}
 
 		initComponents();
 
@@ -120,5 +122,9 @@ public abstract class AbstractWizardPage<E> extends WaitComponentFeedbackPanel i
 				fireUpdateValidator(result);
 			}
 		});
+	}
+
+	public boolean hasValidationOnFocus() {
+		return true;
 	}
 }

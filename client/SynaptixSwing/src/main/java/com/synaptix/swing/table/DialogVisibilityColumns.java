@@ -70,7 +70,10 @@ public class DialogVisibilityColumns extends JPanel {
 	private void initComponents() {
 		validationResultModel = new DefaultValidationResultModel();
 		keyTypedResultView = ValidationResultViewFactory.createReportIconAndTextLabel(validationResultModel);
-		toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+
+		if (hasValidationOnFocus()) {
+			toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		}
 
 		closeAction = new CloseAction();
 		listToList = new JListToList<SyTableColumn>();
@@ -190,5 +193,9 @@ public class DialogVisibilityColumns extends JPanel {
 		public void stateChanged(ChangeEvent e) {
 			updateValidation();
 		}
+	}
+
+	public boolean hasValidationOnFocus() {
+		return true;
 	}
 }

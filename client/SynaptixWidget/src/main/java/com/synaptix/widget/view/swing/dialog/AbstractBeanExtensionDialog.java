@@ -66,7 +66,10 @@ public abstract class AbstractBeanExtensionDialog<E> extends WaitComponentFeedba
 	protected final void initialize() {
 		validationResultModel = new DefaultValidationResultModel();
 		keyTypedResultView = ValidationResultViewFactory.createReportIconAndTextLabel(validationResultModel);
-		toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+
+		if(hasValidationOnFocus()) {
+			toolTipFeedbackComponentValidationResultFocusListener = new ToolTipFeedbackComponentValidationResultFocusListener(validationResultModel);
+		}
 
 		initComponents();
 
@@ -180,5 +183,9 @@ public abstract class AbstractBeanExtensionDialog<E> extends WaitComponentFeedba
 	@Override
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
+	}
+
+	public boolean hasValidationOnFocus() {
+		return true;
 	}
 }
